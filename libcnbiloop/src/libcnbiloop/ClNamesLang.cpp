@@ -129,6 +129,39 @@ bool ClNamesLang::IsUnset(const char* message, std::string* name) {
 	return true;
 }
 
+bool ClNamesLang::IsStore(const char* message, std::string* name, 
+		std::string* content) {
+	int count = sscanf(message, CLLN_STOR_IN, ClLanguage::_cache0->buffer, 
+			ClLanguage::_cache1->buffer);
+	if(count < 2)
+		return false;
+
+	name->assign(ClLanguage::_cache0->buffer);
+	content->assign(ClLanguage::_cache1->buffer);
+	return true;
+}
+
+bool ClNamesLang::IsRetrieve(const char* message, std::string* name) {
+	int count = sscanf(message, CLLN_RETR_IN, ClLanguage::_cache0->buffer);
+	if(count < 1)
+		return false;
+
+	name->assign(ClLanguage::_cache0->buffer);
+	return true;
+}
+
+bool ClNamesLang::IsDispatch(const char* message, std::string* name, 
+		std::string* content) {
+	int count = sscanf(message, CLLN_DISP_IN, ClLanguage::_cache0->buffer, 
+			ClLanguage::_cache1->buffer);
+	if(count < 2)
+		return false;
+
+	name->assign(ClLanguage::_cache0->buffer);
+	content->assign(ClLanguage::_cache1->buffer);
+	return true;
+}
+
 bool ClNamesLang::IsOk(const char* message) {
 	return(strcmp(CLLN_OK, message) == 0);
 }
@@ -136,6 +169,5 @@ bool ClNamesLang::IsOk(const char* message) {
 bool ClNamesLang::IsError(const char* message, int* code) {
 	return(sscanf(message, CLLN_ERROR, code) == 1);
 }
-
 
 #endif

@@ -24,7 +24,7 @@ using namespace std;
 int main(void) {
 
 	ClNamesLang names;
-	std::string name, address;
+	std::string name, address, content;
 	
 	name.clear();
 	address.clear();
@@ -60,12 +60,23 @@ int main(void) {
 	cout << names.IsOk(names.message->buffer) << endl;
 	
 	name.clear();
+	content.clear();
 	cout << names.Store("config.xml", "<hello>world</hello>") << endl;
+	cout << names.IsStore(names.message->buffer, &name, &content) << endl;
+	cout << "--> Name:    " << name << endl;
+	cout << "--> Content: " << content << endl;
 	
 	name.clear();
 	cout << names.Retrieve("config.xml") << endl;
+	cout << names.IsRetrieve(names.message->buffer, &name) << endl;
+	cout << "--> Name:    " << name << endl;
 	
+	name.clear();
+	content.clear();
 	cout << names.Dispatch("config.xml", "<hello>world</hello>") << endl;
+	cout << names.IsDispatch(names.message->buffer, &name, &content) << endl;
+	cout << "--> Name:    " << name << endl;
+	cout << "--> Content: " << content << endl;
 
 	name.clear();
 	address.clear();

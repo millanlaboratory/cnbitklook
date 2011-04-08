@@ -40,6 +40,9 @@ class ClNamesLang : public ClLanguage {
 		bool IsReply(const char* message, CcAddress* address);
 		bool IsSet(const char* message, std::string* name, CcAddress* address);
 		bool IsUnset(const char* message, std::string* name);
+		bool IsStore(const char* message, std::string* name, std::string* content);
+		bool IsRetrieve(const char* message, std::string* name);
+		bool IsDispatch(const char* message, std::string* name, std::string* content);
 		bool IsOk(const char* message);
 		bool IsError(const char* message, int* code);
 	public:
