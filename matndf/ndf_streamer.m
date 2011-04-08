@@ -27,8 +27,8 @@ end
 
 pos.N = min([length(pos.hdr) length(pos.trl)]);
 
-pos.cbeg = pos.hdr(1) + length(hdr);
-pos.cend = pos.trl(1) - 1;
+pos.cbeg = pos.hdr(1);
+pos.cend = pos.trl(1) + length(trl) - 1;
 pos.ccut = pos.trl(1) + length(trl);
 
 message = buffer(pos.cbeg:pos.cend);
