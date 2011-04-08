@@ -87,6 +87,8 @@ int main(void) {
 		goto shutdown;
 	}
 
+	CcTimeValue tic;
+	CcTime::Tic(&tic);
 	while(true) {
 		if(CcCore::receivedSIGINT.Get() || CcCore::receivedSIGTERM.Get())
 			goto shutdown;
@@ -97,10 +99,14 @@ int main(void) {
 		if(nameserver.Connect() == false)
 			goto shutdown;
 	
-		acquisiton.AddLabelGDF(781);
-		acquisiton.AddLabelLPT(2);
+
+		if(CcTime::Toc(&tic) > 20000.00f) {
+			acquisiton.AddLabelGDF(781);
+			acquisiton.AddLabelLPT(2);
+			CcTime::Tic(&tic);
+		}
 		
-		CcTime::Sleep(5000.00f);
+		CcTime::Sleep(2000.00f);
 	}
 
 shutdown:
