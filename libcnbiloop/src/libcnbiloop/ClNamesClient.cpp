@@ -155,9 +155,17 @@ std::string ClNamesClient::Retrieve(const std::string& name) {
 	return content;
 }
 		
-int ClNamesClient::Store(const std::string& name, CcFile file) {
-	std::string data = file.Get();
-	return this->Store(name, data);
+bool ClNamesClient::Store(const std::string& name, CcFile* file) {
+	return (this->Store(name, file->Get()) == ClNamesLang::Successful);
+}
+
+bool ClNamesClient::Retrieve(const std::string& name, CcFile* file) {
+	std::string content;
+	int status = this->Retrieve(name, &content);
+	if(status != ClNamesLang::Successful)
+		return false;
+	file->Set(content);
+	return true;
 }
 
 #endif
