@@ -39,6 +39,8 @@
 #define CLLN_RETR_OUT	"[clln]retrieve|%s[/clln]"
 #define CLLN_STOR_IN	"[clln]store|%[^'|']|%[^'['][/clln]"
 #define CLLN_STOR_OUT	"[clln]store|%s|%s[/clln]"
+#define CLLN_ERASE_IN	"[clln]erase|%[^'['][/clln]"
+#define CLLN_ERASE_OUT	"[clln]erase|%s[/clln]"
 
 const std::string ClNamesLang::Hdr = "[clln]";
 const std::string ClNamesLang::Trl = "[/clln]";
@@ -78,6 +80,11 @@ char* ClNamesLang::Dispatch(const std::string& name,
 		const std::string& content) {
 	sprintf(ClLanguage::message->buffer, CLLN_DISP_OUT, name.c_str(), 
 			content.c_str());
+	return ClLanguage::message->buffer;
+}
+		
+char* ClNamesLang::Erase(const std::string& name) {
+	sprintf(ClLanguage::message->buffer, CLLN_ERASE_OUT, name.c_str());
 	return ClLanguage::message->buffer;
 }
 
@@ -144,6 +151,15 @@ bool ClNamesLang::IsStore(const char* message, std::string* name,
 
 bool ClNamesLang::IsRetrieve(const char* message, std::string* name) {
 	int count = sscanf(message, CLLN_RETR_IN, ClLanguage::_cache0->buffer);
+	if(count < 1)
+		return false;
+
+	name->assign(ClLanguage::_cache0->buffer);
+	return true;
+}
+
+bool ClNamesLang::IsErase(const char* message, std::string* name) {
+	int count = sscanf(message, CLLN_ERASE_IN, ClLanguage::_cache0->buffer);
 	if(count < 1)
 		return false;
 

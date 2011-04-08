@@ -32,6 +32,7 @@ class ClNamesLang : public ClLanguage {
 		char* Store(const std::string& name, const std::string& content);
 		char* Retrieve(const std::string& name);
 		char* Dispatch(const std::string& name, const std::string& content);
+		char* Erase(const std::string& name);
 
 		char* Ok(void);
 		char* Error(const int code);
@@ -43,6 +44,7 @@ class ClNamesLang : public ClLanguage {
 		bool IsStore(const char* message, std::string* name, std::string* content);
 		bool IsRetrieve(const char* message, std::string* name);
 		bool IsDispatch(const char* message, std::string* name, std::string* content);
+		bool IsErase(const char* message, std::string* name);
 		bool IsOk(const char* message);
 		bool IsError(const char* message, int* code);
 	public:

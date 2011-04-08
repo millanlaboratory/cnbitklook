@@ -53,7 +53,7 @@ void ClNamesAsServer::HandleRecvEndpoint(CcSocket* caller, CcAddress address) {
 				CcStreamer::Forward) == false)
 		return;
 	
-	std::string luname;
+	std::string luname, stname, stcontent;
 	CcAddress luaddr;
 
 	if(this->language.IsQuery(message.c_str(), &luname)) {
@@ -221,7 +221,8 @@ bool ClNamesAsServer::Retrieve(const std::string& name, std::string* content) {
 	return true;
 }
 		
-bool ClNamesAsServer::Store(const std::string& name, const std::string& content) {
+bool ClNamesAsServer::Store(const std::string& name, 
+		const std::string& content) {
 	this->_semstorage.Wait();
 	std::map<CcAddress, std::string>::iterator it;
 	it = this->_storage.find(name);
