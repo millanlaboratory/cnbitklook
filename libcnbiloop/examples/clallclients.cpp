@@ -77,7 +77,7 @@ int main(void) {
 	filebdf.append(timestamp);
 	filebdf.append(".bdf");
 
-	filelog.assign("cltest");
+	filelog.assign("cltest_");
 	filelog.append(timestamp);
 	filelog.append(".bdf");
 
