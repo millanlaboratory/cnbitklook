@@ -31,22 +31,18 @@ int main(void) {
 		exit(1);
 	}
 	
-
 	CcAddress address;
-
-	while(client.Connect()) {
+	if(client.Connect()) {
 		client.Set("/pippo", "127.0.0.1:12000");
 		client.Set("/pippo", "127.0.0.1:12000");
 		client.Query("/pippo", &address);
 		client.Query("/pluto", &address);
 		client.Unset("/pippo");
 		client.Unset("/pippo");
-		CcTime::Sleep(10000.00f);
+		CcTime::Sleep(2000.00f);
 	}
 
-
-
-	while(client.Connect()) {
+	if(client.Connect()) {
 		client.Set("/pippo", "127.0.0.1:12000");
 		client.Set("/pluto", "127.0.0.1:12001");
 		client.Set("/minie", "127.0.0.1:12002");
@@ -54,49 +50,18 @@ int main(void) {
 		client.Unset("/pippo");
 		client.Unset("/pluto");
 		client.Unset("/minie");
+		CcTime::Sleep(2000.00f);
 	}
 
-	/*
-	while(client.Connect()) {
-		int pid0 = 0, pid1 = 0;
-		
-		if(client.ForkAndCheck(&pid0) != ClProLang::Successful)
-			return 1;
-		if(client.ForkAndCheck(&pid1) != ClProLang::Successful)
-			return 1;
-		cout << "Spawned " << pid0 << endl;
-		cout << "Spawned " << pid1 << endl;
-		
-		client.ChangeDirectory(pid0, "/home/mtavella/");
-		client.Launch(pid0, "a=rand(10,10);");
-		client.Launch(pid0, "save;");
-		client.Launch(pid0, "bench(1);");
-		
-		client.Launch(pid1, "antani;");
-	
-		for(int i = 0; i < 4; i++) {	
-			if(client.Connect() == false)
-				return 2;
-
-			int status0 = client.IsAlive(pid0);
-			int status1 = client.IsAlive(pid1);
-
-			cout << "PID0 " << status0 << endl;
-			cout << "PID1 " << status1 << endl;
-	
-			if(status0 != ClProLang::Successful)
-				client.Terminate(pid0);
-			if(status1 != ClProLang::Successful)
-				client.Terminate(pid1);
-
-			CcTime::Sleep(1000.00f);
-		}
-		
-		client.Terminate(pid0);
-		client.Terminate(pid1);
-
-		CcTime::Sleep(5000.00f);
+	if(client.Connect()) {
+		client.Store("config.xml", "Blah blah blah");
+		client.Store("config.xml", "Bho bho bho");
+		std::cout << "Result: " <<  client.Retrieve("config.xml") << std::endl;
+		client.Erase("config.xml");
+		client.Erase("config.xml");
+		std::cout << "Result: " <<  client.Retrieve("config.xml") << std::endl;
+		CcTime::Sleep(2000.00f);
 	}
-	*/
+
 	return 0;
 }

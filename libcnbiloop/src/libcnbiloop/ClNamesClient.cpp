@@ -113,7 +113,7 @@ int ClNamesClient::Store(const std::string& name, const std::string& content) {
 	int errorid = 0;
 	std::string message, reply;
 	
-	this->_language.Set(name, content);
+	this->_language.Store(name, content);
 	bool status = ClClient::_client.SendRecv(this->_language.message->buffer,
 			&reply, ClNamesLang::Hdr, ClNamesLang::Trl, ClClient::_waitms);
 
@@ -132,7 +132,7 @@ int ClNamesClient::Erase(const std::string& name) {
 	int errorid = 0;
 	std::string message, reply;
 	
-	this->_language.Unset(name);
+	this->_language.Erase(name);
 	bool status = ClClient::_client.SendRecv(this->_language.message->buffer,
 			&reply, ClNamesLang::Hdr, ClNamesLang::Trl, ClClient::_waitms);
 

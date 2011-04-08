@@ -103,7 +103,7 @@ void ClNamesAsServer::HandleRecvEndpoint(CcSocket* caller, CcAddress address) {
 					<< stname << ", " << stcontent.size() << " bytes");
 		} else {
 			server->Send(language.Error(ClNamesLang::AlreadyStored), address);
-			CcLogWarningS(this->_stream, "Set from " << address << ": " 
+			CcLogWarningS(this->_stream, "Store from " << address << ": " 
 					<< stname << " AlreadyStored");
 		}
 	} else if(this->language.IsRetrieve(message.c_str(), &stname)) {
@@ -112,7 +112,7 @@ void ClNamesAsServer::HandleRecvEndpoint(CcSocket* caller, CcAddress address) {
 					<< stname << ", " << stcontent.size() << " bytes");
 			server->Send(language.Dispatch(stcontent), address);
 		} else {
-			CcLogWarningS(this->_stream, "Query from " << address << ": " 
+			CcLogWarningS(this->_stream, "Retrieve from " << address << ": " 
 					<< luname << " NotAvailable");
 			server->Send(language.Error(ClNamesLang::NotAvailable), address);
 		}
