@@ -21,7 +21,8 @@ noinst_PROGRAMS = ccmutex \
 				  ccpipereader \
 				  ccpipeserver \
 				  ccdoublebuffer \
-				  ccendpoint
+				  ccendpoint \
+				  ccfile
 
 ccptable_SOURCES = ccptable.cpp
 ccprocess_SOURCES = ccprocess.cpp
@@ -44,5 +45,6 @@ ccpipereader_SOURCES = ccpipereader.cpp
 ccpipeserver_SOURCES = ccpipeserver.cpp
 ccdoublebuffer_SOURCES = ccdoublebuffer.cpp
 ccendpoint_SOURCES = ccendpoint.cpp
+ccfile_SOURCES = ccfile.cpp
 
 LDADD = $(top_builddir)/src/libcnbicore/libcnbicore.la

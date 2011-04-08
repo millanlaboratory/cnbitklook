@@ -16,24 +16,15 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CCFILE_HPP 
-#define CCFILE_HPP 
+#include <iostream>
+#include "CcFile.hpp"
+using namespace std;
 
-#include "CcBasic.hpp"
-#include <string>
+int main(void) {
+	CcFile source, dest;
+	source.Load("/etc/fstab");
+	dest.Set(source.Get());
+	dest.Save("myfstab.txt");
 
-class CcFile : public CcObject {
-	public:
-		CcFile(void);
-		virtual ~CcFile(void);
-		virtual bool Load(const std::string& filename);
-		virtual bool Save(const std::string& filename);
-		virtual void Set(const std::string& data);
-		virtual void Get(std::string* data);
-		virtual std::string Get(void);
-
-	protected:
-		std::string _data;
-};
-
-#endif
+	return 0;
+}
