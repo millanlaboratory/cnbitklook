@@ -1,0 +1,53 @@
+Edited by matteo.lostuzzo@epfl.ch Tue 08/12/09 17:14 CET
+Proposed integration of event handler as follows:
+
+
+================================================================
+
+// DIR: $CNBITOOLKIT/libcnbicore/src/libcnbicore
+
+
+
+// In the header file:
+#include <libfeedback/fb_event.h>
+
+
+
+// In FeedbackEngine.cpp
+
+int event_handler(fb_hwnd wnd, unsigned int type, const void* data){
+	int retcode = 1;
+	struct fb_keyevent* keyevt =  (struct fb_keyevent*) data;
+
+	switch (type) {
+	case FB_EVT_QUIT:
+		retcode = 0;
+		break;
+
+	case FB_EVT_KEYBOARD:
+		if (keyevt->sym == SDLK_ESCAPE)
+			retcode = 0;
+		else
+			retcode = 1;
+		break;
+
+	default:
+		retcode = 1;
+	}
+
+	return retcode;
+}
+
+
+
+// In FeedbackEngine::Main
+
+	// initalise the the event handler
+	cout << this->_window << endl;
+	fb_set_event_handler(this->_window, event_handler);
+
+// Proposed new function
+
+void ErrorSquares::ProcessEvents(void) {
+	fb_process_events(_window);
+}

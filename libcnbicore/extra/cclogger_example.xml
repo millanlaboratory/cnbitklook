@@ -1,0 +1,20 @@
+<?xml version='1.0'?>
+<!-- 2010-07-15  Michele Tavella <michele.tavella@epfl.ch> -->
+<?xml-stylesheet type='text/xsl' href='cclogger.xsl'?>
+<CcLogger xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xsd='http://www.w3.org/2001/XMLSchema' timestamp='20081013113120' module='cc_nameserver'>
+	<CcLogEntry timestamp='20100715211234' level='Config'><caller>SMTLogger.Program</caller><file>test.cpp</file><line>10</line><message>This is a Config message</message></CcLogEntry>
+	<CcLogEntry timestamp='20100715211234' level='Exception'><caller>SMTLogger.Program</caller><file>test.cpp</file><line>10</line><message>This is an Exception message</message></CcLogEntry>
+	<CcLogEntry timestamp='20100715211234' level='Debug'><caller>SMTLogger.Program</caller><file>test.cpp</file><line>10</line><message>This is a Debug message</message></CcLogEntry>
+	<CcLogEntry timestamp='20100715211234' level='Info'><caller>SMTLogger.Program</caller><file>test.cpp</file><line>10</line><message>This is a Message message</message></CcLogEntry>
+	<CcLogEntry timestamp='20100715211234' level='Warning'><caller>SMTLogger.Program</caller><file>test.cpp</file><line>10</line><message>This is a Warning message</message></CcLogEntry>
+	<CcLogEntry timestamp='20100715211234' level='Error'><caller>SMTLogger.Program</caller><file>test.cpp</file><line>10</line><message>This is an Error message</message></CcLogEntry>
+	<CcLogEntry timestamp='20100715211234' level='Fatal'><caller>SMTLogger.Program</caller><file>test.cpp</file><line>10</line><message>This is a Fatal message</message></CcLogEntry>
+	
+	<CcLogEntry timestamp='20100715211234' level='Config'><caller>SMTLogger.Program</caller><file>test.cpp</file><line>10</line><message>This is a Config message</message></CcLogEntry>
+	<CcLogEntry timestamp='20100715211234' level='Exception'><caller>SMTLogger.Program</caller><file>test.cpp</file><line>10</line><message>This is an Exception message</message></CcLogEntry>
+	<CcLogEntry timestamp='20100715211234' level='Debug'><caller>SMTLogger.Program</caller><file>test.cpp</file><line>10</line><message>This is a Debug message</message></CcLogEntry>
+	<CcLogEntry timestamp='20100715211234' level='Info'><caller>SMTLogger.Program</caller><file>test.cpp</file><line>10</line><message>This is a Message message</message></CcLogEntry>
+	<CcLogEntry timestamp='20100715211234' level='Warning'><caller>SMTLogger.Program</caller><file>test.cpp</file><line>10</line><message>This is a Warning message</message></CcLogEntry>
+	<CcLogEntry timestamp='20100715211234' level='Error'><caller>SMTLogger.Program</caller><file>test.cpp</file><line>10</line><message>This is an Error message</message></CcLogEntry>
+	<CcLogEntry timestamp='20100715211234' level='Fatal'><caller>SMTLogger.Program</caller><file>test.cpp</file><line>10</line><message>This is a Fatal message</message></CcLogEntry>
+</CcLogger>

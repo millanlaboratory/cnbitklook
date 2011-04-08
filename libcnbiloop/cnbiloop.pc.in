@@ -1,0 +1,10 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: libcnbiloop
+Description: CNBI BCI loop library
+Version: @PACKAGE_VERSION@
+Libs: -L${libdir} -lcnbiloop
+Cflags: -I${includedir}/cnbiloop

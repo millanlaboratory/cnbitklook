@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding='UTF-8'?>
+<!-- 2010-11-19  Michele Tavella <michele.tavella@epfl.ch> -->
+<cnbiconfig>
+	<!-- Subject Block -->
+	<subject>
+		<id>b3</id>
+		<age>25</age>
+	</subject>
+
+	<!-- Experimenter -->
+	<recording>
+		<experimenter>mtavella</experimenter>
+		<experiment>MI_training</experiment>
+		<project>TOBI</project>
+		<location>SUVA</location>
+		<date>2010.09.12</date>
+	</recording>
+
+	<!-- Protocol Block -->
+	<protocol>
+		<scenes>
+			<begin>500.00</begin>
+			<end>500.00</end>
+			<user>200.00</user>
+		</scenes>
+
+		<trial>
+			<waitmin>250.00</waitmin>
+			<waitmax>250.00</waitmax>
+			<fixation>250.00</fixation>
+			<cue>250.00</cue>
+			<cfeedback>1000.00</cfeedback>
+			<boom>200.00</boom>
+		</trial>
+		
+		<gdfevents>
+			<off>0x8000</off>
+			<inc>0x030a</inc>
+			<trial>0x0300</trial>
+			<trialoff>0x8300</trialoff>
+			<cfeedback>0x030d</cfeedback>
+			<cfeedbackoff>0x830d</cfeedbackoff>
+			<targethit>0x0381</targethit>
+			<targetmiss>0x0382</targetmiss>
+			<cross>0x0312</cross>
+			<beep>0x0311</beep>
+			<cueundef>0x030f</cueundef>
+		</gdfevents>
+	</protocol>
+
+	<!-- Parameters Block -->
+	<parameters>
+		<copilot> 
+			<granularity>16</granularity>
+			<threshold>0.85</threshold>
+			<viscosity>0.05</viscosity>
+		</copilot> 
+	</parameters>
+	
+	<!-- Options Block -->
+	<options>
+		<fes>
+			<dev>/dev/ttyUSB0</dev>
+			<async>false</async>
+			<orthosis>false</orthosis>
+		</fes>
+		<robotino>
+			<address>10.66.99.130:6120</address>
+			<sharedcontrol>true</sharedcontrol>
+		</robotino>
+		<qw>
+			<prototype>browser</prototype>
+			<crash>true</crash>
+		</qw>
+	</options>
+	
+	<!-- Offline Block -->
+	<offline>
+		<smr>
+			<description>Offline_MI</description>
+			<taskset key="mi_rhlh">
+				<threshold>
+					<mi_hand_left>0.85</mi_hand_left>
+					<mi_hand_right>0.85</mi_hand_right>
+				</threshold>
+			</taskset>
+			<taskset key="mi_rhbf">
+				<threshold>
+					<mi_hand_right>0.85</mi_hand_right>
+					<mi_both_feet>0.85</mi_both_feet>
+				</threshold>
+			</taskset>
+		</smr>
+	</offline>
+	
+	<!-- Online Block -->
+	<online>
+		<smr>
+			<description>Online_MI</description>
+			<taskset key="mi_rhlh" classifier="kmi0">
+				<threshold>
+					<mi_hand_left>0.85</mi_hand_left>
+					<mi_hand_right>0.85</mi_hand_right>
+				</threshold>
+			</taskset>
+			<integration>0.96</integration>
+		</smr>
+		<smrerrp>
+			<description>Online_MI_ErrP</description>
+			<taskset key="mi_rhlh" classifier="kmi0">
+				<threshold>
+					<mi_hand_left>0.85</mi_hand_left>
+					<mi_hand_right>0.92</mi_hand_right>
+				</threshold>
+				<bias>
+					<mi_hand_left>0.10</mi_hand_left>
+					<mi_hand_right>0.90</mi_hand_right>
+				</bias>
+				<integration>
+					<mi_hand_left>0.96</mi_hand_left>
+					<mi_hand_right>0.92</mi_hand_right>
+				</integration>
+			</taskset>
+			<taskset key="errp" classifier="kerrp0">
+				<priors>
+					<errp_true>0.20</errp_true>
+					<errp_false>0.80</errp_false>
+				</priors>
+			</taskset>
+		</smrerrp>
+	</online>
+
+	<!-- Classifiers Block -->
+	<classifier>
+		<kmi0>
+			<description>Yesterday</description>
+			<filename>b3_mi_20091204.mat</filename>
+			<icvalue>ValueProb</icvalue>
+			<iclabel>LabelClass</iclabel>
+		</kmi0>
+		<kmi1>
+			<description>Today</description>
+			<filename>b3_mi_20091202.mat</filename>
+			<icvalue>ValueProb</icvalue>
+			<iclabel>LabelClass</iclabel>
+		</kmi1>
+		<kerrp0>
+			<description>ErrP_classifier</description>
+			<filename>a0_errp_20091204.mat</filename>
+			<icvalue>ValueProb</icvalue>
+			<iclabel>LabelClass</iclabel>
+		</kerrp0>
+	</classifier>
+	
+	<!-- Standard Task List -->
+	<taskset>
+		<!-- Offline tasksets -->
+		<mi_rlsf>
+			<class id="0" key="mi_hand_right">15</class>
+			<class id="1" key="mi_hand_left">15</class>
+			<class id="2" key="mi_rest">15</class>
+			<class id="3" key="mi_both_feet">5</class>
+		</mi_rlsf>
+		<mi_rlbf>
+			<class id="0" key="mi_hand_right">15</class>
+			<class id="1" key="mi_hand_left">15</class>
+			<class id="2" key="mi_both_feet">15</class>
+		</mi_rlbf>
+		<mi_rhlh>
+			<class id="0" key="mi_hand_right">15</class>
+			<class id="1" key="mi_hand_left">15</class>
+		</mi_rhlh>
+		<mi_rhbf>
+			<class id="0" key="mi_hand_right">15</class>
+			<class id="1" key="mi_both_feet">15</class>
+		</mi_rhbf>
+		<mi_bflh>
+			<class id="0" key="mi_both_feet">15</class>
+			<class id="1" key="mi_hand_left">15</class>
+		</mi_bflh>
+		<mi_bhbf>
+			<class id="0" key="mi_both_hands">15</class>
+			<class id="1" key="mi_both_feet">15</class>
+		</mi_bhbf>
+		<mi_bfbh>
+			<class id="0" key="mi_both_feet">15</class>
+			<class id="1" key="mi_both_hands">15</class>
+		</mi_bfbh>
+		<errp>
+			<class id="0" key="errp_true">80</class>
+			<class id="1" key="errp_false">20</class>
+		</errp> 
+	</taskset>
+	
+	<!-- Standard Task List -->
+	<tasks>
+		<mi_hand_right>
+			<description>Right_Hand_MI</description>
+			<gdfevent>0x0302</gdfevent>
+			<hwtrigger>1</hwtrigger>
+		</mi_hand_right>
+		<mi_hand_left>
+			<description>Left_Hand_MI</description>
+			<gdfevent>0x0301</gdfevent>
+			<hwtrigger>1</hwtrigger>
+		</mi_hand_left>
+		<mi_both_hands>
+			<description>Both_Hands_MI</description>
+			<gdfevent>0x0305</gdfevent>
+			<hwtrigger>1</hwtrigger>
+		</mi_both_hands>
+		<mi_both_feet>
+			<description>Both_Feet_MI</description>
+			<gdfevent>0x0303</gdfevent>
+			<hwtrigger>1</hwtrigger>
+		</mi_both_feet>
+		<mi_rest>
+			<description>Rest_MI</description>
+			<gdfevent>0x030f</gdfevent>
+			<hwtrigger>1</hwtrigger>
+		</mi_rest>
+		<mi_tongue>
+			<description>Tongue_MI</description>
+			<gdfevent>0x0304</gdfevent>
+			<hwtrigger>1</hwtrigger>
+		</mi_tongue>
+		<errp_true>
+			<description>ErrP_Detected</description>
+			<gdfevent>0x030b</gdfevent>
+			<hwtrigger>2</hwtrigger>
+		</errp_true>
+		<errp_false>
+			<description>ErrP_NotDetected</description>
+			<gdfevent>0x030c</gdfevent>
+			<hwtrigger>2</hwtrigger>
+		</errp_false>
+		<onset_true>
+			<description>MI_Onset_Detected</description>
+			<gdfevent>0x010</gdfevent>
+			<hwtrigger>3</hwtrigger>
+		</onset_true>
+		<onset_false>
+			<description>MI_Onset_NotDetected</description>
+			<gdfevent>0x011</gdfevent>
+			<hwtrigger>3</hwtrigger>
+		</onset_false>
+	</tasks>
+
+	<!-- Configuration Block -->
+	<configuration>
+		<clservers>
+			<nameserver>127.0.0.1:8000</nameserver>
+			<acquisition>127.0.0.1:9000</acquisition>
+			<processing>127.0.0.1:9100</processing>
+		</clservers>
+		<cptriggerlpt> 
+			<port>-1</port>
+			<duration>4</duration>
+			<level>0</level>
+		</cptriggerlpt>
+	</configuration>
+</cnbiconfig>

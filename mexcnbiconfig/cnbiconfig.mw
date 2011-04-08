@@ -1,0 +1,309 @@
+%   Copyright (C) 2010 Michele Tavella <tavella.michele@gmail.com>
+%
+%   This file is part of the mexcnbiconfig wrapper
+%
+%   The libndf library is free software: you can redistribute it and/or
+%   modify it under the terms of the version 3 of the GNU General Public
+%   License as published by the Free Software Foundation.
+%
+%   This program is distributed in the hope that it will be useful,
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%   GNU General Public License for more details.
+%
+%   You should have received a copy of the GNU General Public License
+%   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+$ #include <libtobiic/ICMessage.hpp>
+$ #include <libcnbiconfig/CCfgConfig.hpp>
+$ #include <libcnbiconfig/CCfgTask.hpp>
+$ #include <libcnbiconfig/CCfgTaskset.hpp>
+$ #include <libxmlconfig/XMLException.hpp>
+$ #include <cstring>
+$ #include <iostream>
+$ #include <stdio.h>
+
+@function [cptr] = ccfg_new(filename);
+	$ CCfgConfig* new_config(std::string* filename) {
+	$ 	CCfgConfig* config = new CCfgConfig(*filename);
+	$ 	return config;
+	$ }
+	# std::string* sfilename = new std::string(cstring filename);
+	# CCfgConfig *cptr = new_config(std::string* sfilename);
+
+@function [cptr] = ccfg_delete(cptr)
+	# delete(CCfgConfig* cptr);
+
+@function [retval, cptr] = ccfg_validate(cptr)
+	$ bool validate(CCfgConfig* cptr) {
+	$ 	return cptr->Validate();
+	$ }
+	# bool retval = validate(CCfgConfig* cptr);
+
+@function [retval, cptr] = ccfg_offline(cptr, blockname, taskset)
+	$ CCfgTaskset* offline(CCfgConfig* cptr, std::string* blockname, std::string* taskset) {
+	$	try {
+	$ 		return cptr->Offline(*blockname, *taskset);
+	$	} catch(XMLException e) {
+	$		printf("[ccfg_offline] Exception in libcnbiconfig: %s, %s\n",
+	$			e.Caller().c_str(), e.Info().c_str());
+	$		return NULL;
+	$	}
+	$ }
+	# std::string* sblockname = new std::string(cstring blockname);
+	# std::string* staskset = new std::string(cstring taskset);
+	# CCfgTaskset* retval = offline(CCfgConfig* cptr, std::string* sblockname, std::string* staskset);
+
+@function [t, cptr] = ccfg_online(cptr, blockname, taskset)
+	$ CCfgTaskset* online(CCfgConfig* cptr, std::string* blockname, std::string* taskset) {
+	$	try {
+	$ 		return cptr->Online(*blockname, *taskset);
+	$	} catch(XMLException e) {
+	$		printf("[ccfg_online] Exception in libcnbiconfig: %s, %s\n",
+	$			e.Caller().c_str(), e.Info().c_str());
+	$		return NULL;
+	$	}
+	$ }
+	# std::string* sblockname = new std::string(cstring blockname);
+	# std::string* staskset = new std::string(cstring taskset);
+	# CCfgTaskset* t = online(CCfgConfig* cptr, std::string* sblockname, std::string* staskset);
+
+@function [t, cptr] = ccfg_onlinem(cptr, blockname, taskset, message)
+	$ CCfgTaskset* onlinem(CCfgConfig* cptr, std::string* blockname, std::string* taskset, ICMessage* message) {
+	$	try {
+	$ 		return cptr->Online(*blockname, *taskset, message);
+	$	} catch(XMLException e) {
+	$		printf("[ccfg_onlinem] Exception in libcnbiconfig: %s, %s\n",
+	$			e.Caller().c_str(), e.Info().c_str());
+	$		return NULL;
+	$	}
+	$ }
+	# std::string* sblockname = new std::string(cstring blockname);
+	# std::string* staskset = new std::string(cstring taskset);
+	# CCfgTaskset* t = onlinem(CCfgConfig* cptr, std::string* sblockname,  std::string* staskset, ICMessage* message);
+
+@function [cptr] = ccfg_root(cptr)
+	$ void root(CCfgConfig* cptr) {
+	$	try {
+	$ 		cptr->Root();
+	$	} catch(XMLException e) {
+	$		printf("[ccfg_root] Exception in libcnbiconfig: %s, %s\n",
+	$			e.Caller().c_str(), e.Info().c_str());
+	$	}
+	$ }
+	# root(CCfgConfig* cptr);
+
+@function [cptr] = ccfg_branch(cptr)
+	$ void branch(CCfgConfig* cptr) {
+	$	try {
+	$ 		cptr->Branch();
+	$	} catch(XMLException e) {
+	$		printf("[ccfg_branch] Exception in libcnbiconfig: %s, %s\n",
+	$			e.Caller().c_str(), e.Info().c_str());
+	$	}
+	$ }
+	# branch(CCfgConfig* cptr);
+
+@function [cptr] = ccfg_setbranch(cptr)
+	$ void setbranch(CCfgConfig* cptr) {
+	$	try {
+	$ 		cptr->SetBranch();
+	$	} catch(XMLException e) {
+	$		printf("[ccfg_setbranch] Exception in libcnbiconfig: %s, %s\n",
+	$			e.Caller().c_str(), e.Info().c_str());
+	$	}
+	$ }
+	# setbranch(CCfgConfig* cptr);
+
+@function [retval, cptr] = ccfg_quickstring(cptr, path)
+	$ void quickstring(CCfgConfig* cptr, std::string* path, char* buffer) {
+	$	try {
+	$ 		std::string result = cptr->QuickString(*path);
+	$ 		strcpy(buffer, result.c_str());
+	$	} catch(XMLException e) {
+	$		printf("[ccfg_quickstring] Exception in libcnbiconfig: %s, %s\n",
+	$			e.Caller().c_str(), e.Info().c_str());
+	$	}
+	$ }
+	$
+	retval = '';
+	# std::string* spath = new std::string(cstring path);
+	# quickstring(CCfgConfig* cptr, std::string* spath, inout cstring[4096] retval);
+
+@function [retval, cptr] = ccfg_quickbool(cptr, path)
+	$ bool quickbool(CCfgConfig* cptr, std::string* path) {
+	$	try {
+	$ 		return cptr->QuickBool(*path);
+	$	} catch(XMLException e) {
+	$		printf("[ccfg_quickbool] Exception in libcnbiconfig: %s, %s\n",
+	$			e.Caller().c_str(), e.Info().c_str());
+	$		return 0;
+	$	}
+	$ }
+	# std::string* spath = new std::string(cstring path);
+	# bool retval = quickbool(CCfgConfig* cptr, std::string* spath);
+
+@function [retval, cptr] = ccfg_quickfloat(cptr, path)
+	$ float quickfloat(CCfgConfig* cptr, std::string* path) {
+	$	try {
+	$ 		return cptr->QuickFloat(*path);
+	$	} catch(XMLException e) {
+	$		printf("[ccfg_quickfloat] Exception in libcnbiconfig: %s, %s\n",
+	$			e.Caller().c_str(), e.Info().c_str());
+	$		return 0.00f;
+	$	}
+	$ }
+	# std::string* spath = new std::string(cstring path);
+	# float retval = quickfloat(CCfgConfig* cptr, std::string* spath);
+
+@function [retval, cptr] = ccfg_quickint(cptr, path)
+	$ int quickint(CCfgConfig* cptr, std::string* path) {
+	$	try {
+	$ 		return cptr->QuickInt(*path);
+	$	} catch(XMLException e) {
+	$		printf("[ccfg_quickint] Exception in libcnbiconfig: %s, %s\n",
+	$			e.Caller().c_str(), e.Info().c_str());
+	$		return 0;
+	$	}
+	$ }
+	# std::string* spath = new std::string(cstring path);
+	# int retval = quickint(CCfgConfig* cptr, std::string* spath);
+
+@function [retval, cptr] = ccfg_quickuint(cptr, path)
+	$ int quickuint(CCfgConfig* cptr, std::string* path) {
+	$	try {
+	$ 		return cptr->QuickUInt(*path);
+	$	} catch(XMLException e) {
+	$		printf("[ccfg_quickuint] Exception in libcnbiconfig: %s, %s\n",
+	$			e.Caller().c_str(), e.Info().c_str());
+	$		return 0;
+	$	}
+	$ }
+	# std::string* spath = new std::string(cstring path);
+	# uint retval = quickuint(CCfgConfig* cptr, std::string* spath);
+
+
+@function [tptr] = ccfgtaskset_new();
+	$ CCfgTaskset* new_taskset(void) {
+	$ 	CCfgTaskset* taskset = new CCfgTaskset();
+	$ 	return taskset;
+	$ }
+	# CCfgTaskset* tptr = new_taskset();
+
+@function [tptr] = ccfgtaskset_delete(tptr)
+	# delete(CCfgTaskset* tptr);
+
+@function [kptr, tptr] = ccfgtaskset_gettask(tptr, what)
+	$ CCfgTask* gettask(CCfgTaskset* tptr, std::string* what) {
+	$	try {
+	$ 		return tptr->Get(*what);
+	$	} catch(XMLException e) {
+	$		printf("[ccfgtaskset_gettask] Exception in libcnbiconfig: %s, %s\n",
+	$			e.Caller().c_str(), e.Info().c_str());
+	$		return NULL;
+	$	}
+	$ }
+	# std::string* swhat = new std::string(cstring what);
+	# CCfgTask* kptr = gettask(CCfgTaskset* tptr, std::string* swhat);
+
+@function [kptr, tptr] = ccfgtaskset_gettaskbyid(tptr, id)
+	$ CCfgTask* gettaskbyid(CCfgTaskset* tptr, unsigned int id) {
+	$	try {
+	$ 		return tptr->Get(id);
+	$	} catch(XMLException e) {
+	$		printf("[ccfgtaskset_gettaskbyid] Exception in libcnbiconfig: %s, %s\n",
+	$			e.Caller().c_str(), e.Info().c_str());
+	$		return NULL;
+	$	}
+	$ }
+	# CCfgTask* kptr = gettaskbyid(CCfgTaskset* tptr, int id);
+
+@function [count, tptr] = ccfgtaskset_count(tptr)
+	$ unsigned int counttasks(CCfgTaskset* tptr) {
+	$	try {
+	$ 		return tptr->Count();
+	$	} catch(XMLException e) {
+	$		printf("[ccfgtaskset_count] Exception in libcnbiconfig: %s, %s\n",
+	$			e.Caller().c_str(), e.Info().c_str());
+	$		return 0;
+	$	}
+	$ }
+	# int count = counttasks(CCfgTaskset* tptr);
+
+@function [classifier, tptr] = ccfgtaskset_getclassifier(tptr)
+	$ void getclassifier(CCfgTaskset* tptr, char* buffer) {
+	$	try {
+	$ 		strcpy(buffer, tptr->classifier.c_str()); 
+	$	} catch(XMLException e) {
+	$		printf("[ccfgtaskset_getclassifier] Exception in libcnbiconfig: %s, %s\n",
+	$			e.Caller().c_str(), e.Info().c_str());
+	$	}
+	$ }
+	classifier = '';
+	# getclassifier(CCfgTaskset* tptr, inout cstring[4096] classifier);
+
+@function [retval, tptr] = ccfgtaskset_hastask(tptr, what)
+	$ bool hastask(CCfgTaskset* tptr, std::string* what) {
+	$   if(tptr == NULL)
+	$		return NULL;
+	$	try {
+	$ 		return tptr->Has(*what);
+	$	} catch(XMLException e) {
+	$		printf("[ccfgtaskset_hastask] Exception in libcnbiconfig: %s, %s\n",
+	$			e.Caller().c_str(), e.Info().c_str());
+	$		return NULL;
+	$	}
+	$ }
+	# std::string* swhat = new std::string(cstring what);
+	# bool retval = hastask(CCfgTaskset* tptr, std::string* swhat);
+
+
+@function [tptr] = ccfgtask_new();
+	$ CCfgTask* new_task(void) {
+	$ 	CCfgTask* task = new CCfgTask;
+	$ 	return task;
+	$ }
+	# CCfgTask* tptr = new_task(); 
+
+@function [name, tptr] = ccfgtask_getname(tptr);
+	$ void get_name(CCfgTask* tptr, char* buffer) {
+	$ 	strcpy(buffer, tptr->name.c_str()); 
+	$ }
+	$
+	name = '';
+	# get_name(CCfgTask* tptr, inout cstring[4096] name);
+
+@function [description, tptr] = ccfgtask_getdescription(tptr);
+	$ void get_description(CCfgTask* tptr, char* buffer) {
+	$ 	strcpy(buffer, tptr->description.c_str()); 
+	$ }
+	$
+	description = '';
+	# get_description(CCfgTask* tptr, inout cstring[4096] description);
+
+@function [id, tptr] = ccfgtask_getid(tptr);
+	$ int get_id(CCfgTask* tptr) {
+	$	return tptr->id;
+	$ }
+	# int id = get_id(CCfgTask* tptr);
+
+@function [trials, tptr] = ccfgtask_gettrials(tptr);
+	$ int get_trials(CCfgTask* tptr) {
+	$	return tptr->trials;
+	$ }
+	# int trials = get_trials(CCfgTask* tptr);
+
+@function [hwt, tptr] = ccfgtask_gethwt(tptr);
+	$ int get_hwt(CCfgTask* tptr) {
+	$	return (int)tptr->hwt;
+	$ }
+	# int hwt = get_hwt(CCfgTask* tptr);
+
+@function [gdf, tptr] = ccfgtask_getgdf(tptr);
+	$ int get_gdf(CCfgTask* tptr) {
+	$	return (int)tptr->gdf;
+	$ }
+	# int gdf = get_gdf(CCfgTask* tptr);
+
+%@function [tptr] = ccfgtask_delete(tptr)
+%	# delete(CCfgTask* tptr);

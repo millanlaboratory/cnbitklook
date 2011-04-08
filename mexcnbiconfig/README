@@ -1,0 +1,113 @@
+2010-09-08  Michele Tavella <michele.tavella@epfl.ch>
+
+This tutorial describes how to build the Matlab MEX interfaces for libtobiic.
+Now, to be honest, this whole procedure is quite thought and I'm not expecting
+anybody to follow it, since the MEX interfaces are distributed by me. I develop
+and test this stuff on Windows XP SP2 32bit and Matlab R2009b.  For Linux go at
+the very end of this file.
+
+                      -----------------------------------------
+					              MEX for Windows 
+                      -----------------------------------------
+
+
+-----------------------------------------
+Step 1 
+  GnuMEX, MSYS, MinGW 
+-----------------------------------------
+Go on:
+ http://files.mtvl.org/work/TOBI/TOBIic/
+Download and install in this order the following files:
+ 1) http://files.mtvl.org/work/TOBI/MSYS-1.0.11.exe
+ 2) http://files.mtvl.org/work/TOBI/msysDTK-1.0.1.exe
+ 3) http://files.mtvl.org/work/TOBI/tdm-mingw-1.908.0-4.4.1-2.exe
+ 4) http://files.mtvl.org/work/TOBI/gnumex-2.01.zip
+
+At this point you should have MSYS+MinGW ready to rock and also GnuMEX. 
+
+-----------------------------------------
+Step 2
+  Autoconf, automake, libtool and MWrap   
+-----------------------------------------
+Go on:
+ http://files.mtvl.org/work/TOBI/TOBIic/extra/
+and download all the goodness inside the folder:
+ http://files.mtvl.org/work/TOBI/TOBIiC/extra/autoconf-2.64.tar.gz
+ http://files.mtvl.org/work/TOBI/TOBIiC/extra/automake-1.11.1.tar.bz2
+ http://files.mtvl.org/work/TOBI/TOBIiC/extra/libtool-2.2.6b.tar.gz
+ http://files.mtvl.org/work/TOBI/TOBIiC/extra/mwrap-0.33.tar.gz 
+ http://files.mtvl.org/work/TOBI/TOBIiC/extra/install.sh
+ http://files.mtvl.org/work/TOBI/TOBIiC/extra/rapidxml-1.13.zip 
+
+I suggest you move all this stuff in your MSYS home folder, that should be
+something like: 
+ C:\msys\1.0\home\mtavella
+If you run the install.sh script provided, it will uncompress, compile and
+install all the tools above. This is doable by simply running the script in the
+same folder you have the files above (i.e. C:\msys\1.0\home\mtavella):
+ sh install.sh
+
+Autoconf, automake and libtool are necessary to compile TOBIiC. MWrap will be
+used to wrap automatically the library and generate some files that GnuMEX will
+use to build the MEX files.
+
+-----------------------------------------
+Step 3
+  Install RapidXML
+-----------------------------------------
+Go here:
+ http://files.mtvl.org/work/TOBI/TOBIic/extra/
+and download the RapidXML headers:
+ http://files.mtvl.org/work/TOBI/TOBIiC/extra/rapidxml-1.13.zip 
+
+ Unzip rapidxml-1.13.zip and copy the two .hpp files in 
+ C:\minGW\include\
+
+-----------------------------------------
+Step 4
+  Compile and install libtobiic
+-----------------------------------------
+Get a tarball/checkout/clone of libtobiic and uncompress in your home, I assume
+ C:\msys\1.0\home\mtavella\libtobiic
+Then:
+ cd ~/libtobiic
+ mkdir build
+ cd build
+ ../configure --prefix=/mingw/
+ make
+ make install
+
+Cheers! You have now installed libtobiic.
+
+-----------------------------------------
+Step 5
+  Compile the MEX interface
+-----------------------------------------
+Assuming libtobiic is here:
+ C:\msys\1.0\home\mtavella\libtobiic
+do:
+ cd libtobiic/bindings/matlab
+ make -f Makefile
+This will generate the wrappers with MWrap. At this point, open Matlab and do:
+ cd C:\msys\1.0\home\mtavella\libtobiic\bindings\matlab
+ make
+
+Please note that when issuing the 'make' command from MSYS, you are calling GNU
+Make, while from Matlab you are calling the 'make.m', that calls GnuMEX.
+
+-----------------------------------------
+Step 6
+  Test the MEXed libtobiic
+-----------------------------------------
+At this point you can simply call 
+ icmessage
+from Matlab and check if everything works.
+
+
+
+                      -----------------------------------------
+					              MEX for Linux
+                      -----------------------------------------
+1. Download and install mwrap
+2. Compile and install libtobiic
+3. Follow step 5) and 6) of the Windows guide

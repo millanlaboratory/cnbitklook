@@ -1,0 +1,10 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: libcnbiconfig
+Description: CNBI configuration structrues library
+Version: @PACKAGE_VERSION@
+Libs: -L${libdir} -lcnbiconfig
+Cflags: -I${includedir}/cnbiconfig

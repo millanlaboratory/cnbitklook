@@ -1,0 +1,55 @@
+/*
+    Copyright (C) 2010 Michele Tavella <tavella.michele@gmail.com>
+
+    This file is part of the libcnbicore library
+
+    The libndf library is free software: you can redistribute it and/or
+    modify it under the terms of the version 3 of the GNU General Public
+    License as published by the Free Software Foundation.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#ifndef CCPTABLE_HPP 
+#define CCPTABLE_HPP 
+
+#include <map>
+#include <sys/types.h>
+#include "CcSemaphore.hpp"
+
+class CcPtable {
+	public:
+		static CcPtable* Instance(void);
+		static void Release(void);
+		static unsigned int Refcount(void);
+		static void Add(pid_t);
+		static void Replace(pid_t);
+		static void Remove(pid_t);
+		static bool Has(pid_t);
+		static unsigned int Size(void);
+		static void SetDead(pid_t);
+		static bool IsDead(pid_t);
+		static bool IsAlive(pid_t);
+		static void Dump(void);
+	private:
+	protected:
+		CcPtable(void);
+		~CcPtable(void);
+		static void Destroy(void);
+
+	public:
+	private:
+		static CcPtable* _instance;
+		static unsigned int _refCount;
+	protected:
+		static std::map<pid_t, bool> _table;
+		static CcSemaphore _semlock;
+};
+
+#endif
