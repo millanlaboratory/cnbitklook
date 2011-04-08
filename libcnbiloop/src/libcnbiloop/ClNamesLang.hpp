@@ -31,7 +31,7 @@ class ClNamesLang : public ClLanguage {
 		char* Unset(const std::string& name);
 		char* Store(const std::string& name, const std::string& content);
 		char* Retrieve(const std::string& name);
-		char* Dispatch(const std::string& name, const std::string& content);
+		char* Dispatch(const std::string& content);
 		char* Erase(const std::string& name);
 
 		char* Ok(void);
@@ -43,7 +43,7 @@ class ClNamesLang : public ClLanguage {
 		bool IsUnset(const char* message, std::string* name);
 		bool IsStore(const char* message, std::string* name, std::string* content);
 		bool IsRetrieve(const char* message, std::string* name);
-		bool IsDispatch(const char* message, std::string* name, std::string* content);
+		bool IsDispatch(const char* message, std::string* content);
 		bool IsErase(const char* message, std::string* name);
 		bool IsOk(const char* message);
 		bool IsError(const char* message, int* code);
@@ -57,6 +57,8 @@ class ClNamesLang : public ClLanguage {
 		static const int Successful = 1;
 		static const int NotFound = 2;
 		static const int AlreadySet = 3;
+		static const int AlreadyStored= 4;
+		static const int NotAvailable = 5;
 };
 
 #endif

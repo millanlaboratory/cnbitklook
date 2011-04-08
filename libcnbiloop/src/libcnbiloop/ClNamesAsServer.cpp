@@ -97,8 +97,35 @@ void ClNamesAsServer::HandleRecvEndpoint(CcSocket* caller, CcAddress address) {
 					<< luname << " NotFound");
 		}
 	} else if(this->language.IsStore(message.c_str(), &stname, &stcontent)) {
+		if(this->Store(stname, stcontent) == true) {
+			server->Send(language.Ok(), address);
+			CcLogInfoS(this->_stream, "Store from " << address << ": " 
+					<< stname << ", " << stcontent.size() << " bytes");
+		} else {
+			server->Send(language.Error(ClNamesLang::AlreadyStored), address);
+			CcLogWarningS(this->_stream, "Set from " << address << ": " 
+					<< stname << " AlreadyStored");
+		}
 	} else if(this->language.IsRetrieve(message.c_str(), &stname)) {
+		if(this->Retrieve(stname, &stcontent) == true) {
+			CcLogInfoS(this->_stream, "Retrieve from " << address << ": " 
+					<< stname << ", " << stcontent.size() << " bytes");
+			server->Send(language.Dispatch(stcontent), address);
+		} else {
+			CcLogWarningS(this->_stream, "Query from " << address << ": " 
+					<< luname << " NotAvailable");
+			server->Send(language.Error(ClNamesLang::NotAvailable), address);
+		}
 	} else if(this->language.IsErase(message.c_str(), &stname)) {
+		if(this->Erase(stname) == true) {
+			server->Send(language.Ok(), address);
+			CcLogInfoS(this->_stream, "Erase from " << address << ": " 
+					<< stname);
+		} else {
+			server->Send(language.Error(ClNamesLang::NotAvailable), address);
+			CcLogWarningS(this->_stream, "Erase from " << address << ": " 
+					<< stname << " NotAvailable");
+		}
 	} else {
 		server->Send(language.Error(ClNamesLang::NotUndestood), address);
 		CcLogWarningS(this->_stream, "Message from " << address << 

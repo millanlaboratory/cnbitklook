@@ -33,8 +33,8 @@
 #define CLLN_UNSET_IN	"[clln]unset|%[^'['][/clln]"
 #define CLLN_UNSET_OUT	"[clln]unset|%s[/clln]"
 
-#define CLLN_DISP_IN	"[clln]dispatch|%[^'|']|%[^'['][/clln]"
-#define CLLN_DISP_OUT	"[clln]dispatch|%s|%s[/clln]"
+#define CLLN_DISP_IN	"[clln]dispatch|%[^'['][/clln]"
+#define CLLN_DISP_OUT	"[clln]dispatch|%s[/clln]"
 #define CLLN_RETR_IN	"[clln]retrieve|%[^'['][/clln]"
 #define CLLN_RETR_OUT	"[clln]retrieve|%s[/clln]"
 #define CLLN_STOR_IN	"[clln]store|%[^'|']|%[^'['][/clln]"
@@ -76,10 +76,8 @@ char* ClNamesLang::Retrieve(const std::string& name) {
 	return ClLanguage::message->buffer;
 }
 
-char* ClNamesLang::Dispatch(const std::string& name, 
-		const std::string& content) {
-	sprintf(ClLanguage::message->buffer, CLLN_DISP_OUT, name.c_str(), 
-			content.c_str());
+char* ClNamesLang::Dispatch(const std::string& content) {
+	sprintf(ClLanguage::message->buffer, CLLN_DISP_OUT, content.c_str());
 	return ClLanguage::message->buffer;
 }
 		
@@ -167,15 +165,12 @@ bool ClNamesLang::IsErase(const char* message, std::string* name) {
 	return true;
 }
 
-bool ClNamesLang::IsDispatch(const char* message, std::string* name, 
-		std::string* content) {
-	int count = sscanf(message, CLLN_DISP_IN, ClLanguage::_cache0->buffer, 
-			ClLanguage::_cache1->buffer);
-	if(count < 2)
+bool ClNamesLang::IsDispatch(const char* message, std::string* content) {
+	int count = sscanf(message, CLLN_DISP_IN, ClLanguage::_cache0->buffer);
+	if(count < 1)
 		return false;
 
-	name->assign(ClLanguage::_cache0->buffer);
-	content->assign(ClLanguage::_cache1->buffer);
+	content->assign(ClLanguage::_cache0->buffer);
 	return true;
 }
 

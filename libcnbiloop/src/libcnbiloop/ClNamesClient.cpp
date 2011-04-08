@@ -33,10 +33,8 @@ int ClNamesClient::Query(const std::string& name, CcAddress* address) {
 	bool status = ClClient::_client.SendRecv(this->_language.message->buffer,
 			&reply, ClNamesLang::Hdr, ClNamesLang::Trl, ClClient::_waitms);
 
-	if(status == false) {
-		CcLogWarningS(ClClient::_stream, "No reply in " << ClClient::_waitms << "ms");
+	if(status == false) 
 		return ClNamesLang::NoReply;
-	}
 
 	if(this->_language.IsReply(reply.c_str(), address))
 		return ClNamesLang::Successful;
@@ -54,10 +52,8 @@ int ClNamesClient::Set(const std::string& name, CcAddress address) {
 	bool status = ClClient::_client.SendRecv(this->_language.message->buffer,
 			&reply, ClNamesLang::Hdr, ClNamesLang::Trl, ClClient::_waitms);
 
-	if(status == false) {
-		CcLogWarningS(ClClient::_stream, "No reply in " << ClClient::_waitms << "ms");
+	if(status == false) 
 		return ClNamesLang::NoReply;
-	}
 
 	if(this->_language.IsOk(reply.c_str()))
 		return ClNamesLang::Successful;
@@ -75,10 +71,8 @@ int ClNamesClient::Unset(const std::string& name) {
 	bool status = ClClient::_client.SendRecv(this->_language.message->buffer,
 			&reply, ClNamesLang::Hdr, ClNamesLang::Trl, ClClient::_waitms);
 
-	if(status == false) {
-		CcLogWarningS(ClClient::_stream, "No reply in " << ClClient::_waitms << "ms");
+	if(status == false) 
 		return ClNamesLang::NoReply;
-	}
 
 	if(this->_language.IsOk(reply.c_str()))
 		return ClNamesLang::Successful;
@@ -94,6 +88,71 @@ CcAddress ClNamesClient::Query(const std::string& name) {
 	if(this->Query(name, &address) != ClNamesLang::Successful)
 		address.assign("");
 	return address;
+}
+
+int ClNamesClient::Retrieve(const std::string& name, std::string* content) {
+	int errorid = 0;
+	std::string message, reply;
+	
+	this->_language.Retrieve(name);
+	bool status = ClClient::_client.SendRecv(this->_language.message->buffer,
+			&reply, ClNamesLang::Hdr, ClNamesLang::Trl, ClClient::_waitms);
+
+	if(status == false) 
+		return ClNamesLang::NoReply;
+
+	if(this->_language.IsDispatch(reply.c_str(), content))
+		return ClNamesLang::Successful;
+	else if(this->_language.IsError(reply.c_str(), &errorid))
+		return errorid;
+	else
+		return ClNamesLang::StatusLost;
+}
+
+int ClNamesClient::Store(const std::string& name, const std::string& content) {
+	int errorid = 0;
+	std::string message, reply;
+	
+	this->_language.Set(name, content);
+	bool status = ClClient::_client.SendRecv(this->_language.message->buffer,
+			&reply, ClNamesLang::Hdr, ClNamesLang::Trl, ClClient::_waitms);
+
+	if(status == false) 
+		return ClNamesLang::NoReply;
+
+	if(this->_language.IsOk(reply.c_str()))
+		return ClNamesLang::Successful;
+	else if(this->_language.IsError(reply.c_str(), &errorid))
+		return errorid;
+	else
+		return ClNamesLang::StatusLost;
+}
+
+int ClNamesClient::Erase(const std::string& name) {
+	int errorid = 0;
+	std::string message, reply;
+	
+	this->_language.Unset(name);
+	bool status = ClClient::_client.SendRecv(this->_language.message->buffer,
+			&reply, ClNamesLang::Hdr, ClNamesLang::Trl, ClClient::_waitms);
+
+	if(status == false) 
+		return ClNamesLang::NoReply;
+
+	if(this->_language.IsOk(reply.c_str()))
+		return ClNamesLang::Successful;
+	else if(this->_language.IsError(reply.c_str(), &errorid))
+		return errorid;
+	else
+		return ClNamesLang::StatusLost;
+}
+
+		
+std::string ClNamesClient::Retrieve(const std::string& name) {
+	std::string content;
+	if(this->Retrieve(name, &content) != ClNamesLang::Successful)
+		content.assign("");
+	return content;
 }
 
 #endif

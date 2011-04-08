@@ -76,11 +76,9 @@ int main(void) {
 	cout << names.IsErase(names.message->buffer, &name) << endl;
 	cout << "--> Name:    " << name << endl;
 	
-	name.clear();
 	content.clear();
-	cout << names.Dispatch("config.xml", "<hello>world</hello>") << endl;
-	cout << names.IsDispatch(names.message->buffer, &name, &content) << endl;
-	cout << "--> Name:    " << name << endl;
+	cout << names.Dispatch("<hello>world</hello>") << endl;
+	cout << names.IsDispatch(names.message->buffer, &content) << endl;
 	cout << "--> Content: " << content << endl;
 
 	name.clear();

@@ -29,6 +29,11 @@ class ClNamesClient : public ClClient {
 		virtual int Set(const std::string& name, CcAddress address);
 		virtual int Unset(const std::string& name);
 		virtual CcAddress Query(const std::string& name);
+		
+		virtual int Retrieve(const std::string& name, std::string* content);
+		virtual int Store(const std::string& name, const std::string& content);
+		virtual int Erase(const std::string& name);
+		virtual std::string Retrieve(const std::string& name);
 	private:
 	protected:
 
