@@ -56,6 +56,7 @@ try
 	hostD.cache = '';
 	hostD.hdr = '<tobiid';
 	hostD.trl = '/>';
+	hostD.queue = {};
 
 	hostC.socket  = [];
 	hostC.address = '127.0.0.1:9500';
@@ -188,16 +189,10 @@ try
 			end
 			
 			% Dequeue all messages
-			hostD.cache = '';
-			while(true)
-				[hostD.cache, hostD.buffer] = ...
-					ndf_streamer(hostD.buffer, hostD.hdr, hostD.trl);
-				if(isempty(hostD.cache))
-					break;
-				end
-
-				% Deserialize iD message
-				idmessage_deserialize(hostD.serializer, hostD.cache);
+			[hostD.queue, hostD.buffer] = ...
+				ndf_streamerq(hostD.buffer, hostD.hdr, hostD.trl);
+			for iq = 1:length(hostD.queue)
+				idmessage_deserialize(hostD.serializer, hostD.queue{iq});
 			end
 		end
 		% Same as before, for TiC
