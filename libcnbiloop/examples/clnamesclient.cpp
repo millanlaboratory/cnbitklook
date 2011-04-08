@@ -18,6 +18,7 @@
 
 #include "ClNamesClient.hpp"
 #include <libcnbicore/CcBasic.hpp>
+#include <libcnbicore/CcFile.hpp>
 #include <iostream>
 
 using namespace std;
@@ -62,6 +63,16 @@ int main(void) {
 		std::cout << "Result: " <<  client.Retrieve("config.xml") << std::endl;
 		CcTime::Sleep(2000.00f);
 	}
+
+	if(client.Connect()) {
+		CcFile file;
+		file.Load("/etc/fstab");
+		client.Store("fstab", &file);
+		file.Clear();
+		client.Retrieve("fstab", &file);
+		client.Erase("fstab");
+	}
+
 
 	return 0;
 }
