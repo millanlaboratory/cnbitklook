@@ -23,8 +23,10 @@ using namespace std;
 int main(void) {
 	CcFile source, dest;
 	source.Load("/etc/fstab");
+
 	dest.Set(source.Get());
 	dest.Save("myfstab.txt");
+	
 
 	return 0;
 }
