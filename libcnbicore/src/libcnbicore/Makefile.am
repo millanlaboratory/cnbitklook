@@ -40,7 +40,9 @@ libcnbicore_include_HEADERS = CcBasic.hpp \
 							  CcTime.hpp \
 							  CcDoubleBuffer.hpp \
 							  CcBuffer.cpp \
-							  CcBuffer.hpp
+							  CcBuffer.hpp \
+							  CcFile.cpp \
+							  CcFile.hpp
 
 libcnbicore_la_SOURCES = CcBasic.hpp \
 						 CcPipeServer.cpp \
@@ -107,7 +109,9 @@ libcnbicore_la_SOURCES = CcBasic.hpp \
 						 CcDoubleBuffer.cpp \
 						 CcDoubleBuffer.hpp \
 						 CcBuffer.cpp \
-						 CcBuffer.hpp 
+						 CcBuffer.hpp \
+						 CcFile.cpp \
+						 CcFile.hpp
 
 libcnbicore_la_LDFLAGS = $(AM_CFLAGS) \
 					   -version-info $(CURRENT):$(REVISION):$(AGE) \
