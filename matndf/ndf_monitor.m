@@ -97,7 +97,7 @@ try
 	
 	% Event socket
 	% - Create a new TCP socket for sending/receiving events
-	disp('[ndf_monitor] Dreating TiD TDP socket');
+	disp('[ndf_monitor] Creating TiD TDP socket');
 	hostD.socket = tr_new();
 	tr_init_socket_default(hostD.socket);
 	tr_tcpclient(hostD.socket);
