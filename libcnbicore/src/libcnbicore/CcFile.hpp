@@ -31,6 +31,7 @@ class CcFile : public CcObject {
 		virtual void Set(const std::string& data);
 		virtual void Get(std::string* data);
 		virtual std::string Get(void);
+		virtual void Clear(void);
 
 	protected:
 		std::string _data;

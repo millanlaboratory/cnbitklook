@@ -68,4 +68,8 @@ std::string CcFile::Get(void) {
 	return data;
 }
 
+void CcFile::Clear(void) {
+	this->_data.clear();
+}
+
 #endif
