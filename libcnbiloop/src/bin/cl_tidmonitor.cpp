@@ -130,7 +130,7 @@ int main(int argc, char* argv[]) {
 	while(true) {
 		if(nsclient.Connect() == false)  {
 			CcLogFatal("Lost connection with nameserver");
-			client.Disconnect();
+			//client.Disconnect();
 			break;
 		}
 		if(client.IsConnected() == false) {
@@ -139,12 +139,12 @@ int main(int argc, char* argv[]) {
 			break;
 		}
 		if(CcCore::receivedSIGINT.Get()) {
-			client.Disconnect();
+			//client.Disconnect();
 			nsclient.Unset("/tidmonitor");
 			break;
 		}
 		if(CcCore::receivedSIGTERM.Get()) {
-			client.Disconnect();
+			//client.Disconnect();
 			nsclient.Unset("/tidmonitor");
 			break;
 		}
