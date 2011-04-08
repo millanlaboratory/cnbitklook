@@ -96,6 +96,9 @@ void ClNamesAsServer::HandleRecvEndpoint(CcSocket* caller, CcAddress address) {
 			CcLogWarningS(this->_stream, "Unset from " << address << ": " 
 					<< luname << " NotFound");
 		}
+	} else if(this->language.IsStore(message.c_str(), &stname, &stcontent)) {
+	} else if(this->language.IsRetrieve(message.c_str(), &stname)) {
+	} else if(this->language.IsErase(message.c_str(), &stname)) {
 	} else {
 		server->Send(language.Error(ClNamesLang::NotUndestood), address);
 		CcLogWarningS(this->_stream, "Message from " << address << 
@@ -232,6 +235,20 @@ bool ClNamesAsServer::Store(const std::string& name,
 	}
 	
 	this->_storage[name] = content;
+	this->_semstorage.Post();
+	return true;
+}
+
+bool ClNamesAsServer::Erase(const std::string& name) {
+	this->_semstorage.Wait();
+	std::map<std::string, std::string>::iterator it;
+	it = this->_storage.find(name);
+	if(it == this->_storage.end()) {
+		this->_semstorage.Post();
+		return false;
+	}
+
+	this->_storage.erase(it);
 	this->_semstorage.Post();
 	return true;
 }

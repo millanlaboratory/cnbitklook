@@ -45,6 +45,7 @@ class ClNamesAsServer : public CcSocketProxy, protected CcThread {
 		virtual void AddMonitored(const std::string& name, CcAddress address);
 		virtual bool Retrieve(const std::string& name, CcAddress* address);
 		virtual bool Store(const std::string& name, const std::string& address);
+		virtual bool Erase(const std::string& name);
 		
 	public:
 	private:
