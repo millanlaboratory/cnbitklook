@@ -12,7 +12,7 @@
 # age to 0.
 m4_define([lib_release],0)
 m4_define([lib_current],2)
-m4_define([lib_revision],1)
+m4_define([lib_revision],0)
 m4_define([lib_age],0)
 
 # Setup Automake
