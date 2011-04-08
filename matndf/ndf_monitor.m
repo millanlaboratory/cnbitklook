@@ -15,7 +15,6 @@
 %   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 %   function config = ndf_monitor(pipename, addressD, addressC)
-%function config = ndf_monitor(pipename, hostname, port)
 function config = ndf_monitor(pipename, addressD, addressC)
 
 % Verify if mtpath is installed
@@ -54,13 +53,18 @@ try
 	hostD.message = idmessage_new();
 	hostD.serializer = idserializerrapid_new(hostD.message);
 	hostD.buffer = '';
+	hostD.cache = '';
+	hostD.hdr = '<tobiid';
+	hostD.trl = '/>';
 
 	hostC.socket  = [];
 	hostC.address = '127.0.0.1:9500';
 	hostC.ipport  = {'127.0.0.1', '9500'};
 	hostC.message = icmessage_new();
 	hostC.serializer = icserializerrapid_new(hostC.message);
-	hostC.buffer = '';
+	hostC.cache = '';
+	hostC.hdr = '<tobiic';
+	hostC.trl = '</tobiic>';
 	
 	% Configure TiD message
 	idmessage_setdescription(hostD.message, 'ndf_monitor');
@@ -167,14 +171,33 @@ try
 		if(tr_connected(hostD.socket) < 0) 
 			tr_close(hostD.socket);
 			tr_connect(hostD.socket, hostD.ipport{1}, hostD.ipport{2});
+			tr_set_nonblocking(hostD.socket, 1);
 		else
-			if(mod(frame.index, 256) == 0)
+			if(mod(frame.index, 160) == 0)
 				% Prepare TiD message and send it
 				idmessage_absolutetic(hostD.message);
 				idmessage_setbidx(hostD.message, frame.index);
 				idmessage_setevent(hostD.message, frame.index);
-				hostD.buffer = idmessage_serialize(hostD.serializer);
-				tr_send(hostD.socket, hostD.buffer);
+				hostD.cache = idmessage_serialize(hostD.serializer);
+				tr_send(hostD.socket, hostD.cache);
+			end
+
+			% Receive from iD
+			if(tr_recv(hostD.socket))
+				hostD.buffer = [hostD.buffer, tr_getbuffer(hostD.socket)];
+			end
+			
+			% Dequeue all messages
+			hostD.cache = '';
+			while(true)
+				[hostD.cache, hostD.buffer] = ...
+					ndf_streamer(hostD.buffer, hostD.hdr, hostD.trl);
+				if(isempty(hostD.cache))
+					break;
+				end
+
+				% Deserialize iD message
+				idmessage_deserialize(hostD.serializer, hostD.cache);
 			end
 		end
 		% Same as before, for TiC
@@ -187,8 +210,8 @@ try
 			icmessage_setbidx(hostC.message, frame.index);
 			icmessage_setvalue(hostC.message, ...
 				'ndf_monitor', 'frame', frame.index);
-			hostC.buffer = icmessage_serialize(hostC.serializer);
-			tr_send(hostC.socket, hostC.buffer);
+			hostC.cache = icmessage_serialize(hostC.serializer);
+			tr_send(hostC.socket, hostC.cache);
 		end
 			
 
