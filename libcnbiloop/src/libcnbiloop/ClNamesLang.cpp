@@ -24,14 +24,21 @@
 
 #define CLLN_ERROR		"[clln]error|%d[/clln]"
 #define CLLN_OK			"[clln]ok[/clln]"
-#define CLLN_QUERY_OUT	"[clln]query|%s[/clln]"
 #define CLLN_QUERY_IN	"[clln]query|%[^'['][/clln]"
-#define CLLN_REPLY_OUT	"[clln]reply|%s[/clln]"
+#define CLLN_QUERY_OUT	"[clln]query|%s[/clln]"
 #define CLLN_REPLY_IN	"[clln]reply|%[^'['][/clln]"
-#define CLLN_SET_OUT	"[clln]set|%s|%s[/clln]"
+#define CLLN_REPLY_OUT	"[clln]reply|%s[/clln]"
 #define CLLN_SET_IN		"[clln]set|%[^'|']|%[^'['][/clln]"
-#define CLLN_UNSET_OUT	"[clln]unset|%s[/clln]"
+#define CLLN_SET_OUT	"[clln]set|%s|%s[/clln]"
 #define CLLN_UNSET_IN	"[clln]unset|%[^'['][/clln]"
+#define CLLN_UNSET_OUT	"[clln]unset|%s[/clln]"
+
+#define CLLN_DISP_IN	"[clln]dispatch|%[^'|']|%[^'['][/clln]"
+#define CLLN_DISP_OUT	"[clln]dispatch|%s|%s[/clln]"
+#define CLLN_RETR_IN	"[clln]retrieve|%[^'['][/clln]"
+#define CLLN_RETR_OUT	"[clln]retrieve|%s[/clln]"
+#define CLLN_STOR_IN	"[clln]store|%[^'|']|%[^'['][/clln]"
+#define CLLN_STOR_OUT	"[clln]store|%s|%s[/clln]"
 
 const std::string ClNamesLang::Hdr = "[clln]";
 const std::string ClNamesLang::Trl = "[/clln]";
@@ -54,6 +61,24 @@ char* ClNamesLang::Set(const std::string& name, CcAddress address) {
 char* ClNamesLang::Unset(const std::string& name) {
 	sprintf(ClLanguage::message->buffer, CLLN_UNSET_OUT, name.c_str());
 	return ClLanguage::message->buffer;
+}
+
+char* ClNamesLang::Store(const std::string& name, const std::string& content) {
+	sprintf(ClLanguage::message->buffer, CLLN_STOR_OUT, name.c_str(), 
+			content.c_str());
+	return ClLanguage::message->buffer;
+}
+
+char* ClNamesLang::Retrieve(const std::string& name) {
+	sprintf(ClLanguage::message->buffer, CLLN_RETR_OUT, name.c_str());
+	return ClLanguage::message->buffer;
+}
+
+char* ClNamesLang::Dispatch(const std::string& name, 
+		const std::string& content) {
+	sprintf(ClLanguage::message->buffer, CLLN_DISP_OUT, name.c_str(), 
+			content.c_str());
+	return NULL;
 }
 
 char* ClNamesLang::Ok(void) {
@@ -111,5 +136,6 @@ bool ClNamesLang::IsOk(const char* message) {
 bool ClNamesLang::IsError(const char* message, int* code) {
 	return(sscanf(message, CLLN_ERROR, code) == 1);
 }
+
 
 #endif

@@ -29,6 +29,9 @@ class ClNamesLang : public ClLanguage {
 		char* Reply(CcAddress address);
 		char* Set(const std::string& name, CcAddress address);
 		char* Unset(const std::string& name);
+		char* Store(const std::string& name, const std::string& content);
+		char* Retrieve(const std::string& name);
+		char* Dispatch(const std::string& name, const std::string& content);
 
 		char* Ok(void);
 		char* Error(const int code);
