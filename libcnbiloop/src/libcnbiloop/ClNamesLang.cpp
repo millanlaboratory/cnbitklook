@@ -109,7 +109,8 @@ bool ClNamesLang::IsReply(const char* message, CcAddress* address) {
 	return true;
 }
 
-bool ClNamesLang::IsSet(const char* message, std::string* name, CcAddress* address) {
+bool ClNamesLang::IsSet(const char* message, std::string* name, 
+		CcAddress* address) {
 	int count = sscanf(message, CLLN_SET_IN, ClLanguage::_cache0->buffer, 
 			ClLanguage::_cache1->buffer);
 	if(count < 2)

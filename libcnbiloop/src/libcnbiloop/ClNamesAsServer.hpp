@@ -43,6 +43,8 @@ class ClNamesAsServer : public CcSocketProxy, protected CcThread {
 		virtual bool Unset(const std::string& name);
 		virtual void Main(void);
 		virtual void AddMonitored(const std::string& name, CcAddress address);
+		virtual bool Retrieve(const std::string& name, CcAddress* address);
+		virtual bool Store(const std::string& name, const std::string& address);
 		
 	public:
 	private:
@@ -51,8 +53,10 @@ class ClNamesAsServer : public CcSocketProxy, protected CcThread {
 		std::stringstream _stream;
 		std::map<std::string, CcAddress> _lookup;
 		std::map<std::string, CcAddress> _monitor;
+		std::map<std::string, std::string> _storage;
 		CcSemaphore _semlookup;
 		CcSemaphore _semmonitor;
+		CcSemaphore _semstorage;
 		double _monitorms;
 };
 

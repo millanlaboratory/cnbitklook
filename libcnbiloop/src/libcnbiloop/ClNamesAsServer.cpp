@@ -206,5 +206,33 @@ void ClNamesAsServer::AddMonitored(const std::string& name, CcAddress address) {
 	this->_monitor[name] = address;
 	this->_semmonitor.Post();
 }
+
+bool ClNamesAsServer::Retrieve(const std::string& name, std::string* content) {
+	this->_semstorage.Wait();
+	std::map<CcAddress, std::string>::iterator it;
+	it = this->_storage.find(name);
+	if(it == this->_storage.end()) {
+		this->_semstorage.Post();
+		return false;
+	}
+	
+	content->assign((*it).second);
+	this->_semstorage.Post();
+	return true;
+}
+		
+bool ClNamesAsServer::Store(const std::string& name, const std::string& content) {
+	this->_semstorage.Wait();
+	std::map<CcAddress, std::string>::iterator it;
+	it = this->_storage.find(name);
+	if(it != this->_storage.end()) {
+		this->_semstorage.Post();
+		return false;
+	}
+	
+	this->_storage[name] = content;
+	this->_semstorage.Post();
+	return true;
+}
 		
 #endif
