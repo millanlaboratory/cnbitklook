@@ -58,7 +58,17 @@ int main(void) {
 	
 	cout << names.Ok() << endl;
 	cout << names.IsOk(names.message->buffer) << endl;
+	
+	name.clear();
+	cout << names.Store("config.xml", "<hello>world</hello>") << endl;
+	
+	name.clear();
+	cout << names.Retrieve("config.xml") << endl;
+	
+	cout << names.Dispatch("config.xml", "<hello>world</hello>") << endl;
 
+	name.clear();
+	address.clear();
 
 	return 0;
 }

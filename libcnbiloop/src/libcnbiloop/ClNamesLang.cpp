@@ -78,7 +78,7 @@ char* ClNamesLang::Dispatch(const std::string& name,
 		const std::string& content) {
 	sprintf(ClLanguage::message->buffer, CLLN_DISP_OUT, name.c_str(), 
 			content.c_str());
-	return NULL;
+	return ClLanguage::message->buffer;
 }
 
 char* ClNamesLang::Ok(void) {
