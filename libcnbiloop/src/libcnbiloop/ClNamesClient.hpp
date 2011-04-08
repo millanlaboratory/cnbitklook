@@ -21,6 +21,7 @@
 
 #include "ClClient.hpp"
 #include "ClNamesLang.hpp"
+#include <libcnbicore/CcFile.hpp>
 
 class ClNamesClient : public ClClient {
 	public:
@@ -34,6 +35,7 @@ class ClNamesClient : public ClClient {
 		virtual int Store(const std::string& name, const std::string& content);
 		virtual int Erase(const std::string& name);
 		virtual std::string Retrieve(const std::string& name);
+		virtual int Store(const std::string& name, CcFile file);
 	private:
 	protected:
 

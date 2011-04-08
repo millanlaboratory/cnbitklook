@@ -154,5 +154,10 @@ std::string ClNamesClient::Retrieve(const std::string& name) {
 		content.assign("");
 	return content;
 }
+		
+int ClNamesClient::Store(const std::string& name, CcFile file) {
+	std::string data = file.Get();
+	return this->Store(name, data);
+}
 
 #endif
