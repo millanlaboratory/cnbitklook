@@ -127,7 +127,6 @@ int main(int argc, char* argv[]) {
 	CcTimeValue tvSigCheck;
 	CcTime::Tic(&tvSigCheck);
 	size_t gsize = -1, asize = -1;
-	int i = 0;
 	while(true) {
 		gsize = eegdev.GetData();
 		asize = eegdev.GetAvailable();
