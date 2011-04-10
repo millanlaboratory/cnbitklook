@@ -35,6 +35,7 @@ class CcFile : public CcObject {
 
 	protected:
 		std::string _data;
+		CcSemaphore _semdata;
 };
 
 #endif

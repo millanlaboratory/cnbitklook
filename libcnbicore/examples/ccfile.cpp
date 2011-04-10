@@ -21,12 +21,14 @@
 using namespace std;
 
 int main(void) {
+	std::string buffer;
+
 	CcFile source, dest;
 	source.Load("/etc/fstab");
+	source.Get(&buffer);
 
 	dest.Set(source.Get());
 	dest.Save("myfstab.txt");
 	
-
 	return 0;
 }

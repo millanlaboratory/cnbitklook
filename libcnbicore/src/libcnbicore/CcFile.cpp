@@ -30,46 +30,61 @@ CcFile::~CcFile(void) {
 }
 
 bool CcFile::Load(const std::string& filename) {
+	this->_semdata.Wait();
 	std::ifstream stream(filename.c_str(), std::ifstream::in);
-	if(stream.good() == false)
+	if(stream.good() == false) {
+		this->_semdata.Post();
 		return false;
+	}
 	
 	this->_data.clear();
-	std::string buffer;
-	while(!stream.eof()) {
-		getline(stream, buffer);
-		this->_data.append(buffer);
-		this->_data.append("\n");
-	}
+	std::stringstream buffer;
+	buffer << stream.rdbuf();
+	this->_data.assign(buffer.str());
+
 	stream.close();
+	this->_semdata.Post();
 	return true;
 }
 
 bool CcFile::Save(const std::string& filename) {
+	this->_semdata.Wait();
 	std::ofstream stream(filename.c_str());
-	if(stream.good() == false)
+	if(stream.good() == false) {
+		this->_semdata.Post();
 		return false;
+	}
 	
 	stream << this->_data;
 	stream.close();
+	this->_semdata.Post();
 	return true;
 }
 
 void CcFile::Set(const std::string& data) {
+	this->_semdata.Wait();
 	this->_data.assign(data);
+	this->_semdata.Post();
 }
 
 void CcFile::Get(std::string* data) {
+	this->_semdata.Wait();
 	data->assign(this->_data);
+	this->_semdata.Post();
 }
 
 std::string CcFile::Get(void) {
-	std::string data(this->_data);
+	std::string data;
+	this->_semdata.Wait();
+	data.assign(this->_data);
+	this->_semdata.Post();
 	return data;
 }
 
 void CcFile::Clear(void) {
+	this->_semdata.Wait();
 	this->_data.clear();
+	this->_semdata.Post();
 }
 
 #endif
