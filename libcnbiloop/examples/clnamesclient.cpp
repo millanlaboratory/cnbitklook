@@ -31,7 +31,7 @@ int main(void) {
 		CcLogFatal("Cannot connect to endpoint");
 		exit(1);
 	}
-	
+
 	CcAddress address;
 	if(client.Connect()) {
 		client.Set("/pippo", "127.0.0.1:12000");
@@ -71,8 +71,11 @@ int main(void) {
 		file.Clear();
 		client.Retrieve("fstab", &file);
 		client.Erase("fstab");
+	
+		client.StoreFile("group", "/etc/group");
+		client.RetrieveFile("group", "group");
+		client.Erase("group");
 	}
-
 
 	return 0;
 }

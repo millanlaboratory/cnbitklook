@@ -29,6 +29,11 @@ int main(void) {
 
 	dest.Set(source.Get());
 	dest.Save("myfstab.txt");
+
+	CcFile huge;
+	huge.Load("/home/mtavella/Desktop/file.mat");
+	cout << huge.Size() << "/" << huge.MaxSize() << endl;
+	huge.Save("/home/mtavella/Desktop/file2.mat");
 	
 	return 0;
 }

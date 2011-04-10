@@ -1,20 +1,20 @@
 /*
-    Copyright (C) 2010 Michele Tavella <tavella.michele@gmail.com>
+   Copyright (C) 2010 Michele Tavella <tavella.michele@gmail.com>
 
-    This file is part of the libcnbiloop library
+   This file is part of the libcnbiloop library
 
-    The libcnbiloop library is free software: you can redistribute it and/or
-    modify it under the terms of the version 3 of the GNU General Public
-    License as published by the Free Software Foundation.
+   The libcnbiloop library is free software: you can redistribute it and/or
+   modify it under the terms of the version 3 of the GNU General Public
+   License as published by the Free Software Foundation.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #ifndef CLACQLANG_CPP 
 #define CLACQLANG_CPP 
@@ -34,48 +34,55 @@
 
 const std::string ClAcqLang::Hdr = "[clla]";
 const std::string ClAcqLang::Trl = "[/clla]";
-		
+
 char* ClAcqLang::AddLabelGDF(const GDFEvent label) {
-	sprintf(ClLanguage::message->buffer, CLLA_ADD_LABEL_GDF, label);
+	snprintf(ClLanguage::message->buffer, ClLanguage::MaxSize(),
+			CLLA_ADD_LABEL_GDF, label);
 	return ClLanguage::message->buffer;
 }
-		
+
 char* ClAcqLang::AddLabelLPT(const HWTrigger label) {
-	sprintf(ClLanguage::message->buffer, CLLA_ADD_LABEL_LPT, label);
+	snprintf(ClLanguage::message->buffer, ClLanguage::MaxSize(),
+			CLLA_ADD_LABEL_LPT, label);
 	return ClLanguage::message->buffer;
 }
 
 char* ClAcqLang::AddLabelTXT(const std::string& label) {
-	sprintf(ClLanguage::message->buffer, CLLA_ADD_LABEL_TXT, label.c_str());
+	snprintf(ClLanguage::message->buffer, ClLanguage::MaxSize(),
+			CLLA_ADD_LABEL_TXT, label.c_str());
 	return ClLanguage::message->buffer;
 }
-		
+
 char* ClAcqLang::OpenXDF(const std::string& filegdf, 
 		const std::string& filelog, const std::string& linelog) {
-	sprintf(ClLanguage::message->buffer, CLLA_OPEN_XDF_OUT, 
-			filegdf.c_str(), filelog.c_str(), linelog.c_str());
+	snprintf(ClLanguage::message->buffer, ClLanguage::MaxSize(),
+			CLLA_OPEN_XDF_OUT, filegdf.c_str(), filelog.c_str(),
+			linelog.c_str());
 	return ClLanguage::message->buffer;
 }
 
 char* ClAcqLang::CloseXDF(void) {
-	sprintf(ClLanguage::message->buffer, CLLA_CLOSE_XDF);
+	snprintf(ClLanguage::message->buffer, ClLanguage::MaxSize(),
+			CLLA_CLOSE_XDF);
 	return ClLanguage::message->buffer;
 }
 
 char* ClAcqLang::Ok(void) {
-	sprintf(ClLanguage::message->buffer, CLLA_OK); 
+	snprintf(ClLanguage::message->buffer, ClLanguage::MaxSize(),
+			CLLA_OK); 
 	return ClLanguage::message->buffer;
 }
 
 char* ClAcqLang::Error(const int code) {
-	sprintf(ClLanguage::message->buffer, CLLA_ERROR, code);
+	snprintf(ClLanguage::message->buffer, ClLanguage::MaxSize(),
+			CLLA_ERROR, code);
 	return ClLanguage::message->buffer;
 }
 
 bool ClAcqLang::IsAddLabelGDF(const char* message, GDFEvent* label) {
 	return(sscanf(message, CLLA_ADD_LABEL_GDF, label) == 1);
 }
-		 
+
 bool ClAcqLang::IsAddLabelLPT(const char* message, HWTrigger* label) {
 	return(sscanf(message, CLLA_ADD_LABEL_LPT, (unsigned int*)label) == 1);
 }

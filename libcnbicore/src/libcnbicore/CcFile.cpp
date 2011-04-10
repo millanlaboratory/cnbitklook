@@ -86,5 +86,21 @@ void CcFile::Clear(void) {
 	this->_data.clear();
 	this->_semdata.Post();
 }
+		
+size_t CcFile::Size(void) {
+	size_t size;
+	this->_semdata.Wait();
+	size = this->_data.size();
+	this->_semdata.Post();
+	return size;
+}
+		
+size_t CcFile::MaxSize(void) {
+	size_t size;
+	this->_semdata.Wait();
+	size = this->_data.max_size();
+	this->_semdata.Post();
+	return size;
+}
 
 #endif

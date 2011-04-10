@@ -41,37 +41,44 @@ const std::string ClProLang::Hdr = "[cllp]";
 const std::string ClProLang::Trl = "[/cllp]";
 
 char* ClProLang::Fork(void) {
-	sprintf(ClLanguage::message->buffer, CLLP_FORK);
+	snprintf(ClLanguage::message->buffer, ClLanguage::MaxSize(),
+			CLLP_FORK);
 	return ClLanguage::message->buffer;
 }
-		
+
 char* ClProLang::Launch(const int pid, const std::string& call) {
-	sprintf(ClLanguage::message->buffer, CLLP_LAUNCH_MATLAB_OUT, pid, call.c_str());
+	snprintf(ClLanguage::message->buffer, ClLanguage::MaxSize(),
+			CLLP_LAUNCH_MATLAB_OUT, pid, call.c_str());
 	return ClLanguage::message->buffer;
 }
 
 char* ClProLang::Terminate(const int pid) {
-	sprintf(ClLanguage::message->buffer, CLLP_TERMINATE, pid);
+	snprintf(ClLanguage::message->buffer, ClLanguage::MaxSize(),
+			CLLP_TERMINATE, pid);
 	return ClLanguage::message->buffer;
 }
 
 char* ClProLang::IsAlive(const int pid) {
-	sprintf(ClLanguage::message->buffer, CLLP_ISALIVE, pid);
+	snprintf(ClLanguage::message->buffer, ClLanguage::MaxSize(),
+			CLLP_ISALIVE, pid);
 	return ClLanguage::message->buffer;
 }
 
 char* ClProLang::Ok(const int pid) {
-	sprintf(ClLanguage::message->buffer, CLLP_OK, pid);
+	snprintf(ClLanguage::message->buffer, ClLanguage::MaxSize(),
+			CLLP_OK, pid);
 	return ClLanguage::message->buffer;
 }
 
 char* ClProLang::Error(const int code) {
-	sprintf(ClLanguage::message->buffer, CLLP_ERROR, code);
+	snprintf(ClLanguage::message->buffer, ClLanguage::MaxSize(),
+			CLLP_ERROR, code);
 	return ClLanguage::message->buffer;
 }
 
 char* ClProLang::Died(const int pid) {
-	sprintf(ClLanguage::message->buffer, CLLP_DIED, pid);
+	snprintf(ClLanguage::message->buffer, ClLanguage::MaxSize(),
+			CLLP_DIED, pid);
 	return ClLanguage::message->buffer;
 }
 
@@ -79,12 +86,12 @@ bool ClProLang::IsFork(const char* message) {
 	return (strcmp(message, CLLP_FORK) == 0);
 }
 
-bool ClProLang::IsLaunch(const char* message, int* pid, std::string* call) {
-	if(sscanf(message, CLLP_LAUNCH_MATLAB_IN, pid, ClLanguage::_cache0->buffer) != 2)
-		return false;
-	call->assign(ClLanguage::_cache0->buffer);
-	return true;
-}
+	bool ClProLang::IsLaunch(const char* message, int* pid, std::string* call) {
+		if(sscanf(message, CLLP_LAUNCH_MATLAB_IN, pid, ClLanguage::_cache0->buffer) != 2)
+			return false;
+		call->assign(ClLanguage::_cache0->buffer);
+		return true;
+	}
 
 bool ClProLang::IsIsAlive(const char* message, int* pid) {
 	return(sscanf(message, CLLP_ISALIVE, pid) == 1);
@@ -107,13 +114,15 @@ bool ClProLang::IsError(const char* message, int* code) {
 }
 
 char* ClProLang::ChangeDirectory(const int pid, const std::string& path) {
-	sprintf(ClLanguage::message->buffer, CLLP_CWD_OUT, pid, path.c_str());
+	snprintf(ClLanguage::message->buffer, ClLanguage::MaxSize(),
+			CLLP_CWD_OUT, pid, path.c_str());
 	return ClLanguage::message->buffer;
 }
 
 char* ClProLang::Include(const int pid, const std::string& path0, 
 		const std::string& path1){
-	sprintf(ClLanguage::message->buffer, CLLP_INCLUDE_IN, 
+	snprintf(ClLanguage::message->buffer, ClLanguage::MaxSize(),
+			CLLP_INCLUDE_IN, 
 			pid, path0.c_str(), path1.c_str());
 	return ClLanguage::message->buffer;
 }
@@ -122,7 +131,8 @@ char* ClProLang::LaunchNDF(int pid,
 		const std::string& function, const std::string& pipename,
 		const CcAddress addressD, const CcAddress addressC, 
 		const std::string& extra) {
-	sprintf(ClLanguage::message->buffer, CLLP_LAUNCH_NDFMATLAB_OUT, 
+	snprintf(ClLanguage::message->buffer, ClLanguage::MaxSize(),
+			CLLP_LAUNCH_NDFMATLAB_OUT, 
 			pid,
 			function.c_str(), 
 			pipename.c_str(),
@@ -146,7 +156,7 @@ bool ClProLang::IsChangeDirectory(const char* message,
 
 bool ClProLang::IsInclude(const char* message, int* pid, 
 		std::string* path0, std::string* path1) {
-	
+
 	int count = sscanf(message, CLLP_INCLUDE_OUT, 
 			pid, 
 			ClLanguage::_cache0->buffer,  
@@ -165,7 +175,7 @@ bool ClProLang::IsLaunchNDF(const char* message,
 		std::string* function, std::string* pipename, 
 		std::string* addressD, std::string* addressC, 
 		std::string* extra) {
-	
+
 	int count = sscanf(message, CLLP_LAUNCH_NDFMATLAB_IN, 
 			pid,
 			ClLanguage::_cache0->buffer,  

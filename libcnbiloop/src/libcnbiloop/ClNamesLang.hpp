@@ -25,6 +25,7 @@
 
 class ClNamesLang : public ClLanguage {
 	public:
+		ClNamesLang(void);
 		char* Query(const std::string& name);
 		char* Reply(CcAddress address);
 		char* Set(const std::string& name, CcAddress address);

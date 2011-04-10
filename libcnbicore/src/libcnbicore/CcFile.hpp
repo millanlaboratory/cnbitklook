@@ -32,6 +32,8 @@ class CcFile : public CcObject {
 		virtual void Get(std::string* data);
 		virtual std::string Get(void);
 		virtual void Clear(void);
+		virtual size_t Size(void);
+		virtual size_t MaxSize(void);
 
 	protected:
 		std::string _data;

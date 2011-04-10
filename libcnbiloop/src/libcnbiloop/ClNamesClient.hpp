@@ -38,6 +38,9 @@ class ClNamesClient : public ClClient {
 
 		virtual bool Store(const std::string& name, CcFile* file);
 		virtual bool Retrieve(const std::string& name, CcFile* file);
+		
+		virtual bool StoreFile(const std::string& name, const std::string& filename);
+		virtual bool RetrieveFile(const std::string& name, const std::string& filename);
 	private:
 	protected:
 

@@ -168,4 +168,20 @@ bool ClNamesClient::Retrieve(const std::string& name, CcFile* file) {
 	return true;
 }
 
+bool ClNamesClient::StoreFile(const std::string& name, 
+		const std::string& filename) {
+	CcFile file;
+	if(file.Load(filename) == false)
+		return false;
+	return this->Store(name, &file);
+}
+
+bool ClNamesClient::RetrieveFile(const std::string& name, 
+		const std::string& filename) {
+	CcFile file;
+	if(this->Retrieve(name, &file) == false) 
+		return false;
+	return(file.Save(filename));
+}
+
 #endif

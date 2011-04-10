@@ -100,4 +100,16 @@ $ #include <stdio.h>
 	$ }
 	# bool status = clerase(ClLoop* c, cstring name[1024]);
 
+@function [status] = cl_retrievefile(c, name, filename)
+	$ bool clretrievefile(ClLoop* q, char* name, char* filename) {
+	$	std::string nm(name), fn(filename);
+	$	return q->nameserver.RetrieveFile(nm, fn);
+	$ }
+	# bool status = clretrievefile(ClLoop* c, cstring name[1024], cstring filename[1024]);
 
+@function [status] = cl_storefile(c, name, filename)
+	$ bool clstorefile(ClLoop* q, char* name, char* filename) {
+	$	std::string nm(name), fn(filename);
+	$	return(q->nameserver.StoreFile(nm, fn));
+	$ }
+	# bool status = clstorefile(ClLoop* c, cstring name[1024], cstring filename[1024]);

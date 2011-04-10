@@ -22,7 +22,8 @@
 #include "ClLanguage.hpp" 
 
 ClLanguage::ClLanguage(size_t bsize, size_t csize) {
-	this->message = new CcBuffer<char>(bsize);
+	this->_bsize = bsize;
+	this->message = new CcBuffer<char>(this->_bsize);
 	this->_cache0 = new CcBuffer<char>(csize);
 	this->_cache1 = new CcBuffer<char>(csize);
 	this->_cache2 = new CcBuffer<char>(csize);
@@ -39,6 +40,10 @@ ClLanguage::~ClLanguage(void) {
 	delete this->_cache3;
 	delete this->_cache4;
 	delete this->_cache5;
+}
+
+size_t ClLanguage::MaxSize(void) {
+	return this->_bsize;
 }
 
 #endif

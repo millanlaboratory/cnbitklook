@@ -45,57 +45,69 @@
 const std::string ClNamesLang::Hdr = "[clln]";
 const std::string ClNamesLang::Trl = "[/clln]";
 		
+ClNamesLang::ClNamesLang(void) : ClLanguage(1048576) {
+}
+		
 char* ClNamesLang::Query(const std::string& name) {
-	sprintf(ClLanguage::message->buffer, CLLN_QUERY_OUT, name.c_str());
+	snprintf(ClLanguage::message->buffer, ClLanguage::MaxSize(), 
+			CLLN_QUERY_OUT, name.c_str());
 	return ClLanguage::message->buffer;
 }
 
 char* ClNamesLang::Reply(CcAddress address) {
-	sprintf(ClLanguage::message->buffer, CLLN_REPLY_OUT, address.c_str());
+	snprintf(ClLanguage::message->buffer, ClLanguage::MaxSize(),
+			CLLN_REPLY_OUT, address.c_str());
 	return ClLanguage::message->buffer;
 }
 
 char* ClNamesLang::Set(const std::string& name, CcAddress address) {
-	sprintf(ClLanguage::message->buffer, CLLN_SET_OUT, name.c_str(), address.c_str());
+	snprintf(ClLanguage::message->buffer, ClLanguage::MaxSize(),
+			CLLN_SET_OUT, name.c_str(), address.c_str());
 	return ClLanguage::message->buffer;
 }
 
 char* ClNamesLang::Unset(const std::string& name) {
-	sprintf(ClLanguage::message->buffer, CLLN_UNSET_OUT, name.c_str());
+	snprintf(ClLanguage::message->buffer, ClLanguage::MaxSize(),
+			CLLN_UNSET_OUT, name.c_str());
 	return ClLanguage::message->buffer;
 }
 
 char* ClNamesLang::Store(const std::string& name, const std::string& content) {
-	sprintf(ClLanguage::message->buffer, CLLN_STOR_OUT, name.c_str(), 
-			content.c_str());
+	snprintf(ClLanguage::message->buffer, ClLanguage::MaxSize(),
+			CLLN_STOR_OUT, name.c_str(), content.c_str());
 	return ClLanguage::message->buffer;
 }
 
 char* ClNamesLang::Retrieve(const std::string& name) {
-	sprintf(ClLanguage::message->buffer, CLLN_RETR_OUT, name.c_str());
+	snprintf(ClLanguage::message->buffer, ClLanguage::MaxSize(),
+			CLLN_RETR_OUT, name.c_str());
 	return ClLanguage::message->buffer;
 }
 
 char* ClNamesLang::Dispatch(const std::string& content) {
-	sprintf(ClLanguage::message->buffer, CLLN_DISP_OUT, content.c_str());
+	snprintf(ClLanguage::message->buffer, ClLanguage::MaxSize(),
+			CLLN_DISP_OUT, content.c_str());
 	return ClLanguage::message->buffer;
 }
-		
+
 char* ClNamesLang::Erase(const std::string& name) {
-	sprintf(ClLanguage::message->buffer, CLLN_ERASE_OUT, name.c_str());
+	snprintf(ClLanguage::message->buffer, ClLanguage::MaxSize(),
+			CLLN_ERASE_OUT, name.c_str());
 	return ClLanguage::message->buffer;
 }
 
 char* ClNamesLang::Ok(void) {
-	sprintf(ClLanguage::message->buffer, CLLN_OK);
+	snprintf(ClLanguage::message->buffer, ClLanguage::MaxSize(),
+			CLLN_OK);
 	return ClLanguage::message->buffer;
 }
 
 char* ClNamesLang::Error(const int code) {
-	sprintf(ClLanguage::message->buffer, CLLN_ERROR, code);
+	snprintf(ClLanguage::message->buffer, ClLanguage::MaxSize(),
+			CLLN_ERROR, code);
 	return ClLanguage::message->buffer;
 }
-		
+
 bool ClNamesLang::IsQuery(const char* message, std::string* name) {
 	int count = sscanf(message, CLLN_QUERY_IN, ClLanguage::_cache0->buffer);
 	if(count < 1)

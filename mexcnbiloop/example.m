@@ -38,7 +38,9 @@ for i = 1:10
 	cl_store(loop, 'data0', '<hello>world!</hello>');
 	cl_retrieve(loop, 'data0');
 	cl_erase(loop, 'data0');
-
+	cl_storefile(loop, 'huge', '/home/mtavella/Desktop/file.mat')
+	cl_retrievefile(loop, 'huge', '/home/mtavella/Desktop/file2.mat');
+	cl_erase(loop, 'data0');
 	pause(1);
 end
 
