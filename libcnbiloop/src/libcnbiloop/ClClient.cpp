@@ -34,7 +34,6 @@ ClClient::~ClClient(void) {
 bool ClClient::Connect(const CcAddress address) {
 	if(this->_client.IsConnected())
 		return true;
-
 	try {
 		this->_client.Connect(address);
 	} catch(CcException e) {

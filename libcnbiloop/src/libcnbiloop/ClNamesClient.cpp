@@ -156,7 +156,7 @@ std::string ClNamesClient::Retrieve(const std::string& name) {
 }
 		
 bool ClNamesClient::Store(const std::string& name, CcFile* file) {
-	return (this->Store(name, file->Get()) == ClNamesLang::Successful);
+	return(this->Store(name, file->Get()) == ClNamesLang::Successful);
 }
 
 bool ClNamesClient::Retrieve(const std::string& name, CcFile* file) {

@@ -45,7 +45,7 @@
 const std::string ClNamesLang::Hdr = "[clln]";
 const std::string ClNamesLang::Trl = "[/clln]";
 		
-ClNamesLang::ClNamesLang(void) : ClLanguage(1048576) {
+ClNamesLang::ClNamesLang(void) { //: ClLanguage(1048576, 5*1048576) {
 }
 		
 char* ClNamesLang::Query(const std::string& name) {
@@ -153,6 +153,7 @@ bool ClNamesLang::IsStore(const char* message, std::string* name,
 			ClLanguage::_cache1->buffer);
 	if(count < 2)
 		return false;
+	
 
 	name->assign(ClLanguage::_cache0->buffer);
 	content->assign(ClLanguage::_cache1->buffer);
