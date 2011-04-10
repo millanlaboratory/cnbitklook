@@ -37,8 +37,8 @@
 #define CLLN_DISP_OUT	"[clln]dispatch|%s[/clln]"
 #define CLLN_RETR_IN	"[clln]retrieve|%[^'['][/clln]"
 #define CLLN_RETR_OUT	"[clln]retrieve|%s[/clln]"
-#define CLLN_STOR_IN	"[clln]store|%[^'|']|%[^'['][/clln]"
-#define CLLN_STOR_OUT	"[clln]store|%s|%s[/clln]"
+#define CLLN_STOR_IN	"[clln]store|%[^'|']|%lu|%[^'['][/clln]"
+#define CLLN_STOR_OUT	"[clln]store|%s|%lu|%s[/clln]"
 #define CLLN_ERASE_IN	"[clln]erase|%[^'['][/clln]"
 #define CLLN_ERASE_OUT	"[clln]erase|%s[/clln]"
 
@@ -74,7 +74,7 @@ char* ClNamesLang::Unset(const std::string& name) {
 
 char* ClNamesLang::Store(const std::string& name, const std::string& content) {
 	snprintf(ClLanguage::message->buffer, ClLanguage::MessageSize(),
-			CLLN_STOR_OUT, name.c_str(), content.c_str());
+			CLLN_STOR_OUT, name.c_str(), content.size(), content.c_str());
 	return ClLanguage::message->buffer;
 }
 
@@ -149,8 +149,10 @@ bool ClNamesLang::IsUnset(const char* message, std::string* name) {
 
 bool ClNamesLang::IsStore(const char* message, std::string* name, 
 		std::string* content) {
-	int count = sscanf(message, CLLN_STOR_IN, ClLanguage::_cache0->buffer, 
-			ClLanguage::_cache1->buffer);
+	size_t size;
+	int count = sscanf(message, CLLN_STOR_IN, ClLanguage::_cache0->buffer,
+			&size, ClLanguage::_cache1->buffer);
+
 	if(count < 2)
 		return false;
 	
