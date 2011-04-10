@@ -19,6 +19,7 @@
 #ifndef CCSOCKET_HPP
 #define CCSOCKET_HPP
 
+#include "CcFlags.hpp"
 #include "CcCallback.hpp"
 #include "CcMutex.hpp"
 #include "CcObject.hpp"
@@ -36,7 +37,7 @@ class CcSocketProxy;
  */
 class CcSocket : public CcObject {
 	public:
-		CcSocket(unsigned int bsize = 1024, unsigned int maxconns = 1);
+		CcSocket(unsigned int bsize = CCSOCKET_BSIZE, unsigned int maxconns = 1);
 		virtual ~CcSocket(void);
 		virtual int Recv(void) = 0; 
 		virtual int Send(const char* message) = 0;

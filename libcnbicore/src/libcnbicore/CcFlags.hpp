@@ -47,7 +47,7 @@
 #define CCASYNC_WAIT_POLL			 0.500
 #define CCASYNC_WAIT_MACCEPT	  2000.000
 #define CCASYNC_WAIT_MRECV			 1.000
-
+#define CCSOCKET_BSIZE			   1048576
 /*! \mainpage libcnbicore
  *
  * \section sec_intro Introduction
