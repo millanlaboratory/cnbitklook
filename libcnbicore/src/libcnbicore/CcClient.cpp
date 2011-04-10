@@ -117,6 +117,9 @@ int CcClient::Send(const char* message) {
 	
 	int bytes = TR_BYTES_NONE;
 
+	if(strlen(message) > CcSocket::_socket->bsize)
+		CcLogWarning("Message size larger than socket buffer");
+
 	CcSocket::_semsocket.Wait();
 	bytes = tr_send(CcSocket::_socket, (char*)message);
 	CcSocket::_semsocket.Post();
