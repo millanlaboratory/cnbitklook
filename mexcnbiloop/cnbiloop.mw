@@ -52,3 +52,50 @@ $ #include <stdio.h>
 	$	return q->IsConnected();
 	$ }
 	# bool status = clisconnected(ClLoop* c);
+
+@function [address] = cl_query(c, name)
+	$ void clquery(ClLoop* q, char* name, char* addr) {
+	$	std::string nm(name);
+	$	std::string ad = q->nameserver.Query(nm);
+	$	strcpy(addr, ad.c_str());
+	$ }
+	address = '';
+	# clquery(ClLoop* c, cstring name[1024], inout cstring address[1024]);
+
+@function [status] = cl_set(c, name, address)
+	$ bool clset(ClLoop* q, char* name, char* addr) {
+	$	std::string nm(name), ad(addr);
+	$	return(q->nameserver.Set(nm, ad) == ClNamesLang::Successful);
+	$ }
+	# bool status = clset(ClLoop* c, cstring name[1024], cstring address[1024]);
+
+@function [status] = cl_unset(c, name)
+	$ bool clunset(ClLoop* q, char* name) {
+	$	std::string nm(name);
+	$	return(q->nameserver.Unset(nm) == ClNamesLang::Successful);
+	$ }
+	# bool status = clunset(ClLoop* c, cstring name[1024]);
+
+
+@function [content] = cl_retrieve(c, name)
+	$ void clretrieve(ClLoop* q, char* name, char* content) {
+	$	std::string nm(name);
+	$	std::string cn = q->nameserver.Retrieve(nm);
+	$	strcpy(content, cn.c_str());
+	$ }
+	content = '';
+	# clretrieve(ClLoop* c, cstring name[1024], inout cstring content[10240]);
+
+@function [status] = cl_store(c, name, content)
+	$ bool clstore(ClLoop* q, char* name, char* content) {
+	$	std::string nm(name), cn(content);
+	$	return(q->nameserver.Store(nm, cn) == ClNamesLang::Successful);
+	$ }
+	# bool status = clstore(ClLoop* c, cstring name[1024], cstring content[10240]);
+
+@function [status] = cl_erase(c, name)
+	$ bool clerase(ClLoop* q, char* name) {
+	$	std::string nm(name);
+	$	return(q->nameserver.Erase(nm) == ClNamesLang::Successful);
+	$ }
+	# bool status = clerase(ClLoop* c, cstring name[1024]);

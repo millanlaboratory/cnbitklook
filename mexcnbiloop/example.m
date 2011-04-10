@@ -21,12 +21,20 @@ if(cl_connect(loop) == false)
 	disp('[example] Cannot connect...');
 end
 
+disp(['[example] Acquisition: ' cl_query(loop, '/acquisition')]);
+disp(['[example] Processing:  ' cl_query(loop, '/processing')]);
+disp(['[example] Nameserver:  ' cl_query(loop, '/nameserver')]);
+
 for i = 1:10
 	if(cl_isconnected(loop) == false)
 		disp('[example] Lost connection...');
 		break;
 	end
 	disp('[example] Still connected!');
+	
+	cl_set(loop, '/test', '1.2.3.4:1000');
+	cl_query(loop, '/test');
+	cl_unset(loop, '/test');
 
 	pause(1);
 end
