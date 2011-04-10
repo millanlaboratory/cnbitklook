@@ -79,7 +79,7 @@ int main(void) {
 
 	filelog.assign("cltest_");
 	filelog.append(timestamp);
-	filelog.append(".bdf");
+	filelog.append(".log");
 
 	if(acquisiton.OpenXDF(filebdf, filelog, "debug=1") 
 			!= ClAcqLang::Successful) {
