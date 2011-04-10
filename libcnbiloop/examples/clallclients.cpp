@@ -73,7 +73,7 @@ int main(void) {
 
 	std::string timestamp, filebdf, filelog;
 	CcTime::Timestamp(&timestamp);
-	filebdf.assign("cltest");
+	filebdf.assign("cltest_");
 	filebdf.append(timestamp);
 	filebdf.append(".bdf");
 
