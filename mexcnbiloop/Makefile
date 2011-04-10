@@ -5,7 +5,7 @@
 
 # Which library are we linking against?
 PROJECT=cnbiloop
-LIBNAME=lib$(PROJECT)
+LIBNAME=lib$(PROJECT) -lcnbicore
 LDSTUFF=-l$(PROJECT) 
 SOURCE_MW=$(PROJECT).mw
 SOURCE_CC=$(PROJECT).cc
