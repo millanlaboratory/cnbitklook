@@ -26,7 +26,7 @@
 #include <stdio.h>
 #include <list>
 
-CcServerMulti::CcServerMulti(bool multistream, unsigned int bsize, 
+CcServerMulti::CcServerMulti(bool multistream, size_t bsize, 
 		unsigned maxconns) : CcServer(CcServer::AsServer, bsize, maxconns) {
 	CcSocket::SetName("CcServerMulti");
 

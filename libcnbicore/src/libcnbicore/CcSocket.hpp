@@ -37,7 +37,7 @@ class CcSocketProxy;
  */
 class CcSocket : public CcObject {
 	public:
-		CcSocket(unsigned int bsize = CCSOCKET_BSIZE, unsigned int maxconns = 1);
+		CcSocket(size_t bsize = CCSOCKET_BSIZE, unsigned int maxconns = 1);
 		virtual ~CcSocket(void);
 		virtual int Recv(void) = 0; 
 		virtual int Send(const char* message) = 0;

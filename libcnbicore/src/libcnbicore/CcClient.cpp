@@ -24,7 +24,7 @@
 #include <stdio.h>
 #include <string.h>
 
-CcClient::CcClient(unsigned int bsize, unsigned int maxconns) 
+CcClient::CcClient(size_t bsize, unsigned int maxconns) 
 	: CcSocket(bsize, maxconns) {
 	CcSocket::SetName("CcClient");
 }

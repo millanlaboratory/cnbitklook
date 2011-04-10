@@ -25,7 +25,7 @@
 #include <string.h>
 #include <stdio.h>
 
-CcServerSingle::CcServerSingle(unsigned int bsize, unsigned maxconns) :
+CcServerSingle::CcServerSingle(size_t bsize, unsigned maxconns) :
 	CcServer(CcServer::AsServer, bsize, maxconns) {
 	CcSocket::SetName("CcServerSingle");
 
