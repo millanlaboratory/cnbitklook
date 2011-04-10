@@ -152,8 +152,7 @@ bool ClNamesLang::IsStore(const char* message, std::string* name,
 	size_t size;
 	int count = sscanf(message, CLLN_STOR_IN, ClLanguage::_cache0->buffer,
 			&size, ClLanguage::_cache1->buffer);
-
-	if(count < 2)
+	if(count < 3)
 		return false;
 	
 
