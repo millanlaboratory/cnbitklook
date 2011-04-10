@@ -49,6 +49,12 @@ void ClLoop::Disconnect(void) {
 	this->acquisition.Disconnect();
 	this->nameserver.Disconnect();
 }
+		
+bool ClLoop::IsConnected(void) {
+	return this->processing.IsConnected() &&
+		this->acquisition.IsConnected() &&
+		this->nameserver.IsConnected();
+}
 
 bool ClLoop::ConnectNameserver(void) {
 	int status = this->nameserver.Connect(this->_nameserver);

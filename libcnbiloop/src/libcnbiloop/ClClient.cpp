@@ -47,6 +47,10 @@ void ClClient::Disconnect(void) {
 	this->_client.Disconnect();
 }
 
+bool ClClient::IsConnected(void) {
+	return this->_client.IsConnected();
+}
+
 void ClClient::HandleDisconnect(CcSocket* caller) { 
 	CcClient *client = (CcClient*)caller;
 	CcAddress address = client->GetLocal();

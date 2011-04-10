@@ -28,6 +28,7 @@ class ClClient : public CcSocketProxy {
 		virtual ~ClClient(void);
 		virtual bool Connect(const CcAddress address);
 		virtual void Disconnect(void);
+		virtual bool IsConnected(void);
 	protected:
 		virtual void HandleDisconnect(CcSocket* caller);
 

@@ -30,6 +30,7 @@ class ClLoop {
 		virtual ~ClLoop(void);
 		virtual bool Connect(CcAddress nameserver = "127.0.0.1:8000");
 		virtual void Disconnect(void);
+		virtual bool IsConnected(void);
 	protected:
 		virtual bool ConnectNameserver(void);
 		virtual bool ConnectProcessing(void);
