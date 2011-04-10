@@ -21,13 +21,34 @@ $ #include <cstring>
 $ #include <iostream>
 $ #include <stdio.h>
 
-@function [cptr] = cl_new();
+@function [c] = cl_new();
 	$ ClLoop* clnew(void) {
 	$ 	ClLoop* loop = new ClLoop();
 	$ 	return loop;
 	$ }
-	# ClLoop *cptr = clnew();
+	# ClLoop *c = clnew();
 
-@function [cptr] = cl_delete(cptr)
-	# delete(ClLoop* cptr);
+@function [c] = cl_delete(c)
+	# delete(ClLoop* c);
 
+@function [status] = cl_connect(c, nameserver)
+	$ bool clconnect(ClLoop* q, char* nameserver) {
+	$ 	std::string ns(nameserver);
+	$	return q->Connect(ns);
+	$ }
+	if(nargin < 2)
+		nameserver = '127.0.0.1:8000';
+	end
+	# bool status = clconnect(ClLoop* c, cstring nameserver[128]);
+
+@function cl_disconnect(c)
+	$ void cldisconnect(ClLoop* q) {
+	$	q->Disconnect();
+	$ }
+	# cldisconnect(ClLoop* c);
+
+@function [status] = cl_isconnected(c)
+	$ bool clisconnected(ClLoop* q) {
+	$	return q->IsConnected();
+	$ }
+	# bool status = clisconnected(ClLoop* c);
