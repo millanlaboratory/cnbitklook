@@ -156,7 +156,7 @@ int ClNamesClient::Erase(const std::string& name) {
 std::string ClNamesClient::Retrieve(const std::string& name) {
 	std::string content;
 	if(this->Retrieve(name, &content) != ClNamesLang::Successful)
-		content.assign("");
+		content.clear();
 	return content;
 }
 		

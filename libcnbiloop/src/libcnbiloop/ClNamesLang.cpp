@@ -34,8 +34,8 @@
 #define CLLN_UNSET_IN	"[clln]unset|%[^'['][/clln]"
 #define CLLN_UNSET_OUT	"[clln]unset|%s[/clln]"
 
-#define CLLN_DISP_IN	"[clln]dispatch|%[^'['][/clln]"
-#define CLLN_DISP_OUT	"[clln]dispatch|%s[/clln]"
+#define CLLN_DISP_IN	"[clln]dispatch|%lu|%[^'['][/clln]"
+#define CLLN_DISP_OUT	"[clln]dispatch|%lu|%s[/clln]"
 #define CLLN_RETR_IN	"[clln]retrieve|%[^'['][/clln]"
 #define CLLN_RETR_OUT	"[clln]retrieve|%s[/clln]"
 #define CLLN_STOR_IN	"[clln]store|%[^'|']|%lu|%[^'['][/clln]"
@@ -87,7 +87,7 @@ char* ClNamesLang::Retrieve(const std::string& name) {
 
 char* ClNamesLang::Dispatch(const std::string& content) {
 	snprintf(ClLanguage::message->buffer, ClLanguage::MessageSize(),
-			CLLN_DISP_OUT, content.c_str());
+			CLLN_DISP_OUT, content.size(), content.c_str());
 	return ClLanguage::message->buffer;
 }
 
@@ -164,7 +164,8 @@ bool ClNamesLang::IsStore(const char* message, std::string* name,
 	if(trl == std::string::npos)
 		return false;
 	content->assign(cache.substr(trl-size, size));
-	
+	std::cout << *content << std::endl;
+
 	return true;
 }
 
@@ -187,11 +188,19 @@ bool ClNamesLang::IsErase(const char* message, std::string* name) {
 }
 
 bool ClNamesLang::IsDispatch(const char* message, std::string* content) {
-	int count = sscanf(message, CLLN_DISP_IN, ClLanguage::_cache0->buffer);
-	if(count < 1)
+	size_t size = 0;
+	int count = sscanf(message, CLLN_DISP_IN, &size, 
+			ClLanguage::_cache0->buffer);
+	if(count < 2)
 		return false;
 
-	content->assign(ClLanguage::_cache0->buffer);
+	//content->assign(ClLanguage::_cache0->buffer);
+
+	std::string cache(message);
+	size_t trl = cache.find(ClNamesLang::Trl);
+	if(trl == std::string::npos)
+		return false;
+	content->assign(cache.substr(trl-size, size));
 	return true;
 }
 
