@@ -25,6 +25,7 @@ ClLoop::ClLoop(void) {
 }
 
 ClLoop::~ClLoop(void) {
+	this->Disconnect();
 }
 		
 bool ClLoop::Connect(CcAddress nameserver) {
@@ -43,24 +44,45 @@ bool ClLoop::Connect(CcAddress nameserver) {
 	return true;
 }
 		
-bool ClLoop::Disconnect(void) {
+void ClLoop::Disconnect(void) {
+	this->processing.Disconnect();
+	this->acquisition.Disconnect();
+	this->nameserver.Disconnect();
 }
 
 bool ClLoop::ConnectNameserver(void) {
-	return this->nameserver.Connect(this->_nameserver);
+	int status = this->nameserver.Connect(this->_nameserver);
+	if(status != ClNamesLang::Successful) {
+		CcLogErrorS(this->_stream, "Cannot connect to nameserver: " <<
+				this->_nameserver << ", " << status);
+		return false;
+	}
+	return true;
 }
 
 bool ClLoop::ConnectProcessing(void) {
-	return this->processing.Connect(this->_processing);
+	int status = this->processing.Connect(this->_processing);
+	if(status != ClProLang::Successful) {
+		CcLogErrorS(this->_stream, "Cannot connect to processing: " <<
+				this->_processing << ", " << status);
+		return false;
+	}
+	return true;
 }
 
 bool ClLoop::ConnectAcquisition(void) {
-	return this->acquisiton.Connect(this->_acquisiton);
+	int status = this->acquisition.Connect(this->_acquisition);
+	if(status != ClAcqLang::Successful) {
+		CcLogErrorS(this->_stream, "Cannot connect to acquisition: " <<
+				this->_acquisition << ", " << status);
+		return false;
+	}
+	return true;
 }
 
 bool ClLoop::QueryAddresses(void) {
 	int sp = this->nameserver.Query("/processing", &this->_processing);
-	int sa = this->nameserver.Query("/acquisiton", &this->_acquisiton);
+	int sa = this->nameserver.Query("/acquisition", &this->_acquisition);
 
 	if(sp != ClNamesLang::Successful)
 		return false;

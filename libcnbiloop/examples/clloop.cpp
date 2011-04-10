@@ -29,13 +29,17 @@ int main(void) {
 	
 	ClLoop loop;
 
-	loop.Connect();
+	if(loop.Connect() == true)
+		cout << "Connected" << endl;
+	else
+		return 1;
 	
 	while(true) {
 		if(CcCore::receivedSIGINT.Get() || CcCore::receivedSIGTERM.Get())
 			break;
 		CcTime::Sleep(1000.00f);
 	}
+	loop.Disconnect();
 
 	return 0;
 }

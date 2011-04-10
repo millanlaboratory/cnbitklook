@@ -28,7 +28,7 @@ class ClLoop {
 		ClLoop(void);
 		virtual ~ClLoop(void);
 		virtual bool Connect(CcAddress nameserver = "127.0.0.1:8000");
-		virtual bool Disconnect(void);
+		virtual void Disconnect(void);
 	protected:
 		virtual bool ConnectNameserver(void);
 		virtual bool ConnectProcessing(void);
@@ -37,12 +37,13 @@ class ClLoop {
 
 	public:
 		ClProClient processing;
-		ClAcqClient acquisiton;
+		ClAcqClient acquisition;
 		ClNamesClient nameserver;
 	protected:
 		CcAddress _processing;
-		CcAddress _acquisiton;
+		CcAddress _acquisition;
 		CcAddress _nameserver;
+		std::stringstream _stream;
 };
 
 #endif

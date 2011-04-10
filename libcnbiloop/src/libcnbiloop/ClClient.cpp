@@ -43,10 +43,14 @@ bool ClClient::Connect(const CcAddress address) {
 	return true;
 }
 
+void ClClient::Disconnect(void) {
+	this->_client.Disconnect();
+}
+
 void ClClient::HandleDisconnect(CcSocket* caller) { 
 	CcClient *client = (CcClient*)caller;
 	CcAddress address = client->GetLocal();
-	CcLogWarning(std::string("Endpoint dropped: ").append(address));
+	CcLogDebug(std::string("Endpoint dropped: ").append(address));
 }
 
 #endif
