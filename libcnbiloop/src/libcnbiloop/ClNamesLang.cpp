@@ -22,6 +22,7 @@
 #include "ClNamesLang.hpp" 
 #include <libcnbicore/CcFlags.hpp>
 #include <stdio.h>
+#include <stdexcept>
 
 #define CLLN_ERROR		"[clln]error|%d[/clln]"
 #define CLLN_OK			"[clln]ok[/clln]"
@@ -34,11 +35,11 @@
 #define CLLN_UNSET_IN	"[clln]unset|%[^'['][/clln]"
 #define CLLN_UNSET_OUT	"[clln]unset|%s[/clln]"
 
-#define CLLN_DISP_IN	"[clln]dispatch|%lu|%[^'['][/clln]"
+#define CLLN_DISP_IN	"[clln]dispatch|%lu|%*s[/clln]"
 #define CLLN_DISP_OUT	"[clln]dispatch|%lu|%s[/clln]"
 #define CLLN_RETR_IN	"[clln]retrieve|%[^'['][/clln]"
 #define CLLN_RETR_OUT	"[clln]retrieve|%s[/clln]"
-#define CLLN_STOR_IN	"[clln]store|%[^'|']|%lu|%[^'['][/clln]"
+#define CLLN_STOR_IN	"[clln]store|%[^'|']|%lu|%*s[/clln]"
 #define CLLN_STOR_OUT	"[clln]store|%s|%lu|%s[/clln]"
 #define CLLN_ERASE_IN	"[clln]erase|%[^'['][/clln]"
 #define CLLN_ERASE_OUT	"[clln]erase|%s[/clln]"
@@ -152,19 +153,23 @@ bool ClNamesLang::IsStore(const char* message, std::string* name,
 		std::string* content) {
 	size_t size = 0;
 	int count = sscanf(message, CLLN_STOR_IN, ClLanguage::_cache0->buffer,
-			&size, ClLanguage::_cache1->buffer);
-	if(count < 3)
+			&size);
+	if(count < 2)
 		return false;
 	
 	name->assign(ClLanguage::_cache0->buffer);
-	//content->assign(ClLanguage::_cache1->buffer);
 	
 	std::string cache(message);
 	size_t trl = cache.find(ClNamesLang::Trl);
 	if(trl == std::string::npos)
 		return false;
-	content->assign(cache.substr(trl-size, size));
-	std::cout << *content << std::endl;
+
+	try {
+		content->assign(cache.substr(trl-size, size));
+	} catch(std::out_of_range& e) {
+		CcLogFatal("Out of range exception")
+		return false;
+	}
 
 	return true;
 }
@@ -189,18 +194,22 @@ bool ClNamesLang::IsErase(const char* message, std::string* name) {
 
 bool ClNamesLang::IsDispatch(const char* message, std::string* content) {
 	size_t size = 0;
-	int count = sscanf(message, CLLN_DISP_IN, &size, 
-			ClLanguage::_cache0->buffer);
-	if(count < 2)
+	int count = sscanf(message, CLLN_DISP_IN, &size);
+	if(count < 1)
 		return false;
-
-	//content->assign(ClLanguage::_cache0->buffer);
 
 	std::string cache(message);
 	size_t trl = cache.find(ClNamesLang::Trl);
 	if(trl == std::string::npos)
 		return false;
-	content->assign(cache.substr(trl-size, size));
+	
+	try {
+		content->assign(cache.substr(trl-size, size));
+	} catch(std::out_of_range& e) {
+		CcLogFatal("Out of range exception")
+		return false;
+	}
+
 	return true;
 }
 

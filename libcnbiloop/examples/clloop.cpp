@@ -34,15 +34,12 @@ int main(void) {
 	else
 		return 1;
 	
-		loop.nameserver.StoreFile("big", "/home/mtavella/Desktop/culo.txt");
-		loop.nameserver.RetrieveFile("big", "classifier.mat");
-		loop.nameserver.Erase("big");
+	loop.nameserver.StoreFile("big", "/home/mtavella/Desktop/culo.txt");
+	//loop.nameserver.RetrieveFile("big", "classifier.mat");
+	loop.nameserver.Erase("big");
 	while(true) {
 		if(CcCore::receivedSIGINT.Get() || CcCore::receivedSIGTERM.Get())
 			break;
-
-
-		//client.StoreFile("big", "/home/mtavella/Desktop/culo.txt");
 
 		CcTime::Sleep(1000.00f);
 	}
