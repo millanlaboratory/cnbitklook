@@ -23,11 +23,10 @@
 
 class ClLanguage {
 	public:
-		ClLanguage(size_t msize = 4096, size_t csize = 2048, size_t ssize = 256);
+		ClLanguage(size_t msize = 4092, size_t csize = 2048);
 		virtual ~ClLanguage(void);
 		virtual size_t MessageSize(void);
 		virtual size_t CacheSize(void);
-		virtual size_t StorageSize(void);
 
 	public:
 		CcBuffer<char>* message;
@@ -39,7 +38,6 @@ class ClLanguage {
 		CcBuffer<char>* _cache3;
 		CcBuffer<char>* _cache4;
 		CcBuffer<char>* _cache5;
-		CcBuffer<char>* _storage;
 };
 
 #endif

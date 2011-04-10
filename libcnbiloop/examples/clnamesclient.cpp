@@ -75,7 +75,6 @@ int main(void) {
 		client.StoreFile("group", "/etc/group");
 		client.RetrieveFile("group", "group");
 		client.Erase("group");
-	
 	}
 
 	return 0;

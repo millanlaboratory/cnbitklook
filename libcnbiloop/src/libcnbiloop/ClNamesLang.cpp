@@ -20,6 +20,7 @@
 #define CLNAMESLANG_CPP 
 
 #include "ClNamesLang.hpp" 
+#include <libcnbicore/CcFlags.hpp>
 #include <stdio.h>
 
 #define CLLN_ERROR		"[clln]error|%d[/clln]"
@@ -44,8 +45,8 @@
 
 const std::string ClNamesLang::Hdr = "[clln]";
 const std::string ClNamesLang::Trl = "[/clln]";
-		
-ClNamesLang::ClNamesLang(void) : ClLanguage(2200000, 2048, 2*1048576) {
+
+ClNamesLang::ClNamesLang(void) : ClLanguage(CCSOCKET_BSIZE) {
 }
 		
 char* ClNamesLang::Query(const std::string& name) {
@@ -149,7 +150,7 @@ bool ClNamesLang::IsUnset(const char* message, std::string* name) {
 
 bool ClNamesLang::IsStore(const char* message, std::string* name, 
 		std::string* content) {
-	size_t size;
+	size_t size = 0;
 	int count = sscanf(message, CLLN_STOR_IN, ClLanguage::_cache0->buffer,
 			&size, ClLanguage::_cache1->buffer);
 	if(count < 3)
@@ -163,6 +164,7 @@ bool ClNamesLang::IsStore(const char* message, std::string* name,
 	if(trl == std::string::npos)
 		return false;
 	content->assign(cache.substr(trl-size, size));
+	
 	return true;
 }
 

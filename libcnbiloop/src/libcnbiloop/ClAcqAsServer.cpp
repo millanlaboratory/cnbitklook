@@ -55,13 +55,11 @@ void ClAcqAsServer::HandleListen(CcSocket* caller) {
 			"Listening on TCP socket: " << server->GetLocal());
 }
 
-void ClAcqAsServer::HandleAcceptEndpoint(CcSocket* caller, 
-		CcAddress address) { 
+void ClAcqAsServer::HandleAcceptEndpoint(CcSocket* caller, CcAddress address) { 
 	CcLogConfigS(this->_stream, "Accepted TCP endpoint: " << address);
 }
 
-void ClAcqAsServer::HandleDropEndpoint(CcSocket* caller,
-		CcAddress address) { 
+void ClAcqAsServer::HandleDropEndpoint(CcSocket* caller, CcAddress address) { 
 	CcLogConfigS(this->_stream, "Dropped TCP endpoint: " << address);
 }
 
