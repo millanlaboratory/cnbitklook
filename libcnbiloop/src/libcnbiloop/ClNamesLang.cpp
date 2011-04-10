@@ -49,61 +49,61 @@ ClNamesLang::ClNamesLang(void) { //: ClLanguage(1048576, 5*1048576) {
 }
 		
 char* ClNamesLang::Query(const std::string& name) {
-	snprintf(ClLanguage::message->buffer, ClLanguage::MaxSize(), 
+	snprintf(ClLanguage::message->buffer, ClLanguage::MessageSize(), 
 			CLLN_QUERY_OUT, name.c_str());
 	return ClLanguage::message->buffer;
 }
 
 char* ClNamesLang::Reply(CcAddress address) {
-	snprintf(ClLanguage::message->buffer, ClLanguage::MaxSize(),
+	snprintf(ClLanguage::message->buffer, ClLanguage::MessageSize(),
 			CLLN_REPLY_OUT, address.c_str());
 	return ClLanguage::message->buffer;
 }
 
 char* ClNamesLang::Set(const std::string& name, CcAddress address) {
-	snprintf(ClLanguage::message->buffer, ClLanguage::MaxSize(),
+	snprintf(ClLanguage::message->buffer, ClLanguage::MessageSize(),
 			CLLN_SET_OUT, name.c_str(), address.c_str());
 	return ClLanguage::message->buffer;
 }
 
 char* ClNamesLang::Unset(const std::string& name) {
-	snprintf(ClLanguage::message->buffer, ClLanguage::MaxSize(),
+	snprintf(ClLanguage::message->buffer, ClLanguage::MessageSize(),
 			CLLN_UNSET_OUT, name.c_str());
 	return ClLanguage::message->buffer;
 }
 
 char* ClNamesLang::Store(const std::string& name, const std::string& content) {
-	snprintf(ClLanguage::message->buffer, ClLanguage::MaxSize(),
+	snprintf(ClLanguage::message->buffer, ClLanguage::MessageSize(),
 			CLLN_STOR_OUT, name.c_str(), content.c_str());
 	return ClLanguage::message->buffer;
 }
 
 char* ClNamesLang::Retrieve(const std::string& name) {
-	snprintf(ClLanguage::message->buffer, ClLanguage::MaxSize(),
+	snprintf(ClLanguage::message->buffer, ClLanguage::MessageSize(),
 			CLLN_RETR_OUT, name.c_str());
 	return ClLanguage::message->buffer;
 }
 
 char* ClNamesLang::Dispatch(const std::string& content) {
-	snprintf(ClLanguage::message->buffer, ClLanguage::MaxSize(),
+	snprintf(ClLanguage::message->buffer, ClLanguage::MessageSize(),
 			CLLN_DISP_OUT, content.c_str());
 	return ClLanguage::message->buffer;
 }
 
 char* ClNamesLang::Erase(const std::string& name) {
-	snprintf(ClLanguage::message->buffer, ClLanguage::MaxSize(),
+	snprintf(ClLanguage::message->buffer, ClLanguage::MessageSize(),
 			CLLN_ERASE_OUT, name.c_str());
 	return ClLanguage::message->buffer;
 }
 
 char* ClNamesLang::Ok(void) {
-	snprintf(ClLanguage::message->buffer, ClLanguage::MaxSize(),
+	snprintf(ClLanguage::message->buffer, ClLanguage::MessageSize(),
 			CLLN_OK);
 	return ClLanguage::message->buffer;
 }
 
 char* ClNamesLang::Error(const int code) {
-	snprintf(ClLanguage::message->buffer, ClLanguage::MaxSize(),
+	snprintf(ClLanguage::message->buffer, ClLanguage::MessageSize(),
 			CLLN_ERROR, code);
 	return ClLanguage::message->buffer;
 }

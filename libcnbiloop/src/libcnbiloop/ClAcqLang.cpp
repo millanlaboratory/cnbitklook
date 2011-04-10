@@ -36,45 +36,45 @@ const std::string ClAcqLang::Hdr = "[clla]";
 const std::string ClAcqLang::Trl = "[/clla]";
 
 char* ClAcqLang::AddLabelGDF(const GDFEvent label) {
-	snprintf(ClLanguage::message->buffer, ClLanguage::MaxSize(),
+	snprintf(ClLanguage::message->buffer, ClLanguage::MessageSize(),
 			CLLA_ADD_LABEL_GDF, label);
 	return ClLanguage::message->buffer;
 }
 
 char* ClAcqLang::AddLabelLPT(const HWTrigger label) {
-	snprintf(ClLanguage::message->buffer, ClLanguage::MaxSize(),
+	snprintf(ClLanguage::message->buffer, ClLanguage::MessageSize(),
 			CLLA_ADD_LABEL_LPT, label);
 	return ClLanguage::message->buffer;
 }
 
 char* ClAcqLang::AddLabelTXT(const std::string& label) {
-	snprintf(ClLanguage::message->buffer, ClLanguage::MaxSize(),
+	snprintf(ClLanguage::message->buffer, ClLanguage::MessageSize(),
 			CLLA_ADD_LABEL_TXT, label.c_str());
 	return ClLanguage::message->buffer;
 }
 
 char* ClAcqLang::OpenXDF(const std::string& filegdf, 
 		const std::string& filelog, const std::string& linelog) {
-	snprintf(ClLanguage::message->buffer, ClLanguage::MaxSize(),
+	snprintf(ClLanguage::message->buffer, ClLanguage::MessageSize(),
 			CLLA_OPEN_XDF_OUT, filegdf.c_str(), filelog.c_str(),
 			linelog.c_str());
 	return ClLanguage::message->buffer;
 }
 
 char* ClAcqLang::CloseXDF(void) {
-	snprintf(ClLanguage::message->buffer, ClLanguage::MaxSize(),
+	snprintf(ClLanguage::message->buffer, ClLanguage::MessageSize(),
 			CLLA_CLOSE_XDF);
 	return ClLanguage::message->buffer;
 }
 
 char* ClAcqLang::Ok(void) {
-	snprintf(ClLanguage::message->buffer, ClLanguage::MaxSize(),
+	snprintf(ClLanguage::message->buffer, ClLanguage::MessageSize(),
 			CLLA_OK); 
 	return ClLanguage::message->buffer;
 }
 
 char* ClAcqLang::Error(const int code) {
-	snprintf(ClLanguage::message->buffer, ClLanguage::MaxSize(),
+	snprintf(ClLanguage::message->buffer, ClLanguage::MessageSize(),
 			CLLA_ERROR, code);
 	return ClLanguage::message->buffer;
 }

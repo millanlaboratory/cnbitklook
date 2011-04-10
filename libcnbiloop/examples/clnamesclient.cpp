@@ -31,6 +31,32 @@ int main(void) {
 		CcLogFatal("Cannot connect to endpoint");
 		exit(1);
 	}
+		
+	CcFile file;
+	file.Load("/home/mtavella/Desktop/culo.txt");
+	std::string fileb, fileb2;
+	file.Get(&fileb);
+
+	/*
+	char cache[1048576];
+	char cache2[1048576];
+	int w = sprintf(cache, "%s", fileb.c_str());
+	//cout << sscanf(cache, "%s", cache2) << endl;
+	strncpy(cache2, cache, fileb.size());
+	fileb2.assign(cache2);
+	
+	cout << file.Size() << endl;
+	cout << fileb.size() << endl;
+	cout << w << endl;
+	cout << fileb2.size() << endl;
+	//cout << fileb2 << endl;
+
+	return 0;
+	*/
+
+	client.StoreFile("culo", "/home/mtavella/Desktop/culo.txt");
+	client.RetrieveFile("culo", "group");
+	client.Erase("culo");
 
 	CcAddress address;
 	if(client.Connect()) {

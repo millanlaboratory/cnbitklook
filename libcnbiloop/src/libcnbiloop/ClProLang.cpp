@@ -41,43 +41,43 @@ const std::string ClProLang::Hdr = "[cllp]";
 const std::string ClProLang::Trl = "[/cllp]";
 
 char* ClProLang::Fork(void) {
-	snprintf(ClLanguage::message->buffer, ClLanguage::MaxSize(),
+	snprintf(ClLanguage::message->buffer, ClLanguage::MessageSize(),
 			CLLP_FORK);
 	return ClLanguage::message->buffer;
 }
 
 char* ClProLang::Launch(const int pid, const std::string& call) {
-	snprintf(ClLanguage::message->buffer, ClLanguage::MaxSize(),
+	snprintf(ClLanguage::message->buffer, ClLanguage::MessageSize(),
 			CLLP_LAUNCH_MATLAB_OUT, pid, call.c_str());
 	return ClLanguage::message->buffer;
 }
 
 char* ClProLang::Terminate(const int pid) {
-	snprintf(ClLanguage::message->buffer, ClLanguage::MaxSize(),
+	snprintf(ClLanguage::message->buffer, ClLanguage::MessageSize(),
 			CLLP_TERMINATE, pid);
 	return ClLanguage::message->buffer;
 }
 
 char* ClProLang::IsAlive(const int pid) {
-	snprintf(ClLanguage::message->buffer, ClLanguage::MaxSize(),
+	snprintf(ClLanguage::message->buffer, ClLanguage::MessageSize(),
 			CLLP_ISALIVE, pid);
 	return ClLanguage::message->buffer;
 }
 
 char* ClProLang::Ok(const int pid) {
-	snprintf(ClLanguage::message->buffer, ClLanguage::MaxSize(),
+	snprintf(ClLanguage::message->buffer, ClLanguage::MessageSize(),
 			CLLP_OK, pid);
 	return ClLanguage::message->buffer;
 }
 
 char* ClProLang::Error(const int code) {
-	snprintf(ClLanguage::message->buffer, ClLanguage::MaxSize(),
+	snprintf(ClLanguage::message->buffer, ClLanguage::MessageSize(),
 			CLLP_ERROR, code);
 	return ClLanguage::message->buffer;
 }
 
 char* ClProLang::Died(const int pid) {
-	snprintf(ClLanguage::message->buffer, ClLanguage::MaxSize(),
+	snprintf(ClLanguage::message->buffer, ClLanguage::MessageSize(),
 			CLLP_DIED, pid);
 	return ClLanguage::message->buffer;
 }
@@ -114,14 +114,14 @@ bool ClProLang::IsError(const char* message, int* code) {
 }
 
 char* ClProLang::ChangeDirectory(const int pid, const std::string& path) {
-	snprintf(ClLanguage::message->buffer, ClLanguage::MaxSize(),
+	snprintf(ClLanguage::message->buffer, ClLanguage::MessageSize(),
 			CLLP_CWD_OUT, pid, path.c_str());
 	return ClLanguage::message->buffer;
 }
 
 char* ClProLang::Include(const int pid, const std::string& path0, 
 		const std::string& path1){
-	snprintf(ClLanguage::message->buffer, ClLanguage::MaxSize(),
+	snprintf(ClLanguage::message->buffer, ClLanguage::MessageSize(),
 			CLLP_INCLUDE_IN, 
 			pid, path0.c_str(), path1.c_str());
 	return ClLanguage::message->buffer;
@@ -131,7 +131,7 @@ char* ClProLang::LaunchNDF(int pid,
 		const std::string& function, const std::string& pipename,
 		const CcAddress addressD, const CcAddress addressC, 
 		const std::string& extra) {
-	snprintf(ClLanguage::message->buffer, ClLanguage::MaxSize(),
+	snprintf(ClLanguage::message->buffer, ClLanguage::MessageSize(),
 			CLLP_LAUNCH_NDFMATLAB_OUT, 
 			pid,
 			function.c_str(), 
