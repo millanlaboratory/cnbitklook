@@ -156,16 +156,13 @@ bool ClNamesLang::IsStore(const char* message, std::string* name,
 		return false;
 	
 	name->assign(ClLanguage::_cache0->buffer);
-	content->assign(ClLanguage::_cache1->buffer);
+	//content->assign(ClLanguage::_cache1->buffer);
 	
-	/*
 	std::string cache(message);
-	std::cout << cache << std::endl;
 	size_t trl = cache.find(ClNamesLang::Trl);
 	if(trl == std::string::npos)
 		return false;
 	content->assign(cache.substr(trl-size, size));
-	*/
 	return true;
 }
 

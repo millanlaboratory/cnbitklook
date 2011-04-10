@@ -32,13 +32,6 @@ int main(void) {
 		exit(1);
 	}
 		
-	/*
-	client.StoreFile("xml", 
-			"/home/mtavella/Git/cnbitk/cnbiloop/libcnbiconfig/extra/example.xml");
-	client.RetrieveFile("xml", "group");
-	client.Erase("xml");
-	*/
-
 	CcAddress address;
 	if(client.Connect()) {
 		client.Set("/pippo", "127.0.0.1:12000");
