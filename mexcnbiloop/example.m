@@ -35,6 +35,9 @@ for i = 1:10
 	cl_set(loop, '/test', '1.2.3.4:1000');
 	cl_query(loop, '/test');
 	cl_unset(loop, '/test');
+	cl_store(loop, 'data0', '<hello>world!</hello>');
+	cl_retrieve(loop, 'data0');
+	cl_erase(loop, 'data0');
 
 	pause(1);
 end

@@ -99,3 +99,5 @@ $ #include <stdio.h>
 	$	return(q->nameserver.Erase(nm) == ClNamesLang::Successful);
 	$ }
 	# bool status = clerase(ClLoop* c, cstring name[1024]);
+
+
