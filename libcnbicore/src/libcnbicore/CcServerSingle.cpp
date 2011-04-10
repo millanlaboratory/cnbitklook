@@ -144,7 +144,8 @@ void CcServerSingle::Main(void) {
 		CcSocket::_semsocket.Post();
 
 		this->_semendpoint.Wait();
-		tr_init_socket_default(&this->_endpoint);
+		tr_init_socket_default(&this->_endpoint, 
+				CcSocket::_socket->bsize * sizeof(char), 1);
 		tr_tcpendpoint(&this->_endpoint);
 		this->_semendpoint.Post();
 

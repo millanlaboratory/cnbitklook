@@ -33,7 +33,7 @@
  */
 class CcServerMulti : public CcServer {
 	public:
-		CcServerMulti(bool multistream = true, unsigned int bsize = 1024, 
+		CcServerMulti(bool multistream = true, unsigned int bsize = CCSOCKET_BSIZE, 
 				unsigned maxconns = 256);
 		virtual ~CcServerMulti(void);
 		
