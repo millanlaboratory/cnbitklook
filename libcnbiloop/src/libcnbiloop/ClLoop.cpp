@@ -26,5 +26,48 @@ ClLoop::ClLoop(void) {
 
 ClLoop::~ClLoop(void) {
 }
+		
+bool ClLoop::Connect(CcAddress nameserver) {
+	this->_nameserver = nameserver;
+	if(this->ConnectNameserver() == false)
+		return false;
+
+	if(this->QueryAddresses() == false)
+		return false;
+
+	if(this->ConnectProcessing() == false)
+		return false;
+	if(this->ConnectAcquisition() == false)
+		return false;
+
+	return true;
+}
+		
+bool ClLoop::Disconnect(void) {
+}
+
+bool ClLoop::ConnectNameserver(void) {
+	return this->nameserver.Connect(this->_nameserver);
+}
+
+bool ClLoop::ConnectProcessing(void) {
+	return this->processing.Connect(this->_processing);
+}
+
+bool ClLoop::ConnectAcquisition(void) {
+	return this->acquisiton.Connect(this->_acquisiton);
+}
+
+bool ClLoop::QueryAddresses(void) {
+	int sp = this->nameserver.Query("/processing", &this->_processing);
+	int sa = this->nameserver.Query("/acquisiton", &this->_acquisiton);
+
+	if(sp != ClNamesLang::Successful)
+		return false;
+	if(sa != ClNamesLang::Successful)
+		return false;
+
+	return true;
+}
 
 #endif

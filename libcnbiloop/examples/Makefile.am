@@ -8,7 +8,8 @@ noinst_PROGRAMS = clacqlang \
 				  clproclient \
 				  clproclient2 \
 				  clnamesclient \
-				  clallclients
+				  clallclients \
+				  clloop
 
 clacqlang_SOURCES = clacqlang.cpp
 clprolang_SOURCES = clprolang.cpp
@@ -18,5 +19,6 @@ clproclient_SOURCES = clproclient.cpp
 clproclient2_SOURCES = clproclient2.cpp
 clnamesclient_SOURCES = clnamesclient.cpp
 clallclients_SOURCES = clallclients.cpp
+clloop_SOURCES = clloop.cpp
 
 LDADD = $(top_builddir)/src/libcnbiloop/libcnbiloop.la

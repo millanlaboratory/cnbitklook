@@ -19,16 +19,30 @@
 #ifndef CLLOOP_HPP 
 #define CLLOOP_HPP 
 
+#include "ClProClient.hpp"
+#include "ClAcqClient.hpp"
+#include "ClNamesClient.hpp"
+
 class ClLoop {
 	public:
 		ClLoop(void);
 		virtual ~ClLoop(void);
-	private:
+		virtual bool Connect(CcAddress nameserver = "127.0.0.1:8000");
+		virtual bool Disconnect(void);
 	protected:
+		virtual bool ConnectNameserver(void);
+		virtual bool ConnectProcessing(void);
+		virtual bool ConnectAcquisition(void);
+		virtual bool QueryAddresses(void);
 
 	public:
-	private:
+		ClProClient processing;
+		ClAcqClient acquisiton;
+		ClNamesClient nameserver;
 	protected:
+		CcAddress _processing;
+		CcAddress _acquisiton;
+		CcAddress _nameserver;
 };
 
 #endif
