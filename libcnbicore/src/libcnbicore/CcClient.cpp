@@ -103,9 +103,6 @@ void CcClient::Disconnect(void) {
 	if(this->IsConnected() == false)
 		return;
 
-	if(this->IsRunning() == false)
-		return;
-	
 	CcThread::Stop();
 	CcThread::Join();
 
