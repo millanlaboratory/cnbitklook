@@ -100,11 +100,16 @@ void CcClient::Connect(const CcIp ip, const CcPortUInt port,
 }
 
 void CcClient::Disconnect(void) {
+	if(this->IsConnected() == false)
+		return;
+
+	if(this->IsRunning() == false)
+		return;
+	
 	CcThread::Stop();
 	CcThread::Join();
-	
-	this->CloseSocket();
 
+	this->CloseSocket();
 	this->iOnDisconnect.Execute((CcSocket*)this);
 	this->pOnDisconnect();
 }
