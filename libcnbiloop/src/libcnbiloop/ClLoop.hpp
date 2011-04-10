@@ -22,6 +22,7 @@
 #include "ClProClient.hpp"
 #include "ClAcqClient.hpp"
 #include "ClNamesClient.hpp"
+#include <libcnbicore/CcBasic.hpp>
 
 class ClLoop {
 	public:

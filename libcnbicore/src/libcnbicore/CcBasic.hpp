@@ -19,13 +19,13 @@
 #ifndef CCBASIC_HPP
 #define CCBASIC_HPP
 
-#include "CcEndpoint.hpp"
 #include "CcCallback.hpp"
 #include "CcCore.hpp"
-#include "CcPtable.hpp"
-#include "CcTime.hpp"
-#include "CcLog.hpp"
+#include "CcEndpoint.hpp"
 #include "CcException.hpp"
 #include "CcFlags.hpp"
+#include "CcLog.hpp"
+#include "CcPtable.hpp"
+#include "CcTime.hpp"
 
 #endif 
