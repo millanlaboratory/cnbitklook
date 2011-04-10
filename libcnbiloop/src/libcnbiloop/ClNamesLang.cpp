@@ -45,7 +45,7 @@
 const std::string ClNamesLang::Hdr = "[clln]";
 const std::string ClNamesLang::Trl = "[/clln]";
 		
-ClNamesLang::ClNamesLang(void) { //: ClLanguage(1048576, 5*1048576) {
+ClNamesLang::ClNamesLang(void) : ClLanguage(2200000, 2048, 2*1048576) {
 }
 		
 char* ClNamesLang::Query(const std::string& name) {
