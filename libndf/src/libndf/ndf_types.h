@@ -39,8 +39,13 @@ extern "C" {
 #define	NDF_TIMEVAL		11
 #define	NDF_DOUBLETIME	12
 
-typedef unsigned int ndf_typeid;
+#define NDF_PRESET_UNKNOWN	0
+#define NDF_PRESET_GTEC		100
+#define NDF_PRESET_BIOSEMI	200
+#define NDF_PRESET_GDF		300
+#define NDF_PRESET_BDF		400
 
+typedef unsigned int ndf_typeid;
 size_t ndf_sizeof(ndf_typeid id);
 
 #ifdef __cplusplus
