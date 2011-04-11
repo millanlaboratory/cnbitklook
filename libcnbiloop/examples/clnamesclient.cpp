@@ -34,11 +34,10 @@ int main(void) {
 		
 	if(client.Connect()) {
 		client.Erase("huge");
-		client.StoreFile("huge", "/home/mtavella/Desktop/huge.txt");
+		client.StoreFile("huge", "/home/mtavella/Desktop/culo.txt");
 		client.RetrieveFile("huge", "huge.txt");
 		client.Erase("huge");
 	}
-	return 0;
 
 	CcAddress address;
 	if(client.Connect()) {
