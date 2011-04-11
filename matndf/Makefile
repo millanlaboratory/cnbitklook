@@ -10,6 +10,12 @@ ndf_toc: ndf_toc.c
 clean:
 	rm ndf_*.mex*
 
-install:
+local-install:
+	@mkdir -p ${CNBITK_MATLAB}/matndf/
 	@cp -vf *.mex* ${CNBITK_MATLAB}/matndf/
 	@cp -vf ndf_*.m ${CNBITK_MATLAB}/matndf/
+
+install:
+	@mkdir -p /opt/cnbitkmat/matndf/
+	@cp -vf *.mex* /opt/cnbitkmat/matndf/
+	@cp -vf ndf_*.m /opt/cnbitkmat/matndf/

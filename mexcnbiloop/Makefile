@@ -35,7 +35,14 @@ clean:
 	@rm -vf cl_*.m
 	@rm -vf core
 
+local-install:
+	@mkdir -p ${CNBITK_MATLAB}/mex${PROJECT}/
+	@cp -vf *.mex* ${CNBITK_MATLAB}/mex${PROJECT}/
+	@cp -vf cl_*.m ${CNBITK_MATLAB}/mex${PROJECT}/
+	@cp -vf example*.m ${CNBITK_MATLAB}/mex${PROJECT}/
+
 install:
-	@cp -vf *.mex* ${CNBITK_MATLAB}/mexcnbiloop/
-	@cp -vf cl_*.m ${CNBITK_MATLAB}/mexcnbiloop/
-	@cp -vf example*.m ${CNBITK_MATLAB}/mexcnbiloop/
+	@mkdir -p /opt/cnbitkmat/mex${PROJECT}/
+	@cp -vf *.mex* /opt/cnbitkmat/mex${PROJECT}/
+	@cp -vf cl_*.m /opt/cnbitkmat/mex${PROJECT}/
+	@cp -vf example*.m /opt/cnbitkmat/mex${PROJECT}/

@@ -37,9 +37,18 @@ clean:
 	@rm -vf ccfgtaskset_*.m
 	@rm -vf core
 
+local-install:
+	@mkdir -p ${CNBITK_MATLAB}/mex${PROJECT}/
+	@cp -vf *.mex* ${CNBITK_MATLAB}/mex${PROJECT}/
+	@cp -vf ccfg_*.m ${CNBITK_MATLAB}/mex${PROJECT}/
+	@cp -vf ccfgtask_*.m ${CNBITK_MATLAB}/mex${PROJECT}/
+	@cp -vf ccfgtaskset_*.m ${CNBITK_MATLAB}/mex${PROJECT}/
+	@cp -vf example_*.m ${CNBITK_MATLAB}/mex${PROJECT}/
+
 install:
-	@cp -vf *.mex* ${CNBITK_MATLAB}/mexcnbiconfig/
-	@cp -vf ccfg_*.m ${CNBITK_MATLAB}/mexcnbiconfig/
-	@cp -vf ccfgtask_*.m ${CNBITK_MATLAB}/mexcnbiconfig/
-	@cp -vf ccfgtaskset_*.m ${CNBITK_MATLAB}/mexcnbiconfig/
-	@cp -vf example_*.m ${CNBITK_MATLAB}/mexcnbiconfig/
+	@mkdir -p /opt/cnbitkmat/mex${PROJECT}/
+	@cp -vf *.mex* /opt/cnbitkmat/mex${PROJECT}/
+	@cp -vf ccfg_*.m /opt/cnbitkmat/mex${PROJECT}/
+	@cp -vf ccfgtask_*.m /opt/cnbitkmat/mex${PROJECT}/
+	@cp -vf ccfgtaskset_*.m /opt/cnbitkmat/mex${PROJECT}/
+	@cp -vf example_*.m /opt/cnbitkmat/mex${PROJECT}/
