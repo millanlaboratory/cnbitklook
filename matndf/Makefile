@@ -14,8 +14,10 @@ local-install:
 	@mkdir -p ${CNBITK_MATLAB}/matndf/
 	@cp -vf *.mex* ${CNBITK_MATLAB}/matndf/
 	@cp -vf ndf_*.m ${CNBITK_MATLAB}/matndf/
+	@cp -vf printf.m ${CNBITK_MATLAB}/matndf/
 
 install:
 	@mkdir -p /opt/cnbitkmat/matndf/
 	@cp -vf *.mex* /opt/cnbitkmat/matndf/
 	@cp -vf ndf_*.m /opt/cnbitkmat/matndf/
+	@cp -vf printf.m /opt/cnbitkmat/matndf/
