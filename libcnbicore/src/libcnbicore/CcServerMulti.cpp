@@ -326,9 +326,6 @@ int CcServerMulti::SendNot(std::string* message, CcAddress address) {
 }
 
 int CcServerMulti::ImplSend(const char* message, CcAddress address) {
-	if(strlen(message) > CcSocket::_socket->bsize)
-		CcLogWarning("Message size larger than socket buffer");
-	
 	CcSocketMapIt it = this->_endpoints.find(address);
 	int bytes = tr_send(&(*it->second), (char*)message);
 	
