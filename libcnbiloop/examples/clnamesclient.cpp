@@ -31,14 +31,7 @@ int main(void) {
 		CcLogFatal("Cannot connect to endpoint");
 		exit(1);
 	}
-		
-	if(client.Connect()) {
-		client.Erase("huge");
-		client.StoreFile("huge", "/home/mtavella/Desktop/huge.txt");
-		client.RetrieveFile("huge", "huge.txt");
-		client.Erase("huge");
-	}
-
+	
 	CcAddress address;
 	if(client.Connect()) {
 		client.Set("/pippo", "127.0.0.1:12000");
