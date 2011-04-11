@@ -18,16 +18,9 @@
 
 #include <stdio.h>
 
-int main(void)
-{
-	int k = 1;
-	char* test = (char*)&k;
-
-	if (test[0] == 1)
-		printf("[cc_endianness] Endianness: Little Endian!\n");
-	else
-		printf("[cc_endianness] Endianness: Big Endian!\n");
-
+int main(void){
+	long i; 
+	size_t s = sizeof(i);
+	printf("[cc_architecture] Long int size is %i bytes long\n", s); 
 	return 0;
 }
-

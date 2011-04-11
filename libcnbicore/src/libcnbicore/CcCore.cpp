@@ -69,10 +69,10 @@ CcCore::CcCore(void) {
 	printf("\033[1;31m%s\033[0m %s\n", 
 			"[CcCore::CcCore]", 
 			"Core functionalities loaded");
-	printf(" User: %s\n", CcCore::GetUsername().c_str()); 
-	printf(" Home: %s\n", CcCore::GetDirectoryHome().c_str()); 
-	printf(" Tmp:  %s\n", CcCore::GetDirectoryTmp().c_str()); 
-	printf(" Cwd:  %s\n", CcCore::GetDirectoryCwd().c_str()); 
+	//printf(" User: %s\n", CcCore::GetUsername().c_str()); 
+	//printf(" Home: %s\n", CcCore::GetDirectoryHome().c_str()); 
+	//printf(" Tmp:  %s\n", CcCore::GetDirectoryTmp().c_str()); 
+	//printf(" Cwd:  %s\n", CcCore::GetDirectoryCwd().c_str()); 
 }
 
 CcCore::~CcCore(void) {
