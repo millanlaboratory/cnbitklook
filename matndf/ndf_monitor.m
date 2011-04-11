@@ -25,18 +25,16 @@ try
 		addpath('/opt/mtpath');
 	end
 
-	if(getenv('CNBITK_MATLAB'))
-		mtpath_include('$CNBITK_MATLAB/');
-	else
-		mtpath_include('/opt/cnbitkmat/');
+	if(isempty(getenv('CNBITK_MATLAB')))
+		setenv('CNBITK_MATLAB', '/opt/cnbitkmat/');
 	end
-	if(getenv('EEGC3_ROOT'))
-		mtpath_include('$EEGC3_ROOT/');
-		mtpath_include('$EEGC3_ROOT/modules/smr');
-	else
-		mtpath_include('/opt/eegc3');
-		mtpath_include('/opt/eegc3/modules/smr');
+	if(isempty(getenv('EEGC3_ROOT')))
+		setenv('EEGC3_ROOT', '/opt/eegc3');
 	end
+
+	mtpath_include('$CNBITK_MATLAB/');
+	mtpath_include('$EEGC3_ROOT/');
+	mtpath_include('$EEGC3_ROOT/modules/smr');
 catch exception
 	disp(['[ndf_monitor] Exception: ' exception.message ]);
 	disp(exception.stack);
