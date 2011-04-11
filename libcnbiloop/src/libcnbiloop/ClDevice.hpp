@@ -68,6 +68,7 @@ class ClDevice {
 		int _ttype;
 		size_t _frames;
 		std::stringstream _stream;
+		unsigned int _presetid;
 };
 
 #endif

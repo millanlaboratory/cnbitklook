@@ -34,6 +34,7 @@ ClDevice::ClDevice(int stype, int ttype) {
 	this->_stype = stype;
 	this->_ttype = ttype;
 	this->_frames = 0;
+	this->_presetid = NDF_PRESET_UNKNOWN;
 }
 
 ClDevice::~ClDevice(void) {
@@ -110,7 +111,19 @@ bool ClDevice::Setup(float hz) {
 }
 
 bool ClDevice::Open(const std::string& devname) {
-	std::string devnamearg("datafile|path|");
+	std::string devnamearg;
+	
+	if(devname.find(".bdf") != std::string::npos) {
+		devnamearg.assign("datafile|path|");
+		this->_presetid = NDF_PRESET_BDF;
+	} else if(devname.find(".gdf") != std::string::npos) {
+		devnamearg.assign("datafile|path|");
+		this->_presetid = NDF_PRESET_GDF;
+	} else if(devname.find("biosemi") != std::string::npos) {
+		this->_presetid = NDF_PRESET_BIOSEMI;
+	} else if(devname.find("gtec") != std::string::npos) {
+		this->_presetid = NDF_PRESET_GTEC;
+	}
 	devnamearg.append(devname);
 
 	this->_dev = egd_open(devnamearg.c_str());
@@ -229,7 +242,7 @@ void ClDevice::InitNDF(ndf_frame* frame) {
 	frame->config.tri_channels 	= this->_cap.trigger_nmax;
 	frame->config.samples 		= ClDevice::_frames;;
 	frame->config.sf 			= this->_cap.sampling_freq;
-	frame->config.id 			= 0;
+	frame->config.id 			= this->_presetid;
 	ndf_init(frame);
 }
 
