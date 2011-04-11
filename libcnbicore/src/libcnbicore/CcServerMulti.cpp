@@ -92,7 +92,7 @@ bool CcServerMulti::Accept(CcAddress* raddress) {
 	tr_socket* endpoint = NULL;
 	if(this->_endpointPtr == NULL) {
 		this->_endpointPtr = new tr_socket;
-		tr_init_socket(this->_endpointPtr, CcSocket::_socket->bsize * sizeof(char), 1);
+		tr_init_socket_default(this->_endpointPtr);
 		tr_tcpendpoint(this->_endpointPtr);
 	}
 	endpoint = this->_endpointPtr;
@@ -384,18 +384,10 @@ int CcServerMulti::ImplRecv(CcAddress address) {
 	CcSocket::_sembuffer.Wait();
 	CcSocket::_semsocket.Wait();
 	CcSocketMapIt it = this->_endpoints.find(address);
-	bytes = tr_recv(&(*it->second));
-	
-	if(bytes > 0)
-		memcpy(CcSocket::_buffer, (*it->second).buffer,
-				CcSocket::_socket->bsize * sizeof(char));
+	bytes = tr_recv_ptr(&(*it->second), CcSocket::_buffer);
 	CcSocket::_semsocket.Post();
 
-	if(bytes == TR_BYTES_NONE) {
-		CcSocket::_sembuffer.Post();
-		return bytes;
-	}
-	if(bytes == TR_BYTES_ERROR) {
+	if(bytes == TR_BYTES_NONE || bytes == TR_BYTES_NONE) {
 		CcSocket::_sembuffer.Post();
 		return bytes;
 	}
@@ -403,10 +395,11 @@ int CcServerMulti::ImplRecv(CcAddress address) {
 	if(this->_multistream.Get() == true) {
 		this->_semdatastreams.Wait();
 		CcStreamerMapIt itS = this->datastreams.find(address);
-		(*itS->second).Append(CcSocket::_buffer);
+		(*itS->second).Append(CcSocket::_buffer, bytes);
 		this->_semdatastreams.Post();
-	} else
-		CcSocket::datastream.Append(CcSocket::_buffer);
+	} else {
+		CcSocket::datastream.Append(CcSocket::_buffer, bytes);
+	}
 	CcSocket::_sembuffer.Post();
 
 	this->AddBytesRecv(bytes);

@@ -70,9 +70,6 @@ void CcServerSingle::Drop(void) {
 
 int CcServerSingle::Send(const char* message) {
 	int bytes = TR_BYTES_NONE;
-	
-	if(strlen(message) > CcSocket::_socket->bsize)
-		CcLogWarning("Message size larger than socket buffer");
 
 	this->_semendpoint.Wait();
 	bytes = tr_send(&this->_endpoint, (char*)message);
@@ -117,9 +114,7 @@ int CcServerSingle::Recv(void) {
 
 	CcSocket::_sembuffer.Wait();
 	this->_semendpoint.Wait();
-	bytes = tr_recv(&this->_endpoint);
-	memcpy(CcSocket::_buffer, this->_endpoint.buffer,
-			CcSocket::_socket->bsize * sizeof(char));
+	bytes = tr_recv_ptr(&this->_endpoint, CcSocket::_buffer);
 	this->_semendpoint.Post();
 
 	if(bytes == TR_BYTES_ERROR || bytes == TR_BYTES_NONE) {
@@ -127,7 +122,7 @@ int CcServerSingle::Recv(void) {
 		return bytes;
 	}
 	
-	CcSocket::datastream.Append(CcSocket::_buffer);
+	CcSocket::datastream.Append(CcSocket::_buffer, bytes);
 	CcSocket::_sembuffer.Post();
 
 	this->AddBytesRecv(bytes);
@@ -147,8 +142,7 @@ void CcServerSingle::Main(void) {
 		CcSocket::_semsocket.Post();
 
 		this->_semendpoint.Wait();
-		tr_init_socket(&this->_endpoint, 
-				CcSocket::_socket->bsize * sizeof(char), 1);
+		tr_init_socket_default(&this->_endpoint); 
 		tr_tcpendpoint(&this->_endpoint);
 		this->_semendpoint.Post();
 

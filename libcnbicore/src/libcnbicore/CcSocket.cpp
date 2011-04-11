@@ -32,14 +32,14 @@ CcSocket::CcSocket(size_t bsize, unsigned int maxconn) :
 	CcObject("CcSocket") {
 	this->_semsocket.Wait();
 	this->_socket = new tr_socket;
-	tr_init_socket(this->_socket, bsize, maxconn);
+	tr_init_socket_default(this->_socket);
 	this->_semsocket.Post();
 
 	this->_sembuffer.Wait();
 	this->_buffer = NULL;
 	this->_sembuffer.Post();
 	
-	this->AllocBuffer();
+	this->AllocBuffer(bsize);
 }
 
 CcSocket::~CcSocket(void) {
@@ -53,10 +53,11 @@ CcSocket::~CcSocket(void) {
 	this->FreeBuffer();
 }
 		
-void CcSocket::AllocBuffer(void) {
+void CcSocket::AllocBuffer(size_t bsize) {
 	this->_sembuffer.Wait();
-	this->_buffer = new char[this->_socket->bsize];
-	memset(this->_buffer, 0, this->_socket->bsize * sizeof(const char));
+	this->_bsize = bsize;
+	this->_buffer = new char[this->_bsize];
+	memset(this->_buffer, 0, this->_bsize * sizeof(const char));
 	this->_sembuffer.Post();
 }
 

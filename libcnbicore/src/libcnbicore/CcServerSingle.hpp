@@ -30,7 +30,7 @@
  */
 class CcServerSingle : public CcServer {
 	public:
-		CcServerSingle(size_t bsize = CCSOCKET_BSIZE, unsigned maxconns = 256);
+		CcServerSingle(size_t bsize = CCCORE_1MB, unsigned maxconns = 256);
 		virtual ~CcServerSingle(void);
 		virtual int Recv(void); 
 		virtual int Send(const char* message);

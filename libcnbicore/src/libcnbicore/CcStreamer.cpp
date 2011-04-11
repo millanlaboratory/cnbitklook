@@ -34,7 +34,7 @@ void CcStreamer::Append(std::string buffer) {
 	this->_mtxstream.Post();
 }
 		
-void CcStreamer::Append(const char* buffer, unsigned int bsize) {
+void CcStreamer::Append(const char* buffer, size_t bsize) {
 	this->_mtxstream.Wait();
 	this->_stream.append(buffer, bsize);
 	this->_mtxstream.Post();

@@ -117,9 +117,6 @@ int CcClient::Send(const char* message) {
 	
 	int bytes = TR_BYTES_NONE;
 
-	if(strlen(message) > CcSocket::_socket->bsize)
-		CcLogWarning("Message size larger than socket buffer");
-
 	CcSocket::_semsocket.Wait();
 	bytes = tr_send(CcSocket::_socket, (char*)message);
 	CcSocket::_semsocket.Post();
@@ -178,18 +175,16 @@ int CcClient::Recv(void) {
 		return status;
 	}
 
-	bytes = tr_recv(CcSocket::_socket); 
+	CcSocket::_sembuffer.Wait();
+	bytes = tr_recv_ptr(CcSocket::_socket, CcSocket::_buffer); 
 	if(bytes == TR_BYTES_ERROR || bytes == TR_BYTES_NONE) {
 		CcSocket::_semsocket.Post();
+		CcSocket::_sembuffer.Post();
 		return bytes;
 	}
-
-	CcSocket::_sembuffer.Wait();
-	memcpy(CcSocket::_buffer, CcSocket::_socket->buffer,
-			CcSocket::_socket->bsize * sizeof(char));
 	CcSocket::_semsocket.Post();
 	
-	CcSocket::datastream.Append(CcSocket::_buffer);
+	CcSocket::datastream.Append(CcSocket::_buffer, bytes);
 	CcSocket::_sembuffer.Post();
 
 	this->AddBytesRecv(bytes);

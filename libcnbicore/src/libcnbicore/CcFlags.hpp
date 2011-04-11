@@ -36,6 +36,7 @@
 /* 09-09-29  Michele Tavella <michele.tavella@epfl.ch>
  * Non-blocking sockets
  */
+#define CCCORE_1MB				   1048576
 #define CCASYNC_WAIT_ACCEPT		   500.000
 #define CCASYNC_WAIT_CONNECT		 1.000
 //#define CCASYNC_WAIT_RECV			 0.050
@@ -47,7 +48,6 @@
 #define CCASYNC_WAIT_POLL			 0.500
 #define CCASYNC_WAIT_MACCEPT	  2000.000
 #define CCASYNC_WAIT_MRECV			 1.000
-#define CCSOCKET_BSIZE			     10240
 
 /*! \mainpage libcnbicore
  *

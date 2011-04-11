@@ -36,7 +36,7 @@ class CcStreamer : public CcObject {
 		virtual ~CcStreamer(void);
 
 		virtual void Append(std::string buffer);
-		virtual void Append(const char* buffer, unsigned int bsize);
+		virtual void Append(const char* buffer, size_t bsize);
 		virtual bool Extract(std::string* buffer, std::string hdr, 
 				std::string trl, CcStreamerDirection direction);
 		virtual bool Has(std::string hdr, std::string trl, 

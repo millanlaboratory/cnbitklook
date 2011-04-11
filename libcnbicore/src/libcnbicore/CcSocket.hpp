@@ -37,7 +37,7 @@ class CcSocketProxy;
  */
 class CcSocket : public CcObject {
 	public:
-		CcSocket(size_t bsize = CCSOCKET_BSIZE, unsigned int maxconns = 1);
+		CcSocket(size_t bsize = CCCORE_1MB, unsigned int maxconns = 1);
 		virtual ~CcSocket(void);
 		virtual int Recv(void) = 0; 
 		virtual int Send(const char* message) = 0;
@@ -52,7 +52,7 @@ class CcSocket : public CcObject {
 		void AddBytesSend(const int bytes);	
 		void AddBytesRecv(const int bytes);
 	private:
-		virtual void AllocBuffer(void);
+		virtual void AllocBuffer(size_t bsize);
 		virtual void FreeBuffer(void);
 
 	public:
@@ -61,6 +61,7 @@ class CcSocket : public CcObject {
 		tr_socket* _socket;
 		CcSemaphore _semsocket;
 		char* _buffer;
+		size_t _bsize;
 		CcSemaphore _sembuffer;
 	private:
 		CcMutex _mtxbytes;
