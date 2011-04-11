@@ -36,6 +36,6 @@ clean:
 	@rm -vf core
 
 install:
-	@cp -vf *.mex* ${CNBITK_MATLAB}/mexcnbiconfig/
-	@cp -vf cl_*.m ${CNBITK_MATLAB}/mexcnbiconfig/
-	@cp -vf example_*.m ${CNBITK_MATLAB}/mexcnbiconfig/
+	@cp -vf *.mex* ${CNBITK_MATLAB}/mexcnbiloop/
+	@cp -vf cl_*.m ${CNBITK_MATLAB}/mexcnbiloop/
+	@cp -vf example*.m ${CNBITK_MATLAB}/mexcnbiloop/
