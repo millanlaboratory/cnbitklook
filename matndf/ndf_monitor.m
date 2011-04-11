@@ -21,10 +21,9 @@ function config = ndf_monitor(pipename, addressD, addressC)
 % Configuration 
 % - Initialize, configure and setup the required toolboxes
 try
-	if(isempty(which('mtpath_include')))
-		addpath('/opt/mtpath');
+	if(isempty(getenv('MTPATH_ROOT')))
+		setenv('MTPATH_ROOT', '/opt/mtpath/');
 	end
-
 	if(isempty(getenv('CNBITK_MATLAB')))
 		setenv('CNBITK_MATLAB', '/opt/cnbitkmat/');
 	end
@@ -32,11 +31,16 @@ try
 		setenv('EEGC3_ROOT', '/opt/eegc3');
 	end
 
+	addpath(getenv('MTPATH_ROOT'));
+	if(isempty(which('mtpath_include')))
+		disp('[ndf_monitor] mtpath not installed');
+	end
 	mtpath_include('$CNBITK_MATLAB/');
 	mtpath_include('$EEGC3_ROOT/');
 	mtpath_include('$EEGC3_ROOT/modules/smr');
 catch exception
 	disp(['[ndf_monitor] Exception: ' exception.message ]);
+	disp(exception);
 	disp(exception.stack);
 	disp('[ndf_monitor] Killing Matlab...');
 	exit;
@@ -219,6 +223,7 @@ try
 		num2str(samples) ' NDF frames in ' num2str(toc) 's']);
 catch exception
 	disp(['[ndf_monitor] Exception: ' exception.message ]);
+	disp(exception);
 	disp(exception.stack);
 	disp('[ndf_monitor] Killing Matlab...');
 	exit;
