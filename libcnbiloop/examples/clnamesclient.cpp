@@ -32,6 +32,16 @@ int main(void) {
 		exit(1);
 	}
 		
+	if(client.Connect()) {
+		cout << "HUGE" << endl;
+		client.Erase("huge");
+		client.StoreFile("huge", "/home/mtavella/Desktop/huge.txt");
+		client.RetrieveFile("huge", "huge.txt");
+		client.Erase("huge");
+		cout << "/HUGE" << endl;
+	}
+	return 0;
+
 	CcAddress address;
 	if(client.Connect()) {
 		client.Set("/pippo", "127.0.0.1:12000");
