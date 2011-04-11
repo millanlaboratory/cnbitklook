@@ -76,7 +76,7 @@ int main(void) {
 		client.RetrieveFile("group", "group");
 		client.Erase("group");
 		
-		client.StoreFile("huge", "/home/mtavella/Desktop/huge.xml");
+		client.StoreFile("huge", "/home/mtavella/Desktop/huge.txt");
 		client.RetrieveFile("huge", "huge.txt");
 		client.Erase("huge");
 	}

@@ -103,7 +103,7 @@ int main(int argc, char* argv[]) {
 	pipes->Open(optpipename, 5);
 
 	// Setup, Bind and register ClAcqAsServer
-	CcServerMulti server;
+	CcServerMulti server(true, 5*CCCORE_1MB);
 	ClAcqAsServer handler(&writer, &frame, &semframe);
 	ClNamesClient nsclient;
 	try {

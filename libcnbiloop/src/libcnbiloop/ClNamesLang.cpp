@@ -47,7 +47,7 @@
 const std::string ClNamesLang::Hdr = "[clln]";
 const std::string ClNamesLang::Trl = "[/clln]";
 
-ClNamesLang::ClNamesLang(void) : ClLanguage(CCSOCKET_BSIZE) {
+ClNamesLang::ClNamesLang(void) : ClLanguage(CCCORE_1MB) {
 }
 		
 char* ClNamesLang::Query(const std::string& name) {

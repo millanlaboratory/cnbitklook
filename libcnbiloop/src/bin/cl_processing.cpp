@@ -55,7 +55,7 @@ int main(int argc, char* argv[]) {
 			append(optendpoint.GetAddress()).append("/TCP"));
 	
 	// Setup TCP server
-	CcServerMulti server;
+	CcServerMulti server(true, 5*CCCORE_1MB);
 	ClProAsServer handler;
 	ClNamesClient nsclient;
 	try { 

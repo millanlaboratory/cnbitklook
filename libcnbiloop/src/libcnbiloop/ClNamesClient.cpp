@@ -113,10 +113,10 @@ int ClNamesClient::Store(const std::string& name, const std::string& content) {
 	int errorid = 0;
 	std::string message, reply;
 	
-	if(content.size() > CCSOCKET_BSIZE) {
-		CcLogError("Content size exceedes socket buffer");
-		return ClNamesLang::StatusLost;
-	}
+	//if(content.size() > CCSOCKET_BSIZE) {
+	//	CcLogError("Content size exceedes socket buffer");
+	//	return ClNamesLang::StatusLost;
+	//}
 
 	this->_language.Store(name, content);
 	bool status = ClClient::_client.SendRecv(this->_language.message->buffer,
