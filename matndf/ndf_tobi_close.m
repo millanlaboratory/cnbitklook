@@ -1,0 +1,30 @@
+%   Copyright (C) 2011 Michele Tavella <tavella.michele@gmail.com>
+%
+%   This file is part of matndf
+%
+%   The libndf library is free software: you can redistribute it and/or
+%   modify it under the terms of the version 3 of the GNU General Public
+%   License as published by the Free Software Foundation.
+%
+%   This program is distributed in the hope that it will be useful,
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%   GNU General Public License for more details.
+%
+%   You should have received a copy of the GNU General Public License
+%   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+%
+%   function ndf_tobi_close(tobi)
+function ndf_tobi_close(tobi)
+
+tr_close(tobi.iC.socket);
+tr_free(tobi.iC.socket);
+tr_delete(tobi.iC.socket);
+icmessage_delete(tobi.iC.message);
+icserializerrapid_delete(tobi.iC.serializer);
+
+tr_close(tobi.iD.socket);
+tr_free(tobi.iD.socket);
+tr_delete(tobi.iD.socket);
+idmessage_delete(tobi.iD.message);
+idserializerrapid_delete(tobi.iD.serializer);
