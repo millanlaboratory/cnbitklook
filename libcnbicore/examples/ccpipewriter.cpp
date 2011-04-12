@@ -24,7 +24,7 @@
 
 int main(void) {
 	CcCore::OpenLogger("ccpipesource", 
-			CcCore::TerminalColors, CcLogEntry::LevelDebug);
+			CcCore::TerminalColors, CcCore::LevelDebug);
 
 	CcPipeWriter w;
 	int ack = 6;

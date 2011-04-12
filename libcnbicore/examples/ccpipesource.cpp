@@ -73,7 +73,7 @@ class Writer : public CcThread {
 
 int main(void) {
 	CcCore::OpenLogger("ccpipesource", 
-			CcCore::TerminalColors, CcLogEntry::LevelDebug);
+			CcCore::TerminalColors, CcCore::LevelDebug);
 
 	CcPipeSource::CatchSIGPIPE();
 	Writer w;

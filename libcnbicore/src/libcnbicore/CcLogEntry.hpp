@@ -19,11 +19,10 @@
 #ifndef CCLOGENTRY_HPP
 #define CCLOGENTRY_HPP
 
+#include "CcCore.hpp"
 #include <string>
 #include <sstream>
-
 class CcLogger;
-typedef unsigned int CcLogLevel;
 
 /*! \brief Entry for CcLogger
  */
@@ -39,15 +38,7 @@ class CcLogEntry {
 		virtual std::string Serialize(void);
 		virtual CcLogLevel GetLevel(void);
 		static const std::string GetLevelTxt(CcLogLevel level);
-	public:
-		static const CcLogLevel LevelDebug = 10;
-		static const CcLogLevel LevelConfig = 20;
-		static const CcLogLevel LevelInfo = 30; 
-		static const CcLogLevel LevelException = 40;
-		static const CcLogLevel LevelWarning = 50;
-		static const CcLogLevel LevelError = 60;
-		static const CcLogLevel LevelFatal = 70;
-		
+	protected:
 		static const std::string TxtDebug;
 		static const std::string TxtConfig;
 		static const std::string TxtInfo;

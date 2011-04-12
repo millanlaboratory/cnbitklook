@@ -36,7 +36,7 @@ class Matlab : public CcProcess {
 
 int main(void) {
 	CcCore::OpenLogger("ccprocess", 
-			CcCore::TerminalColors, CcLogEntry::LevelConfig);
+			CcCore::TerminalColors, CcCore::LevelConfig);
 	
 	CcPtable* table = CcPtable::Instance();
 

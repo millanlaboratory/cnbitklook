@@ -59,25 +59,25 @@ std::string CcLogEntry::Serialize(void) {
 	buffer.append(this->_timestamp);
 	buffer.append("' level='");
 	switch(this->_level) {
-		case CcLogEntry::LevelConfig:
+		case CcCore::LevelConfig:
 			buffer.append("Config");
 			break;
-		case CcLogEntry::LevelException:
+		case CcCore::LevelException:
 			buffer.append("Exception");
 			break;
-		case CcLogEntry::LevelDebug:
+		case CcCore::LevelDebug:
 			buffer.append("Debug");
 			break;
-		case CcLogEntry::LevelInfo:
+		case CcCore::LevelInfo:
 			buffer.append("Info");
 			break;
-		case CcLogEntry::LevelWarning:
+		case CcCore::LevelWarning:
 			buffer.append("Warning");
 			break;
-		case CcLogEntry::LevelError:
+		case CcCore::LevelError:
 			buffer.append("Error");
 			break;
-		case CcLogEntry::LevelFatal:
+		case CcCore::LevelFatal:
 			buffer.append("Fatal");
 			break;
 		default:
@@ -106,19 +106,19 @@ CcLogLevel CcLogEntry::GetLevel(void) {
 
 const std::string CcLogEntry::GetLevelTxt(CcLogLevel level) {
 	switch(level) {
-		case CcLogEntry::LevelDebug:
+		case CcCore::LevelDebug:
 			return CcLogEntry::TxtDebug;
-		case CcLogEntry::LevelConfig:
+		case CcCore::LevelConfig:
 			return CcLogEntry::TxtConfig;
-		case CcLogEntry::LevelInfo:
+		case CcCore::LevelInfo:
 			return CcLogEntry::TxtInfo;
-		case CcLogEntry::LevelException:
+		case CcCore::LevelException:
 			return CcLogEntry::TxtException;
-		case CcLogEntry::LevelWarning:
+		case CcCore::LevelWarning:
 			return CcLogEntry::TxtWarning;
-		case CcLogEntry::LevelError:
+		case CcCore::LevelError:
 			return CcLogEntry::TxtError;
-		case CcLogEntry::LevelFatal:
+		case CcCore::LevelFatal:
 			return CcLogEntry::TxtFatal;
 	}
 	return "undef";

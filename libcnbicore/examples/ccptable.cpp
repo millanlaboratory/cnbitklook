@@ -23,7 +23,7 @@ using namespace std;
 
 int main(void) {
 	CcCore::OpenLogger("ccprocess", 
-			CcCore::TerminalColors, CcLogEntry::LevelInfo);
+			CcCore::TerminalColors, CcCore::LevelInfo);
 	
 	CcPtable* table = CcPtable::Instance();
 	

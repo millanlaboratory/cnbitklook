@@ -21,7 +21,7 @@
 
 int main(void) {
 	CcCore::OpenLogger("ccpipesource", 
-			CcCore::TerminalColors, CcLogEntry::LevelConfig);
+			CcCore::TerminalColors, CcCore::LevelConfig);
 
 	int ack = 100;
 	CcPipeServer s(&ack, sizeof(int));

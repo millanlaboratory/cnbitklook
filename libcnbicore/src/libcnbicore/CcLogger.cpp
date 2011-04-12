@@ -107,31 +107,31 @@ void CcLogger::DumpEntry(CcLogEntry* entry) {
 	}
 	else if(this->_termtype == CcCore::TerminalColors) {
 		switch(entry->_level) {
-			case CcLogEntry::LevelConfig:
+			case CcCore::LevelConfig:
 				printf("\033[1;34m[%s]\033[0m\n %s\n", 
 						entry->_caller.c_str(), entry->_message.c_str());
 				break;
-			case CcLogEntry::LevelException:
+			case CcCore::LevelException:
 				printf("\033[1;35m[%s]\033[0m\n %s\n", 
 						entry->_caller.c_str(), entry->_message.c_str());
 				break;
-			case CcLogEntry::LevelDebug:
+			case CcCore::LevelDebug:
 				printf("\033[1m[%s]\033[0m\n %s\n", 
 						entry->_caller.c_str(), entry->_message.c_str());
 				break;
-			case CcLogEntry::LevelInfo:
+			case CcCore::LevelInfo:
 				printf("\033[1;32m[%s]\033[0m\n %s\n", 
 						entry->_caller.c_str(), entry->_message.c_str());
 				break;
-			case CcLogEntry::LevelWarning:
+			case CcCore::LevelWarning:
 				printf("\033[1;33m[%s]\033[0m\n %s\n", 
 						entry->_caller.c_str(), entry->_message.c_str());
 				break;
-			case CcLogEntry::LevelError:
+			case CcCore::LevelError:
 				printf("\033[0;31m[%s]\033[0m\n %s\n", 
 						entry->_caller.c_str(), entry->_message.c_str());
 				break;
-			case CcLogEntry::LevelFatal:
+			case CcCore::LevelFatal:
 				printf("\033[1;31m[%s]\033[0m\n %s\n", 
 						entry->_caller.c_str(), entry->_message.c_str());
 				break;

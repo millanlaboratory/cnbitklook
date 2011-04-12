@@ -59,7 +59,7 @@ class Reader : public CcThread {
 
 int main(void) {
 	CcCore::OpenLogger("ccpipesink", 
-			CcCore::TerminalColors, CcLogEntry::LevelDebug);
+			CcCore::TerminalColors, CcCore::LevelDebug);
 
 	Reader r;
 	CcLogInfo("Starting reader");

@@ -18,7 +18,7 @@
 #ifndef CCEXCEPTION_HPP
 #define CCEXCEPTION_HPP
 
-#include "CcLogEntry.hpp"
+#include "CcCore.hpp"
 #include "CcObject.hpp"
 #include <string>
 
@@ -54,7 +54,7 @@ class CcException : public CcObject {
 #define CcThrow(message)\
 	{\
 	CcException exception(message, __PRETTY_FUNCTION__); \
-	CcCore::logger.AddEntry(CcLogEntry(CcLogEntry::LevelException,\
+	CcCore::logger.AddEntry(CcLogEntry(CcCore::LevelException,\
 				exception.Info(),\
 				exception.Caller(),\
 				__FILE__, __LINE__)); \

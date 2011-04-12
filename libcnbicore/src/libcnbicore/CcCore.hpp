@@ -21,10 +21,10 @@
 
 #include <iostream>
 #include <string>
-#include "CcLogEntry.hpp"
 #include "CcNetworkTypes.hpp"
 
 typedef int CcTermType;
+typedef int CcLogLevel;
 class CcObject;
 class CcLogger;
 template <class T> class CcThreadSafe;
@@ -41,7 +41,7 @@ class CcCore {
 		static void Status(void);
 		static void OpenLogger(std::string module,
 				CcTermType termtype = CcCore::TerminalColors,
-				CcLogLevel level = CcLogEntry::LevelConfig);
+				CcLogLevel level = CcCore::LevelConfig);
 		static std::string GetDirectoryTmp(void);
 		static std::string GetDirectoryCwd(void);
 		static std::string GetDirectoryHome(void);
@@ -57,10 +57,18 @@ class CcCore {
 		static void Destroy(void);
 
 	public:
-		static CcLogger logger;
 		static const CcTermType TerminalDisabled = 0;
 		static const CcTermType TerminalEnabled = 1;
 		static const CcTermType TerminalColors = 2;
+		static const CcLogLevel LevelDebug = 10;
+		static const CcLogLevel LevelConfig = 20;
+		static const CcLogLevel LevelInfo = 30; 
+		static const CcLogLevel LevelException = 40;
+		static const CcLogLevel LevelWarning = 50;
+		static const CcLogLevel LevelError = 60;
+		static const CcLogLevel LevelFatal = 70;
+	public:
+		static CcLogger logger;
 		static CcThreadSafe<bool> receivedSIGINT;
 		static CcThreadSafe<bool> receivedSIGQUIT;
 		static CcThreadSafe<bool> receivedSIGTERM;

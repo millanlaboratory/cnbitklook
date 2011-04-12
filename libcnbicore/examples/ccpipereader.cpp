@@ -24,7 +24,7 @@
 
 int main(void) {
 	CcCore::OpenLogger("ccpipereader", 
-			CcCore::TerminalColors, CcLogEntry::LevelConfig);
+			CcCore::TerminalColors, CcCore::LevelConfig);
 
 	CcPipeWriter w;
 	CcPipeReader r;
