@@ -35,7 +35,7 @@ void usage(void) {
 	printf("Where: -d       gTec/Biosemi ID, GDF/BDF filename\n");
 	printf("       -f       16 (default), 32, 64...\n");
 	printf("       -a       9000 (default)\n");
-	printf("       -n		/tmp/cl.pipe.ndf (default)\n");
+	printf("       -n       /tmp/cl.pipe.ndf (default)\n");
 }
 
 int main(int argc, char* argv[]) {
