@@ -36,7 +36,6 @@
 /* Initialization */
 CcCore* CcCore::_instance = NULL;
 unsigned int CcCore::_refCount = 0;
-std::string CcCore::username("none");
 
 /* Declarations */
 CcLogger CcCore::logger;
@@ -66,20 +65,24 @@ void cccore_sigchild(int sig) {
 }
 
 CcCore::CcCore(void) {
+	/*
 	printf("\033[1;31m%s\033[0m %s\n", 
 			"[CcCore::CcCore]", 
 			"Core functionalities loaded");
-	//printf(" User: %s\n", CcCore::GetUsername().c_str()); 
-	//printf(" Home: %s\n", CcCore::GetDirectoryHome().c_str()); 
-	//printf(" Tmp:  %s\n", CcCore::GetDirectoryTmp().c_str()); 
-	//printf(" Cwd:  %s\n", CcCore::GetDirectoryCwd().c_str()); 
+	printf(" User: %s\n", CcCore::GetUsername().c_str()); 
+	printf(" Home: %s\n", CcCore::GetDirectoryHome().c_str()); 
+	printf(" Tmp:  %s\n", CcCore::GetDirectoryTmp().c_str()); 
+	printf(" Cwd:  %s\n", CcCore::GetDirectoryCwd().c_str()); 
+	*/
 }
 
 CcCore::~CcCore(void) {
 	CcCore::logger.Close();
+	/*
 	printf("\033[1;31m%s\033[0m %s\n", 
 			"[CcCore::~CcCore]", 
 			"Core functionalities unloaded");
+	 */
 }
 
 CcCore* CcCore::Instance(void) {
@@ -137,23 +140,19 @@ std::string CcCore::GetDirectoryTmp(void) {
 	directory.append("cnbitk-");
 	directory.append(CcCore::GetUsername());
 	directory.append("/");
-
 	return directory;
 }
 		
 std::string CcCore::GetDirectoryCwd(void) {
-	std::string directory(getcwd(NULL, 0));
-	return directory;
+	return std::string(getcwd(NULL, 0));
 }
 
 std::string CcCore::GetDirectoryHome(void) {
-	std::string directory(getenv("HOME"));
-	return directory;
+	return std::string(getenv("HOME"));
 }
 
 std::string CcCore::GetUsername(void) {
-	std::string username(getenv("USER"));
-	return username;
+	return std::string(getenv("USER"));
 }
 
 void CcCore::CatchSIGINT(void) {

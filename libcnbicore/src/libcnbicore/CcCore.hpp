@@ -58,8 +58,6 @@ class CcCore {
 
 	public:
 		static CcLogger logger;
-		static std::string username;
-		static std::string directory;
 		static const CcTermType TerminalDisabled = 0;
 		static const CcTermType TerminalEnabled = 1;
 		static const CcTermType TerminalColors = 2;
