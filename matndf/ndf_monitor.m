@@ -143,10 +143,10 @@ catch exception
 	disp(exception.stack);
 	disp('[ndf_monitor] Killing Matlab...');
 	ndf_close(ndf.sink);
-	ndf_tobi_close();
+	ndf_tobi_close(tobi);
 	exit;
 end
 
 disp('[ndf_monitor] Goin down gracefully');
 ndf_close(ndf.sink);
-ndf_tobi_close();
+ndf_tobi_close(tobi);
