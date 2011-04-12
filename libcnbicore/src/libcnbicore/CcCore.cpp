@@ -130,9 +130,7 @@ void CcCore::OpenLogger(std::string module, CcTermType termtype,
 	filename.append(module);
 	filename.append(".xml");
 	CcCore::logger.Open(filename, module, termtype, level);
-	std::string message("CcLogger is logging in: ");
-	message.append(filename);
-	CcLogInfo(message);
+	CcLogConfig(std::string("CcLogger is logging in: ").append(filename));
 }
 
 std::string CcCore::GetDirectoryTmp(void) {

@@ -21,7 +21,6 @@
 
 #include <iostream>
 #include <string>
-//#include <list>
 #include "CcLogEntry.hpp"
 #include "CcNetworkTypes.hpp"
 
@@ -29,6 +28,7 @@ typedef int CcTermType;
 class CcObject;
 class CcLogger;
 template <class T> class CcThreadSafe;
+
 /*! \brief Singleton kernel class
  *
  * This class provides core functionalities to all the classes in libcnbicore
