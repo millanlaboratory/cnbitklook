@@ -39,10 +39,6 @@ void usage(void) {
 }
 
 int main(int argc, char* argv[]) {
-	CcCore::OpenLogger("cl_acquisition");
-	CcCore::CatchSIGINT();
-	CcCore::CatchSIGTERM();
-	
 	int opt;
 	std::string optdevice;
 	std::string optfs("16");
@@ -63,6 +59,9 @@ int main(int argc, char* argv[]) {
 			return(opt == 'h') ? EXIT_SUCCESS : EXIT_FAILURE;
 		}
 	}
+	CcCore::OpenLogger("cl_acquisition");
+	CcCore::CatchSIGINT();
+	CcCore::CatchSIGTERM();
 
 	CcLogInfo(std::string("Acquisition configured: ").
 			append(optfs).append("Hz, ").

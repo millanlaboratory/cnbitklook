@@ -33,11 +33,6 @@ void usage(void) {
 }
 
 int main(int argc, char* argv[]) {
-	CcCore::OpenLogger("cl_nameserver");
-	CcCore::CatchSIGINT();
-	CcCore::CatchSIGTERM();
-
-	// Parse command line
 	int opt;
 	std::string optopt;
 	CcEndpoint optendpoint("127.0.0.1:8000");
@@ -50,6 +45,10 @@ int main(int argc, char* argv[]) {
 			return(opt == 'h') ? EXIT_SUCCESS : EXIT_FAILURE;
 		}
 	}
+	
+	CcCore::OpenLogger("cl_nameserver");
+	CcCore::CatchSIGINT();
+	CcCore::CatchSIGTERM();
 
 	CcLogInfo(std::string("Processing configured: ").
 			append(optendpoint.GetAddress()).append("/TCP"));

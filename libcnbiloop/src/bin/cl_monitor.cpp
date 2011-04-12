@@ -29,8 +29,6 @@ void usage(void) {
 }
 
 int main(int argc, char* argv[]) {
-	CcCore::OpenLogger("clmonitor");
-	
 	// Parse command line
 	int opt;
 	std::string optname;
@@ -45,9 +43,11 @@ int main(int argc, char* argv[]) {
 	}
 
 	if(optname.empty()) {
-		CcLogFatal("Must specifiy a pipe");
+		usage();
 		return(EXIT_FAILURE);
 	}
+	
+	CcCore::OpenLogger("clmonitor");
 
 	CcTimeValue tvOpen, tvRead, tvLoop;
 	double msOpen, msRead, msNDF, msLoop, msIdeal;
