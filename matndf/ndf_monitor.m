@@ -147,6 +147,6 @@ catch exception
 	exit;
 end
 
-disp('[ndf_monitor] Goin down gracefully');
+disp('[ndf_monitor] Going down');
 ndf_close(ndf.sink);
 ndf_tobi_close(tobi);
