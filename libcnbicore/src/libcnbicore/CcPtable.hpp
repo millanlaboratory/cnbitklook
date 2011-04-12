@@ -19,11 +19,12 @@
 #ifndef CCPTABLE_HPP 
 #define CCPTABLE_HPP 
 
+#include "CcSemaphore.hpp"
+#include "CcObject.hpp"
 #include <map>
 #include <sys/types.h>
-#include "CcSemaphore.hpp"
 
-class CcPtable {
+class CcPtable : public CcObject {
 	public:
 		static CcPtable* Instance(void);
 		static void Release(void);

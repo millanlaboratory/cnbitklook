@@ -29,7 +29,7 @@ class CcObject;
 class CcLogger;
 template <class T> class CcThreadSafe;
 
-/*! \brief Singleton kernel class
+/*! \brief Singleton core class
  *
  * This class provides core functionalities to all the classes in libcnbicore
  */

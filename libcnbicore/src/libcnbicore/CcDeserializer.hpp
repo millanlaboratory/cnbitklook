@@ -19,11 +19,12 @@
 #ifndef CCDESERIALIZER_HPP
 #define CCDESERIALIZER_HPP
 
+#include "CcObject.hpp"
 #include "CcStreamer.hpp"
 
 /*! \brief Interface for classes that deserialize data from CcStreamer
  */
-class CcDeserializer {
+class CcDeserializer : public CcObject {
 	public:
 		virtual bool Deserialize(string* buffer) = 0;
 		virtual bool Deserialize(CcStreamer* stream, 

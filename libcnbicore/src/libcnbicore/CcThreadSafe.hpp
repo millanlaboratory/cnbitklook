@@ -19,11 +19,12 @@
 #ifndef CCTHREADSAFE_HPP
 #define CCTHREADSAFE_HPP
 
+#include "CcObject.hpp"
 #include "CcSemaphore.hpp"
 
 //! \brief Thread safe container
 template <class T = bool>
-class CcThreadSafe {
+class CcThreadSafe : public CcObject {
 	public:
 		CcThreadSafe(void);
 		CcThreadSafe(T value);
