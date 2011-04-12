@@ -53,8 +53,10 @@ void CcThread::Stop(void) {
 }
 
 void CcThread::Join(void) {
+	/*
 	if(this->_thread == NULL)
 		return;
+	 */
 	pthread_join(this->_thread, NULL);
 }
 		

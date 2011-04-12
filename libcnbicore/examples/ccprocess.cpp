@@ -38,8 +38,6 @@ int main(void) {
 	CcCore::OpenLogger("ccprocess", 
 			CcCore::TerminalColors, CcCore::LevelConfig);
 	
-	CcPtable* table = CcPtable::Instance();
-
 	Matlab p0("matlab");
 	Matlab p1("matlab");
 	Matlab p2("matlab");

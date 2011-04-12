@@ -23,6 +23,7 @@
 #include "CcLog.hpp"
 #include "CcLogger.hpp"
 #include "CcObject.hpp"
+#include "CcPtable.hpp"
 #include "CcThreadSafe.hpp"
 #include "CcTime.hpp"
 #include <stdio.h>

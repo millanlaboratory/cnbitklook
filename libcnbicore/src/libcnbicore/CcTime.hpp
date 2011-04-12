@@ -19,6 +19,7 @@
 #ifndef CCTIME_HPP
 #define CCTIME_HPP
 
+#include "CcObject.hpp"
 #include <string>
 #include <sys/time.h>
 
@@ -34,7 +35,7 @@ typedef unsigned long long int CcTimeValueHPT;
  * Mainly static methods for time management in LibCNBICore. 
  * Please use these methods in your code so that code portability is simplified.
  */
-class CcTime {
+class CcTime : public CcObject {
 	public:
 		static void Timestamp(std::string* timestamp);
 		static void Daystamp(std::string* timestamp);

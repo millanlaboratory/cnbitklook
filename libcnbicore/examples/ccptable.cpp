@@ -25,8 +25,6 @@ int main(void) {
 	CcCore::OpenLogger("ccprocess", 
 			CcCore::TerminalColors, CcCore::LevelInfo);
 	
-	CcPtable* table = CcPtable::Instance();
-	
 	cout << CcPtable::Size() << endl;
 	CcPtable::Add(1000);
 	CcPtable::Add(1001);

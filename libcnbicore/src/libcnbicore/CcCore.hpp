@@ -23,10 +23,10 @@
 #include <string>
 #include "CcNetworkTypes.hpp"
 
-typedef int CcTermType;
-typedef int CcLogLevel;
 class CcObject;
 class CcLogger;
+typedef int CcTermType;
+typedef int CcLogLevel;
 template <class T> class CcThreadSafe;
 
 /*! \brief Singleton core class
@@ -50,7 +50,6 @@ class CcCore {
 		static void CatchSIGQUIT(void);
 		static void CatchSIGTERM(void);
 		static void CatchSIGCHLD(void);
-
 	protected:
 		CcCore(void);
 		~CcCore(void);

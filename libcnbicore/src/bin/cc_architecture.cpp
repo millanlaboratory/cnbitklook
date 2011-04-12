@@ -21,6 +21,6 @@
 int main(void){
 	long i; 
 	size_t s = sizeof(i);
-	printf("[cc_architecture] Long int size is %i bytes long\n", s); 
+	printf("[cc_architecture] Long int size is %lu bytes long\n", s); 
 	return 0;
 }

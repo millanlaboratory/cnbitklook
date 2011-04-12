@@ -20,6 +20,7 @@
 #define CCOBJECT_CPP
 
 #include "CcObject.hpp"
+#include "CcTime.hpp"
 #include <cstdio>
 #include <cstring>
 #include <iomanip>

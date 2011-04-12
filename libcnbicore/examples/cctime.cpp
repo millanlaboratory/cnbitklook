@@ -33,7 +33,6 @@ int main(void) {
 	cout << timestamp << endl;
 	
 	CcTimeValue tic;
-	double delta = 0.0f;
 	for(int i = 0; i < 20; i++) {
 		CcTime::Tic(&tic);
 		CcTime::Sleep(1234.00f);

@@ -204,7 +204,7 @@ void ClNamesAsServer::Main(void) {
 			if(this->_master->Send("", address) >= TR_BYTES_NONE)
 				continue;
 			CcLogWarningS(this->_stream, "Endpoint " << address << 
-					"dropped: unsetting " << name);
+					" dropped: unsetting " << name);
 			this->_monitor.erase(name);
 			this->Unset(name);
 		}

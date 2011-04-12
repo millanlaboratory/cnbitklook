@@ -19,7 +19,6 @@
 #ifndef CCOBJECT_HPP
 #define CCOBJECT_HPP
 
-#include "CcTime.hpp"
 #include "CcCore.hpp"
 #include <string>
 #include <iostream>

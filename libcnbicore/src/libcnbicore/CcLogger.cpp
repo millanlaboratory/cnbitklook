@@ -21,6 +21,7 @@
 
 #include "CcLog.hpp"
 #include "CcLogger.hpp"
+#include "CcTime.hpp"
 #include <stdio.h>
 
 CcLogger::CcLogger(void) {
