@@ -26,18 +26,39 @@ ndf_include();
 
 % Prepare and enter main loop
 try 
+	% Prepare Loop structure
+	loop.cl   = cl_new();
+	loop.tic  = 0;
+	loop.toc  = 0;
+	loop.jump = ndf_jump();
+	
+	% Connect to the CNBI Loop (CL) infrastructure
+	if(cl_connect(loop.cl) == false)
+		disp('[ndf_monitor] Cannot connect to CNBI Loop, killing matlab');
+		exit;
+		cl_disconnect(loop.cl);
+		cl_delete(loop.cl);
+	end
+	
+	% See weather addressD and addressC are valid port names (i.e. /PORT),
+	% otherwise assume they are IP:PORT addresses.
+	if(cl_checkname(addressD) == true)
+		addressD = cl_query(loop.cl, addressD);
+	end
+	if(cl_checkname(addressC) == true)
+		addressC = cl_query(loop.cl, addressC);
+	end
+	
 	% Prepare NDF srtructure
 	ndf.conf  = {};
 	ndf.size  = 0;
 	ndf.frame = ndf_frame();
 	ndf.sink  = ndf_sink(pipename);
-	% Prepare Loop structure
-	loop.tic  = 0;
-	loop.toc  = 0;
-	loop.jump = ndf_jump();
 	% Prepare TOBI structure
-	tobi      = ndf_tobi();
+	tobi      = ndf_tobi(addressD, addressC);
 	
+	
+
 	% Configure TiD message
 	idmessage_setdescription(tobi.iD.message, 'ndf_monitor');
 	idmessage_setfamilytype(tobi.iD.message, idmessage_familytype('biosig'));
@@ -144,9 +165,13 @@ catch exception
 	disp('[ndf_monitor] Killing Matlab...');
 	ndf_close(ndf.sink);
 	ndf_tobi_close(tobi);
+	cl_disconnect(loop.cl);
+	cl_delete(loop.cl);
 	exit;
 end
 
 disp('[ndf_monitor] Going down');
 ndf_close(ndf.sink);
 ndf_tobi_close(tobi);
+cl_disconnect(loop.cl);
+cl_delete(loop.cl);

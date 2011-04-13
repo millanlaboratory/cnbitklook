@@ -41,13 +41,13 @@ tobi.iC.cache 		= '';
 tobi.iC.hdr 		= '<tobiic';
 tobi.iC.trl 		= '</tobiic>';
 
-if(nargin >= 2)
+if(nargin >= 2 & isempty(addressD) == false)
 	tobi.iD.address = addressD;
 	tobi.iD.ipport 	= regexp(tobi.iD.address, ':', 'split');
 end
 disp(['[ndf_tobi] TOBI iD endpoint:' tobi.iD.address]);
 
-if(nargin >= 3)
+if(nargin >= 3 & isempty(addressC) == false)
 	tobi.iC.address = addressC;
 	tobi.iC.ipport 	= regexp(tobi.iC.address, ':', 'split');
 end
