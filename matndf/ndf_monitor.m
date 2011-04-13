@@ -33,6 +33,10 @@ try
 	loop.jump = ndf_jump();
 	[loop.cl, pipename, addressD, addressC] = ndf_cl(pipename, addressD, addressC);	
 	
+	pipename
+	addressD
+	addressC
+
 	% Prepare NDF srtructure
 	ndf.conf  = {};
 	ndf.size  = 0;
