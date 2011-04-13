@@ -65,14 +65,14 @@ int main(void) {
 	nameserver.Set("/feedback0", "127.0.0.1:9500");
 	processing.ChangeDirectory(pid0, "/tmp/");
 	processing.IncludeNDF(pid0) ;
-	processing.LaunchNDF(pid0, "ndf_monitor", "/tmp/cl.pipe.ndf.0", 
-			"/acquisition", "/feedback0", "");
+	processing.LaunchNDF(pid0, 
+			"ndf_monitor", "/pipe0", "/acquisition", "/feedback0", "");
 
 	nameserver.Set("/feedback1", "127.0.0.1:9501");
 	processing.ChangeDirectory(pid1, "/tmp/");
 	processing.IncludeNDF(pid1) ;
-	processing.LaunchNDF(pid1, "ndf_monitor", "/tmp/cl.pipe.ndf.1", 
-			"/acquisition", "/feedback1", "");
+	processing.LaunchNDF(pid1, 
+			"ndf_monitor", "/pipe0", "/acquisition", "/feedback1", "");
 	
 	if(processing.Check(pid0) == false) {
 		CcLogFatal("PID0 is dead");
