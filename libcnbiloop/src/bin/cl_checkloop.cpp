@@ -16,9 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ClProClient.hpp"
-#include "ClAcqClient.hpp"
-#include "ClNamesClient.hpp"
+#include "ClLoop.hpp"
 #include <libcnbicore/CcBasic.hpp>
 #include <iostream>
 
@@ -47,20 +45,9 @@ int main(int argc, char* argv[]) {
 	CcCore::CatchSIGINT();
 	CcCore::CatchSIGTERM();
 
-	ClProClient processing;
-	ClAcqClient acquisiton;
-	ClNamesClient nameserver;
-
-	if(nameserver.Connect() == false) {
-		CcLogFatal("Cannot connect to nameserver");
-		exit(1);
-	}
-	if(processing.Connect(nameserver.Query("/processing")) == false) {
-		CcLogFatal("Cannot connect to processing");
-		exit(1);
-	}
-	if(acquisiton.Connect(nameserver.Query("/acquisition")) == false) {
-		CcLogFatal("Cannot connect to acquisiton");
+	ClLoop cl;
+	if(cl.Connect() == false) {
+		CcLogFatal("Cannot connect to loop");
 		exit(1);
 	}
 	
@@ -75,36 +62,36 @@ int main(int argc, char* argv[]) {
 	filelog.append(".log");
 
 	int pid0, pid1;
-	if(processing.ForkAndCheck(&pid0) != ClProLang::Successful)
+	if(cl.processing.ForkAndCheck(&pid0) != ClProLang::Successful)
 		exit(2);
-	if(processing.ForkAndCheck(&pid1) != ClProLang::Successful)
+	if(cl.processing.ForkAndCheck(&pid1) != ClProLang::Successful)
 		exit(2);
 
-	nameserver.Erase("ndf_monitor::scope");
-	nameserver.Store("ndf_monitor::scope", optplot);
+	cl.nameserver.Erase("ndf_monitor::scope");
+	cl.nameserver.Store("ndf_monitor::scope", optplot);
 
-	nameserver.Set("/feedback0", "127.0.0.1:9500");
-	processing.ChangeDirectory(pid0, "/tmp/");
-	processing.IncludeNDF(pid0) ;
-	processing.LaunchNDF(pid0, 
-			"ndf_monitor", "/pipe0", "/acquisition", "/feedback0", "");
+	cl.nameserver.Set("/feedback0", "127.0.0.1:9500");
+	cl.processing.ChangeDirectory(pid0, "/tmp/");
+	cl.processing.IncludeNDF(pid0) ;
+	cl.processing.LaunchNDF(pid0, "ndf_monitor", "/pipe0", 
+			"/acquisition", "/feedback0", "");
 
-	nameserver.Set("/feedback1", "127.0.0.1:9501");
-	processing.ChangeDirectory(pid1, "/tmp/");
-	processing.IncludeNDF(pid1) ;
-	processing.LaunchNDF(pid1, 
-			"ndf_monitor", "/pipe1", "/acquisition", "/feedback1", "");
+	cl.nameserver.Set("/feedback1", "127.0.0.1:9501");
+	cl.processing.ChangeDirectory(pid1, "/tmp/");
+	cl.processing.IncludeNDF(pid1) ;
+	cl.processing.LaunchNDF(pid1, "ndf_monitor", "/pipe1", 
+			"/acquisition", "/feedback1", "");
 	
-	if(processing.Check(pid0) == false) {
+	if(cl.processing.Check(pid0) == false) {
 		CcLogFatal("PID0 is dead");
 		goto shutdown;
 	}
-	if(processing.Check(pid1) == false) {
+	if(cl.processing.Check(pid1) == false) {
 		CcLogFatal("PID1 is dead");
 		goto shutdown;
 	}
 
-	if(acquisiton.OpenXDF(filebdf, filelog, "debug=1") 
+	if(cl.acquisition.OpenXDF(filebdf, filelog, "debug=1") 
 			!= ClAcqLang::Successful) {
 		CcLogFatal("Failed to open XDF, going down");
 		goto shutdown;
@@ -115,30 +102,22 @@ int main(int argc, char* argv[]) {
 	while(true) {
 		if(CcCore::receivedSIGINT.Get() || CcCore::receivedSIGTERM.Get())
 			goto shutdown;
-		if(processing.Connect() == false) {
-			CcLogFatal("Processing server is down");
+		if(cl.IsConnected() == false) {
+			CcLogFatal("Lost connection with loop");
 			goto shutdown;
 		}
-		if(acquisiton.Connect() == false) {
-			CcLogFatal("Acquisition server is down");
-			goto shutdown;
-		}
-		if(nameserver.Connect() == false) {
-			CcLogFatal("Names server is down");
-			goto shutdown;
-		}
-		if(processing.Check(pid0) == false) {
+		if(cl.processing.Check(pid0) == false) {
 			CcLogFatal("PID0 died");
 			goto shutdown;
 		}
-		if(processing.Check(pid1) == false) {
+		if(cl.processing.Check(pid1) == false) {
 			CcLogFatal("PID1 died");
 			goto shutdown;
 		}
 
 		if(CcTime::Toc(&tic) > 20000.00f) {
-			acquisiton.AddLabelGDF(781);
-			acquisiton.AddLabelLPT(2);
+			cl.acquisition.AddLabelGDF(781);
+			cl.acquisition.AddLabelLPT(2);
 			CcTime::Tic(&tic);
 		}
 		
@@ -146,10 +125,10 @@ int main(int argc, char* argv[]) {
 	}
 
 shutdown:
-	acquisiton.CloseXDF();
-	nameserver.Erase("ndf_monitor::scope");
-	processing.Terminate(pid0);
-	processing.Terminate(pid1);
+	cl.acquisition.CloseXDF();
+	cl.nameserver.Erase("ndf_monitor::scope");
+	cl.processing.Terminate(pid0);
+	cl.processing.Terminate(pid1);
 
 	return 0;
 }
