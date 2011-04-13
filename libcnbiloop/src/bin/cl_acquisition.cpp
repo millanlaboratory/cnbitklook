@@ -35,7 +35,7 @@ void usage(void) {
 	printf("Where: -d       gTec/Biosemi ID, GDF/BDF filename\n");
 	printf("       -f       16 (default), 32, 64...\n");
 	printf("       -a       9000 (default)\n");
-	printf("       -n       /tmp/cl.pipe.ndf (default)\n");
+	printf("       -n       /tmp/cl.pipe.ndf. (default)\n");
 }
 
 int main(int argc, char* argv[]) {
@@ -43,7 +43,7 @@ int main(int argc, char* argv[]) {
 	std::string optdevice;
 	std::string optfs("16");
 	CcEndpoint optendpoint("127.0.0.1:9000");
-	std::string optpipename("/tmp/cl.pipe.ndf");
+	std::string optpipename("/tmp/cl.pipe.ndf.");
 
 	while ((opt = getopt(argc, argv, "d:f:p:n:h")) != -1) {
 		if(opt == 'd')
@@ -99,7 +99,7 @@ int main(int argc, char* argv[]) {
 	CcPipeServer* pipes;
 	pipes = new CcPipeServer(frame.ack.buffer, frame.ack.bsize,
 			frame.data.bsize);
-	pipes->Open(optpipename, 5);
+	pipes->Open(optpipename, 6);
 
 	// Setup, Bind and register ClAcqAsServer
 	CcServerMulti server(true, 5*CCCORE_1MB);
@@ -120,6 +120,18 @@ int main(int argc, char* argv[]) {
 	} catch(CcException e) {
 		e.DumpInfo();
 		exit(1);
+	}
+	
+	// Register pipes on nameserver
+	for(int p = 0; p < 6; p++) { 
+		std::stringstream pipename, pipepath;
+		pipename << "/ndf" << p;
+		pipepath << optpipename << p;
+		int nsstatus = nsclient.Set(pipename.str(), pipepath.str());
+		if(nsstatus != ClNamesLang::Successful) {
+			CcLogFatal("Cannot register pipes with nameserver");
+			exit(5);
+		}
 	}
 
 	CcLogInfo("Starting acquisiton");
@@ -160,6 +172,13 @@ int main(int argc, char* argv[]) {
 	server.Release();
 	server.Join();
 	nsclient.Unset("/acquisition");
+	
+	// Register pipes on nameserver
+	for(int p = 0; p < 6; p++) { 
+		std::stringstream pipename;
+		pipename << "/ndf" << p;
+		nsclient.Unset(pipename.str());
+	}
 
 	CcLogInfo("Stopping acquisition");
 
