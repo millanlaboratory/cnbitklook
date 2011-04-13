@@ -45,32 +45,7 @@ int main(void) {
 		CcLogFatal("Cannot connect to acquisiton");
 		exit(1);
 	}
-
-	int pid0, pid1;
-	if(processing.ForkAndCheck(&pid0) != ClProLang::Successful)
-		exit(2);
-	if(processing.ForkAndCheck(&pid1) != ClProLang::Successful)
-		exit(2);
 	
-	processing.ChangeDirectory(pid0, "/tmp/");
-	processing.IncludeNDF(pid0) ;
-	processing.LaunchNDF(pid0, "ndf_monitor", "/tmp/cl.pipe.ndf.0", 
-			nameserver.Query("/acquisition"), "127.0.0.1:9500", "");
-
-	processing.ChangeDirectory(pid1, "/tmp/");
-	processing.IncludeNDF(pid1) ;
-	processing.LaunchNDF(pid1, "ndf_monitor", "/tmp/cl.pipe.ndf.1", 
-			nameserver.Query("/acquisition"), "127.0.0.1:9501", "");
-
-	if(processing.Check(pid0) == false) {
-		CcLogFatal("PID0 is dead");
-		//goto shutdown;
-	}
-	if(processing.Check(pid1) == false) {
-		CcLogFatal("PID1 is dead");
-		//goto shutdown;
-	}
-
 	std::string timestamp, filebdf, filelog;
 	CcTime::Timestamp(&timestamp);
 	filebdf.assign("cltest_");
@@ -80,6 +55,33 @@ int main(void) {
 	filelog.assign("cltest_");
 	filelog.append(timestamp);
 	filelog.append(".log");
+
+	int pid0, pid1;
+	if(processing.ForkAndCheck(&pid0) != ClProLang::Successful)
+		exit(2);
+	if(processing.ForkAndCheck(&pid1) != ClProLang::Successful)
+		exit(2);
+
+	nameserver.Set("/feedback0", "127.0.0.1:9500");
+	processing.ChangeDirectory(pid0, "/tmp/");
+	processing.IncludeNDF(pid0) ;
+	processing.LaunchNDF(pid0, "ndf_monitor", "/tmp/cl.pipe.ndf.0", 
+			"/acquisition", "/feedback0", "");
+
+	nameserver.Set("/feedback1", "127.0.0.1:9501");
+	processing.ChangeDirectory(pid1, "/tmp/");
+	processing.IncludeNDF(pid1) ;
+	processing.LaunchNDF(pid1, "ndf_monitor", "/tmp/cl.pipe.ndf.1", 
+			"/acquisition", "/feedback1", "");
+	
+	if(processing.Check(pid0) == false) {
+		CcLogFatal("PID0 is dead");
+		goto shutdown;
+	}
+	if(processing.Check(pid1) == false) {
+		CcLogFatal("PID1 is dead");
+		goto shutdown;
+	}
 
 	if(acquisiton.OpenXDF(filebdf, filelog, "debug=1") 
 			!= ClAcqLang::Successful) {
@@ -92,13 +94,26 @@ int main(void) {
 	while(true) {
 		if(CcCore::receivedSIGINT.Get() || CcCore::receivedSIGTERM.Get())
 			goto shutdown;
-		if(processing.Connect() == false)
+		if(processing.Connect() == false) {
+			CcLogFatal("Processing server is down");
 			goto shutdown;
-		if(acquisiton.Connect() == false)
+		}
+		if(acquisiton.Connect() == false) {
+			CcLogFatal("Acquisition server is down");
 			goto shutdown;
-		if(nameserver.Connect() == false)
+		}
+		if(nameserver.Connect() == false) {
+			CcLogFatal("Names server is down");
 			goto shutdown;
-	
+		}
+		if(processing.Check(pid0) == false) {
+			CcLogFatal("PID0 died");
+			goto shutdown;
+		}
+		if(processing.Check(pid1) == false) {
+			CcLogFatal("PID1 died");
+			goto shutdown;
+		}
 
 		if(CcTime::Toc(&tic) > 20000.00f) {
 			acquisiton.AddLabelGDF(781);
