@@ -48,6 +48,8 @@ class ClNamesLang : public ClLanguage {
 		bool IsErase(const char* message, std::string* name);
 		bool IsOk(const char* message);
 		bool IsError(const char* message, int* code);
+
+		bool CheckName(const char* message);
 	public:
 		static const std::string Hdr;
 		static const std::string Trl;
@@ -60,6 +62,7 @@ class ClNamesLang : public ClLanguage {
 		static const int AlreadySet = 3;
 		static const int AlreadyStored= 4;
 		static const int NotAvailable = 5;
+		static const int NameFormatError = 6;
 };
 
 #endif

@@ -38,10 +38,11 @@ int ClNamesClient::Query(const std::string& name, CcAddress* address) {
 
 	if(this->_language.IsReply(reply.c_str(), address))
 		return ClNamesLang::Successful;
-	else if(this->_language.IsError(reply.c_str(), &errorid))
+	else if(this->_language.IsError(reply.c_str(), &errorid)) {
+		if(errorid == ClNamesLang::NameFormatError) 
+			CcLogError("Port name must be /PORT");
 		return errorid;
-	else
-		return ClNamesLang::StatusLost;
+	} else return ClNamesLang::StatusLost;
 }
 
 int ClNamesClient::Set(const std::string& name, CcAddress address) {
@@ -57,9 +58,11 @@ int ClNamesClient::Set(const std::string& name, CcAddress address) {
 
 	if(this->_language.IsOk(reply.c_str()))
 		return ClNamesLang::Successful;
-	else if(this->_language.IsError(reply.c_str(), &errorid))
+	else if(this->_language.IsError(reply.c_str(), &errorid)) {
+		if(errorid == ClNamesLang::NameFormatError) 
+			CcLogError("Port name must be /PORT");
 		return errorid;
-	else
+	} else
 		return ClNamesLang::StatusLost;
 }
 
@@ -76,9 +79,11 @@ int ClNamesClient::Unset(const std::string& name) {
 
 	if(this->_language.IsOk(reply.c_str()))
 		return ClNamesLang::Successful;
-	else if(this->_language.IsError(reply.c_str(), &errorid))
+	else if(this->_language.IsError(reply.c_str(), &errorid)) {
+		if(errorid == ClNamesLang::NameFormatError) 
+			CcLogError("Port name must be /PORT");
 		return errorid;
-	else
+	} else
 		return ClNamesLang::StatusLost;
 }
 

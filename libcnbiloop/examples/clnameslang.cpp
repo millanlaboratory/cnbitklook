@@ -31,6 +31,8 @@ int main(void) {
 	cout << names.Query("/antani") << endl;
 	cout << names.IsQuery(names.message->buffer, &name) << endl;
 	cout << "--> Name:    " << name << endl;
+	cout << "--> Valid:   " << names.CheckName("/antani") << endl;
+	cout << "--> Valid:   " << names.CheckName("antani") << endl;
 	
 	name.clear();
 	address.clear();

@@ -34,6 +34,7 @@ int main(void) {
 	
 	CcAddress address;
 	if(client.Connect()) {
+		client.Set("pippo", "127.0.0.1:12000");
 		client.Set("/pippo", "127.0.0.1:12000");
 		client.Set("/pippo", "127.0.0.1:12000");
 		client.Query("/pippo", &address);

@@ -220,5 +220,10 @@ bool ClNamesLang::IsOk(const char* message) {
 bool ClNamesLang::IsError(const char* message, int* code) {
 	return(sscanf(message, CLLN_ERROR, code) == 1);
 }
+		
+bool ClNamesLang::CheckName(const char* message) {
+	char name[128];
+	return(sscanf(message, "/%s", name) == 1);
+}
 
 #endif

@@ -57,44 +57,62 @@ void ClNamesAsServer::HandleRecvEndpoint(CcSocket* caller, CcAddress address) {
 	CcAddress luaddr;
 
 	if(this->language.IsQuery(message.c_str(), &luname)) {
-		if(this->Get(luname, &luaddr) == true) {
-			CcLogInfoS(this->_stream, "Query from " << address << ": " 
-					<< luname << "=" << luaddr);
-			server->Send(language.Reply(luaddr), address);
-		} else {
-			CcLogWarningS(this->_stream, "Query from " << address << ": " 
-					<< luname << " NotFound");
-			server->Send(language.Error(ClNamesLang::NotFound), address);
-		}
-	} else if(this->language.IsSet(message.c_str(), &luname, &luaddr)) {
-		CcEndpoint lusolve(luaddr);
-		CcEndpoint epsolve(address);
-		if(strcmp(lusolve.GetIp().c_str(), "0.0.0.0") == 0) {
-			luaddr.assign(epsolve.GetIp());
-			luaddr.append(":");
-			luaddr.append(lusolve.GetPort());
-			CcLogConfigS(this->_stream, "Local endpoint " << lusolve.GetIp() <<
-					" resolved as " << epsolve.GetIp());
-		}
-		if(this->Set(luname, luaddr) == true) {
-			this->AddMonitored(luname, address);
-			server->Send(language.Ok(), address);
-			CcLogInfoS(this->_stream, "Set from " << address << ": " 
-					<< luname << "=" << luaddr);
+		if(this->language.CheckName(luname.c_str()) == true) { 
+			if(this->Get(luname, &luaddr) == true) {
+				CcLogInfoS(this->_stream, "Query from " << address << ": " 
+						<< luname << "=" << luaddr);
+				server->Send(language.Reply(luaddr), address);
+			} else {
+				CcLogWarningS(this->_stream, "Query from " << address << ": " 
+						<< luname << " NotFound");
+				server->Send(language.Error(ClNamesLang::NotFound), address);
+			}
 		} else {
 			server->Send(language.Error(ClNamesLang::AlreadySet), address);
 			CcLogWarningS(this->_stream, "Set from " << address << ": " 
 					<< luname << " AlreadySet");
+		} 
+	} else if(this->language.IsSet(message.c_str(), &luname, &luaddr)) {
+		if(this->language.CheckName(luname.c_str()) == true) { 
+			CcEndpoint lusolve(luaddr);
+			CcEndpoint epsolve(address);
+			if(strcmp(lusolve.GetIp().c_str(), "0.0.0.0") == 0) {
+				luaddr.assign(epsolve.GetIp());
+				luaddr.append(":");
+				luaddr.append(lusolve.GetPort());
+				CcLogConfigS(this->_stream, "Local endpoint " << lusolve.GetIp() <<
+						" resolved as " << epsolve.GetIp());
+			}
+			if(this->Set(luname, luaddr) == true) {
+				this->AddMonitored(luname, address);
+				server->Send(language.Ok(), address);
+				CcLogInfoS(this->_stream, "Set from " << address << ": " 
+						<< luname << "=" << luaddr);
+			} else {
+				server->Send(language.Error(ClNamesLang::AlreadySet), address);
+				CcLogWarningS(this->_stream, "Set from " << address << ": " 
+						<< luname << " AlreadySet");
+			} 
+		} else {
+			server->Send(language.Error(ClNamesLang::NameFormatError), address);
+			CcLogWarningS(this->_stream, "Set from " << address << ": " 
+					<< luname << " NameFormatError");
 		}
 	} else if(this->language.IsUnset(message.c_str(), &luname)) {
-		if(this->Unset(luname) == true) {
-			server->Send(language.Ok(), address);
-			CcLogInfoS(this->_stream, "Unset from " << address << ": " 
-					<< luname);
+		if(this->language.CheckName(luname.c_str()) == true) { 
+			if(this->Unset(luname) == true) {
+				server->Send(language.Ok(), address);
+				CcLogInfoS(this->_stream, "Unset from " << address << ": " 
+						<< luname);
+			} else {
+				server->Send(language.Error(ClNamesLang::NotFound), address);
+				CcLogWarningS(this->_stream, "Unset from " << address << ": " 
+						<< luname << " NotFound");
+			}
 		} else {
-			server->Send(language.Error(ClNamesLang::NotFound), address);
-			CcLogWarningS(this->_stream, "Unset from " << address << ": " 
-					<< luname << " NotFound");
+			server->Send(language.Error(ClNamesLang::NameFormatError), address);
+			CcLogWarningS(this->_stream, "Set from " << address << ": " 
+					<< luname << " NameFormatError");
 		}
 	} else if(this->language.IsStore(message.c_str(), &stname, &stcontent)) {
 		if(this->Store(stname, stcontent) == true) {
