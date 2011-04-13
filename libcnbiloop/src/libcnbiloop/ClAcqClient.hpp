@@ -28,8 +28,8 @@ class ClAcqClient : public ClClient {
 		virtual int AddLabelGDF(const GDFEvent label);
 		virtual int AddLabelLPT(const HWTrigger label);
 		virtual int AddLabelTXT(const std::string& label);
-		virtual int OpenXDF(const std::string& filegdf, const std::string& filelog,
-				const std::string& linelog);
+		virtual int OpenXDF(const std::string& filegdf, 
+				const std::string& filelog, const std::string& linelog);
 		virtual int CloseXDF(void);
 	private:
 	protected:

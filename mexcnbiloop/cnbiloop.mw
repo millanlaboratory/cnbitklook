@@ -114,6 +114,19 @@ $ #include <stdio.h>
 	$ }
 	# bool status = clstorefile(ClLoop* c, cstring name[1024], cstring filename[1024]);
 
+@function [status] = cl_openxdf(c, filexdf, filelog, linelog)
+	$ bool clopenxdf(ClLoop* q, char* filexdf, char* filelog, char* linelog) {
+	$	std::string xdf(filexdf), log(filelog), line(linelog);
+	$	return(q->acquisition.OpenXDF(xdf, log, line));
+	$ }
+	# bool status = clopenxdf(ClLoop* c, cstring filexdf[1024], cstring filelog[1024], cstring linelog[1024]);
+
+@function [status] = cl_closexdf(c)
+	$ bool clclosexdf(ClLoop* q) {
+	$	return(q->acquisition.CloseXDF());
+	$ }
+	# bool status = clclosexdf(ClLoop* c);
+
 @function [isvalid] = cl_checkname(name)
 	$ bool clcheckname(char* nm) {
 	$ 	ClNamesLang language;
