@@ -19,7 +19,7 @@ function ndf_monitor(pipename, addressD, addressC)
 
 if(nargin < 3 | isempty(addressC)); addressC = ''; end
 if(nargin < 2 | isempty(addressD)); addressD = ''; end
-if(nargin < 1 | isempty(pipename)); pipename = '/tmp/cl.pipe.ndf.0'; end
+if(nargin < 1 | isempty(pipename)); pipename = '/pipe0'; end
 
 % Include all the required toolboxes
 ndf_include();
@@ -31,7 +31,7 @@ try
 	loop.tic  = 0;
 	loop.toc  = 0;
 	loop.jump = ndf_jump();
-	[loop.cl, addressD, addressC] = ndf_cl(addressD, addressC);	
+	[loop.cl, pipename, addressD, addressC] = ndf_cl(pipename, addressD, addressC);	
 	
 	% Prepare NDF srtructure
 	ndf.conf  = {};

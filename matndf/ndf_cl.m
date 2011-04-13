@@ -14,8 +14,8 @@
 %   You should have received a copy of the GNU General Public License
 %   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
-%   function [cl, addressD, addressC] = ndf_cl(addressD, addressC)
-function [cl, addressD, addressC] = ndf_cl(addressD, addressC)
+%   function [cl, addressD, addressC] = ndf_cl(pipename, addressD, addressC)
+function [cl, pipename, addressD, addressC] = ndf_cl(pipename, addressD, addressC)
 
 cl = cl_new();
 	
@@ -28,6 +28,9 @@ end
 
 % See weather addressD and addressC are valid port names (i.e. /PORT),
 % otherwise assume they are IP:PORT addresses.
+if(cl_checkname(pipename) == true)
+	pipename = cl_query(cl, addressD);
+end
 if(cl_checkname(addressD) == true)
 	addressD = cl_query(cl, addressD);
 end
