@@ -19,34 +19,32 @@ clear all;
 loop = cl_new();
 if(cl_connect(loop) == false)
 	disp('[example] Cannot connect...');
-end
+else
+	cl_checkname('test');
+	cl_checkname('/test');
 
-cl_checkname('test')
-cl_checkname('/test')
+	disp(['[example] Acquisition: ' cl_query(loop, '/acquisition')]);
+	disp(['[example] Processing:  ' cl_query(loop, '/processing')]);
+	disp(['[example] Nameserver:  ' cl_query(loop, '/nameserver')]);
 
-disp(['[example] Acquisition: ' cl_query(loop, '/acquisition')]);
-disp(['[example] Processing:  ' cl_query(loop, '/processing')]);
-disp(['[example] Nameserver:  ' cl_query(loop, '/nameserver')]);
-
-for i = 1:10
-	if(cl_isconnected(loop) == false)
-		disp('[example] Lost connection...');
-		break;
+	for i = 1:10
+		if(cl_isconnected(loop) == false)
+			disp('[example] Lost connection...');
+			break;
+		end
+		disp('[example] Still connected!');
+		
+		cl_set(loop, '/test', '1.2.3.4:1000');
+		cl_query(loop, '/test');
+		cl_unset(loop, '/test');
+		cl_store(loop, 'data0', '<hello>world!</hello>');
+		cl_retrieve(loop, 'data0');
+		cl_erase(loop, 'data0');
+		cl_storefile(loop, 'huge', '/home/mtavella/Desktop/huge.txt')
+		cl_retrievefile(loop, 'huge', '/home/mtavella/Desktop/huge.txt');
+		cl_erase(loop, 'huge');
+		pause(1);
 	end
-	disp('[example] Still connected!');
-	
-	cl_set(loop, '/test', '1.2.3.4:1000');
-	cl_query(loop, '/test');
-	cl_unset(loop, '/test');
-	cl_store(loop, 'data0', '<hello>world!</hello>');
-	cl_retrieve(loop, 'data0');
-	cl_erase(loop, 'data0');
-	cl_storefile(loop, 'huge', '/home/mtavella/Desktop/huge.txt')
-	cl_retrievefile(loop, 'huge', '/home/mtavella/Desktop/huge.txt');
-	cl_erase(loop, 'huge');
-	pause(1);
 end
-
 cl_disconnect(loop);
-
 cl_delete(loop);

@@ -143,7 +143,9 @@ try
 catch exception
 	disp(['[ndf_monitor] Exception: ' exception.message ]);
 	disp(exception);
-	disp(exception.stack);
+	disp(exception.stack.file);
+	disp(exception.stack.name);
+	disp(exception.stack.line);
 	disp('[ndf_monitor] Killing Matlab...');
 	ndf_close(ndf.sink);
 	ndf_tobi_close(tobi);
