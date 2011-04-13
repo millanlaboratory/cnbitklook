@@ -58,7 +58,6 @@ void CcPipeServer::Open(const std::string& filename, unsigned int total) {
 	for(unsigned int i = 0; i < total; i++) {
 		sprintf(buf, "%d", i);
 		pipename.assign(filename);
-		pipename.append(".");
 		pipename.append(buf);
 		CcPipeWriter* w = new CcPipeWriter(this->_bsize);
 		this->_pipes.push_back(w);
