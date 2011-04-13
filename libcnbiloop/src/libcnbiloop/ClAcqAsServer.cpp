@@ -41,26 +41,26 @@ ClAcqAsServer::~ClAcqAsServer(void) {
 
 void ClAcqAsServer::HandleBind(CcSocket* caller) { 
 	CcServerMulti *server = (CcServerMulti*)caller;
-	CcLogConfigS(this->_stream, "Bound TCP socket: " << server->GetLocal());
+	CcLogDebugS(this->_stream, "Bound TCP socket: " << server->GetLocal());
 }
 
 void ClAcqAsServer::HandleRelease(CcSocket* caller) { 
 	CcServerMulti *server = (CcServerMulti*)caller;
-	CcLogConfigS(this->_stream, "Released TCP socket: " << server->GetLocal());
+	CcLogDebugS(this->_stream, "Released TCP socket: " << server->GetLocal());
 }
 
 void ClAcqAsServer::HandleListen(CcSocket* caller) { 
 	CcServerMulti *server = (CcServerMulti*)caller;
-	CcLogConfigS(this->_stream, 
+	CcLogDebugS(this->_stream, 
 			"Listening on TCP socket: " << server->GetLocal());
 }
 
 void ClAcqAsServer::HandleAcceptEndpoint(CcSocket* caller, CcAddress address) { 
-	CcLogConfigS(this->_stream, "Accepted TCP endpoint: " << address);
+	CcLogDebugS(this->_stream, "Accepted TCP endpoint: " << address);
 }
 
 void ClAcqAsServer::HandleDropEndpoint(CcSocket* caller, CcAddress address) { 
-	CcLogConfigS(this->_stream, "Dropped TCP endpoint: " << address);
+	CcLogDebugS(this->_stream, "Dropped TCP endpoint: " << address);
 }
 
 void ClAcqAsServer::HandleRecvEndpoint(CcSocket* caller,
