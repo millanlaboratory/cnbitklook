@@ -29,7 +29,7 @@ end
 % See weather addressD and addressC are valid port names (i.e. /PORT),
 % otherwise assume they are IP:PORT addresses.
 if(cl_checkname(pipename) == true)
-	pipename = cl_query(cl, addressD);
+	pipename = cl_query(cl, pipename);
 end
 if(cl_checkname(addressD) == true)
 	addressD = cl_query(cl, addressD);
