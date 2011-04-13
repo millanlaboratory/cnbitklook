@@ -113,3 +113,10 @@ $ #include <stdio.h>
 	$	return(q->nameserver.StoreFile(nm, fn));
 	$ }
 	# bool status = clstorefile(ClLoop* c, cstring name[1024], cstring filename[1024]);
+
+@function [isvalid] = cl_checkname(name)
+	$ bool clcheckname(char* nm) {
+	$ 	ClNamesLang language;
+	$	return(language.CheckName(nm));
+	$ }
+	# bool isvalid = clcheckname(cstring name[1024]);

@@ -21,6 +21,9 @@ if(cl_connect(loop) == false)
 	disp('[example] Cannot connect...');
 end
 
+cl_checkname('test')
+cl_checkname('/test')
+
 disp(['[example] Acquisition: ' cl_query(loop, '/acquisition')]);
 disp(['[example] Processing:  ' cl_query(loop, '/processing')]);
 disp(['[example] Nameserver:  ' cl_query(loop, '/nameserver')]);
