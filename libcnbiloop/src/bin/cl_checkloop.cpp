@@ -72,7 +72,7 @@ int main(void) {
 	processing.ChangeDirectory(pid1, "/tmp/");
 	processing.IncludeNDF(pid1) ;
 	processing.LaunchNDF(pid1, 
-			"ndf_monitor", "/pipe0", "/acquisition", "/feedback1", "");
+			"ndf_monitor", "/pipe1", "/acquisition", "/feedback1", "");
 	
 	if(processing.Check(pid0) == false) {
 		CcLogFatal("PID0 is dead");
