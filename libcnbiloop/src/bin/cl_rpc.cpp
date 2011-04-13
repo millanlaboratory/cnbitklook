@@ -34,6 +34,8 @@ void example(void) {
 	printf(" query /acquisition\n");
 	printf(" store ndf_monitor::display true\n");
 	printf(" retrieve ndf_monitor::display\n");
+	printf(" storefile ndf_monitor::display /home/mtavella/display.txt\n");
+	printf(" retrievefile ndf_monitor::display /home/mtavella/display.txt\n");
 	printf(" erase ndf_monitor::display\n");
 	printf(" fork\n");
 	printf(" launch 1231 \"bench(1);\"\n");
@@ -55,6 +57,8 @@ void usage(void) {
 	printf(" query NAME                        queries a NAME\n");
 	printf(" store NAME CONTENT                stores CONTENT under NAME\n");
 	printf(" retrieve NAME                     retrieves the CONTENT stored under NAME\n");
+	printf(" storefile NAME PATH               stores file PATH under NAME\n");
+	printf(" retrievefile NAME PATH            retrieves NAME and save it in PATH\n");
 	printf(" erase NAME                        erases the CONTENT stored under NAME\n");
 	printf(" fork                              fork a Matlab process\n");
 	printf(" launch PID COMMAND                launch a COMMAND in Matlab process PID\n");
@@ -251,6 +255,20 @@ int main(int argc, char* argv[]) {
 		nameserver(status);
 		if(status == ClNamesLang::Successful)
 			cout << storage << endl;
+	
+	} else if(command.compare("storefile") == 0) {
+		if(argc != 4) usage();
+		connect(&cl);
+
+		bool status = cl.nameserver.StoreFile(arg1, arg2);
+		return((int)status);
+
+	} else if(command.compare("retrievefile") == 0) {
+		if(argc != 4) usage();
+		connect(&cl);
+
+		bool status = cl.nameserver.RetrieveFile(arg1, arg2);
+		return((int)status);
 
 	} else if(command.compare("erase") == 0) {
 		if(argc != 3) usage();
