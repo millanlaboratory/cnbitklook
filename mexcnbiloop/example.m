@@ -27,6 +27,7 @@ else
 	disp(['[example] Processing:  ' cl_query(loop, '/processing')]);
 	disp(['[example] Nameserver:  ' cl_query(loop, '/nameserver')]);
 
+	cl_openxdf(loop, 'matlab_xdf.bdf', 'matlab_log.txt', 'nothing special');
 	for i = 1:10
 		if(cl_isconnected(loop) == false)
 			disp('[example] Lost connection...');
@@ -45,6 +46,7 @@ else
 		cl_erase(loop, 'huge');
 		pause(1);
 	end
+	cl_closexdf(loop);
 end
 cl_disconnect(loop);
 cl_delete(loop);
