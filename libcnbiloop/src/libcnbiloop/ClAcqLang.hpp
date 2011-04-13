@@ -48,7 +48,7 @@ class ClAcqLang : public ClLanguage {
 		static const int StatusLost = -3;
 		static const int NotSupported = -2;
 		static const int NotUndestood = -1;
-		static const int ErrorNoReply = 0;
+		static const int NoReply = 0;
 		static const int Successful = 1;
 		static const int NDFLimitReached = 5;
 		static const int XDFAlreadyOpen = 6;

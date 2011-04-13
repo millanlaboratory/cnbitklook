@@ -35,7 +35,7 @@ int ClAcqClient::AddLabelGDF(const GDFEvent label) {
 
 	if(status == false) {
 		CcLogWarningS(ClClient::_stream, "No reply in " << ClClient::_waitms << "ms");
-		return ClAcqLang::ErrorNoReply;
+		return ClAcqLang::NoReply;
 	}
 
 	if(this->_language.IsOk(reply.c_str()))
@@ -56,7 +56,7 @@ int ClAcqClient::AddLabelLPT(const HWTrigger label) {
 	
 	if(status == false) {
 		CcLogWarningS(ClClient::_stream, "No reply in " << ClClient::_waitms << "ms");
-		return ClAcqLang::ErrorNoReply;
+		return ClAcqLang::NoReply;
 	}
 
 	if(this->_language.IsOk(reply.c_str()))
@@ -77,7 +77,7 @@ int ClAcqClient::AddLabelTXT(const std::string& label) {
 	
 	if(status == false) {
 		CcLogWarningS(ClClient::_stream, "No reply in " << ClClient::_waitms << "ms");
-		return ClAcqLang::ErrorNoReply;
+		return ClAcqLang::NoReply;
 	}
 
 	if(this->_language.IsOk(reply.c_str()))
@@ -99,7 +99,7 @@ int ClAcqClient::OpenXDF(const std::string& filegdf,
 
 	if(status == false) {
 		CcLogWarningS(ClClient::_stream, "No reply in " << ClClient::_waitms << "ms");
-		return ClAcqLang::ErrorNoReply;
+		return ClAcqLang::NoReply;
 	}
 
 	if(this->_language.IsOk(reply.c_str()))
@@ -120,7 +120,7 @@ int ClAcqClient::CloseXDF(void) {
 
 	if(status == false) {
 		CcLogWarningS(ClClient::_stream, "No reply in " << ClClient::_waitms << "ms");
-		return ClAcqLang::ErrorNoReply;
+		return ClAcqLang::NoReply;
 	}
 
 	if(this->_language.IsOk(reply.c_str()))
