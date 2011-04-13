@@ -125,7 +125,7 @@ int main(int argc, char* argv[]) {
 	// Register pipes on nameserver
 	for(int p = 0; p < 6; p++) { 
 		std::stringstream pipename, pipepath;
-		pipename << "/ndf" << p;
+		pipename << "/pipe" << p;
 		pipepath << optpipename << p;
 		int nsstatus = nsclient.Set(pipename.str(), pipepath.str());
 		if(nsstatus != ClNamesLang::Successful) {
@@ -176,7 +176,7 @@ int main(int argc, char* argv[]) {
 	// Register pipes on nameserver
 	for(int p = 0; p < 6; p++) { 
 		std::stringstream pipename;
-		pipename << "/ndf" << p;
+		pipename << "/pipe" << p;
 		nsclient.Unset(pipename.str());
 	}
 
