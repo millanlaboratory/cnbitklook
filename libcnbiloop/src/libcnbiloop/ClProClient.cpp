@@ -33,11 +33,8 @@ int ClProClient::Fork(int* rpid) {
 	bool status = ClClient::_client.SendRecv(this->_language.message->buffer,
 			&reply, ClProLang::Hdr, ClProLang::Trl, ClClient::_waitms);
 
-	if(status == false) {
-		CcLogWarningS(ClClient::_stream, "No reply in " << 
-				ClClient::_waitms << "ms");
+	if(status == false) 
 		return ClProLang::NoReply;
-	}
 
 	if(this->_language.IsOk(reply.c_str(), rpid))
 		return ClProLang::Successful;
@@ -76,11 +73,8 @@ int ClProClient::Launch(const int pid, const std::string& call) {
 	bool status = ClClient::_client.SendRecv(this->_language.message->buffer,
 			&reply, ClProLang::Hdr, ClProLang::Trl, ClClient::_waitms);
 
-	if(status == false) {
-		CcLogWarningS(ClClient::_stream, "No reply in " << 
-				ClClient::_waitms << "ms");
+	if(status == false)
 		return ClProLang::NoReply;
-	}
 
 	if(this->_language.IsOk(reply.c_str(), &rpid))
 		return ClProLang::Successful;
@@ -99,11 +93,8 @@ int ClProClient::IsAlive(const int pid) {
 	bool status = ClClient::_client.SendRecv(this->_language.message->buffer,
 			&reply, ClProLang::Hdr, ClProLang::Trl, ClClient::_waitms);
 
-	if(status == false) {
-		CcLogWarningS(ClClient::_stream, "No reply in " << 
-				ClClient::_waitms << "ms");
+	if(status == false)
 		return ClProLang::NoReply;
-	}
 
 	if(this->_language.IsOk(reply.c_str(), &rpid))
 		return ClProLang::Successful;
@@ -123,11 +114,8 @@ int ClProClient::Terminate(const int pid) {
 	bool status = ClClient::_client.SendRecv(this->_language.message->buffer,
 			&reply, ClProLang::Hdr, ClProLang::Trl, ClClient::_waitms);
 
-	if(status == false) {
-		CcLogWarningS(ClClient::_stream, "No reply in " << 
-				ClClient::_waitms << "ms");
+	if(status == false)
 		return ClProLang::NoReply;
-	}
 
 	if(this->_language.IsOk(reply.c_str(), &rpid))
 		return ClProLang::Successful;
@@ -146,11 +134,8 @@ int ClProClient::ChangeDirectory(const int pid, const std::string& path) {
 	bool status = ClClient::_client.SendRecv(this->_language.message->buffer,
 			&reply, ClProLang::Hdr, ClProLang::Trl, ClClient::_waitms);
 
-	if(status == false) {
-		CcLogWarningS(ClClient::_stream, "No reply in " <<
-				ClClient::_waitms << "ms");
+	if(status == false) 
 		return ClProLang::NoReply;
-	}
 
 	if(this->_language.IsOk(reply.c_str(), &rpid))
 		return ClProLang::Successful;
@@ -170,11 +155,8 @@ int ClProClient::Include(const int pid, const std::string& path0,
 	bool status = ClClient::_client.SendRecv(this->_language.message->buffer,
 			&reply, ClProLang::Hdr, ClProLang::Trl, ClClient::_waitms);
 
-	if(status == false) {
-		CcLogWarningS(ClClient::_stream, "No reply in " << 
-				ClClient::_waitms << "ms");
+	if(status == false)
 		return ClProLang::NoReply;
-	}
 
 	if(this->_language.IsOk(reply.c_str(), &rpid))
 		return ClProLang::Successful;
@@ -196,11 +178,8 @@ int ClProClient::LaunchNDF(const int pid, const std::string& function,
 	bool status = ClClient::_client.SendRecv(this->_language.message->buffer,
 			&reply, ClProLang::Hdr, ClProLang::Trl, ClClient::_waitms);
 
-	if(status == false) {
-		CcLogWarningS(ClClient::_stream, "No reply in " << 
-				ClClient::_waitms << "ms");
+	if(status == false)
 		return ClProLang::NoReply;
-	}
 
 	if(this->_language.IsOk(reply.c_str(), &rpid))
 		return ClProLang::Successful;
@@ -227,5 +206,4 @@ bool ClProClient::Check(const int pid, double waitms) {
 	return true;
 }
 		
-
 #endif

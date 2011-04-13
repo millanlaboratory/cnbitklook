@@ -24,7 +24,7 @@
 
 class ClClient : public CcSocketProxy {
 	public:
-		ClClient(const double waitms = 5000.00f);
+		ClClient(const double waitms = 2500.00f);
 		virtual ~ClClient(void);
 		virtual bool Connect(const CcAddress address);
 		virtual void Disconnect(void);

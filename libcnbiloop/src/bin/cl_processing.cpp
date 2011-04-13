@@ -33,10 +33,6 @@ void usage(void) {
 }
 
 int main(int argc, char* argv[]) {
-	CcCore::OpenLogger("cl_processing");
-	CcCore::CatchSIGINT();
-	CcCore::CatchSIGTERM();
-	
 	// Parse command line
 	int opt;
 	std::string optopt;
@@ -50,7 +46,11 @@ int main(int argc, char* argv[]) {
 			return(opt == 'h') ? EXIT_SUCCESS : EXIT_FAILURE;
 		}
 	}
-
+	
+	CcCore::OpenLogger("cl_processing");
+	CcCore::CatchSIGINT();
+	CcCore::CatchSIGTERM();
+	
 	CcLogInfo(std::string("Processing configured: ").
 			append(optendpoint.GetAddress()).append("/TCP"));
 	
