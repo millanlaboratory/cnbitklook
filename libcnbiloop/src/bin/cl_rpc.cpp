@@ -22,9 +22,46 @@
 
 using namespace std;
 
+void example(void) { 
+	printf("Usage: cl_rpc [COMMAND] [OPTION]..\n\n");
+	printf("Valid commands are:\n");
+	printf(" help\n");
+	printf(" example\n");
+	printf(" openxdf test.gdf test.log \"threshold=0.76 integration=0.96\"\n");
+	printf(" closexdf\n");
+	printf(" set /acquisition 127.0.0.1:9000\n");
+	printf(" unset /acquisition\n");
+	printf(" query /acquisition\n");
+	printf(" store ndf_monitor::display true\n");
+	printf(" retrieve ndf_monitor::display\n");
+	printf(" erase ndf_monitor::display\n");
+	printf(" fork\n");
+	printf(" launch 1231 \"bench(1);\"\n");
+	printf(" isalive 1231\n");
+	printf(" terminate 1231\n");
+	printf(" cwd 1231 /home/mtavella/\n");
+	printf(" include 1231 /home/mtavella/ /home/ptito/\n");
+}
+
 void usage(void) { 
-	printf("Usage: cl_rpc [-p]\n");
-	printf("Where: -p      true/false\n");
+	printf("Usage: cl_rpc [COMMAND] [OPTION]..\n\n");
+	printf("Valid commands are:\n");
+	printf(" help                              display this help and exit\n");
+	printf(" help                              display the examples and exit\n");
+	printf(" openxdf XDFFILE LOGFILE LOGLINE   open XDFFILE and adds LOGLINE to LOGFILE\n");
+	printf(" closexdf                          close the currently open XDFFILE\n");
+	printf(" set NAME IP:PORT                  sets a NAME\n");
+	printf(" unset NAME                        unsets a NAME\n");
+	printf(" query NAME                        queries a NAME\n");
+	printf(" store NAME CONTENT                stores CONTENT under NAME\n");
+	printf(" retrieve NAME                     retrieves the CONTENT stored under NAME\n");
+	printf(" erase NAME                        erases the CONTENT stored under NAME\n");
+	printf(" fork                              fork a Matlab process\n");
+	printf(" launch PID COMMAND                launch a COMMAND in Matlab process PID\n");
+	printf(" isalive PID                       checks if PID is alive\n");
+	printf(" terminate PID                     terminate PID\n");
+	printf(" cwd PID PATH                      changes working directory of PID\n");
+	printf(" include PID PATH1 PATH2           have PID include PATH1 and PATH2\n");
 	exit(1);
 }
 
@@ -153,6 +190,9 @@ int main(int argc, char* argv[]) {
 	if(argc >= 5) arg3.assign(argv[4]);
 	
 	if(command.compare("help") == 0) {
+		usage();
+	} else if(command.compare("example") == 0) {
+		example();
 	} else if(command.compare("openxdf") == 0) {
 		if(argc != 5) usage();
 		connect(&cl);
@@ -283,7 +323,6 @@ int main(int argc, char* argv[]) {
 		status = cl.processing.Include(pid, arg1, arg2);
 		processing(status);
 		return(status);
-
 	} else {
 		usage();
 	}
