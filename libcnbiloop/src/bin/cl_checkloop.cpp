@@ -24,7 +24,25 @@
 
 using namespace std;
 
-int main(void) {
+void usage(void) { 
+	printf("Usage: cl_checkloop [-p]\n");
+	printf("Where: -p      true/false\n");
+	exit(1);
+}
+
+int main(int argc, char* argv[]) {
+	int opt;
+	std::string optplot("false");
+	
+	while ((opt = getopt(argc, argv, "p:h")) != -1) {
+		if(opt == 'p')
+			optplot.assign(optarg);
+		else {
+			usage();
+			return(opt == 'h') ? EXIT_SUCCESS : EXIT_FAILURE;
+		}
+	}
+
 	CcCore::OpenLogger("clallclients");
 	CcCore::CatchSIGINT();
 	CcCore::CatchSIGTERM();
@@ -61,6 +79,9 @@ int main(void) {
 		exit(2);
 	if(processing.ForkAndCheck(&pid1) != ClProLang::Successful)
 		exit(2);
+
+	nameserver.Erase("ndf_monitor::scope");
+	nameserver.Store("ndf_monitor::scope", optplot);
 
 	nameserver.Set("/feedback0", "127.0.0.1:9500");
 	processing.ChangeDirectory(pid0, "/tmp/");
@@ -126,6 +147,7 @@ int main(void) {
 
 shutdown:
 	acquisiton.CloseXDF();
+	nameserver.Erase("ndf_monitor::scope");
 	processing.Terminate(pid0);
 	processing.Terminate(pid1);
 

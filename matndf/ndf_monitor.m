@@ -14,7 +14,7 @@
 %   You should have received a copy of the GNU General Public License
 %   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
-%   function ndf_monitor(pipename, addressD, addressC)
+%   function ndf_monitor(pipename, addressD, addressC, optplot)
 function ndf_monitor(pipename, addressD, addressC)
 
 if(nargin < 3 | isempty(addressC)); addressC = ''; end
@@ -31,11 +31,11 @@ try
 	loop.tic  = 0;
 	loop.toc  = 0;
 	loop.jump = ndf_jump();
-	[loop.cl, pipename, addressD, addressC] = ndf_cl(pipename, addressD, addressC);	
+	[loop.cl, pipename, addressD, addressC] = ...
+		ndf_cl(pipename, addressD, addressC);	
 	
-	pipename
-	addressD
-	addressC
+	optplot = cl_retrieve(loop.cl, 'ndf_monitor::scope');
+	optplot = strcmp(optplot, 'true');
 
 	% Prepare NDF srtructure
 	ndf.conf  = {};
@@ -73,16 +73,16 @@ try
 	disp(['[ndf_monitor] NDF type id: ' num2str(ndf.conf.id)]);
 
 	% Ring-buffers
-	% - By default they contain the last second of data
+	% - By default they contain the last 2 seconds of data
 	% - Eventually, save CPU by not buffering unuseful dat
 	% - If you want to store the timestamps for debugging, then
 	%   also configure buffer.tim in this way:
 	%   buffer.tim = ndf_ringbuffer(10*ndf.conf.sf/ndf.conf.samples, 1);
 	%
 	disp('[ndf_monitor] Creating ring-buffers');
-	buffer.eeg = ndf_ringbuffer(1*ndf.conf.sf, ndf.conf.eeg_channels);
-	buffer.exg = ndf_ringbuffer(1*ndf.conf.sf, ndf.conf.exg_channels);
-	buffer.tri = ndf_ringbuffer(1*ndf.conf.sf, ndf.conf.tri_channels);
+	buffer.eeg = ndf_ringbuffer(2*ndf.conf.sf, ndf.conf.eeg_channels);
+	buffer.exg = ndf_ringbuffer(2*ndf.conf.sf, ndf.conf.exg_channels);
+	buffer.tri = ndf_ringbuffer(2*ndf.conf.sf, ndf.conf.tri_channels);
 
 	% Initialize ndf_jump structure
 	% - Each NDF frame carries an index number
@@ -109,6 +109,26 @@ try
 		buffer.eeg = ndf_add2buffer(buffer.eeg, ndf.frame.eeg);
 		buffer.exg = ndf_add2buffer(buffer.exg, ndf.frame.exg);
 		buffer.tri = ndf_add2buffer(buffer.tri, ndf.frame.tri);
+
+		if(optplot == true)
+			eegc3_figure(1);
+			subplot(7, 1, 1:4)
+			imagesc(eegc3_car(eegc3_dc(buffer.eeg))');
+			title(sprintf('Frame=%6.6d, Dl=%7.2f (ms)', ndf.frame.index, loop.toc));
+			set(gca, 'XTickLabel', {});
+			ylabel('eeg');
+			
+			subplot(7, 1, 5:6)
+			imagesc(eegc3_car(eegc3_dc(buffer.exg))');
+			set(gca, 'XTickLabel', {});
+			ylabel('exg');
+			
+			subplot(7, 1, 7)
+			imagesc(buffer.tri');
+			ylabel('tri');
+			set(gca, 'XTickLabel', {});
+			drawnow;
+		end
 
 		% Connect and send data to endpoint
 		% - The idea is that the endpoint might go up/down while this module
@@ -147,9 +167,7 @@ try
 catch exception
 	disp(['[ndf_monitor] Exception: ' exception.message ]);
 	disp(exception);
-	disp(exception.stack.file);
-	disp(exception.stack.name);
-	disp(exception.stack.line);
+	disp(exception.stack);
 	disp('[ndf_monitor] Killing Matlab...');
 	ndf_close(ndf.sink);
 	ndf_tobi_close(tobi);
