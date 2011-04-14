@@ -30,6 +30,7 @@
  * If you are handling streams, I strongly suggest you use this class.
  */
 class CcObject {
+	friend class CcCore;
 	public:
 		CcObject(const char* name = "unset", bool verbose = false);
 		virtual ~CcObject(void);
@@ -54,8 +55,6 @@ class CcObject {
 		friend std::ostream &operator<<(std::ostream& output, const CcObject*);
 		bool operator==(const CcObject& right);
 		bool operator!=(const CcObject& right);
-
-		friend class CcCore;
 };
 
 #endif
