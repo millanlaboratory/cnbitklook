@@ -46,4 +46,24 @@ T CcThreadSafe<T>::Get(void) {
 	this->_semdata.Post();
 	return value;
 }
+
+template <class T> 
+bool CcThreadSafe<T>::TrySet(T value) {
+	if(this->_semdata.TryWait()) {
+		this->_data = value;
+		this->_semdata.Post();
+		return true;
+	}
+	return false;
+}
+
+template <class T> 
+bool CcThreadSafe<T>::TryGet(T* value) {
+	if(this->_semdata.TryWait()) {
+		*value = this->_data;
+		this->_semdata.Post();
+		return true;
+	}
+	return false;
+}
 #endif
