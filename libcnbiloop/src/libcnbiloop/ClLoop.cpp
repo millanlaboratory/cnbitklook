@@ -63,8 +63,7 @@ void ClLoop::Destroy(void) {
 }
 		
 bool ClLoop::Connect(CcAddress nameserver) {
-	if(ClLoop::_refCount < 1)
-		ClLoop::Instance();
+	//ClLoop::Instance();
 	ClLoop::_nameserver = nameserver;
 	
 	if(ClLoop::ConnectNameserver() == false)
@@ -83,6 +82,7 @@ void ClLoop::Disconnect(void) {
 	ClLoop::processing.Disconnect();
 	ClLoop::acquisition.Disconnect();
 	ClLoop::nameserver.Disconnect();
+	//ClLoop::Release();
 }
 		
 bool ClLoop::IsConnected(void) {
