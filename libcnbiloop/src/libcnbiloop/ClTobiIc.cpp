@@ -21,11 +21,74 @@
 
 #include "ClTobiIc.hpp" 
 
-ClTobiIc::ClTobiIc(ClLoop* loop) {
-	this->_loop = loop;
+ClTobiIc::ClTobiIc(void) {
+	this->_server = NULL;
 }
 
 ClTobiIc::~ClTobiIc(void) {
+}
+		
+bool ClTobiIc::Open(const CcPort port, const std::string& name) {
+	if(this->_server != NULL)
+		return false;
+	
+	this->_name.assign(name);
+
+	ClLoop::Instance();
+	if(ClLoop::Connect() == false) { 
+		CcLogError("Cannot connect to loop");
+		return false;
+	}
+	CcEndpoint endpoint("0.0.0.0", port);
+	
+	this->_server = new CcServerSingle();
+	try { 
+		this->_server->Bind(endpoint);
+	} catch(CcException e) {
+		CcLogErrorS(this->_stream, "Cannot bind to port " << port);
+		return false;
+	}
+
+	int status = ClLoop::nameserver.Set(this->_name, endpoint.GetAddress());
+	if(status != ClNamesLang::Successful) {
+		CcLogErrorS(this->_stream, "Cannot set " << name 
+				<< " as " << endpoint.GetAddress());
+		return false;
+	}
+
+	CB_CcSocket(this->_server->iOnAccept, this, HandleAccept);
+	CB_CcSocket(this->_server->iOnDrop, this, HandleDrop);
+	CB_CcSocket(this->_server->iOnRecv, this, HandleRecv);
+
+	return true;
+}
+		
+bool ClTobiIc::Close(void) {
+	if(this->_server == NULL)
+		return true;
+
+	ClLoop::nameserver.Unset(this->_name);
+	this->_server->Release();
+	delete(this->_server);
+	this->_server = NULL;
+
+	return true;
+}
+
+void ClTobiIc::HandleRecv(CcSocket* caller) { 
+	std::cout << "ERRR"<< std::endl;
+}
+
+void ClTobiIc::HandleAccept(CcSocket* caller) { 
+	CcServerSingle *server = (CcServerSingle*)caller;
+	CcLogDebugS(this->_stream, "Accepted TCP endpoint: " << 
+			server->GetRemote());
+}
+		
+void ClTobiIc::HandleDrop(CcSocket* caller) { 
+	CcServerSingle *server = (CcServerSingle*)caller;
+	CcLogDebugS(this->_stream, "Dropped TCP endpoint: " << 
+			server->GetRemote());
 }
 
 #endif

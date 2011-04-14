@@ -25,7 +25,12 @@ int main(void) {
 	CcCore::OpenLogger("cltobiic");
 	CcCore::CatchSIGINT();
 	CcCore::CatchSIGTERM();
-	
+
+	ClTobiIc ic;
+	ic.Open("9500", "/feedback0");
+
+	CcTime::Sleep(10000.00f);
+	ic.Close();
 
 	return 0;
 }

@@ -24,15 +24,22 @@
 #include <libcnbicore/CcServerSingle.hpp>
 #include <iostream>
 
-class ClTobiIc {
+class ClTobiIc : public CcSocketProxy {
 	public:
-		ClTobiIc(ClLoop* loop = NULL);
+		ClTobiIc(void);
 		virtual ~ClTobiIc(void);
+		virtual bool Open(const CcPort port, const std::string& name);
+		virtual bool Close(void);
 	protected:
+		virtual void HandleAccept(CcSocket* caller);
+		virtual void HandleDrop(CcSocket* caller);
+		virtual void HandleRecv(CcSocket* caller);
 
 	public:
 	protected:
-		ClLoop* _loop;
+		CcServerSingle* _server;
+		std::string _name;
+		std::stringstream _stream;
 };
 
 #endif
