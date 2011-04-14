@@ -23,13 +23,13 @@ $ #include <stdio.h>
 
 @function [c] = cl_new();
 	$ ClLoop* clnew(void) {
-	$ 	ClLoop* loop = new ClLoop();
+	$ 	ClLoop* loop = ClLoop::Instance();
 	$ 	return loop;
 	$ }
 	# ClLoop *c = clnew();
 
 @function [c] = cl_delete(c)
-	# delete(ClLoop* c);
+	# ClLoop::Release();
 
 @function [status] = cl_connect(c, nameserver)
 	$ bool clconnect(ClLoop* q, char* nameserver) {
