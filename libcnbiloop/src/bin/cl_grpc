@@ -1,0 +1,13 @@
+#!/bin/bash
+# 2011-04-14  Michele Tavella <michele.tavella@epfl.ch>
+
+if [ "z$1" == "zhelp" ]; then
+	cl_rpc help;
+elif [ "z$1" == "zexample" ]; then
+	cl_rpc example;
+else
+	ARGS=$@
+	RESULT=`cl_rpc $ARGS 2>&1`
+	cl_rpcnotify "CnbiTk RPC: $ARGS" "$RESULT"
+	echo $RESULT;
+fi
