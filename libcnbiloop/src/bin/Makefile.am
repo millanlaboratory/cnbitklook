@@ -1,6 +1,6 @@
 # 2009-11-05  Michele Tavella <michele.tavella@epfl.ch>
 AM_CPPFLAGS = -I$(top_srcdir)/src/libcnbiloop 
-EXTRA_DIST = cl_rpcnotify cl_grpc
+dist_bin_SCRIPTS = cl_rpcnotify cl_grpc
 
 bin_PROGRAMS = cl_acquisition \
 			   cl_processing \
