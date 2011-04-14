@@ -45,13 +45,13 @@ bool ClTobiIc::Open(const CcPort port, const std::string& name) {
 	try { 
 		this->_server->Bind(endpoint);
 	} catch(CcException e) {
-		CcLogErrorS(this->_stream, "Cannot bind to port " << port);
+		CcLogDebugS(this->_stream, "Cannot bind to port " << port);
 		return false;
 	}
 
 	int status = ClLoop::nameserver.Set(this->_name, endpoint.GetAddress());
 	if(status != ClNamesLang::Successful) {
-		CcLogErrorS(this->_stream, "Cannot set " << name 
+		CcLogDebugS(this->_stream, "Cannot set " << name 
 				<< " as " << endpoint.GetAddress());
 		return false;
 	}
@@ -59,6 +59,9 @@ bool ClTobiIc::Open(const CcPort port, const std::string& name) {
 	CB_CcSocket(this->_server->iOnAccept, this, HandleAccept);
 	CB_CcSocket(this->_server->iOnDrop, this, HandleDrop);
 	CB_CcSocket(this->_server->iOnRecv, this, HandleRecv);
+	
+	this->_hasdropped.Set(false);
+	this->_hasmessage.Wait();
 
 	return true;
 }
@@ -71,12 +74,43 @@ bool ClTobiIc::Close(void) {
 	this->_server->Release();
 	delete(this->_server);
 	this->_server = NULL;
+	this->_hasmessage.Post();
 
 	return true;
 }
 
+bool ClTobiIc::GetMessage(ICSerializerRapid* serializer, bool lock) {
+	if(this->_hasdropped.Get() == true)
+		return false;
+
+	if(lock == false) {
+		if(this->_hasmessage.TryWait() == false)
+			return false;
+	} else {
+		this->_hasmessage.Wait();
+	}
+	
+	this->_sembuffer.Wait();
+	try {
+		serializer->Deserialize(&this->_buffer);
+		this->_buffer.clear();
+	} catch(TCException e) { 
+		CcLogException("Caught TCException");
+	}
+	this->_sembuffer.Post();
+	return true;
+}
+
 void ClTobiIc::HandleRecv(CcSocket* caller) { 
-	std::cout << "ERRR"<< std::endl;
+	if(this->_sembuffer.TryWait() == false) 
+		return;
+
+	bool status = false;
+	status = this->_server->datastream.Extract(&this->_buffer, "<tobiic",
+			"</tobiic>", CcStreamer::Forward);
+	if(status)
+		this->_hasmessage.Post();
+	this->_sembuffer.Post();
 }
 
 void ClTobiIc::HandleAccept(CcSocket* caller) { 
@@ -89,6 +123,8 @@ void ClTobiIc::HandleDrop(CcSocket* caller) {
 	CcServerSingle *server = (CcServerSingle*)caller;
 	CcLogDebugS(this->_stream, "Dropped TCP endpoint: " << 
 			server->GetRemote());
+	this->_hasdropped.Set(true);
+	this->_hasmessage.Post();
 }
 
 #endif

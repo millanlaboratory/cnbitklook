@@ -17,6 +17,8 @@
 */
 
 #include "ClTobiIc.hpp"
+#include <libtobiic/ICMessage.hpp>
+#include <libtobiic/ICSerializerRapid.hpp>
 #include <iostream>
 
 using namespace std;
@@ -26,10 +28,38 @@ int main(void) {
 	CcCore::CatchSIGINT();
 	CcCore::CatchSIGTERM();
 
-	ClTobiIc ic;
-	ic.Open("9500", "/feedback0");
+	ICMessage message;
+	ICSerializerRapid serializer(&message);
 
-	CcTime::Sleep(10000.00f);
+	ClTobiIc ic;
+	while(true) { 
+		if(ic.Open("9500", "/feedback0") == false) {
+			CcLogFatal("Cannot open");
+			ic.Close();
+			return 1;
+		}
+
+		while(ic.GetMessage(&serializer, false) == false) {
+			CcTime::Sleep(1000.00f);
+			CcLogInfo("WAITING");
+			if(CcCore::receivedSIGINT.Get() || CcCore::receivedSIGTERM.Get()) {
+				goto shutdown;
+			}
+		}
+
+		while(true) { 
+			if(ic.GetMessage(&serializer) == false)
+				break;
+			if(CcCore::receivedSIGINT.Get() || CcCore::receivedSIGTERM.Get()) {
+				goto shutdown;
+			}
+			CcLogInfo("Message received");
+		}
+		CcLogFatal("Connection lost");
+		ic.Close();
+	}
+
+shutdown:
 	ic.Close();
 
 	return 0;
