@@ -26,26 +26,34 @@
 
 class ClLoop {
 	public:
+		static ClLoop* Instance(void);
+		static void Release(void);
+		static unsigned int Refcount(void);
+
+		static bool Connect(CcAddress nameserver = "127.0.0.1:8000");
+		static void Disconnect(void);
+		static bool IsConnected(void);
+	protected:
 		ClLoop(void);
 		virtual ~ClLoop(void);
-		virtual bool Connect(CcAddress nameserver = "127.0.0.1:8000");
-		virtual void Disconnect(void);
-		virtual bool IsConnected(void);
-	protected:
-		virtual bool ConnectNameserver(void);
-		virtual bool ConnectProcessing(void);
-		virtual bool ConnectAcquisition(void);
-		virtual bool QueryAddresses(void);
+		static void Destroy(void);
+		static bool ConnectNameserver(void);
+		static bool ConnectProcessing(void);
+		static bool ConnectAcquisition(void);
+		static bool QueryAddresses(void);
 
 	public:
-		ClProClient processing;
-		ClAcqClient acquisition;
-		ClNamesClient nameserver;
+		static ClProClient processing;
+		static ClAcqClient acquisition;
+		static ClNamesClient nameserver;
 	protected:
-		CcAddress _processing;
-		CcAddress _acquisition;
-		CcAddress _nameserver;
-		std::stringstream _stream;
+		static CcAddress _processing;
+		static CcAddress _acquisition;
+		static CcAddress _nameserver;
+		static std::stringstream _stream;
+	private:
+		static ClLoop* _instance;
+		static unsigned int _refCount;
 };
 
 #endif

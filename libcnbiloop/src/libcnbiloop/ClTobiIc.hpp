@@ -16,29 +16,23 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#ifndef CLTOBIIC_HPP 
+#define CLTOBIIC_HPP 
+
 #include "ClLoop.hpp"
 #include <libcnbicore/CcBasic.hpp>
+#include <libcnbicore/CcServerSingle.hpp>
 #include <iostream>
 
-using namespace std;
+class ClTobiIc {
+	public:
+		ClTobiIc(ClLoop* loop = NULL);
+		virtual ~ClTobiIc(void);
+	protected:
 
-int main(void) {
-	CcCore::OpenLogger("clloop");
-	CcCore::CatchSIGINT();
-	CcCore::CatchSIGTERM();
-	
-	if(ClLoop::Connect() == true)
-		cout << "Connected" << endl;
-	else
-		return 1;
-	
-	while(true) {
-		if(CcCore::receivedSIGINT.Get() || CcCore::receivedSIGTERM.Get())
-			break;
+	public:
+	protected:
+		ClLoop* _loop;
+};
 
-		CcTime::Sleep(1000.00f);
-	}
-	ClLoop::Disconnect();
-
-	return 0;
-}
+#endif

@@ -20,75 +20,110 @@
 #define CLLOOP_CPP 
 
 #include "ClLoop.hpp" 
+/* Initialization */
+ClLoop* ClLoop::_instance = NULL;
+unsigned int ClLoop::_refCount = 0;
+
+/* Declarations */	
+ClProClient ClLoop::processing;
+ClAcqClient ClLoop::acquisition;
+ClNamesClient ClLoop::nameserver;
+CcAddress ClLoop::_processing;
+CcAddress ClLoop::_acquisition;
+CcAddress ClLoop::_nameserver;
+std::stringstream ClLoop::_stream;
 
 ClLoop::ClLoop(void) {
 }
 
 ClLoop::~ClLoop(void) {
-	this->Disconnect();
+	ClLoop::Disconnect();
+}
+		
+ClLoop* ClLoop::Instance(void) {
+	if(ClLoop::_instance == NULL)
+		ClLoop::_instance = new ClLoop;
+	++ClLoop::_refCount;
+	return ClLoop::_instance;
+}
+
+unsigned int ClLoop::Refcount(void) {
+	return ClLoop::_refCount;
+}
+
+void ClLoop::Release(void) {
+	if(--ClLoop::_refCount < 1) 
+		ClLoop::Destroy();
+}
+
+void ClLoop::Destroy(void) {
+	if(ClLoop::_instance == NULL) 
+		return;
+	delete ClLoop::_instance;
 }
 		
 bool ClLoop::Connect(CcAddress nameserver) {
-	this->_nameserver = nameserver;
-	if(this->ConnectNameserver() == false)
+	if(ClLoop::_refCount < 1)
+		ClLoop::Instance();
+	ClLoop::_nameserver = nameserver;
+	
+	if(ClLoop::ConnectNameserver() == false)
 		return false;
-
-	if(this->QueryAddresses() == false)
+	if(ClLoop::QueryAddresses() == false)
 		return false;
-
-	if(this->ConnectProcessing() == false)
+	if(ClLoop::ConnectProcessing() == false)
 		return false;
-	if(this->ConnectAcquisition() == false)
+	if(ClLoop::ConnectAcquisition() == false)
 		return false;
 
 	return true;
 }
 		
 void ClLoop::Disconnect(void) {
-	this->processing.Disconnect();
-	this->acquisition.Disconnect();
-	this->nameserver.Disconnect();
+	ClLoop::processing.Disconnect();
+	ClLoop::acquisition.Disconnect();
+	ClLoop::nameserver.Disconnect();
 }
 		
 bool ClLoop::IsConnected(void) {
-	return this->processing.IsConnected() &&
-		this->acquisition.IsConnected() &&
-		this->nameserver.IsConnected();
+	return ClLoop::processing.IsConnected() &&
+		ClLoop::acquisition.IsConnected() &&
+		ClLoop::nameserver.IsConnected();
 }
 
 bool ClLoop::ConnectNameserver(void) {
-	int status = this->nameserver.Connect(this->_nameserver);
+	int status = ClLoop::nameserver.Connect(ClLoop::_nameserver);
 	if(status != ClNamesLang::Successful) {
-		CcLogErrorS(this->_stream, "Cannot connect to nameserver: " <<
-				this->_nameserver << ", " << status);
+		CcLogErrorS(ClLoop::_stream, "Cannot connect to nameserver: " <<
+				ClLoop::_nameserver << ", " << status);
 		return false;
 	}
 	return true;
 }
 
 bool ClLoop::ConnectProcessing(void) {
-	int status = this->processing.Connect(this->_processing);
+	int status = ClLoop::processing.Connect(ClLoop::_processing);
 	if(status != ClProLang::Successful) {
-		CcLogErrorS(this->_stream, "Cannot connect to processing: " <<
-				this->_processing << ", " << status);
+		CcLogErrorS(ClLoop::_stream, "Cannot connect to processing: " <<
+				ClLoop::_processing << ", " << status);
 		return false;
 	}
 	return true;
 }
 
 bool ClLoop::ConnectAcquisition(void) {
-	int status = this->acquisition.Connect(this->_acquisition);
+	int status = ClLoop::acquisition.Connect(ClLoop::_acquisition);
 	if(status != ClAcqLang::Successful) {
-		CcLogErrorS(this->_stream, "Cannot connect to acquisition: " <<
-				this->_acquisition << ", " << status);
+		CcLogErrorS(ClLoop::_stream, "Cannot connect to acquisition: " <<
+				ClLoop::_acquisition << ", " << status);
 		return false;
 	}
 	return true;
 }
 
 bool ClLoop::QueryAddresses(void) {
-	int sp = this->nameserver.Query("/processing", &this->_processing);
-	int sa = this->nameserver.Query("/acquisition", &this->_acquisition);
+	int sp = ClLoop::nameserver.Query("/processing", &ClLoop::_processing);
+	int sa = ClLoop::nameserver.Query("/acquisition", &ClLoop::_acquisition);
 
 	if(sp != ClNamesLang::Successful)
 		return false;

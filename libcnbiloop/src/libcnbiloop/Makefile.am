@@ -17,7 +17,9 @@ libcnbiloop_include_HEADERS = ClDevice.hpp \
 							  ClNamesClient.hpp \
 							  ClProClient.hpp \
 							  ClClient.hpp \
-							  ClLoop.hpp
+							  ClLoop.hpp \
+							  ClTobiIc.hpp \
+							  ClTobiId.hpp
 
 libcnbiloop_la_SOURCES = ClDevice.cpp \
 						 ClDevice.hpp \
@@ -48,7 +50,11 @@ libcnbiloop_la_SOURCES = ClDevice.cpp \
 						 ClClient.hpp \
 						 ClClient.cpp \
 						 ClLoop.hpp \
-						 ClLoop.cpp
+						 ClLoop.cpp \
+						 ClTobiIc.cpp \
+						 ClTobiIc.hpp \
+						 ClTobiId.cpp \
+						 ClTobiId.hpp
 
 libcnbiloop_la_LDFLAGS = $(AM_CFLAGS) \
 						 -version-info $(CURRENT):$(REVISION):$(AGE) \

@@ -45,8 +45,8 @@ int main(int argc, char* argv[]) {
 	CcCore::CatchSIGINT();
 	CcCore::CatchSIGTERM();
 
-	ClLoop cl;
-	if(cl.Connect() == false) {
+	ClLoop::Instance();
+	if(ClLoop::Connect() == false) {
 		CcLogFatal("Cannot connect to loop");
 		exit(1);
 	}
@@ -62,36 +62,36 @@ int main(int argc, char* argv[]) {
 	filelog.append(".log");
 
 	int pid0, pid1;
-	if(cl.processing.ForkAndCheck(&pid0) != ClProLang::Successful)
+	if(ClLoop::processing.ForkAndCheck(&pid0) != ClProLang::Successful)
 		exit(2);
-	if(cl.processing.ForkAndCheck(&pid1) != ClProLang::Successful)
+	if(ClLoop::processing.ForkAndCheck(&pid1) != ClProLang::Successful)
 		exit(2);
 
-	cl.nameserver.Erase("ndf_monitor::scope");
-	cl.nameserver.Store("ndf_monitor::scope", optplot);
+	ClLoop::nameserver.Erase("ndf_monitor::scope");
+	ClLoop::nameserver.Store("ndf_monitor::scope", optplot);
 
-	cl.nameserver.Set("/feedback0", "127.0.0.1:9500");
-	cl.processing.ChangeDirectory(pid0, "/tmp/");
-	cl.processing.IncludeNDF(pid0) ;
-	cl.processing.LaunchNDF(pid0, "ndf_monitor", "/pipe0", 
+	ClLoop::nameserver.Set("/feedback0", "127.0.0.1:9500");
+	ClLoop::processing.ChangeDirectory(pid0, "/tmp/");
+	ClLoop::processing.IncludeNDF(pid0) ;
+	ClLoop::processing.LaunchNDF(pid0, "ndf_monitor", "/pipe0", 
 			"/acquisition", "/feedback0", "");
 
-	cl.nameserver.Set("/feedback1", "127.0.0.1:9501");
-	cl.processing.ChangeDirectory(pid1, "/tmp/");
-	cl.processing.IncludeNDF(pid1) ;
-	cl.processing.LaunchNDF(pid1, "ndf_monitor", "/pipe1", 
+	ClLoop::nameserver.Set("/feedback1", "127.0.0.1:9501");
+	ClLoop::processing.ChangeDirectory(pid1, "/tmp/");
+	ClLoop::processing.IncludeNDF(pid1) ;
+	ClLoop::processing.LaunchNDF(pid1, "ndf_monitor", "/pipe1", 
 			"/acquisition", "/feedback1", "");
 	
-	if(cl.processing.Check(pid0) == false) {
+	if(ClLoop::processing.Check(pid0) == false) {
 		CcLogFatal("PID0 is dead");
 		goto shutdown;
 	}
-	if(cl.processing.Check(pid1) == false) {
+	if(ClLoop::processing.Check(pid1) == false) {
 		CcLogFatal("PID1 is dead");
 		goto shutdown;
 	}
 
-	if(cl.acquisition.OpenXDF(filebdf, filelog, "debug=1") 
+	if(ClLoop::acquisition.OpenXDF(filebdf, filelog, "debug=1") 
 			!= ClAcqLang::Successful) {
 		CcLogFatal("Failed to open XDF, going down");
 		goto shutdown;
@@ -102,22 +102,22 @@ int main(int argc, char* argv[]) {
 	while(true) {
 		if(CcCore::receivedSIGINT.Get() || CcCore::receivedSIGTERM.Get())
 			goto shutdown;
-		if(cl.IsConnected() == false) {
+		if(ClLoop::IsConnected() == false) {
 			CcLogFatal("Lost connection with loop");
 			goto shutdown;
 		}
-		if(cl.processing.Check(pid0) == false) {
+		if(ClLoop::processing.Check(pid0) == false) {
 			CcLogFatal("PID0 died");
 			goto shutdown;
 		}
-		if(cl.processing.Check(pid1) == false) {
+		if(ClLoop::processing.Check(pid1) == false) {
 			CcLogFatal("PID1 died");
 			goto shutdown;
 		}
 
 		if(CcTime::Toc(&tic) > 20000.00f) {
-			cl.acquisition.AddLabelGDF(781);
-			cl.acquisition.AddLabelLPT(2);
+			ClLoop::acquisition.AddLabelGDF(781);
+			ClLoop::acquisition.AddLabelLPT(2);
 			CcTime::Tic(&tic);
 		}
 		
@@ -125,10 +125,10 @@ int main(int argc, char* argv[]) {
 	}
 
 shutdown:
-	cl.acquisition.CloseXDF();
-	cl.nameserver.Erase("ndf_monitor::scope");
-	cl.processing.Terminate(pid0);
-	cl.processing.Terminate(pid1);
+	ClLoop::acquisition.CloseXDF();
+	ClLoop::nameserver.Erase("ndf_monitor::scope");
+	ClLoop::processing.Terminate(pid0);
+	ClLoop::processing.Terminate(pid1);
 
 	return 0;
 }

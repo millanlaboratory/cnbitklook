@@ -23,22 +23,6 @@
 using namespace std;
 
 int main(void) {
-	CcCore::OpenLogger("clloop");
-	CcCore::CatchSIGINT();
-	CcCore::CatchSIGTERM();
-	
-	if(ClLoop::Connect() == true)
-		cout << "Connected" << endl;
-	else
-		return 1;
-	
-	while(true) {
-		if(CcCore::receivedSIGINT.Get() || CcCore::receivedSIGTERM.Get())
-			break;
-
-		CcTime::Sleep(1000.00f);
-	}
-	ClLoop::Disconnect();
 
 	return 0;
 }
