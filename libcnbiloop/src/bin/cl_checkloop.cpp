@@ -100,7 +100,7 @@ int main(int argc, char* argv[]) {
 	CcTimeValue tic;
 	CcTime::Tic(&tic);
 	while(true) {
-		if(CcCore::receivedSIGINT.Get() || CcCore::receivedSIGTERM.Get())
+		if(CcCore::receivedSIGAny.Get())
 			goto shutdown;
 		if(ClLoop::IsConnected() == false) {
 			CcLogFatal("Lost connection with loop");

@@ -160,9 +160,7 @@ int main(int argc, char* argv[]) {
 				CcLogFatal("Lost connection with nameserver");
 				break;
 			}
-			if(CcCore::receivedSIGINT.Get()) 
-				break;
-			if(CcCore::receivedSIGTERM.Get()) 
+			if(CcCore::receivedSIGAny.Get()) 
 				break;
 			CcTime::Tic(&tvSigCheck);
 		}

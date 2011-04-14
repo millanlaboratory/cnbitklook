@@ -33,10 +33,8 @@ int ClAcqClient::AddLabelGDF(const GDFEvent label) {
 	bool status = ClClient::_client.SendRecv(this->_language.message->buffer,
 			&reply, ClAcqLang::Hdr, ClAcqLang::Trl, ClClient::_waitms);
 
-	if(status == false) {
-		CcLogWarningS(ClClient::_stream, "No reply in " << ClClient::_waitms << "ms");
+	if(status == false)
 		return ClAcqLang::NoReply;
-	}
 
 	if(this->_language.IsOk(reply.c_str()))
 		return ClAcqLang::Successful;
@@ -54,10 +52,8 @@ int ClAcqClient::AddLabelLPT(const HWTrigger label) {
 	bool status = ClClient::_client.SendRecv(this->_language.message->buffer,
 			&reply, ClAcqLang::Hdr, ClAcqLang::Trl, ClClient::_waitms);
 	
-	if(status == false) {
-		CcLogWarningS(ClClient::_stream, "No reply in " << ClClient::_waitms << "ms");
+	if(status == false)
 		return ClAcqLang::NoReply;
-	}
 
 	if(this->_language.IsOk(reply.c_str()))
 		return ClAcqLang::Successful;
@@ -75,10 +71,8 @@ int ClAcqClient::AddLabelTXT(const std::string& label) {
 	bool status = ClClient::_client.SendRecv(this->_language.message->buffer,
 			&reply, ClAcqLang::Hdr, ClAcqLang::Trl, ClClient::_waitms);
 	
-	if(status == false) {
-		CcLogWarningS(ClClient::_stream, "No reply in " << ClClient::_waitms << "ms");
+	if(status == false)
 		return ClAcqLang::NoReply;
-	}
 
 	if(this->_language.IsOk(reply.c_str()))
 		return ClAcqLang::Successful;
@@ -97,10 +91,8 @@ int ClAcqClient::OpenXDF(const std::string& filegdf,
 	bool status = ClClient::_client.SendRecv(this->_language.message->buffer,
 			&reply, ClAcqLang::Hdr, ClAcqLang::Trl, ClClient::_waitms);
 
-	if(status == false) {
-		CcLogWarningS(ClClient::_stream, "No reply in " << ClClient::_waitms << "ms");
+	if(status == false)
 		return ClAcqLang::NoReply;
-	}
 
 	if(this->_language.IsOk(reply.c_str()))
 		return ClAcqLang::Successful;
@@ -118,10 +110,8 @@ int ClAcqClient::CloseXDF(void) {
 	bool status = ClClient::_client.SendRecv(this->_language.message->buffer,
 			&reply, ClAcqLang::Hdr, ClAcqLang::Trl, ClClient::_waitms);
 
-	if(status == false) {
-		CcLogWarningS(ClClient::_stream, "No reply in " << ClClient::_waitms << "ms");
+	if(status == false)
 		return ClAcqLang::NoReply;
-	}
 
 	if(this->_language.IsOk(reply.c_str()))
 		return ClAcqLang::Successful;

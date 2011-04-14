@@ -33,16 +33,18 @@ int main(void) {
 
 	ClTobiIc ic;
 	while(true) { 
+		// Open iC
 		if(ic.Open("9500", "/feedback0") == false) {
 			CcLogFatal("Cannot open");
 			ic.Close();
 			return 1;
 		}
 
-		while(ic.GetMessage(&serializer, false) == false) {
+		// Wait for the first message to arrive
+		while(ic.WaitMessage(&serializer) == false) {
 			CcTime::Sleep(1000.00f);
-			CcLogInfo("WAITING");
-			if(CcCore::receivedSIGINT.Get() || CcCore::receivedSIGTERM.Get()) {
+			CcLogInfo("Waiting...");
+			if(CcCore::receivedSIGAny.Get()) {
 				goto shutdown;
 			}
 		}
@@ -50,10 +52,13 @@ int main(void) {
 		while(true) { 
 			if(ic.GetMessage(&serializer) == false)
 				break;
-			if(CcCore::receivedSIGINT.Get() || CcCore::receivedSIGTERM.Get()) {
+			if(CcCore::receivedSIGAny.Get())
 				goto shutdown;
-			}
+			if(ClLoop::IsConnected() == false) 
+				goto shutdown;
+
 			CcLogInfo("Message received");
+			std::cout<< message.GetBlockIdx() << std::endl;
 		}
 		CcLogFatal("Connection lost");
 		ic.Close();

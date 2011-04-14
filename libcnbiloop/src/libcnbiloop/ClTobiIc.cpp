@@ -79,6 +79,14 @@ bool ClTobiIc::Close(void) {
 	return true;
 }
 
+bool ClTobiIc::WaitMessage(ICSerializerRapid* serializer) {
+	return GetMessage(serializer, false);
+}
+
+bool ClTobiIc::GetMessage(ICSerializerRapid* serializer) {
+	return GetMessage(serializer, true);
+}
+
 bool ClTobiIc::GetMessage(ICSerializerRapid* serializer, bool lock) {
 	if(this->_hasdropped.Get() == true)
 		return false;
@@ -88,6 +96,8 @@ bool ClTobiIc::GetMessage(ICSerializerRapid* serializer, bool lock) {
 			return false;
 	} else {
 		this->_hasmessage.Wait();
+		if(this->_hasdropped.Get() == true)
+			return false;
 	}
 	
 	this->_sembuffer.Wait();
