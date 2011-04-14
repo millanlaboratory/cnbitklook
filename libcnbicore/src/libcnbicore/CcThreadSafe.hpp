@@ -30,8 +30,10 @@ class CcThreadSafe : public CcObject {
 		CcThreadSafe(T value);
 		void Set(T value);
 		T Get(void);
+		T Get(T reset);
 		bool TrySet(T value);
 		bool TryGet(T* value);
+		bool TryGet(T* value, T reset);
 	private:
 		T _data;
 		CcSemaphore _semdata;

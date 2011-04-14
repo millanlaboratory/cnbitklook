@@ -48,6 +48,15 @@ T CcThreadSafe<T>::Get(void) {
 }
 
 template <class T> 
+T CcThreadSafe<T>::Get(T reset) {
+	this->_semdata.Wait();
+	T value = this->_data;
+	this->_data = reset;
+	this->_semdata.Post();
+	return value;
+}
+
+template <class T> 
 bool CcThreadSafe<T>::TrySet(T value) {
 	if(this->_semdata.TryWait()) {
 		this->_data = value;
@@ -61,6 +70,17 @@ template <class T>
 bool CcThreadSafe<T>::TryGet(T* value) {
 	if(this->_semdata.TryWait()) {
 		*value = this->_data;
+		this->_semdata.Post();
+		return true;
+	}
+	return false;
+}
+
+template <class T> 
+bool CcThreadSafe<T>::TryGet(T* value, T reset) {
+	if(this->_semdata.TryWait()) {
+		*value = this->_data;
+		this->_data = reset;
 		this->_semdata.Post();
 		return true;
 	}
