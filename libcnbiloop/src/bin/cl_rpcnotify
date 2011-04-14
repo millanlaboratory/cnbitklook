@@ -9,11 +9,16 @@ import sys
 def main(argv=None):
     if not pynotify.init("Basics"):
         sys.exit(1)
-	if argv is None:
-		argv = sys.argv
-	print "ciao" 
+    if not pynotify.init("Urgency"):
+        sys.exit(1)
+
+    if argv is None:
+         argv = sys.argv
 
     n = pynotify.Notification(sys.argv[1], sys.argv[2])
+    n.set_urgency(pynotify.URGENCY_CRITICAL)
+    n.set_timeout(2500)
+    
 
     if not n.show():
         print "Failed to send notification"
