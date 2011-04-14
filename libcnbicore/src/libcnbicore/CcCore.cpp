@@ -40,6 +40,7 @@ unsigned int CcCore::_refCount = 0;
 
 /* Declarations */
 CcLogger CcCore::logger;
+CcThreadSafe<bool> CcCore::receivedAny(false);
 CcThreadSafe<bool> CcCore::receivedSIGINT(false);
 CcThreadSafe<bool> CcCore::receivedSIGQUIT(false);
 CcThreadSafe<bool> CcCore::receivedSIGTERM(false);
@@ -48,21 +49,25 @@ CcThreadSafe<bool> CcCore::receivedSIGCHLD(false);
 void cccore_sigint(int sig) {
 	CcLogFatal("Catched SIGINT");
 	CcCore::receivedSIGINT.Set(true);
+	CcCore::receivedAny.Set(true);
 }
 
 void cccore_sigquit(int sig) {
 	CcLogFatal("Catched SIGQUIT");
 	CcCore::receivedSIGQUIT.Set(true);
+	CcCore::receivedAny.Set(true);
 }
 
 void cccore_sigterm(int sig) {
 	CcLogFatal("Catched SIGQUIT");
 	CcCore::receivedSIGTERM.Set(true);
+	CcCore::receivedAny.Set(true);
 }
 
 void cccore_sigchild(int sig) {
 	CcLogFatal("Catched CHILD");
 	CcCore::receivedSIGCHLD.Set(true);
+	CcCore::receivedAny.Set(true);
 }
 
 CcCore::CcCore(void) {

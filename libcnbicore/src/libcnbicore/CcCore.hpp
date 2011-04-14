@@ -68,6 +68,7 @@ class CcCore {
 		static const CcLogLevel LevelFatal = 70;
 	public:
 		static CcLogger logger;
+		static CcThreadSafe<bool> receivedAny;
 		static CcThreadSafe<bool> receivedSIGINT;
 		static CcThreadSafe<bool> receivedSIGQUIT;
 		static CcThreadSafe<bool> receivedSIGTERM;
