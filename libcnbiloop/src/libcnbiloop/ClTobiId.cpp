@@ -37,13 +37,13 @@ bool ClTobiId::Attach(const std::string& name) {
 	this->_name.assign(name);
 
 	if(ClLoop::Connect() == false) { 
-		CcLogError("Cannot connect to loop");
+		CcLogDebug("Cannot connect to loop");
 		return false;
 	}
 
 	CcAddress address;
 	if(ClLoop::nameserver.Query(this->_name, &address) != ClNamesLang::Successful) {
-		CcLogErrorS(this->_stream, "Query returned empty result: " << this->_name);
+		CcLogDebugS(this->_stream, "Query returned empty result: " << this->_name);
 		return false;
 	}
 
@@ -52,7 +52,7 @@ bool ClTobiId::Attach(const std::string& name) {
 	try {
 		this->_client->Connect(endpoint);
 	} catch(CcException e) {
-		CcLogErrorS(this->_stream, "Cannot connect to " << address);
+		CcLogDebugS(this->_stream, "Cannot connect to " << address);
 		return false;
 	}
 	

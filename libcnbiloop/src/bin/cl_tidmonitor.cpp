@@ -55,6 +55,8 @@ int main(int argc, char* argv[]) {
 		if(id.Attach(optname) == false) {
 			id.Detach();
 			CcTime::Sleep(5000);
+			if(CcCore::receivedSIGAny.Get())
+				goto shutdown;
 			continue;
 		}
 	

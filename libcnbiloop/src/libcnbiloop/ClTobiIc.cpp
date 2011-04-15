@@ -37,7 +37,7 @@ bool ClTobiIc::Attach(const CcPort port, const std::string& name) {
 	this->_name.assign(name);
 
 	if(ClLoop::Connect() == false) { 
-		CcLogError("Cannot connect to loop");
+		CcLogDebug("Cannot connect to loop");
 		return false;
 	}
 	CcEndpoint endpoint("0.0.0.0", port);
@@ -46,13 +46,13 @@ bool ClTobiIc::Attach(const CcPort port, const std::string& name) {
 	try { 
 		this->_server->Bind(endpoint);
 	} catch(CcException e) {
-		CcLogErrorS(this->_stream, "Cannot bind to port " << port);
+		CcLogDebugS(this->_stream, "Cannot bind to port " << port);
 		return false;
 	}
 
 	int status = ClLoop::nameserver.Set(this->_name, endpoint.GetAddress());
 	if(status != ClNamesLang::Successful) {
-		CcLogErrorS(this->_stream, "Cannot set " << name 
+		CcLogDebugS(this->_stream, "Cannot set " << name 
 				<< " as " << endpoint.GetAddress());
 		return false;
 	}
