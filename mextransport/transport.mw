@@ -1,0 +1,102 @@
+%   Copyright (C) 2010 Michele Tavella <tavella.michele@gmail.com>
+%
+%   This file is part of the mextransport wrapper
+%
+%   The libndf library is free software: you can redistribute it and/or
+%   modify it under the terms of the version 3 of the GNU General Public
+%   License as published by the Free Software Foundation.
+%
+%   This program is distributed in the hope that it will be useful,
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%   GNU General Public License for more details.
+%
+%   You should have received a copy of the GNU General Public License
+%   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+$ #include <libtransport/net.h>
+$ #include <libtransport/tcp.h>
+$ #include <libtransport/udp.h>
+$ #include <cstring>
+$ #include <stdio.h>
+$ #include <stdlib.h>
+
+@function [sptr] = tr_new();
+	$ tr_socket* newsocket(void) { 
+	$	return (tr_socket*)malloc(sizeof(tr_socket));
+	$ }
+	# tr_socket* sptr = newsocket();
+
+@function [sptr] = tr_delete(sptr);
+	# free(tr_socket* sptr);
+
+@function [sptr] = tr_init_socket_default(sptr);
+	# tr_init_socket_default(tr_socket* sptr);
+
+@function [sptr] = tr_tcpclient(sptr);
+	# tr_tcpclient(tr_socket* sptr);
+
+@function [sptr] = tr_tcpserver(sptr);
+	# tr_tcpserver(tr_socket* sptr);
+
+@function [sptr] = tr_tcpendpoint(sptr);
+	# tr_tcpendpoint(tr_socket* sptr);
+
+@function [status, sptr] = tr_open(sptr);
+	# int status = tr_open(tr_socket* sptr);
+
+@function [status, sptr] = tr_close(sptr);
+	# int status = tr_close(tr_socket* sptr);
+
+@function [sptr] = tr_free(sptr);
+	# tr_free(tr_socket* sptr);
+
+@function [status, sptr] = tr_connect(sptr, address, port);
+	# int status = tr_connect(tr_socket* sptr, cstring address, cstring port);
+
+@function [status, sptr] = tr_connected(sptr);
+	# int status = tr_connected(tr_socket* sptr);
+
+@function [status, sptr] = tr_check(sptr);
+	# int status = tr_check(tr_socket* sptr);
+
+@function [bytes, sptr] = tr_send(sptr, buffer);
+	# int bytes = tr_send(tr_socket* sptr, cstring buffer);
+
+@function [status, sptr] = tr_recv(sptr);
+	# int status = tr_recv(tr_socket* sptr);
+
+@function [buffer, sptr] = tr_getbuffer(sptr);
+	$ void getbuffer(tr_socket* socket, char* buffer) {
+	$ 	strcpy(buffer, (char*)socket->buffer);
+	$ }
+	buffer = '';
+	# getbuffer(tr_socket* sptr, inout cstring[1024] buffer);
+
+@function [status, sptr] = tr_bind(sptr, port);
+	# int status = tr_bind(tr_socket* sptr, cstring port);
+
+@function [status, sptr] = tr_listen(sptr);
+	# int status = tr_listen(tr_socket* sptr);
+
+@function [status, sptr] = tr_accept(sptr, eptr);
+	# int status = tr_accept(tr_socket* sptr, tr_socket* eptr);
+
+@function [status, sptr] = tr_set_nonblocking(sptr, value);
+	# int status = tr_set_nonblocking(tr_socket* sptr, int value);
+
+@function [address, port, sptr] = tr_getlocal(sptr);
+	$ int getlocal(tr_socket* socket, char* address) {
+	$ 	strcpy(address, socket->local.address);
+	$ 	return socket->local.port;
+	$ }
+	address = '';
+	# int port = getlocal(tr_socket* sptr, inout cstring[1024] address);
+
+@function [address, port, sptr] = tr_getremote(sptr);
+	$ int getremote(tr_socket* socket, char* address) {
+	$ 	strcpy(address, socket->remote.address);
+	$ 	return socket->remote.port;
+	$ }
+	address = '';
+	# int port = getremote(tr_socket* sptr, inout cstring[1024] address);
