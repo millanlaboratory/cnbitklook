@@ -59,13 +59,13 @@ void cccore_sigquit(int sig) {
 }
 
 void cccore_sigterm(int sig) {
-	CcLogFatal("Catched SIGQUIT");
+	CcLogFatal("Catched SIGTERM");
 	CcCore::receivedSIGTERM.Set(true);
 	CcCore::receivedSIGAny.Set(true);
 }
 
 void cccore_sigchild(int sig) {
-	CcLogFatal("Catched CHILD");
+	CcLogFatal("Catched SIGCHILD");
 	CcCore::receivedSIGCHLD.Set(true);
 	CcCore::receivedSIGAny.Set(true);
 }
