@@ -106,34 +106,44 @@ void CcLogger::DumpEntry(CcLogEntry* entry) {
 				entry->_caller.c_str(), entry->_message.c_str());
 		return;
 	}
+
+// \033[1;34m[%s]\033[0m
+// \033[1;37m%s 
 	else if(this->_termtype == CcCore::TerminalColors) {
 		switch(entry->_level) {
 			case CcCore::LevelConfig:
-				printf("\033[1;34m[%s]\033[0m\n %s\n", 
+				printf("\033[1;37m%s::\033[1;34m[%s]\033[0m\n %s\n", 
+						CcCore::GetModulename().c_str(), 
 						entry->_caller.c_str(), entry->_message.c_str());
 				break;
 			case CcCore::LevelException:
-				printf("\033[1;35m[%s]\033[0m\n %s\n", 
+				printf("\033[1;37m%s::\033[1;35m[%s]\033[0m\n %s\n", 
+						CcCore::GetModulename().c_str(), 
 						entry->_caller.c_str(), entry->_message.c_str());
 				break;
 			case CcCore::LevelDebug:
-				printf("\033[1m[%s]\033[0m\n %s\n", 
+				printf("\033[1;37m%s::\033[1m[%s]\033[0m\n %s\n", 
+						CcCore::GetModulename().c_str(), 
 						entry->_caller.c_str(), entry->_message.c_str());
 				break;
 			case CcCore::LevelInfo:
-				printf("\033[1;32m[%s]\033[0m\n %s\n", 
+				printf("\033[1;37m%s::\033[1;32m[%s]\033[0m\n %s\n", 
+						CcCore::GetModulename().c_str(), 
 						entry->_caller.c_str(), entry->_message.c_str());
 				break;
 			case CcCore::LevelWarning:
-				printf("\033[1;33m[%s]\033[0m\n %s\n", 
+				printf("\033[1;37m%s::\033[1;33m[%s]\033[0m\n %s\n", 
+						CcCore::GetModulename().c_str(), 
 						entry->_caller.c_str(), entry->_message.c_str());
 				break;
 			case CcCore::LevelError:
-				printf("\033[0;31m[%s]\033[0m\n %s\n", 
+				printf("\033[1;37m%s::\033[0;31m[%s]\033[0m\n %s\n", 
+						CcCore::GetModulename().c_str(), 
 						entry->_caller.c_str(), entry->_message.c_str());
 				break;
 			case CcCore::LevelFatal:
-				printf("\033[1;31m[%s]\033[0m\n %s\n", 
+				printf("\033[1;37m%s::\033[1;31m[%s]\033[0m\n %s\n", 
+						CcCore::GetModulename().c_str(), 
 						entry->_caller.c_str(), entry->_message.c_str());
 				break;
 			default:

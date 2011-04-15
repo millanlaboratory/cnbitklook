@@ -39,6 +39,7 @@ CcCore* CcCore::_instance = NULL;
 unsigned int CcCore::_refCount = 0;
 
 /* Declarations */
+std::string CcCore::_modulename;
 CcLogger CcCore::logger;
 CcThreadSafe<bool> CcCore::receivedSIGAny(false);
 CcThreadSafe<bool> CcCore::receivedSIGINT(false);
@@ -119,7 +120,7 @@ void CcCore::Status(void) {
 				CcCore::Refcount());
 }
 		
-void CcCore::OpenLogger(std::string module, CcTermType termtype,
+void CcCore::OpenLogger(std::string modulename, CcTermType termtype,
 		CcLogLevel level) {
 	std::string timestamp;
 	CcTime::Datetime(&timestamp);
@@ -129,13 +130,15 @@ void CcCore::OpenLogger(std::string module, CcTermType termtype,
 		if(errno != EEXIST)
 			directory.assign("./");
 
+	CcCore::_modulename.assign(modulename);
+
 	std::string filename;
 	filename.append(directory);
 	filename.append(timestamp);
 	filename.append("_");
-	filename.append(module);
+	filename.append(CcCore::_modulename);
 	filename.append(".xml");
-	CcCore::logger.Open(filename, module, termtype, level);
+	CcCore::logger.Open(filename, CcCore::_modulename, termtype, level);
 	CcLogConfig(std::string("CcLogger is logging in: ").append(filename));
 }
 
@@ -157,6 +160,10 @@ std::string CcCore::GetDirectoryHome(void) {
 
 std::string CcCore::GetUsername(void) {
 	return std::string(getenv("USER"));
+}
+
+std::string CcCore::GetModulename(void) {
+	return CcCore::_modulename;
 }
 
 void CcCore::CatchSIGINT(void) {

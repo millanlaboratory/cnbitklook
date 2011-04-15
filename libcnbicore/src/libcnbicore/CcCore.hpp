@@ -39,13 +39,14 @@ class CcCore {
 		static void Release(void);
 		static unsigned int Refcount(void);
 		static void Status(void);
-		static void OpenLogger(std::string module,
+		static void OpenLogger(std::string modulename,
 				CcTermType termtype = CcCore::TerminalColors,
 				CcLogLevel level = CcCore::LevelConfig);
 		static std::string GetDirectoryTmp(void);
 		static std::string GetDirectoryCwd(void);
 		static std::string GetDirectoryHome(void);
 		static std::string GetUsername(void);
+		static std::string GetModulename(void);
 		static void CatchSIGINT(void);
 		static void CatchSIGQUIT(void);
 		static void CatchSIGTERM(void);
@@ -76,6 +77,6 @@ class CcCore {
 	private:
 		static CcCore* _instance;
 		static unsigned int _refCount;
-
+		static std::string _modulename;
 };
 #endif
