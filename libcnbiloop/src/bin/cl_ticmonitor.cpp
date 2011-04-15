@@ -17,8 +17,6 @@
 */
 
 #include "ClTobiIc.hpp"
-#include <libtobiic/ICMessage.hpp>
-#include <libtobiic/ICSerializerRapid.hpp>
 #include <iostream>
 
 using namespace std;
@@ -54,25 +52,23 @@ int main(int argc, char* argv[]) {
 	ICSerializerRapid serializer(&message);
 
 	std::stringstream stream;
-	int blockidx;
 	std::string absolute, relative;
 
 	ClTobiIc ic;
 	while(true) { 
 		// Open iC
 		if(ic.Attach(optport, optname) == false) {
-			CcLogFatal("Cannot open");
 			ic.Detach();
-			return 1;
+			CcTime::Sleep(5000);
+			continue;
 		}
 
 		// Wait for the first message to arrive
+		CcLogInfo("Waiting for endpoint...");
 		while(ic.WaitMessage(&serializer) != ClTobiIc::HasMessage) {
-			CcLogInfo("Waiting for endpoint...");
 			CcTime::Sleep(1000.00f);
-			if(CcCore::receivedSIGAny.Get()) {
+			if(CcCore::receivedSIGAny.Get())
 				goto shutdown;
-			}
 		}
 
 		int status = ClTobiIc::NoMessage;
@@ -93,7 +89,6 @@ int main(int argc, char* argv[]) {
 				goto shutdown;
 			}
 			
-			blockidx = message.GetBlockIdx();
 			message.absolute.Get(&absolute);
 			message.relative.Get(&relative);
 			
@@ -109,7 +104,7 @@ int main(int argc, char* argv[]) {
 			CcLogInfoS(stream, "TiC message: " << 
 					" Classifiers=" << classifiers <<
 					", Total=" << total <<
-					", Block " << blockidx << 
+					", Block " << message.GetBlockIdx() << 
 					", A/R=" << absolute << 
 					"/" << relative);
 		}

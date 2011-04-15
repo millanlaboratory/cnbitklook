@@ -22,11 +22,9 @@
 #include "ClLoop.hpp"
 #include <libcnbicore/CcBasic.hpp>
 #include <libcnbicore/CcServerSingle.hpp>
-#include <libcnbicore/CcThreadSafe.hpp>
 #include <libtobicore/TCException.hpp>
 #include <libtobiic/ICMessage.hpp>
 #include <libtobiic/ICSerializerRapid.hpp>
-#include <iostream>
 
 class ClTobiIc : public CcSocketProxy {
 	public:
@@ -48,11 +46,11 @@ class ClTobiIc : public CcSocketProxy {
 		const static int HasMessage = 1;
 		const static int NoMessage = 0;
 	protected:
+		std::stringstream _stream;
 		CcServerSingle* _server;
 		std::string _name;
 		std::string _buffer;
 		CcSemaphore _sembuffer;
-		std::stringstream _stream;
 
 		CcSemaphore _hasmessage;
 };

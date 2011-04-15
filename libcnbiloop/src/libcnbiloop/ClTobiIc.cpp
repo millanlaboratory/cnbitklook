@@ -22,10 +22,12 @@
 #include "ClTobiIc.hpp" 
 
 ClTobiIc::ClTobiIc(void) {
+	ClLoop::Instance();
 	this->_server = NULL;
 }
 
 ClTobiIc::~ClTobiIc(void) {
+	ClLoop::Release();
 }
 		
 bool ClTobiIc::Attach(const CcPort port, const std::string& name) {
@@ -34,7 +36,6 @@ bool ClTobiIc::Attach(const CcPort port, const std::string& name) {
 	
 	this->_name.assign(name);
 
-	ClLoop::Instance();
 	if(ClLoop::Connect() == false) { 
 		CcLogError("Cannot connect to loop");
 		return false;
@@ -118,7 +119,7 @@ void ClTobiIc::HandleRecv(CcSocket* caller) {
 
 	bool status = false;
 	status = this->_server->datastream.Extract(&this->_buffer, "<tobiic",
-			"</tobiic>", CcStreamer::Forward);
+			"</tobiic>");
 	if(status)
 		this->_hasmessage.Post();
 	this->_sembuffer.Post();

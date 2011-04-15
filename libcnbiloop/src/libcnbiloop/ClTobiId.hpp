@@ -19,16 +19,38 @@
 #ifndef CLTOBIID_HPP 
 #define CLTOBIID_HPP 
 
-class ClTobiId {
+#include "ClLoop.hpp"
+#include <libcnbicore/CcBasic.hpp>
+#include <libcnbicore/CcClient.hpp>
+#include <libtobicore/TCException.hpp>
+#include <libtobiid/IDMessage.hpp>
+#include <libtobiid/IDSerializerRapid.hpp>
+#include <list>
+
+class ClTobiId : public CcSocketProxy {
 	public:
 		ClTobiId(void);
 		virtual ~ClTobiId(void);
-	private:
+		virtual bool Attach(const std::string& name = "/acquisition");
+		virtual bool Detach(void);
+		virtual bool IsAttached(void);
+		virtual bool GetMessage(IDSerializerRapid* serializer);
+		virtual int Count(void);
 	protected:
+		virtual void HandleConnect(CcSocket* caller);
+		virtual void HandleDisconnect(CcSocket* caller);
+		virtual void HandleRecv(CcSocket* caller);
 
 	public:
-	private:
 	protected:
+		std::stringstream _stream;
+		CcClient* _client;
+		std::string _name;
+		std::string _buffer;
+		CcSemaphore _sembuffer;
+		
+		CcSemaphore _semqueue;
+		std::list<std::string> _queue;
 };
 
 #endif
