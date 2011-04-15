@@ -46,7 +46,7 @@ int main(int argc, char* argv[]) {
 		}
 	}
 
-	CcCore::OpenLogger("cltobiic");
+	CcCore::OpenLogger("cl_ticmonitor");
 	CcCore::CatchSIGINT();
 	CcCore::CatchSIGTERM();
 
