@@ -48,7 +48,7 @@ class TiDHandler : public CcSocketProxy {
 		}
 
 		void HandleRecv(CcSocket* caller) { 
-			std::string message, iddump, timestamp, reference;
+			std::string message, iddump, absolute, relative;
 			bool status = false;
 			
 			while(true) {
@@ -57,12 +57,12 @@ class TiDHandler : public CcSocketProxy {
 				if(status == false)
 					break;
 				this->_idserializer->Deserialize(&message);
-				this->_idmessage.absolute.Get(&timestamp);
-				this->_idmessage.relative.Get(&reference);
+				this->_idmessage.absolute.Get(&absolute);
+				this->_idmessage.relative.Get(&relative);
 
 				CcLogInfoS(this->_stream, "TiD event:" << 
-				" A/R=" << timestamp << 
-				"/" << reference << 
+				" A/R=" << absolute << 
+				"/" << relative << 
 				", Family=" << this->_idmessage.GetFamily() << 
 				", Event=" << this->_idmessage.GetEvent() << 
 				", Description=" << this->_idmessage.GetDescription());

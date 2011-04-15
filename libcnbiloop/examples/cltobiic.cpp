@@ -31,6 +31,10 @@ int main(void) {
 	ICMessage message;
 	ICSerializerRapid serializer(&message);
 
+	std::stringstream stream;
+	int blockidx;
+	std::string absolute, relative;
+
 	ClTobiIc ic;
 	while(true) { 
 		// Open iC
@@ -56,9 +60,26 @@ int main(void) {
 				goto shutdown;
 			if(ClLoop::IsConnected() == false) 
 				goto shutdown;
+			
+			blockidx = message.GetBlockIdx();
+			message.absolute.Get(&absolute);
+			message.relative.Get(&relative);
+			
+			std::string classifiers;
+			int total = message.classifiers.Size();
+			ICClassifierIter it = message.classifiers.Begin();
+			while(it != message.classifiers.End()) {
+				classifiers.append((*it).first);
+				classifiers.append(" ");
+				it++;
+			}
 
-			CcLogInfo("Message received");
-			std::cout<< message.GetBlockIdx() << std::endl;
+			CcLogInfoS(stream, "TiC message: " << 
+					" Classifiers=" << classifiers <<
+					", Total=" << total <<
+					", Block " << blockidx << 
+					", A/R=" << absolute << 
+					"/" << relative);
 		}
 		CcLogFatal("Connection lost");
 		ic.Detach();
