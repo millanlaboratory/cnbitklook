@@ -109,6 +109,7 @@ float CpProbability::Get(unsigned int index) {
 
 CpProbability* CpProbability::Zero(void) {
 	memset(this->data, 0, sizeof(float) * this->_size);
+	return this;
 }
 
 CpProbability* CpProbability::Priors(void) {
