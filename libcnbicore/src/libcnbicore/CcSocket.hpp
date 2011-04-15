@@ -45,6 +45,7 @@ class CcSocket : public CcObject {
 		long unsigned int GetBytesSend(void);
 		long unsigned int GetBytesRecv(void);
 		virtual bool IsConnected(void);
+		size_t GetBsize(void);
 	protected:
 		virtual void OpenSocket(void) = 0;
 		virtual void CloseSocket(void) = 0;

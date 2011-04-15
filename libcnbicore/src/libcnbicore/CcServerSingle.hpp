@@ -30,7 +30,7 @@
  */
 class CcServerSingle : public CcServer {
 	public:
-		CcServerSingle(size_t bsize = CCCORE_1MB, unsigned maxconns = 256);
+		CcServerSingle(size_t bsize = CCCORE_1MB, unsigned maxconns = 1);
 		virtual ~CcServerSingle(void);
 		virtual int Recv(void); 
 		virtual int Send(const char* message);
@@ -39,6 +39,7 @@ class CcServerSingle : public CcServer {
 				std::string hdr, std::string trl, float waitms = -1);
 		CcAddress GetRemote(void);
 		virtual void Drop(void);
+		virtual bool IsConnected(void);
 	protected:
 		virtual void Main(void);
 		virtual bool Accept(void);

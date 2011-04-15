@@ -110,6 +110,14 @@ bool CcSocket::IsConnected(void) {
 	this->_semsocket.Post();
 	return status;
 }
+		
+size_t CcSocket::GetBsize(void) {
+	size_t bsize = -1;
+	this->_sembuffer.Wait();
+	bsize = this->_bsize;
+	this->_sembuffer.Post();
+	return bsize;
+}
 
 #endif
 

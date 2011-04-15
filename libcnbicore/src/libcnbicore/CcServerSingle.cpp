@@ -142,7 +142,7 @@ void CcServerSingle::Main(void) {
 		CcSocket::_semsocket.Post();
 
 		this->_semendpoint.Wait();
-		tr_init_socket_default(&this->_endpoint); 
+		tr_init_socket(&this->_endpoint, CcSocket::GetBsize(), 1); 
 		tr_tcpendpoint(&this->_endpoint);
 		this->_semendpoint.Post();
 
@@ -180,5 +180,13 @@ CcAddress CcServerSingle::GetRemote(void) {
 
 	return id;
 }
+
+bool CcServerSingle::IsConnected(void) {
+	this->_semendpoint.Wait();
+	bool status = (tr_connected(&this->_endpoint) == 0);
+	this->_semendpoint.Post();
+	return status;
+}
+
 
 #endif
