@@ -24,9 +24,9 @@
 #include <utility>
 #include <rapidxml.hpp>
 
-#include <libxmlconfig/XMLException.hpp>
-#include <libxmlconfig/SmartType.hpp>
-#include <libxmlconfig/XMLDocument.hpp>
+#include "XMLException.hpp"
+#include "SmartType.hpp"
+#include "XMLDocument.hpp"
 
 /*! \brief Simplified interface to CCfgXMLConfig
  *

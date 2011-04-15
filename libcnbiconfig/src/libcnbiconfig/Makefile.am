@@ -34,6 +34,3 @@ libcnbiconfig_la_SOURCES = CCfgConfig.cpp \
 libcnbiconfig_la_LDFLAGS = $(AM_CFLAGS) \
 						 -version-info $(CURRENT):$(REVISION):$(AGE) \
 						 -release $(RELEASE) 
-libcnbiconfig_la_LIBADD = -lm \
-						  -lxmlconfig \
-						  -ltobiic

@@ -52,11 +52,9 @@ AC_LANG([C++])
 #AC_CHECK_HEADERS([arpa/inet.h fcntl.h netdb.h netinet/in.h string.h sys/socket.h unistd.h])
 AC_CHECK_HEADERS([rapidxml.hpp rapidxml_print.hpp], [], 
 				 AC_MSG_ERROR([The RapidXML headers must be installed.]), [])
-AC_CHECK_HEADERS([libxmlconfig/XMLDocument.hpp], [], 
-				 AC_MSG_ERROR([The libxmlconfig headers must be installed.]), [])
 AC_CHECK_HEADERS([libtobiic/ICMessage.hpp], [], 
 				 AC_MSG_ERROR([The libtobiic headers must be installed.]), [])
-LIBS+="-ltobiic -lxmlconfig"
+LIBS+="-ltobiic"
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_HEADER_STDBOOL

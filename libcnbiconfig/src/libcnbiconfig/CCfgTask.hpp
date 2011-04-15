@@ -19,10 +19,10 @@
 #ifndef CCFGTASK_HPP
 #define CCFGTASK_HPP
 
-#include <string>
 #include "CCfgTypes.hpp"
-#include "libxmlconfig/SmartType.hpp"
+#include "SmartType.hpp"
 #include <map>
+#include <string>
 
 typedef std::map<std::string, SmartType> CCfgTaskConfig;
 typedef std::map<std::string, SmartType>::iterator CCfgTaskConfigIt;

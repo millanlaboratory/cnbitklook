@@ -33,7 +33,7 @@ int main(void) {
 		}
 		cout << "XML file is valid\n";
 		
-		CCfgTaskset* offlineMI  = config.Offline("smr", "mi_rhlh");
+		CCfgTaskset* offlineMI = config.Offline("smr", "mi_rhlh");
 		
 		ICMessage sender;
 		CCfgTaskset* onlineMI = config.Online("smr", "mi_rhlh", &sender);
