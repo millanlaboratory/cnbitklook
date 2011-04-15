@@ -106,7 +106,9 @@ bool ClTobiIc::Deserialize(ICSerializerRapid* serializer) {
 		serializer->Deserialize(&this->_buffer);
 		this->_buffer.clear();
 	} catch(TCException e) { 
-		CcLogException("Caught TCException");
+		CcLogExceptionS(this->_stream, "Caught TCException: " <<
+				e.GetCaller() << " - " << e.GetInfo());
+		CcLogException(_buffer);
 	}
 	this->_sembuffer.Post();
 	return true;

@@ -82,12 +82,11 @@ void usage(void) {
 }
 
 int main(int argc, char* argv[]) {
-	// Parse command line
 	int opt;
 	std::string optopt;
 	CcEndpoint optendpoint("127.0.0.1:9000");
 	
-	while ((opt = getopt(argc, argv, "a:h")) != -1) {
+	while((opt = getopt(argc, argv, "a:h")) != -1) {
 		if(opt == 'a')
 			optendpoint.SetAddress(optarg);
 		else {

@@ -23,7 +23,29 @@
 
 using namespace std;
 
-int main(void) {
+void usage(void) { 
+	printf("Usage: cl_ticmonitor -p TCPPORT -n NAME\n");
+	printf("Where: -p       9500 (default)\n");
+	printf("Where: -n       /feedback0 (default)\n");
+	exit(1);
+}
+
+int main(int argc, char* argv[]) {
+	int opt;
+	std::string optname("/feedback0");
+	CcPort optport("9500");
+	
+	while((opt = getopt(argc, argv, "p:n:h")) != -1) {
+		if(opt == 'p')
+			optport.assign(optarg);
+		else if(opt == 'n')
+			optname.assign(optarg);
+		else {
+			usage();
+			return(opt == 'h') ? EXIT_SUCCESS : EXIT_FAILURE;
+		}
+	}
+
 	CcCore::OpenLogger("cltobiic");
 	CcCore::CatchSIGINT();
 	CcCore::CatchSIGTERM();
@@ -38,7 +60,7 @@ int main(void) {
 	ClTobiIc ic;
 	while(true) { 
 		// Open iC
-		if(ic.Attach("9500", "/feedback0") == false) {
+		if(ic.Attach(optport, optname) == false) {
 			CcLogFatal("Cannot open");
 			ic.Detach();
 			return 1;
@@ -70,8 +92,8 @@ int main(void) {
 			ICClassifierIter it = message.classifiers.Begin();
 			while(it != message.classifiers.End()) {
 				classifiers.append((*it).first);
-				classifiers.append(" ");
-				it++;
+				if(it++ != message.classifiers.Begin())
+					classifiers.append(",");
 			}
 
 			CcLogInfoS(stream, "TiC message: " << 
