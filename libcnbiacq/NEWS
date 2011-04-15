@@ -1,0 +1,10 @@
+09-09-23  Michele Tavella <michele.tavella@epfl.ch>
+- CRITICAL: make all net objects thread-safe. This must be done IMMEDIATELY.
+- zero buffer inside every Receive method
+- fix segfault in Exception: 0x00000000004020b1 in operator<< (output=<value
+  optimized out>, obj=<value optimized out>) at src/Exception.cpp:40
+- is NetClient::SetNB thread-safe? 
+- implement NetHost object, keeping in mind about the TOBI NameService
+  requirements
+- implement NetBottle object
+- write MACROS for the specialization of the proxy objects/methods receiver-side
