@@ -89,12 +89,12 @@ try
 	% - Eventually, save CPU by not buffering unuseful dat
 	% - If you want to store the timestamps for debugging, then
 	%   also configure buffer.tim in this way:
-	%   buffer.tim = ndf_ringbuffer(10*ndf.conf.sf/ndf.conf.samples, 1);
+	%   buffer.tim = ndf_ringbuffer(ndf.conf.sf/ndf.conf.samples, 10);
 	%
 	disp('[ndf_monitor] Creating ring-buffers');
-	buffer.eeg = ndf_ringbuffer(2*ndf.conf.sf, ndf.conf.eeg_channels);
-	buffer.exg = ndf_ringbuffer(2*ndf.conf.sf, ndf.conf.exg_channels);
-	buffer.tri = ndf_ringbuffer(2*ndf.conf.sf, ndf.conf.tri_channels);
+	buffer.eeg = ndf_ringbuffer(ndf.conf.sf, ndf.conf.eeg_channels, 2.00);
+	buffer.exg = ndf_ringbuffer(ndf.conf.sf, ndf.conf.exg_channels, 2.00);
+	buffer.tri = ndf_ringbuffer(ndf.conf.sf, ndf.conf.tri_channels, 2.00);
 
 	% Initialize ndf_jump structure
 	% - Each NDF frame carries an index number
