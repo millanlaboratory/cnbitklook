@@ -40,7 +40,7 @@ class CcStreamer : public CcObject {
 		virtual bool Extract(std::string* buffer, std::string hdr, 
 				std::string trl, CcStreamerDirection direction = CcStreamer::Forward);
 		virtual bool Has(std::string hdr, std::string trl, 
-				CcStreamerDirection direction);
+				CcStreamerDirection direction = CcStreamer::Forward);
 		virtual int Count(std::string hdr);
 		virtual void Dump(void);
 		virtual int Size(void);
