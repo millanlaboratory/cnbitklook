@@ -67,21 +67,31 @@ int main(int argc, char* argv[]) {
 		}
 
 		// Wait for the first message to arrive
-		while(ic.WaitMessage(&serializer) == false) {
+		while(ic.WaitMessage(&serializer) != ClTobiIc::HasMessage) {
+			CcLogInfo("Waiting for endpoint...");
 			CcTime::Sleep(1000.00f);
-			CcLogInfo("Waiting...");
 			if(CcCore::receivedSIGAny.Get()) {
 				goto shutdown;
 			}
 		}
 
+		int status = ClTobiIc::NoMessage;
 		while(true) { 
-			if(ic.GetMessage(&serializer) == false)
+			status = ic.GetMessage(&serializer);
+			if(status == ClTobiIc::NoMessage) {
+				CcLogWarning("Endpoint attached, waiting for iC flow");
+				continue;
+			}
+			if(status == ClTobiIc::Detached) {
+				CcLogWarning("Endpoint detached");
 				break;
+			}
 			if(CcCore::receivedSIGAny.Get())
 				goto shutdown;
-			if(ClLoop::IsConnected() == false) 
+			if(ClLoop::IsConnected() == false) {
+				CcLogWarning("Cannot connect to loop");
 				goto shutdown;
+			}
 			
 			blockidx = message.GetBlockIdx();
 			message.absolute.Get(&absolute);

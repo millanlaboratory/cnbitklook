@@ -121,7 +121,7 @@ int main(int argc, char* argv[]) {
 			CcTime::Tic(&tic);
 		}
 		
-		CcTime::Sleep(2000.00f);
+		CcTime::Sleep(1000.00f);
 	}
 
 shutdown:

@@ -45,13 +45,13 @@ bool ClTobiIc::Attach(const CcPort port, const std::string& name) {
 	try { 
 		this->_server->Bind(endpoint);
 	} catch(CcException e) {
-		CcLogDebugS(this->_stream, "Cannot bind to port " << port);
+		CcLogErrorS(this->_stream, "Cannot bind to port " << port);
 		return false;
 	}
 
 	int status = ClLoop::nameserver.Set(this->_name, endpoint.GetAddress());
 	if(status != ClNamesLang::Successful) {
-		CcLogDebugS(this->_stream, "Cannot set " << name 
+		CcLogErrorS(this->_stream, "Cannot set " << name 
 				<< " as " << endpoint.GetAddress());
 		return false;
 	}
@@ -82,36 +82,34 @@ bool ClTobiIc::IsAttached(void) {
 	return this->_server->IsConnected();
 }
 
-bool ClTobiIc::WaitMessage(ICSerializerRapid* serializer) {
+int ClTobiIc::WaitMessage(ICSerializerRapid* serializer) {
 	if(this->IsAttached() == false)
-		return false;
+		return ClTobiIc::Detached;
 	if(this->_hasmessage.TryWait() == false)
-		return false;
+		return ClTobiIc::NoMessage;
 	return Deserialize(serializer);
 }
 
-bool ClTobiIc::GetMessage(ICSerializerRapid* serializer) {
+int ClTobiIc::GetMessage(ICSerializerRapid* serializer) {
 	if(this->IsAttached() == false)
-		return false;
+		return ClTobiIc::Detached;
 	this->_hasmessage.Wait();
+	if(this->IsAttached() == false)
+		return ClTobiIc::Detached;
 	return Deserialize(serializer);
 }
 
-bool ClTobiIc::Deserialize(ICSerializerRapid* serializer) {
-	if(this->IsAttached() == false)
-		return false;
-	
+int ClTobiIc::Deserialize(ICSerializerRapid* serializer) {
 	this->_sembuffer.Wait();
 	try {
 		serializer->Deserialize(&this->_buffer);
 		this->_buffer.clear();
 	} catch(TCException e) { 
-		CcLogExceptionS(this->_stream, "Caught TCException: " <<
-				e.GetCaller() << " - " << e.GetInfo());
-		CcLogException(_buffer);
+		this->_sembuffer.Post();
+		return ClTobiIc::NoMessage;
 	}
 	this->_sembuffer.Post();
-	return true;
+	return ClTobiIc::HasMessage;
 }
 
 void ClTobiIc::HandleRecv(CcSocket* caller) { 

@@ -35,14 +35,18 @@ class ClTobiIc : public CcSocketProxy {
 		virtual bool Attach(const CcPort port, const std::string& name);
 		virtual bool Detach(void);
 		virtual bool IsAttached(void);
-		virtual bool WaitMessage(ICSerializerRapid* serializer);
-		virtual bool GetMessage(ICSerializerRapid* serializer);
+		virtual int WaitMessage(ICSerializerRapid* serializer);
+		virtual int GetMessage(ICSerializerRapid* serializer);
 	protected:
-		virtual bool Deserialize(ICSerializerRapid* serializer);
+		virtual int Deserialize(ICSerializerRapid* serializer);
 		virtual void HandleAccept(CcSocket* caller);
 		virtual void HandleDrop(CcSocket* caller);
 		virtual void HandleRecv(CcSocket* caller);
 
+	public:
+		const static int Detached = -1;
+		const static int HasMessage = 1;
+		const static int NoMessage = 0;
 	protected:
 		CcServerSingle* _server;
 		std::string _name;
