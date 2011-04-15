@@ -56,17 +56,13 @@ AC_SEARCH_LIBS([ndf_init], [ndf], [], AC_MSG_ERROR([The libndf library must be i
 # Checks for header files.
 AC_CHECK_HEADERS([libcnbicore/CcCore.hpp], [], 
 				 AC_MSG_ERROR([The libcnbicore headers must be installed.]), [])
-AC_CHECK_HEADERS([libcnbiconfig/CCfgConfig.hpp], [], 
-				 AC_MSG_ERROR([The libcnbiconfig headers must be installed.]), [])
-AC_CHECK_HEADERS([libxmlconfig/XMLDocument.hpp], [], 
-				 AC_MSG_ERROR([The libxmlconfig headers must be installed.]), [])
 AC_CHECK_HEADERS([libtobicore/TCBlock.hpp], [], 
 				 AC_MSG_ERROR([The libtobicore headers must be installed.]), [])
 AC_CHECK_HEADERS([libtobiic/ICMessage.hpp], [], 
 				 AC_MSG_ERROR([The libtobiic headers must be installed.]), [])
 AC_CHECK_HEADERS([libtobiid/IDMessage.hpp], [], 
 				 AC_MSG_ERROR([The libtobiid headers must be installed.]), [])
-LIBS+="-lcnbicore -lcnbiconfig -lxmlconfig -ltobicore -ltobiic -ltobiid"
+LIBS+="-lcnbicore -ltobicore -ltobiic -ltobiid"
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_HEADER_STDBOOL
