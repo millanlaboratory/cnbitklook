@@ -62,10 +62,14 @@ int main(int argc, char* argv[]) {
 	filelog.append(".log");
 
 	int pid0, pid1;
-	if(ClLoop::processing.ForkAndCheck(&pid0) != ClProLang::Successful)
+	if(ClLoop::processing.ForkAndCheck(&pid0) != ClProLang::Successful) {
+		CcLogFatal("Cannot spawn PID0");
 		exit(2);
-	if(ClLoop::processing.ForkAndCheck(&pid1) != ClProLang::Successful)
+	}
+	if(ClLoop::processing.ForkAndCheck(&pid1) != ClProLang::Successful) {
+		CcLogFatal("Cannot spawn PID1");
 		exit(2);
+	}
 
 	ClLoop::nameserver.Erase("ndf_monitor::scope");
 	ClLoop::nameserver.Store("ndf_monitor::scope", optplot);

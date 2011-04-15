@@ -108,18 +108,18 @@ int main(int argc, char* argv[]) {
 	try {
 		handler.Register(&server);
 		server.Bind(optendpoint, 2);
-		if(nsclient.Connect() == false) {
-			CcLogFatal("Cannot connect to nameserver");
-			exit(2);
-		}
-		int nsstatus = nsclient.Set("/acquisition", server.GetLocal());
-		if(nsstatus != ClNamesLang::Successful) {
-			CcLogFatal("Cannot register with nameserver");
-			exit(3);
-		}
 	} catch(CcException e) {
-		e.DumpInfo();
+		CcLogFatal("Cannot bind socket");
 		exit(1);
+	}
+	if(nsclient.Connect() == false) {
+		CcLogFatal("Cannot connect to nameserver");
+		exit(2);
+	}
+	int nsstatus = nsclient.Set("/acquisition", server.GetLocal());
+	if(nsstatus != ClNamesLang::Successful) {
+		CcLogFatal("Cannot register with nameserver");
+		exit(3);
 	}
 	
 	// Register pipes on nameserver

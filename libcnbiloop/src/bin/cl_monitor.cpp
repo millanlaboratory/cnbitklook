@@ -63,7 +63,7 @@ int main(int argc, char* argv[]) {
 			reader.Open(-1);
 			CcTime::Tic(&tvOpen);
 		} catch(CcException e) {
-			CcLogFatal("Cannot open pipe for reading");
+			CcLogFatal("Cannot open pipe");
 			CcTime::Sleep(5000.00);
 			continue;
 		}
