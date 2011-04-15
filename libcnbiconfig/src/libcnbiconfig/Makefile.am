@@ -7,7 +7,11 @@ libcnbiconfig_include_HEADERS = CCfgConfig.hpp \
 								CCfgTask.hpp \
 								CCfgTaskset.hpp \
 								CCfgXMLConfig.hpp \
-								CCfgTypes.hpp
+								CCfgTypes.hpp \
+								Tools.hpp \
+								SmartType.hpp \
+								XMLDocument.hpp \
+								XMLException.hpp
 
 libcnbiconfig_la_SOURCES = CCfgConfig.cpp \
 						   CCfgConfig.hpp \
@@ -17,7 +21,15 @@ libcnbiconfig_la_SOURCES = CCfgConfig.cpp \
 						   CCfgTaskset.hpp \
 						   CCfgXMLConfig.cpp \
 						   CCfgXMLConfig.hpp \
-						   CCfgTypes.hpp
+						   CCfgTypes.hpp \
+						   Tools.hpp \
+						   Tools.cpp \
+						   SmartType.cpp \
+						   SmartType.hpp \
+						   XMLDocument.cpp \
+						   XMLDocument.hpp \
+						   XMLException.cpp \
+						   XMLException.hpp
 						   
 libcnbiconfig_la_LDFLAGS = $(AM_CFLAGS) \
 						 -version-info $(CURRENT):$(REVISION):$(AGE) \
