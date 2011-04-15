@@ -39,7 +39,7 @@ CcCore* CcCore::_instance = NULL;
 unsigned int CcCore::_refCount = 0;
 
 /* Declarations */
-std::string CcCore::_modulename;
+std::string CcCore::_modulename("unknown");
 CcLogger CcCore::logger;
 CcThreadSafe<bool> CcCore::receivedSIGAny(false);
 CcThreadSafe<bool> CcCore::receivedSIGINT(false);

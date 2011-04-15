@@ -41,7 +41,7 @@ int main(int argc, char* argv[]) {
 		}
 	}
 
-	CcCore::OpenLogger("clallclients");
+	CcCore::OpenLogger("cl_checkloop");
 	CcCore::CatchSIGINT();
 	CcCore::CatchSIGTERM();
 
