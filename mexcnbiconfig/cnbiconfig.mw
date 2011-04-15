@@ -18,7 +18,7 @@ $ #include <libtobiic/ICMessage.hpp>
 $ #include <libcnbiconfig/CCfgConfig.hpp>
 $ #include <libcnbiconfig/CCfgTask.hpp>
 $ #include <libcnbiconfig/CCfgTaskset.hpp>
-$ #include <libxmlconfig/XMLException.hpp>
+$ #include <libcnbiconfig/XMLException.hpp>
 $ #include <cstring>
 $ #include <iostream>
 $ #include <stdio.h>
