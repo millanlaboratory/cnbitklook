@@ -1,0 +1,16 @@
+#!/bin/bash
+# 2011-04-15  Michele Tavella <michele.tavella@epfl.ch>
+
+CHECK=`screen -ls | grep cnbitk | awk '{print $1}'`;
+
+if [ "z$CHECK" == "z" ]; then
+	echo "[cl_screenloop] Error: session not found";
+	cl_rpcnotify "CnbiTk ScreenLoop" "GNU Screen session not found";
+	exit 1;
+else
+	echo "[cl_attachloop] Session found: $CHECK";
+	cl_rpcnotify "CnbiTk ScreenLoop" "Attached to GNU Scren $CHECK"
+	screen -rd 
+fi
+
+exit 0;

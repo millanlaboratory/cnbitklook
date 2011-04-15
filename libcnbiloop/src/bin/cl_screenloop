@@ -1,0 +1,49 @@
+#!/bin/bash
+# 2011-04-15  Michele Tavella <michele.tavella@epfl.ch>
+
+if [ "z$1" == "z" ]; then
+	echo "[cl_screenloop] DEVICE";
+	exit 1;
+fi
+
+CHECK=`screen -ls | grep cnbitk | awk '{print $1}'`;
+
+if [ "z$CHECK" == "z" ]; then
+	echo "[cl_screenloop] Check passed";
+	cl_rpcnotify "CnbiTk ScreenLoop" "Connecting to $1"
+else
+	echo "[cl_screenloop] Error: a cnbitk screen is already attached: $CHECK";
+	cl_rpcnotify "CnbiTk ScreenLoop" "GNU Screen already attached: $CHECK";
+	exit 2;
+fi
+
+ACQUISITION="cl_acquisition -d $1";
+
+echo "[cl_screenloop] Starting screen session"
+screen -d -m -S cnbitk -t RPC bash
+sleep 2
+
+echo "[cl_screenloop] Attaching cl_nameserver"
+screen -S cnbitk -dr -X screen "cl_nameserver"
+sleep 2
+
+echo "[cl_screenloop] Attaching cl_processing"
+screen -S cnbitk -dr -X screen "cl_processing"
+sleep 2
+
+echo "[cl_screenloop] Attaching cl_acquisition"
+screen -S cnbitk -dr -X screen $ACQUISITION
+sleep 2
+
+echo "[cl_screenloop] Attaching cl_monitor"
+screen -S cnbitk -dr -X screen "cl_monitor -p /tmp/cl.pipe.ndf.5"
+sleep 2
+
+echo "[cl_screenloop] Attaching cl_tidmonitor"
+screen -S cnbitk -dr -X screen "cl_tidmonitor"
+
+
+CHECK=`screen -ls | grep cnbitk | awk '{print $1}'`;
+cl_rpcnotify "CnbiTk ScreenLoop" "GNU Screen attached: $CHECK";
+
+exit 0;
