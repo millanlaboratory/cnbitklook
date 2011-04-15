@@ -32,12 +32,13 @@ class ClTobiIc : public CcSocketProxy {
 	public:
 		ClTobiIc(void);
 		virtual ~ClTobiIc(void);
-		virtual bool Open(const CcPort port, const std::string& name);
-		virtual bool Close(void);
+		virtual bool Attach(const CcPort port, const std::string& name);
+		virtual bool Detach(void);
+		virtual bool IsAttached(void);
 		virtual bool WaitMessage(ICSerializerRapid* serializer);
 		virtual bool GetMessage(ICSerializerRapid* serializer);
 	protected:
-		virtual bool GetMessage(ICSerializerRapid* serializer, bool lock);
+		virtual bool Deserialize(ICSerializerRapid* serializer);
 		virtual void HandleAccept(CcSocket* caller);
 		virtual void HandleDrop(CcSocket* caller);
 		virtual void HandleRecv(CcSocket* caller);
@@ -49,7 +50,6 @@ class ClTobiIc : public CcSocketProxy {
 		CcSemaphore _sembuffer;
 		std::stringstream _stream;
 
-		CcThreadSafe<bool> _hasdropped;
 		CcSemaphore _hasmessage;
 };
 

@@ -34,9 +34,9 @@ int main(void) {
 	ClTobiIc ic;
 	while(true) { 
 		// Open iC
-		if(ic.Open("9500", "/feedback0") == false) {
+		if(ic.Attach("9500", "/feedback0") == false) {
 			CcLogFatal("Cannot open");
-			ic.Close();
+			ic.Detach();
 			return 1;
 		}
 
@@ -61,11 +61,11 @@ int main(void) {
 			std::cout<< message.GetBlockIdx() << std::endl;
 		}
 		CcLogFatal("Connection lost");
-		ic.Close();
+		ic.Detach();
 	}
 
 shutdown:
-	ic.Close();
+	ic.Detach();
 
 	return 0;
 }

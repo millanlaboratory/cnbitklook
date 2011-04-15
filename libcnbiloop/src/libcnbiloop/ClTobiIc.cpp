@@ -28,7 +28,7 @@ ClTobiIc::ClTobiIc(void) {
 ClTobiIc::~ClTobiIc(void) {
 }
 		
-bool ClTobiIc::Open(const CcPort port, const std::string& name) {
+bool ClTobiIc::Attach(const CcPort port, const std::string& name) {
 	if(this->_server != NULL)
 		return false;
 	
@@ -60,13 +60,12 @@ bool ClTobiIc::Open(const CcPort port, const std::string& name) {
 	CB_CcSocket(this->_server->iOnDrop, this, HandleDrop);
 	CB_CcSocket(this->_server->iOnRecv, this, HandleRecv);
 	
-	this->_hasdropped.Set(false);
 	this->_hasmessage.Wait();
 
 	return true;
 }
 		
-bool ClTobiIc::Close(void) {
+bool ClTobiIc::Detach(void) {
 	if(this->_server == NULL)
 		return true;
 
@@ -79,26 +78,28 @@ bool ClTobiIc::Close(void) {
 	return true;
 }
 
+bool ClTobiIc::IsAttached(void) {
+	return this->_server->IsConnected();
+}
+
 bool ClTobiIc::WaitMessage(ICSerializerRapid* serializer) {
-	return GetMessage(serializer, false);
+	if(this->IsAttached() == false)
+		return false;
+	if(this->_hasmessage.TryWait() == false)
+		return false;
+	return Deserialize(serializer);
 }
 
 bool ClTobiIc::GetMessage(ICSerializerRapid* serializer) {
-	return GetMessage(serializer, true);
+	if(this->IsAttached() == false)
+		return false;
+	this->_hasmessage.Wait();
+	return Deserialize(serializer);
 }
 
-bool ClTobiIc::GetMessage(ICSerializerRapid* serializer, bool lock) {
-	if(this->_hasdropped.Get() == true)
+bool ClTobiIc::Deserialize(ICSerializerRapid* serializer) {
+	if(this->IsAttached() == false)
 		return false;
-
-	if(lock == false) {
-		if(this->_hasmessage.TryWait() == false)
-			return false;
-	} else {
-		this->_hasmessage.Wait();
-		if(this->_hasdropped.Get() == true)
-			return false;
-	}
 	
 	this->_sembuffer.Wait();
 	try {
@@ -133,7 +134,6 @@ void ClTobiIc::HandleDrop(CcSocket* caller) {
 	CcServerSingle *server = (CcServerSingle*)caller;
 	CcLogDebugS(this->_stream, "Dropped TCP endpoint: " << 
 			server->GetRemote());
-	this->_hasdropped.Set(true);
 	this->_hasmessage.Post();
 }
 
