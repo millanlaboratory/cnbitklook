@@ -61,35 +61,32 @@ int main(int argc, char* argv[]) {
 	try { 
 		handler.Register(&server);
 		server.Bind(optendpoint, 2);
-		if(nsclient.Connect() == false) {
-			CcLogFatal("Cannot connect to nameserver");
-			exit(2);
-		}
-		int nsstatus = nsclient.Set("/processing", server.GetLocal());
-		if(nsstatus != ClNamesLang::Successful) {
-			CcLogFatal("Cannot register with nameserver");
-			exit(3);
-		}
-		while(true) {
-			if(nsclient.Connect() == false)  {
-				CcLogFatal("Lost connection with nameserver");
-				break;
-			}
-			if(CcCore::receivedSIGINT.Get()) 
-				break;
-			if(CcCore::receivedSIGTERM.Get()) 
-				break;
-			CcTime::Sleep(2000);
-		}
-		nsclient.Unset("/processing");
-		server.Release();
-		server.Join();
 	} catch(CcException e) {
-		e.DumpInfo();
+		CcLogFatal("Cannot bind socket");
 		exit(1);
 	}
+	if(nsclient.Connect() == false) {
+		CcLogFatal("Cannot connect to nameserver");
+		exit(2);
+	}
+	int nsstatus = nsclient.Set("/processing", server.GetLocal());
+	if(nsstatus != ClNamesLang::Successful) {
+		CcLogFatal("Cannot register with nameserver");
+		exit(3);
+	}
+	while(true) {
+		if(nsclient.Connect() == false)  {
+			CcLogFatal("Lost connection with nameserver");
+			break;
+		}
+		if(CcCore::receivedSIGINT.Get()) 
+			break;
+		if(CcCore::receivedSIGTERM.Get()) 
+			break;
+		CcTime::Sleep(2000);
+	}
+	nsclient.Unset("/processing");
 	server.Release();
-	server.Join();
 
 	return 0;
 }

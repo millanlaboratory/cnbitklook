@@ -34,8 +34,14 @@ try
 	[loop.cl, pipename, addressD, addressC] = ...
 		ndf_cl(pipename, addressD, addressC);	
 	
+	% -------------------------------------------------------------- %
+	% User initialization                                            %
+	% -------------------------------------------------------------- %
 	optplot = cl_retrieve(loop.cl, 'ndf_monitor::scope');
 	optplot = strcmp(optplot, 'true');
+	% -------------------------------------------------------------- %
+	% /User initialization                                           %
+	% -------------------------------------------------------------- %
 
 	% Prepare NDF srtructure
 	ndf.conf  = {};
@@ -44,7 +50,10 @@ try
 	ndf.sink  = ndf_sink(pipename);
 	% Prepare TOBI structure
 	tobi      = ndf_tobi(addressD, addressC);
-
+		
+	% -------------------------------------------------------------- %
+	% User TOBI configuration                                        %
+	% -------------------------------------------------------------- %
 	% Configure TiD message
 	idmessage_setdescription(tobi.iD.message, 'ndf_monitor');
 	idmessage_setfamilytype(tobi.iD.message, idmessage_familytype('biosig'));
@@ -60,6 +69,9 @@ try
 		'ndf_monitor', ... 
 		'frame', ...
 		781);
+	% -------------------------------------------------------------- %
+	% /User TOBI configuration                                       %
+	% -------------------------------------------------------------- %
 	
 	% Pipe opening and NDF configurationf
 	% - Here the pipe is opened
@@ -110,6 +122,9 @@ try
 		buffer.exg = ndf_add2buffer(buffer.exg, ndf.frame.exg);
 		buffer.tri = ndf_add2buffer(buffer.tri, ndf.frame.tri);
 
+		% -------------------------------------------------------------- %
+		% User main loop                                                 %
+		% -------------------------------------------------------------- %
 		if(optplot == true)
 			eegc3_figure(1);
 			subplot(7, 1, 1:4)
@@ -156,6 +171,9 @@ try
 				'ndf_monitor', 'frame', ndf.frame.index);
 			ndf_tobi_sendc(tobi, ndf.frame.index);
 		end
+		% -------------------------------------------------------------- %
+		% /User main loop                                                %
+		% -------------------------------------------------------------- %
 
 		% Check if module is running slow
 		loop.jump = ndf_jump_update(loop.jump, ndf.frame.index);
