@@ -11,14 +11,11 @@ bin_PROGRAMS = cl_processing \
 			   cl_tidmonitor \
 			   cl_ticmonitor \
 			   cl_checkloop \
-			   cl_rpc
-#cl_acquisition
+			   cl_rpc \
+			   cl_acquisition
 
-#cl_acquisition_SOURCES = cl_acquisition.cpp ClAcqAsServer.cpp
-#cl_acquisition_la_LDADD = -lcnbiacq
-#cl_acquisition_include_HEADERS = ClAcqAsServer.cpp
-#cl_acquisition_includedir = $(includedir)/bin/
-
+cl_acquisition_SOURCES = cl_acquisition.cpp ClAcqAsServer.cpp
+cl_acquisition_LDFLAGS = -lcnbiacq
 cl_processing_SOURCES = cl_processing.cpp ClProAsServer.cpp
 cl_nameserver_SOURCES = cl_nameserver.cpp ClNamesAsServer.cpp
 cl_monitor_SOURCES = cl_monitor.cpp
