@@ -18,8 +18,9 @@
 
 #include "ClAcqAsServer.hpp" 
 #include "ClAcqLang.hpp"
-#include "ClWriter.hpp"
 #include "ClNamesClient.hpp"
+#include <libcnbiacq/CaWriter.hpp>
+#include <libcnbiacq/CaDevice.hpp>
 #include <libcnbicore/CcBasic.hpp>
 #include <libcnbicore/CcPipeServer.hpp>
 #include <libcnbicore/CcServerMulti.hpp>
@@ -73,7 +74,7 @@ int main(int argc, char* argv[]) {
 	CcSemaphore semframe;
 	
 	// Open, Setup and Start EGD device
-	ClDevice eegdev;
+	CaDevice eegdev;
 	if(eegdev.Open(optdevice) == false) {
 		CcLogFatal("Cannot open EGD device");
 		exit(2);
@@ -93,7 +94,7 @@ int main(int argc, char* argv[]) {
 	std::string tmpfn;
 	CcTime::Timestamp(&tmpfn);
 	tmpfn.append(".bdf");
-	ClWriter writer(&eegdev);
+	CaWriter writer(&eegdev);
 
 	// Setup CcPipeServer
 	CcPipeServer* pipes;

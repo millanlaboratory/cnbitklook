@@ -5,18 +5,22 @@ dist_bin_SCRIPTS = cl_rpcnotify \
 				   cl_screenloop \
 				   cl_attachloop
 
-bin_PROGRAMS = cl_acquisition \
-			   cl_processing \
+bin_PROGRAMS = cl_processing \
 			   cl_monitor \
 			   cl_nameserver \
 			   cl_tidmonitor \
 			   cl_ticmonitor \
 			   cl_checkloop \
 			   cl_rpc
+#cl_acquisition
 
-cl_acquisition_SOURCES = cl_acquisition.cpp
-cl_nameserver_SOURCES = cl_nameserver.cpp
-cl_processing_SOURCES = cl_processing.cpp
+#cl_acquisition_SOURCES = cl_acquisition.cpp ClAcqAsServer.cpp
+#cl_acquisition_la_LDADD = -lcnbiacq
+#cl_acquisition_include_HEADERS = ClAcqAsServer.cpp
+#cl_acquisition_includedir = $(includedir)/bin/
+
+cl_processing_SOURCES = cl_processing.cpp ClProAsServer.cpp
+cl_nameserver_SOURCES = cl_nameserver.cpp ClNamesAsServer.cpp
 cl_monitor_SOURCES = cl_monitor.cpp
 cl_tidmonitor_SOURCES = cl_tidmonitor.cpp
 cl_ticmonitor_SOURCES = cl_ticmonitor.cpp

@@ -8,9 +8,6 @@ libcnbiloop_include_HEADERS = ClMatlab.hpp \
 							  ClAcqLang.hpp \
 							  ClProLang.hpp \
 							  ClNamesLang.hpp \
-							  ClAcqAsServer.hpp \
-							  ClProAsServer.hpp \
-							  ClNamesAsServer.hpp \
 							  ClAcqClient.hpp \
 							  ClNamesClient.hpp \
 							  ClProClient.hpp \
@@ -29,12 +26,6 @@ libcnbiloop_la_SOURCES = ClMatlab.cpp \
 						 ClProLang.hpp \
 						 ClNamesLang.cpp \
 						 ClNamesLang.hpp \
-						 ClAcqAsServer.hpp \
-						 ClAcqAsServer.cpp \
-						 ClProAsServer.hpp \
-						 ClProAsServer.cpp \
-						 ClNamesAsServer.hpp \
-						 ClNamesAsServer.cpp \
 						 ClNamesClient.hpp \
 						 ClNamesClient.cpp \
 						 ClAcqClient.hpp \
