@@ -107,8 +107,6 @@ void CcLogger::DumpEntry(CcLogEntry* entry) {
 		return;
 	}
 
-// \033[1;34m[%s]\033[0m
-// \033[1;37m%s 
 	else if(this->_termtype == CcCore::TerminalColors) {
 		switch(entry->_level) {
 			case CcCore::LevelConfig:
