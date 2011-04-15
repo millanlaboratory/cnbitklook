@@ -56,6 +56,8 @@ AC_SEARCH_LIBS([ndf_init], [ndf], [], AC_MSG_ERROR([The libndf library must be i
 # Checks for header files.
 AC_CHECK_HEADERS([libcnbicore/CcCore.hpp], [], 
 				 AC_MSG_ERROR([The libcnbicore headers must be installed.]), [])
+AC_CHECK_HEADERS([libcnbiacq/CaDevice.hpp], [], 
+				 AC_MSG_ERROR([The libcnbiacq headers must be installed.]), [])
 AC_CHECK_HEADERS([libtobicore/TCBlock.hpp], [], 
 				 AC_MSG_ERROR([The libtobicore headers must be installed.]), [])
 AC_CHECK_HEADERS([libtobiic/ICMessage.hpp], [], 

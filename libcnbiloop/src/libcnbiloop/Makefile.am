@@ -3,13 +3,11 @@
 lib_LTLIBRARIES = libcnbiloop.la
 
 libcnbiloop_includedir=$(includedir)/libcnbiloop
-libcnbiloop_include_HEADERS = ClDevice.hpp \
-							  ClMatlab.hpp \
+libcnbiloop_include_HEADERS = ClMatlab.hpp \
 							  ClLanguage.hpp \
 							  ClAcqLang.hpp \
 							  ClProLang.hpp \
 							  ClNamesLang.hpp \
-							  ClWriter.hpp \
 							  ClAcqAsServer.hpp \
 							  ClProAsServer.hpp \
 							  ClNamesAsServer.hpp \
@@ -21,9 +19,7 @@ libcnbiloop_include_HEADERS = ClDevice.hpp \
 							  ClTobiIc.hpp \
 							  ClTobiId.hpp
 
-libcnbiloop_la_SOURCES = ClDevice.cpp \
-						 ClDevice.hpp \
-						 ClMatlab.cpp \
+libcnbiloop_la_SOURCES = ClMatlab.cpp \
 						 ClMatlab.hpp \
 						 ClLanguage.cpp \
 						 ClLanguage.hpp \
@@ -33,8 +29,6 @@ libcnbiloop_la_SOURCES = ClDevice.cpp \
 						 ClProLang.hpp \
 						 ClNamesLang.cpp \
 						 ClNamesLang.hpp \
-						 ClWriter.hpp \
-						 ClWriter.cpp \
 						 ClAcqAsServer.hpp \
 						 ClAcqAsServer.cpp \
 						 ClProAsServer.hpp \
