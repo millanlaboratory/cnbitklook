@@ -47,8 +47,6 @@ LT_INIT([win32-dll])
 AC_LANG([C++])
 
 # Checks for libraries.
-AC_SEARCH_LIBS([xdf_write], [xdffileio], [], AC_MSG_ERROR([The xdfio library must be installed.]))
-AC_SEARCH_LIBS([egd_open], [eegdev], [], AC_MSG_ERROR([The eegdev library must be installed.]))
 AC_SEARCH_LIBS([tr_init_socket], [transport], [], AC_MSG_ERROR([The libtransport library must be installed.]))
 AC_SEARCH_LIBS([tp_init], [transpipe], [], AC_MSG_ERROR([The libtranspipe library must be installed.]))
 AC_SEARCH_LIBS([ndf_init], [ndf], [], AC_MSG_ERROR([The libndf library must be installed.]))
