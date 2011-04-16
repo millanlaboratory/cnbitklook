@@ -23,13 +23,40 @@ $ #include <cstring>
 $ #include <iostream>
 $ #include <stdio.h>
 
-@function [cptr] = ccfg_new(filename);
-	$ CCfgConfig* new_config(std::string* filename) {
-	$ 	CCfgConfig* config = new CCfgConfig(*filename);
+@function [cptr] = ccfg_new();
+	$ CCfgConfig* new_config(void) {
+	$ 	CCfgConfig* config = new CCfgConfig();
 	$ 	return config;
 	$ }
+	# CCfgConfig *cptr = new_config();
+
+@function [cptr] = ccfg_importfile(cptr, filename);
+	$ CCfgConfig* importfile(CCfgConfig* config, std::string* filename) {
+	$	try {
+	$		config->ImportFileEx(*filename);
+	$ 		return config;
+	$	} catch(XMLException e) {
+	$		printf("[ccfg_offline] Exception in libcnbiconfig: %s, %s\n",
+	$			e.Caller().c_str(), e.Info().c_str());
+	$		return NULL;
+	$	}
+	$ }
 	# std::string* sfilename = new std::string(cstring filename);
-	# CCfgConfig *cptr = new_config(std::string* sfilename);
+	# CCfgConfig *cptr = importfile(CCfgConfig* cptr, std::string* sfilename);
+
+@function [cptr] = ccfg_importbuffer(cptr, filename);
+	$ CCfgConfig* importbuffer(CCfgConfig* config, std::string* filename) {
+	$	try {
+	$		config->ImportBufferEx(*filename);
+	$ 		return config;
+	$	} catch(XMLException e) {
+	$		printf("[ccfg_offline] Exception in libcnbiconfig: %s, %s\n",
+	$			e.Caller().c_str(), e.Info().c_str());
+	$		return NULL;
+	$	}
+	$ }
+	# std::string* sfilename = new std::string(cstring filename);
+	# CCfgConfig *cptr = importfile(CCfgConfig* cptr, std::string* sfilename);
 
 @function [cptr] = ccfg_delete(cptr)
 	# delete(CCfgConfig* cptr);
@@ -43,7 +70,7 @@ $ #include <stdio.h>
 @function [retval, cptr] = ccfg_offline(cptr, blockname, taskset)
 	$ CCfgTaskset* offline(CCfgConfig* cptr, std::string* blockname, std::string* taskset) {
 	$	try {
-	$ 		return cptr->Offline(*blockname, *taskset);
+	$ 		return cptr->OfflineEx(*blockname, *taskset);
 	$	} catch(XMLException e) {
 	$		printf("[ccfg_offline] Exception in libcnbiconfig: %s, %s\n",
 	$			e.Caller().c_str(), e.Info().c_str());
@@ -57,7 +84,7 @@ $ #include <stdio.h>
 @function [t, cptr] = ccfg_online(cptr, blockname, taskset)
 	$ CCfgTaskset* online(CCfgConfig* cptr, std::string* blockname, std::string* taskset) {
 	$	try {
-	$ 		return cptr->Online(*blockname, *taskset);
+	$ 		return cptr->OnlineEx(*blockname, *taskset);
 	$	} catch(XMLException e) {
 	$		printf("[ccfg_online] Exception in libcnbiconfig: %s, %s\n",
 	$			e.Caller().c_str(), e.Info().c_str());
@@ -71,7 +98,7 @@ $ #include <stdio.h>
 @function [t, cptr] = ccfg_onlinem(cptr, blockname, taskset, message)
 	$ CCfgTaskset* onlinem(CCfgConfig* cptr, std::string* blockname, std::string* taskset, ICMessage* message) {
 	$	try {
-	$ 		return cptr->Online(*blockname, *taskset, message);
+	$ 		return cptr->OnlineEx(*blockname, *taskset, message);
 	$	} catch(XMLException e) {
 	$		printf("[ccfg_onlinem] Exception in libcnbiconfig: %s, %s\n",
 	$			e.Caller().c_str(), e.Info().c_str());
@@ -85,7 +112,7 @@ $ #include <stdio.h>
 @function [cptr] = ccfg_root(cptr)
 	$ void root(CCfgConfig* cptr) {
 	$	try {
-	$ 		cptr->Root();
+	$ 		cptr->RootEx();
 	$	} catch(XMLException e) {
 	$		printf("[ccfg_root] Exception in libcnbiconfig: %s, %s\n",
 	$			e.Caller().c_str(), e.Info().c_str());
@@ -96,7 +123,7 @@ $ #include <stdio.h>
 @function [cptr] = ccfg_branch(cptr)
 	$ void branch(CCfgConfig* cptr) {
 	$	try {
-	$ 		cptr->Branch();
+	$ 		cptr->BranchEx();
 	$	} catch(XMLException e) {
 	$		printf("[ccfg_branch] Exception in libcnbiconfig: %s, %s\n",
 	$			e.Caller().c_str(), e.Info().c_str());
@@ -118,7 +145,7 @@ $ #include <stdio.h>
 @function [retval, cptr] = ccfg_quickstring(cptr, path)
 	$ void quickstring(CCfgConfig* cptr, std::string* path, char* buffer) {
 	$	try {
-	$ 		std::string result = cptr->QuickString(*path);
+	$ 		std::string result = cptr->QuickStringEx(*path);
 	$ 		strcpy(buffer, result.c_str());
 	$	} catch(XMLException e) {
 	$		printf("[ccfg_quickstring] Exception in libcnbiconfig: %s, %s\n",
@@ -133,7 +160,7 @@ $ #include <stdio.h>
 @function [retval, cptr] = ccfg_quickbool(cptr, path)
 	$ bool quickbool(CCfgConfig* cptr, std::string* path) {
 	$	try {
-	$ 		return cptr->QuickBool(*path);
+	$ 		return cptr->QuickBoolEx(*path);
 	$	} catch(XMLException e) {
 	$		printf("[ccfg_quickbool] Exception in libcnbiconfig: %s, %s\n",
 	$			e.Caller().c_str(), e.Info().c_str());
@@ -146,7 +173,7 @@ $ #include <stdio.h>
 @function [retval, cptr] = ccfg_quickfloat(cptr, path)
 	$ float quickfloat(CCfgConfig* cptr, std::string* path) {
 	$	try {
-	$ 		return cptr->QuickFloat(*path);
+	$ 		return cptr->QuickFloatEx(*path);
 	$	} catch(XMLException e) {
 	$		printf("[ccfg_quickfloat] Exception in libcnbiconfig: %s, %s\n",
 	$			e.Caller().c_str(), e.Info().c_str());
@@ -159,7 +186,7 @@ $ #include <stdio.h>
 @function [retval, cptr] = ccfg_quickint(cptr, path)
 	$ int quickint(CCfgConfig* cptr, std::string* path) {
 	$	try {
-	$ 		return cptr->QuickInt(*path);
+	$ 		return cptr->QuickIntEx(*path);
 	$	} catch(XMLException e) {
 	$		printf("[ccfg_quickint] Exception in libcnbiconfig: %s, %s\n",
 	$			e.Caller().c_str(), e.Info().c_str());
@@ -172,7 +199,7 @@ $ #include <stdio.h>
 @function [retval, cptr] = ccfg_quickuint(cptr, path)
 	$ int quickuint(CCfgConfig* cptr, std::string* path) {
 	$	try {
-	$ 		return cptr->QuickUInt(*path);
+	$ 		return cptr->QuickUIntEx(*path);
 	$	} catch(XMLException e) {
 	$		printf("[ccfg_quickuint] Exception in libcnbiconfig: %s, %s\n",
 	$			e.Caller().c_str(), e.Info().c_str());
@@ -196,7 +223,7 @@ $ #include <stdio.h>
 @function [kptr, tptr] = ccfgtaskset_gettask(tptr, what)
 	$ CCfgTask* gettask(CCfgTaskset* tptr, std::string* what) {
 	$	try {
-	$ 		return tptr->Get(*what);
+	$ 		return tptr->GetEx(*what);
 	$	} catch(XMLException e) {
 	$		printf("[ccfgtaskset_gettask] Exception in libcnbiconfig: %s, %s\n",
 	$			e.Caller().c_str(), e.Info().c_str());
@@ -209,7 +236,7 @@ $ #include <stdio.h>
 @function [kptr, tptr] = ccfgtaskset_gettaskbyid(tptr, id)
 	$ CCfgTask* gettaskbyid(CCfgTaskset* tptr, unsigned int id) {
 	$	try {
-	$ 		return tptr->Get(id);
+	$ 		return tptr->GetEx(id);
 	$	} catch(XMLException e) {
 	$		printf("[ccfgtaskset_gettaskbyid] Exception in libcnbiconfig: %s, %s\n",
 	$			e.Caller().c_str(), e.Info().c_str());

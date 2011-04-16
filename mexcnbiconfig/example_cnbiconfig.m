@@ -17,7 +17,8 @@
 clear all;
 addpath('../mextobiic');
 
-config = ccfg_new('../libcnbiconfig/extra/example.xml');
+config = ccfg_new();
+ccfg_importfile(config, '../libcnbiconfig/extra/example.xml');
 
 ccfg_root(config);
 ccfg_setbranch(config);
@@ -43,14 +44,14 @@ mOnlineErrP = icmessage_new();
 sOnlineMI = icserializerrapid_new(mOnlineMI);
 sOnlineErrP = icserializerrapid_new(mOnlineErrP);
 
-[tOnlineMI, config] = ccfg_onlinem(config, 'task1', 'mi_rhlh', ...
+[tOnlineMI, config] = ccfg_onlinem(config, 'smr', 'mi_rhlh', ...
 	mOnlineMI);
 if(tOnlineMI == 0)
 	fprintf(1, 'Not found\n');
 	return;
 end
 
-[tOnlineErrP, config] = ccfg_onlinem(config, 'task1', 'errp', ...
+[tOnlineErrP, config] = ccfg_onlinem(config, 'smrerrp', 'errp', ...
 	mOnlineErrP);
 if(tOnlineMI == 0)
 	fprintf(1, 'Not found\n');
@@ -87,18 +88,18 @@ if(ccfgtaskset_gettask(tOnlineMI, 'blah'))
 	taskC = ccfgtaskset_hastask(tOnlineMI, 'blah')
 end
 
-messageMI = icmessage_serialize(mOnlineMI, sOnlineMI);
-messageErrP = icmessage_serialize(mOnlineErrP, sOnlineErrP);
+messageMI = icmessage_serialize(sOnlineMI);
+messageErrP = icmessage_serialize(sOnlineErrP);
 fprintf(1, 'ICMessage for MI: %s\n', messageMI);
 fprintf(1, 'ICMessage for ErrP: %s\n', messageErrP);
 	
 mOnlineAll = icmessage_new();
 sOnlineAll = icserializerrapid_new(mOnlineAll);
-[tOnlineMI2, config] = ccfg_onlinem(config, 'task1', 'mi_rhlh', ...
+[tOnlineMI2, config] = ccfg_onlinem(config, 'smr', 'mi_rhlh', ...
 	mOnlineAll);
-[tOnlineErrP, config] = ccfg_onlinem(config, 'task1', 'errp', ...
+[tOnlineErrP, config] = ccfg_onlinem(config, 'smrerrp', 'errp', ...
 	mOnlineAll);
-messageAll = icmessage_serialize(mOnlineAll, sOnlineAll);
+messageAll = icmessage_serialize(sOnlineAll);
 fprintf(1, 'ICMessage for MI+ErrP: %s\n', messageAll);
 
 icmessage_delete(mOnlineAll);

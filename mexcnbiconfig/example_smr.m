@@ -17,7 +17,8 @@
 clear all;
 addpath('../mextobiic');
 
-config = ccfg_new('../libcnbiconfig/extra/example.xml');
+config = ccfg_new();
+ccfg_importfile(config, '../libcnbiconfig/extra/example.xml');
 
 % Allocate ICMessage and ICSerializerRapid wrappers
 ic.message = icmessage_new();
@@ -45,7 +46,7 @@ for i = 1:1000
 		icmessage_setvalue(ic.message, ic.classifier, labels{t}, cprobs(t));
 		icmessage_setvalue(ic.message, ic.classifier, labels{t}, cprobs(t));
 	end
-	buffer = icmessage_serialize(ic.message, ic.serializer);
+	buffer = icmessage_serialize(ic.serializer);
 	fprintf(1, 'It %d: %s\n', i, buffer);
 	%icmessage_dumpmessage(ic.message);
 end
