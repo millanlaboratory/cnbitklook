@@ -23,8 +23,8 @@
 #include "CCfgTask.hpp"
 
 typedef std::map<std::string, CCfgTask*> CCfgTasksetMap;
-typedef CCfgTasksetMap::iterator CCfgTasksetIter;
-typedef CCfgTasksetMap::const_iterator	CCfgTasksetConstIter;
+typedef CCfgTasksetMap::iterator CCfgTasksetIt;
+typedef CCfgTasksetMap::const_iterator	CCfgTasksetConstIt;
 
 /*! \brief The taskset is a map of CCfgTask objects sorted by the GDFEvent
  * 
@@ -33,21 +33,23 @@ typedef CCfgTasksetMap::const_iterator	CCfgTasksetConstIter;
  */
 class CCfgTaskset {
 	public: 
-		virtual CCfgTask* Add(CCfgTask* task);
-		virtual CCfgTask* RemoveEx(std::string name);
-		virtual CCfgTask* GetEx(std::string name);
-		virtual CCfgTask* GetEx(unsigned int id);
-		virtual bool Has(std::string name);
+		CCfgTaskset(const std::string& name);
+		virtual CCfgTask* AddTask(CCfgTask* task);
+		virtual CCfgTask* RemoveTaskEx(const std::string& name);
+		virtual CCfgTask* GetTaskEx(const std::string& name);
+		virtual CCfgTask* GetTaskEx(unsigned int id);
+		virtual bool HasTask(std::string name);
 		virtual unsigned int Count(void);
 		virtual void Clear(void);
 
-		CCfgTasksetIter Begin(void);
-		CCfgTasksetIter End(void);
-		CCfgTasksetConstIter Begin(void) const;
-		CCfgTasksetConstIter End(void) const;
+		CCfgTasksetIt Begin(void);
+		CCfgTasksetIt End(void);
+		CCfgTasksetConstIt Begin(void) const;
+		CCfgTasksetConstIt End(void) const;
 
 	public:
 		CCfgTasksetMap tasks;
+		std::string name;
 		std::string description;
 		std::string classifier;
 };

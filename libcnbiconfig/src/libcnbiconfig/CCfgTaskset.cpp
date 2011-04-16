@@ -20,8 +20,15 @@
 #include "XMLException.hpp"
 #include "XMLTools.hpp"
 		
-CCfgTask* CCfgTaskset::Add(CCfgTask* task) {
-	CCfgTasksetIter it = this->tasks.find(task->name);
+		
+CCfgTaskset::CCfgTaskset(const std::string& name) {
+	this->name.assign(name);
+	this->description.assign("unknown");
+	this->classifier.assign("unknown");
+}
+
+CCfgTask* CCfgTaskset::AddTask(CCfgTask* task) {
+	CCfgTasksetIt it = this->tasks.find(task->name);
 	if(it != this->tasks.end())
 		return NULL;
 
@@ -29,8 +36,8 @@ CCfgTask* CCfgTaskset::Add(CCfgTask* task) {
 	return task;
 }
 
-CCfgTask* CCfgTaskset::RemoveEx(std::string name) {
-	CCfgTasksetIter it = this->tasks.find(name);
+CCfgTask* CCfgTaskset::RemoveTaskEx(const std::string& name) {
+	CCfgTasksetIt it = this->tasks.find(name);
 	if(it == this->tasks.end()) {
 		std::string info;
 		info.append("CCfgTask not found: ");
@@ -43,8 +50,8 @@ CCfgTask* CCfgTaskset::RemoveEx(std::string name) {
 	return retval;
 }
 
-CCfgTask* CCfgTaskset::GetEx(std::string name) {
-	CCfgTasksetIter it = this->tasks.find(name);
+CCfgTask* CCfgTaskset::GetTaskEx(const std::string& name) {
+	CCfgTasksetIt it = this->tasks.find(name);
 	if(it == this->tasks.end()) {
 		std::string info;
 		info.append("CCfgTask not found: ");
@@ -56,9 +63,8 @@ CCfgTask* CCfgTaskset::GetEx(std::string name) {
 	return retval;
 }
 
-#include <iostream>
-CCfgTask* CCfgTaskset::GetEx(unsigned int id) {
-	CCfgTasksetIter it;
+CCfgTask* CCfgTaskset::GetTaskEx(unsigned int id) {
+	CCfgTasksetIt it;
 	for(it = this->tasks.begin(); it != this->tasks.end(); it++) {
 		if((*it).second->id == id)
 			return (*it).second;
@@ -69,8 +75,8 @@ CCfgTask* CCfgTaskset::GetEx(unsigned int id) {
 	throw XMLException(info, __PRETTY_FUNCTION__);
 }
 
-bool CCfgTaskset::Has(std::string name) {
-	CCfgTasksetIter it = this->tasks.find(name);
+bool CCfgTaskset::HasTask(std::string name) {
+	CCfgTasksetIt it = this->tasks.find(name);
 	return(it != this->tasks.end());
 }
 		
@@ -83,22 +89,22 @@ void CCfgTaskset::Clear(void) {
 	this->description.assign("");
 }
 
-CCfgTasksetIter CCfgTaskset::Begin(void) {
-	CCfgTasksetIter it = this->tasks.begin();
+CCfgTasksetIt CCfgTaskset::Begin(void) {
+	CCfgTasksetIt it = this->tasks.begin();
 	return it;
 }
 
-CCfgTasksetIter CCfgTaskset::End(void) {
-	CCfgTasksetIter it = this->tasks.end();
+CCfgTasksetIt CCfgTaskset::End(void) {
+	CCfgTasksetIt it = this->tasks.end();
 	return it;
 }
 
-CCfgTasksetConstIter CCfgTaskset::Begin(void) const {
-	CCfgTasksetConstIter it = this->tasks.begin();
+CCfgTasksetConstIt CCfgTaskset::Begin(void) const {
+	CCfgTasksetConstIt it = this->tasks.begin();
 	return it;
 }
 
-CCfgTasksetConstIter CCfgTaskset::End(void) const {
-	CCfgTasksetConstIter it = this->tasks.end();
+CCfgTasksetConstIt CCfgTaskset::End(void) const {
+	CCfgTasksetConstIt it = this->tasks.end();
 	return it;
 }

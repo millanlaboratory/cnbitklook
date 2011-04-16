@@ -52,3 +52,28 @@ void CCfgTask::Dump(void) {
 		printf(", ");
 	}
 }
+
+CCfgTaskConfigIt CCfgTask::Begin(void) {
+	CCfgTaskConfigIt it = this->config.begin();
+	return it;
+}
+
+CCfgTaskConfigIt CCfgTask::End(void) {
+	CCfgTaskConfigIt it = this->config.end();
+	return it;
+}
+
+CCfgTaskConfigConstIt CCfgTask::Begin(void) const {
+	CCfgTaskConfigConstIt it = this->config.begin();
+	return it;
+}
+
+CCfgTaskConfigConstIt CCfgTask::End(void) const {
+	CCfgTaskConfigConstIt it = this->config.end();
+	return it;
+}
+		
+bool CCfgTask::HasConfig(const std::string& name) {
+	CCfgTaskConfigConstIt it = this->config.find(name);
+	return(it != CCfgTask::End());
+}

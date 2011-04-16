@@ -26,6 +26,7 @@
 
 typedef std::map<std::string, XMLType> CCfgTaskConfig;
 typedef std::map<std::string, XMLType>::iterator CCfgTaskConfigIt;
+typedef std::map<std::string, XMLType>::const_iterator CCfgTaskConfigConstIt;
 
 /*! \brief Definition of a Task according to the CNBI XML definitions
  *
@@ -40,6 +41,12 @@ class CCfgTask {
 		CCfgTask(void);
 		//! \brief Dumps the public methods to stdo
 		void Dump(void);
+		bool HasConfig(const std::string& name);
+		
+		CCfgTaskConfigIt Begin(void);
+		CCfgTaskConfigIt End(void);
+		CCfgTaskConfigConstIt Begin(void) const;
+		CCfgTaskConfigConstIt End(void) const;
 
 	public:
 		//! \brief Task name (i.e. mi_hand_right)

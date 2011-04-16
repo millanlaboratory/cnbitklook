@@ -33,6 +33,7 @@ bool CCfgConfig::Validate(void) {
 		CCfgXMLConfig::RootEx()->GoEx("parameters");
 		CCfgXMLConfig::RootEx()->GoEx("subject");
 		CCfgXMLConfig::RootEx()->GoEx("tasks");
+		CCfgXMLConfig::RootEx()->GoEx("events");
 		CCfgXMLConfig::RootEx()->GoEx("taskset");
 		CCfgXMLConfig::RootEx()->GoEx("protocol");
 		
@@ -53,27 +54,35 @@ bool CCfgConfig::Validate(void) {
 		
 CCfgTaskset* CCfgConfig::OnlineEx(const std::string& blockname, 
 		const std::string& taskset, ICMessage* icmessage) {
-	CCfgTaskset* tasks = new CCfgTaskset();
-	CCfgXMLConfig::RootEx()->GoEx("online")->GoEx(blockname)->SetBranch();
-	tasks->description = 
-		CCfgXMLConfig::BranchEx()->GoEx("description")->GetEx().String();
-
-	this->ParseTasksetEx(taskset, tasks);
-	this->ParseClassifierEx(blockname, taskset, tasks, icmessage);
-	this->ParseConfigEx("online", blockname, taskset, tasks);
+	CCfgTaskset* tasks = new CCfgTaskset(taskset);
+	try {
+		CCfgXMLConfig::RootEx()->GoEx("online")->GoEx(blockname)->SetBranch();
+		tasks->description = 
+			CCfgXMLConfig::BranchEx()->GoEx("description")->GetEx().String();
+		this->ParseTasksetEx(taskset, tasks);
+		this->ParseClassifierEx(blockname, taskset, tasks, icmessage);
+		this->ParseConfigEx("online", blockname, taskset, tasks);
+	} catch(XMLException e) {
+		delete tasks;
+		throw e;
+	}
 
 	return tasks;
 }
 
 CCfgTaskset* CCfgConfig::OfflineEx(const std::string& offline,
 		const std::string& taskset) {
-	CCfgTaskset* tasks = new CCfgTaskset();
-	CCfgXMLConfig::RootEx()->GoEx("offline")->GoEx(offline)->SetBranch();
-	
-	tasks->description = 
-		CCfgXMLConfig::BranchEx()->GoEx("description")->GetEx().String();
-	this->ParseTasksetEx(taskset, tasks);
-	this->ParseConfigEx("offline", offline, taskset, tasks);
+	CCfgTaskset* tasks = new CCfgTaskset(taskset);
+	try {
+		CCfgXMLConfig::RootEx()->GoEx("offline")->GoEx(offline)->SetBranch();
+		tasks->description = 
+			CCfgXMLConfig::BranchEx()->GoEx("description")->GetEx().String();
+		this->ParseTasksetEx(taskset, tasks);
+		this->ParseConfigEx("offline", offline, taskset, tasks);
+	} catch(XMLException e) {
+		delete tasks;
+		throw e;
+	}
 	
 	return tasks;
 }
@@ -125,7 +134,7 @@ void CCfgConfig::ParseTasksetEx(const std::string& name, CCfgTaskset* taskset) {
 		task->gdf = converter.UInt();
 		
 		// Finally add task to taskset
-		taskset->Add(task);
+		taskset->AddTask(task);
 
 		// Loop for next
 		node = CCfgXMLConfig::NextSibling();
@@ -167,7 +176,7 @@ void CCfgConfig::ParseConfigEx(const std::string& mode, const std::string& moden
 				break;
 			
 			std::string taskName(node->name());
-			CCfgTask* task = taskset->GetEx(taskName);
+			CCfgTask* task = taskset->GetTaskEx(taskName);
 			task->config[name] = XMLType(node->value()); 
 			
 			// Loop for next
@@ -226,7 +235,7 @@ void CCfgConfig::ParseClassifierEx(const std::string& modename,
 		throw XMLException(info, __PRETTY_FUNCTION__);
 	}
 
-	CCfgTasksetIter it = taskset->tasks.begin();
+	CCfgTasksetIt it = taskset->tasks.begin();
 	while(it != taskset->tasks.end()) {
 		ICClass* cclass = new ICClass(it->first, 0.00f);
 		classifier->classes.Add(cclass);

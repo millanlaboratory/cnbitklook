@@ -74,22 +74,29 @@
 		</qw>
 	</options>
 	
-	<!-- Offline Block -->
+	<!-- Offline Blocks -->
 	<offline>
-		<smr>
+		<smr> <!-- This is a Block -->
 			<description>Offline_MI</description>
-			<taskset key="mi_rhlh">
-				<threshold>
-					<mi_hand_left>0.85</mi_hand_left>
-					<mi_hand_right>0.85</mi_hand_right>
-				</threshold>
+			<taskset key="mi_rhlh"> <!-- This is a Taskset -->
+				<trials>
+					<mi_hand_left>15</mi_hand_left>
+					<mi_hand_right>15</mi_hand_right>
+				</trials>
 			</taskset>
 			<taskset key="mi_rhbf">
-				<threshold>
-					<mi_hand_right>0.85</mi_hand_right>
-					<mi_both_feet>0.85</mi_both_feet>
-				</threshold>
+				<trials>
+					<mi_hand_right>15</mi_hand_right>
+					<mi_both_feet>15</mi_both_feet>
+				</trials>
 			</taskset>
+			<taskset key="mi_bflh">
+				<trials>
+					<mi_both_feet>15</mi_both_feet>
+					<mi_hand_left>15</mi_hand_left>
+				</trials>
+			</taskset>
+			<threshold>0.85</threshold>
 		</smr>
 	</offline>
 	
@@ -99,9 +106,13 @@
 			<description>Online_MI</description>
 			<taskset key="mi_rhlh" classifier="kmi0">
 				<threshold>
-					<mi_hand_left>0.85</mi_hand_left>
-					<mi_hand_right>0.85</mi_hand_right>
+					<mi_hand_right>0.65</mi_hand_right>
+					<mi_hand_left>0.95</mi_hand_left>
 				</threshold>
+				<trials>
+					<mi_hand_right>150</mi_hand_right>
+					<mi_hand_left>250</mi_hand_left>
+				</trials>
 			</taskset>
 			<integration>0.96</integration>
 		</smr>
@@ -112,6 +123,10 @@
 					<mi_hand_left>0.85</mi_hand_left>
 					<mi_hand_right>0.92</mi_hand_right>
 				</threshold>
+				<trials>
+					<mi_hand_left>15</mi_hand_left>
+					<mi_hand_right>15</mi_hand_right>
+				</trials>
 				<bias>
 					<mi_hand_left>0.10</mi_hand_left>
 					<mi_hand_right>0.90</mi_hand_right>
@@ -156,39 +171,39 @@
 	<taskset>
 		<!-- Offline tasksets -->
 		<mi_rlsf>
-			<class id="0" key="mi_hand_right">15</class>
-			<class id="1" key="mi_hand_left">15</class>
-			<class id="2" key="mi_rest">15</class>
-			<class id="3" key="mi_both_feet">5</class>
+			<class id="0" key="mi_hand_right"/>
+			<class id="1" key="mi_hand_left"/>
+			<class id="2" key="mi_rest"/>
+			<class id="3" key="mi_both_feet"/>
 		</mi_rlsf>
 		<mi_rlbf>
-			<class id="0" key="mi_hand_right">15</class>
-			<class id="1" key="mi_hand_left">15</class>
-			<class id="2" key="mi_both_feet">15</class>
+			<class id="0" key="mi_hand_right"/>
+			<class id="1" key="mi_hand_left"/>
+			<class id="2" key="mi_both_feet"/>
 		</mi_rlbf>
 		<mi_rhlh>
-			<class id="0" key="mi_hand_right">15</class>
-			<class id="1" key="mi_hand_left">15</class>
+			<class id="0" key="mi_hand_right"/>
+			<class id="1" key="mi_hand_left"/>
 		</mi_rhlh>
 		<mi_rhbf>
-			<class id="0" key="mi_hand_right">15</class>
-			<class id="1" key="mi_both_feet">15</class>
+			<class id="0" key="mi_hand_right"/>
+			<class id="1" key="mi_both_feet"/>
 		</mi_rhbf>
 		<mi_bflh>
-			<class id="0" key="mi_both_feet">15</class>
-			<class id="1" key="mi_hand_left">15</class>
+			<class id="0" key="mi_both_feet"/>
+			<class id="1" key="mi_hand_left"/>
 		</mi_bflh>
 		<mi_bhbf>
-			<class id="0" key="mi_both_hands">15</class>
-			<class id="1" key="mi_both_feet">15</class>
+			<class id="0" key="mi_both_hands"/>
+			<class id="1" key="mi_both_feet"/>
 		</mi_bhbf>
 		<mi_bfbh>
-			<class id="0" key="mi_both_feet">15</class>
-			<class id="1" key="mi_both_hands">15</class>
+			<class id="0" key="mi_both_feet"/>
+			<class id="1" key="mi_both_hands"/>
 		</mi_bfbh>
 		<errp>
-			<class id="0" key="errp_true">80</class>
-			<class id="1" key="errp_false">20</class>
+			<class id="0" key="errp_true"/>
+			<class id="1" key="errp_false"/>
 		</errp> 
 	</taskset>
 	
@@ -245,6 +260,20 @@
 			<hwtrigger>3</hwtrigger>
 		</onset_false>
 	</tasks>
+	
+	<!-- Standard Events List -->
+	<events>
+		<run_begin>
+			<description>Run_Begin</description>
+			<gdfevent>0x0302</gdfevent>
+			<hwtrigger>1</hwtrigger>
+		</run_begin>
+		<run_end>
+			<description>Run_End</description>
+			<gdfevent>0x0302</gdfevent>
+			<hwtrigger>1</hwtrigger>
+		</run_end>
+	</events>
 
 	<!-- Configuration Block -->
 	<configuration>
