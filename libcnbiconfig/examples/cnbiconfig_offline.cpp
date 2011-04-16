@@ -115,7 +115,9 @@ int main(void) {
 	HWTrigger* triggers = new HWTrigger(offline->Count());
 	GDFEvent* events = new GDFEvent(offline->Count());
 	for(it = offline->Begin(); it != offline->End(); it++) {
-		CCfgTask* task = (*it).second;
+		CCfgTask* task = it->second;
+		if(task->HasConfig("trials") == false)
+			cout << "Per-task configuration trials is missing" << endl;
 		trials[task->id] = task->config["trials"].Int();
 		triggers[task->id] = task->hwt;
 		events[task->id] = task->gdf;

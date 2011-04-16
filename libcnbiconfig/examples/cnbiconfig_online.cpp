@@ -95,7 +95,9 @@ int main(void) {
 	/* I imagine I need to configure the CSmrCopilot. First thing, I need to get
 	 * the unique threshold we use for training.
 	 *
-	 * I heavily use CCfgXMLConfig here. The Ex methods raise exceptions.
+	 * I heavily use CCfgXMLConfig here. The Ex methods raise exceptions. 
+	 *
+	 * Here we try to get a unique-per block threshold. It will fail.
 	 */
 	float threshold = 0.00f;
 	try {
@@ -122,12 +124,15 @@ int main(void) {
 	HWTrigger* triggers = new HWTrigger(online->Count());
 	GDFEvent* events = new GDFEvent(online->Count());
 	for(it = online->Begin(); it != online->End(); it++) {
-		unsigned int id = (*it).second->id;
-		std::string name((*it).second->name);
-		trials[id] = online->tasks[name]->config["trials"].Int();
-		thresholds[id] = online->tasks[name]->config["threshold"].Float();
-		triggers[id] = online->tasks[name]->hwt;
-		events[id] = online->tasks[name]->gdf;
+		CCfgTask* task = it->second;
+		if(task->HasConfig("trials") == false)
+			cout << "Per-task configuration trials is missing" << endl;
+		if(task->HasConfig("threshold") == false)
+			cout << "Per-task configuration threshold is missing" << endl;
+		trials[task->id] = task->config["trials"].Int();
+		thresholds[task->id] = task->config["threshold"].Float();
+		triggers[task->id] = task->hwt;
+		events[task->id] = task->gdf;
 	}
 
 	/* Good. We now have the trials, triggers and events, all stored in the 
