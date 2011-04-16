@@ -29,7 +29,7 @@ CCfgTask* CCfgTaskset::Add(CCfgTask* task) {
 	return task;
 }
 
-CCfgTask* CCfgTaskset::Remove(std::string name) {
+CCfgTask* CCfgTaskset::RemoveEx(std::string name) {
 	CCfgTasksetIter it = this->tasks.find(name);
 	if(it == this->tasks.end()) {
 		std::string info;
@@ -43,7 +43,7 @@ CCfgTask* CCfgTaskset::Remove(std::string name) {
 	return retval;
 }
 
-CCfgTask* CCfgTaskset::Get(std::string name) {
+CCfgTask* CCfgTaskset::GetEx(std::string name) {
 	CCfgTasksetIter it = this->tasks.find(name);
 	if(it == this->tasks.end()) {
 		std::string info;
@@ -57,7 +57,7 @@ CCfgTask* CCfgTaskset::Get(std::string name) {
 }
 
 #include <iostream>
-CCfgTask* CCfgTaskset::Get(unsigned int id) {
+CCfgTask* CCfgTaskset::GetEx(unsigned int id) {
 	CCfgTasksetIter it;
 	for(it = this->tasks.begin(); it != this->tasks.end(); it++) {
 		if((*it).second->id == id)

@@ -20,39 +20,30 @@
 #include <stdio.h>
 #include <iostream>
 #include <stdlib.h>
-
-		
-bool CCfgConfig::LoadFile(const std::string& filename) {
-	return CCfgXMLConfig::ImportFile(filename);
-}
-
-bool CCfgConfig::LoadBuffer(const std::string& filename) {
-	return CCfgXMLConfig::ImportBuffer(filename);
-}
 		
 bool CCfgConfig::Validate(void) {
 	try {
 		// Test main nodes
-		CCfgXMLConfig::Root()->Go("recording");
-		CCfgXMLConfig::Root()->Go("classifier");
-		CCfgXMLConfig::Root()->Go("configuration");
-		CCfgXMLConfig::Root()->Go("options");
-		CCfgXMLConfig::Root()->Go("offline");
-		CCfgXMLConfig::Root()->Go("online");
-		CCfgXMLConfig::Root()->Go("parameters");
-		CCfgXMLConfig::Root()->Go("subject");
-		CCfgXMLConfig::Root()->Go("tasks");
-		CCfgXMLConfig::Root()->Go("taskset");
-		CCfgXMLConfig::Root()->Go("protocol");
+		CCfgXMLConfig::RootEx()->GoEx("recording");
+		CCfgXMLConfig::RootEx()->GoEx("classifier");
+		CCfgXMLConfig::RootEx()->GoEx("configuration");
+		CCfgXMLConfig::RootEx()->GoEx("options");
+		CCfgXMLConfig::RootEx()->GoEx("offline");
+		CCfgXMLConfig::RootEx()->GoEx("online");
+		CCfgXMLConfig::RootEx()->GoEx("parameters");
+		CCfgXMLConfig::RootEx()->GoEx("subject");
+		CCfgXMLConfig::RootEx()->GoEx("tasks");
+		CCfgXMLConfig::RootEx()->GoEx("taskset");
+		CCfgXMLConfig::RootEx()->GoEx("protocol");
 		
 		// Test mandatory nodes
-		CCfgXMLConfig::Root()->Quick("subject/id");
-		CCfgXMLConfig::Root()->Quick("subject/age");
-		CCfgXMLConfig::Root()->Quick("recording/experimenter");
-		CCfgXMLConfig::Root()->Quick("recording/location");
-		CCfgXMLConfig::Root()->Quick("recording/project");
-		CCfgXMLConfig::Root()->Quick("recording/experiment");
-		CCfgXMLConfig::Root()->Quick("recording/date");
+		CCfgXMLConfig::RootEx()->QuickEx("subject/id");
+		CCfgXMLConfig::RootEx()->QuickEx("subject/age");
+		CCfgXMLConfig::RootEx()->QuickEx("recording/experimenter");
+		CCfgXMLConfig::RootEx()->QuickEx("recording/location");
+		CCfgXMLConfig::RootEx()->QuickEx("recording/project");
+		CCfgXMLConfig::RootEx()->QuickEx("recording/experiment");
+		CCfgXMLConfig::RootEx()->QuickEx("recording/date");
 	} catch(XMLException e) {
 		std::cout << e << std::endl;
 		return false;
@@ -60,40 +51,40 @@ bool CCfgConfig::Validate(void) {
 	return true;
 }
 		
-CCfgTaskset* CCfgConfig::Online(const std::string& blockname, 
+CCfgTaskset* CCfgConfig::OnlineEx(const std::string& blockname, 
 		const std::string& taskset, ICMessage* icmessage) {
 	CCfgTaskset* tasks = new CCfgTaskset();
-	CCfgXMLConfig::Root()->Go("online")->Go(blockname)->SetBranch();
+	CCfgXMLConfig::RootEx()->GoEx("online")->GoEx(blockname)->SetBranch();
 	tasks->description = 
-		CCfgXMLConfig::Branch()->Go("description")->Get().String();
+		CCfgXMLConfig::BranchEx()->GoEx("description")->GetEx().String();
 
-	this->ParseTaskset(taskset, tasks);
-	this->ParseClassifier(blockname, taskset, tasks, icmessage);
-	this->ParseConfig("online", blockname, taskset, tasks);
+	this->ParseTasksetEx(taskset, tasks);
+	this->ParseClassifierEx(blockname, taskset, tasks, icmessage);
+	this->ParseConfigEx("online", blockname, taskset, tasks);
 
 	return tasks;
 }
 
-CCfgTaskset* CCfgConfig::Offline(const std::string& offline,
+CCfgTaskset* CCfgConfig::OfflineEx(const std::string& offline,
 		const std::string& taskset) {
 	CCfgTaskset* tasks = new CCfgTaskset();
-	CCfgXMLConfig::Root()->Go("offline")->Go(offline)->SetBranch();
+	CCfgXMLConfig::RootEx()->GoEx("offline")->GoEx(offline)->SetBranch();
 	
 	tasks->description = 
-		CCfgXMLConfig::Branch()->Go("description")->Get().String();
-	this->ParseTaskset(taskset, tasks);
-	this->ParseConfig("offline", offline, taskset, tasks);
+		CCfgXMLConfig::BranchEx()->GoEx("description")->GetEx().String();
+	this->ParseTasksetEx(taskset, tasks);
+	this->ParseConfigEx("offline", offline, taskset, tasks);
 	
 	return tasks;
 }
 
 
-void CCfgConfig::ParseTaskset(const std::string& name, CCfgTaskset* taskset) {
+void CCfgConfig::ParseTasksetEx(const std::string& name, CCfgTaskset* taskset) {
 	// Use LibCCfgXMLConfig::XMLType for parsing
 	XMLType converter;
 	
 	// Find the taskset branch and start looping
-	CCfgXMLConfig::Root()->Go("taskset")->Go(name)->SetBranch();
+	CCfgXMLConfig::RootEx()->GoEx("taskset")->GoEx(name)->SetBranch();
 	XMLNode node = CCfgXMLConfig::Child();
 	while(true) {
 		if(node == NULL)
@@ -142,14 +133,14 @@ void CCfgConfig::ParseTaskset(const std::string& name, CCfgTaskset* taskset) {
 }
 
 
-void CCfgConfig::ParseConfig(const std::string& mode, const std::string& modename,
+void CCfgConfig::ParseConfigEx(const std::string& mode, const std::string& modename,
 		const std::string& tasksetname, CCfgTaskset* taskset) {
-	CCfgXMLConfig::Root()->Go(mode)->Go(modename)->Go("taskset")->SetBranch();
+	CCfgXMLConfig::RootEx()->GoEx(mode)->GoEx(modename)->GoEx("taskset")->SetBranch();
 	XMLNode node = CCfgXMLConfig::_nBranch;
 	
 	std::string tname;
 	while(node != NULL) {
-		tname = CCfgXMLConfig::GetAttr("key");
+		tname = CCfgXMLConfig::GetAttrEx("key");
 		if(tname.compare(tasksetname) == 0) {
 			node = CCfgXMLConfig::Child();
 			break;
@@ -176,7 +167,7 @@ void CCfgConfig::ParseConfig(const std::string& mode, const std::string& modenam
 				break;
 			
 			std::string taskName(node->name());
-			CCfgTask* task = taskset->Get(taskName);
+			CCfgTask* task = taskset->GetEx(taskName);
 			task->config[name] = XMLType(node->value()); 
 			
 			// Loop for next
@@ -186,18 +177,18 @@ void CCfgConfig::ParseConfig(const std::string& mode, const std::string& modenam
 	}
 }
 		
-void CCfgConfig::ParseClassifier(const std::string& modename, 
+void CCfgConfig::ParseClassifierEx(const std::string& modename, 
 		const std::string& tasksetname, CCfgTaskset* taskset, 
 		ICMessage* icmessage) {
-	CCfgXMLConfig::Root()->Go("online")->Go(modename)->Go("taskset")->SetBranch();
+	CCfgXMLConfig::RootEx()->GoEx("online")->GoEx(modename)->GoEx("taskset")->SetBranch();
 	XMLNode node = CCfgXMLConfig::_nBranch;
 	
 	std::string tname;
 	std::string classifiername;
 	while(node != NULL) {
-		tname = CCfgXMLConfig::GetAttr("key");
+		tname = CCfgXMLConfig::GetAttrEx("key");
 		if(tname.compare(tasksetname) == 0) {
-			classifiername = CCfgXMLConfig::GetAttr("classifier");
+			classifiername = CCfgXMLConfig::GetAttrEx("classifier");
 			taskset->classifier.assign(classifiername);
 			node = CCfgXMLConfig::Child();
 			break;
@@ -216,10 +207,10 @@ void CCfgConfig::ParseClassifier(const std::string& modename,
 	if(icmessage == NULL)
 		return;
 
-	CCfgXMLConfig::Root()->Go("classifier")->Go(classifiername)->SetBranch();
-	std::string description = CCfgXMLConfig::Branch()->QuickString("description");
-	std::string valuetype = CCfgXMLConfig::Branch()->QuickString("icvalue");
-	std::string labeltype = CCfgXMLConfig::Branch()->QuickString("iclabel");
+	CCfgXMLConfig::RootEx()->GoEx("classifier")->GoEx(classifiername)->SetBranch();
+	std::string description = CCfgXMLConfig::BranchEx()->QuickStringEx("description");
+	std::string valuetype = CCfgXMLConfig::BranchEx()->QuickStringEx("icvalue");
+	std::string labeltype = CCfgXMLConfig::BranchEx()->QuickStringEx("iclabel");
 	ICClassifier* classifier = new ICClassifier(classifiername, description);
 	if(classifier->SetValueType(valuetype) == false) {
 		std::string info;

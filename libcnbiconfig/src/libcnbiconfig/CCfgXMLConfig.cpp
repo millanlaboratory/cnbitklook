@@ -33,44 +33,60 @@ CCfgXMLConfig::CCfgXMLConfig(const std::string& rootname) {
 CCfgXMLConfig::~CCfgXMLConfig(void) {
 }
 
-bool CCfgXMLConfig::ImportFile(const std::string& filename) {
-	this->_document.ImportFile(filename);
+void CCfgXMLConfig::ImportFileEx(const std::string& filename) {
+	switch(this->_document.ImportFile(filename)) {
+		case XMLDocument::FileInputError:
+			throw XMLException("File Input Error", __PRETTY_FUNCTION__);
+		case XMLDocument::BufferOverflow:
+			throw XMLException("Buffer Overflow", __PRETTY_FUNCTION__);
+		case XMLDocument::ParsingError:
+			throw XMLException("Parsing Error", __PRETTY_FUNCTION__);
+	}
+
 	this->SearchRoot();
+	this->CheckRootEx();
 }
 
-bool CCfgXMLConfig::ImportBuffer(const std::string& filename) {
-	this->_document.ImportBuffer(filename);
+void CCfgXMLConfig::ImportBufferEx(const std::string& filename) {
+	switch(this->_document.ImportBuffer(filename)) {
+		case XMLDocument::FileInputError:
+			throw XMLException("File Input Error", __PRETTY_FUNCTION__);
+		case XMLDocument::BufferOverflow:
+			throw XMLException("Buffer Overflow", __PRETTY_FUNCTION__);
+		case XMLDocument::ParsingError:
+			throw XMLException("Parsing Error", __PRETTY_FUNCTION__);
+	}
 	this->SearchRoot();
+	this->CheckRootEx();
 }
 	
 void CCfgXMLConfig::SearchRoot(void) {
 	this->_nRoot = this->_document.doc.first_node(this->_rootname.c_str());
-	this->CheckRoot();
 }
 
-void CCfgXMLConfig::CheckRoot(void) {
+void CCfgXMLConfig::CheckRootEx(void) {
 	if(this->_nRoot == NULL)
 		throw XMLException("Root node not found", __PRETTY_FUNCTION__);
 }
 
-void CCfgXMLConfig::CheckBranch(void) {
+void CCfgXMLConfig::CheckBranchEx(void) {
 	if(this->_nBranch == NULL)
 		throw XMLException("Branch node not found", __PRETTY_FUNCTION__);
 }
 
-void CCfgXMLConfig::CheckLeaf(void) {
+void CCfgXMLConfig::CheckLeafEx(void) {
 	if(this->_nLeaf == NULL)
 		throw XMLException("Leaf node not found", __PRETTY_FUNCTION__);
 }
 
-CCfgXMLConfig* CCfgXMLConfig::Root(void) {
-	this->CheckRoot();
+CCfgXMLConfig* CCfgXMLConfig::RootEx(void) {
+	this->CheckRootEx();
 	this->_nLeaf = this->_nRoot;
 	this->_nBranch = this->_nRoot;
 	return this;
 }
 
-CCfgXMLConfig* CCfgXMLConfig::Go(const std::string& blockname) {
+CCfgXMLConfig* CCfgXMLConfig::GoEx(const std::string& blockname) {
 	XMLNode node = this->_nLeaf->first_node(blockname.c_str());
 	if(node == NULL) {
 		std::string info;
@@ -86,7 +102,7 @@ CCfgXMLConfig* CCfgXMLConfig::Go(const std::string& blockname) {
 	return this;
 }
 
-CCfgXMLConfig* CCfgXMLConfig::Quick(const std::string& blockpath) {
+CCfgXMLConfig* CCfgXMLConfig::QuickEx(const std::string& blockpath) {
 	std::vector<std::string> path;
 	this->Tokenize(blockpath, path);
 	if(path.size() == 0) {
@@ -97,24 +113,24 @@ CCfgXMLConfig* CCfgXMLConfig::Quick(const std::string& blockpath) {
 	}
 		
 	for(unsigned int i = 0; i < path.size(); i++)
-		this->Go(path[i]);
+		this->GoEx(path[i]);
 	return this;
 }
 
-std::string CCfgXMLConfig::GetRaw(void) {
-	this->CheckLeaf();
+std::string CCfgXMLConfig::GetRawEx(void) {
+	this->CheckLeafEx();
 	std::string value(this->_nLeaf->value());
 	return value;
 }
 
-CCfgXMLConfig* CCfgXMLConfig::GetRaw(std::string* value) {
-	this->CheckLeaf();
+CCfgXMLConfig* CCfgXMLConfig::GetRawEx(std::string* value) {
+	this->CheckLeafEx();
 	value->assign(this->_nLeaf->value());
 	return this;
 }
 
-XMLType CCfgXMLConfig::Get(void) {
-	this->CheckLeaf();
+XMLType CCfgXMLConfig::GetEx(void) {
+	this->CheckLeafEx();
 	XMLNode nOld = this->_nLeaf;
 
 	XMLType value((const char*)this->_nLeaf->value());
@@ -131,14 +147,14 @@ XMLType CCfgXMLConfig::Get(void) {
 	return value;
 }
 		
-CCfgXMLConfig* CCfgXMLConfig::Get(XMLType* value) {
-	this->CheckLeaf();
+CCfgXMLConfig* CCfgXMLConfig::GetEx(XMLType* value) {
+	this->CheckLeafEx();
 	value->Guess((const char*)this->_nLeaf->value());
 	return this;
 }
 		
-std::string CCfgXMLConfig::GetAttr(const std::string& name) {
-	this->CheckLeaf();
+std::string CCfgXMLConfig::GetAttrEx(const std::string& name) {
+	this->CheckLeafEx();
 	
 	std::string attr;
 	XMLAttr nId = this->_nLeaf->first_attribute(name.c_str());
@@ -152,8 +168,8 @@ CCfgXMLConfig* CCfgXMLConfig::SetBranch(void) {
 	return this;
 }
 
-CCfgXMLConfig* CCfgXMLConfig::Branch(void) {
-	this->CheckBranch();
+CCfgXMLConfig* CCfgXMLConfig::BranchEx(void) {
+	this->CheckBranchEx();
 	this->_nLeaf = this->_nBranch;
 	return this;
 }
@@ -182,24 +198,24 @@ void CCfgXMLConfig::Dump(void) {
 			this->_nLeaf->name(), this->_nLeaf->value());
 }
 
-std::string CCfgXMLConfig::QuickString(const std::string& str) {
-	return this->Quick(str)->Get().String();
+std::string CCfgXMLConfig::QuickStringEx(const std::string& str) {
+	return this->QuickEx(str)->GetEx().String();
 }
 
-bool CCfgXMLConfig::QuickBool(const std::string& str) {
-	return this->Quick(str)->Get().Bool();
+bool CCfgXMLConfig::QuickBoolEx(const std::string& str) {
+	return this->QuickEx(str)->GetEx().Bool();
 }
 
-float CCfgXMLConfig::QuickFloat(const std::string& str) {
-	return this->Quick(str)->Get().Float();
+float CCfgXMLConfig::QuickFloatEx(const std::string& str) {
+	return this->QuickEx(str)->GetEx().Float();
 }
 
-int CCfgXMLConfig::QuickInt(const std::string& str) {
-	return this->Quick(str)->Get().Int();
+int CCfgXMLConfig::QuickIntEx(const std::string& str) {
+	return this->QuickEx(str)->GetEx().Int();
 }
 
-unsigned int CCfgXMLConfig::QuickUInt(const std::string& str) {
-	return this->Quick(str)->Get().UInt();
+unsigned int CCfgXMLConfig::QuickUIntEx(const std::string& str) {
+	return this->QuickEx(str)->GetEx().UInt();
 }
 
 void CCfgXMLConfig::Tokenize(const std::string& str, 

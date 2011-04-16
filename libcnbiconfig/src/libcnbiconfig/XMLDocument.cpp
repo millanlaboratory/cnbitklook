@@ -23,10 +23,9 @@
 #include <stdio.h>
 #include <string.h>
 		
-XMLDocument::XMLDocument(unsigned int bsize) {
+XMLDocument::XMLDocument(size_t bsize) {
 	this->_bsize = bsize;
 	this->_buffer = new char[this->_bsize];
-	this->FillBuffer(NULL);
 }
 
 XMLDocument::~XMLDocument() {
@@ -77,16 +76,16 @@ int XMLDocument::FillBuffer(const std::string* buffer) {
 	memset(this->_buffer, 0, this->_bsize); 
 
 	if(buffer->size() > this->_bsize)
-		return BufferOverflow;
+		return XMLDocument::BufferOverflow;
 	memcpy(this->_buffer, buffer->c_str(), buffer->size());
-	return Successfull;
+	return XMLDocument::Successfull;
 }
 	
 int XMLDocument::Parse(void) {
 	try {
 		this->doc.parse<0>(this->_buffer);
 	} catch(rapidxml::parse_error e) {
-		return ParsingError;
+		return XMLDocument::ParsingError;
 	}
-	return Successfull;
+	return XMLDocument::Successfull;
 }

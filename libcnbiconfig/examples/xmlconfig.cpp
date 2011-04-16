@@ -23,21 +23,22 @@ using namespace std;
 
 int main(void) {
 	try {
-		CCfgXMLConfig xml("../extra/example.xml");
-		xml.Root()->Go("offline")->Go("mi_offline")->Go("description")->GetRaw();
-		xml.Root()->Go("offline")->Go("mi_offline")->Go("taskset")->GetRaw();
+		CCfgXMLConfig xml;
+		xml.ImportFileEx("../extra/example.xml");
+		xml.RootEx()->GoEx("offline")->GoEx("smr")->GoEx("description")->GetRawEx();
+		xml.RootEx()->GoEx("online")->GoEx("smr")->GoEx("description")->GetRawEx();
 		xml.Dump();
 		
-		xml.Root()->Go("offline")->Go("mi_offline")->SetBranch();
-		xml.Branch()->Go("description")->GetRaw();
-		xml.Branch()->Go("taskset")->GetRaw();
-		cout << "got: " << xml.Branch()->Go("taskset")->Get().Key() << endl;
+		xml.RootEx()->GoEx("offline")->GoEx("smr")->SetBranch();
+		xml.BranchEx()->GoEx("description")->GetRawEx();
+		xml.BranchEx()->GoEx("taskset")->GetRawEx();
+		cout << "got: " << xml.BranchEx()->GoEx("taskset")->GetEx().Key() << endl;
 		xml.Dump();
 
-		xml.Root()->Go("taskset")->Go("mirhlh")->Go("class")->SetBranch();
-		string key = xml.Branch()->Get().Key();
-		string id = xml.Branch()->Get().Id();
-		int value = xml.Branch()->Get().Int();
+		xml.RootEx()->GoEx("tasks")->GoEx("mi_hand_right")->GoEx("hwtrigger")->SetBranch();
+		string key = xml.BranchEx()->GetEx().Key();
+		string id = xml.BranchEx()->GetEx().Id();
+		int value = xml.BranchEx()->GetEx().Int();
 		cout << "got: " << id << "/" << key << "=" << value << endl;
 		
 	} catch(XMLException e) {

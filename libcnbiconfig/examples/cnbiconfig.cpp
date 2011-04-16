@@ -27,7 +27,7 @@ using namespace std;
 int main(void) {
 	try {
 		CCfgConfig config;
-		config.LoadFile("../extra/example.xml");
+		config.ImportFileEx("../extra/example.xml");
 
 		if(config.Validate() == false) {
 			cout << "XML file is not valid\n";
@@ -36,44 +36,44 @@ int main(void) {
 		cout << "XML file is valid\n";
 		
 		CCfgTaskset* offlineMI = NULL;
-		offlineMI = config.Offline("smr", "mi_rhlh");
+		offlineMI = config.OfflineEx("smr", "mi_rhlh");
 		
 		ICMessage sender;
-		CCfgTaskset* onlineMI = config.Online("smr", "mi_rhlh", &sender);
-		CCfgTaskset* onlineErrP = config.Online("smrerrp", "errp", &sender);
+		CCfgTaskset* onlineMI = config.OnlineEx("smr", "mi_rhlh", &sender);
+		CCfgTaskset* onlineErrP = config.OnlineEx("smrerrp", "errp", &sender);
 
 
 		cout << ">>>> MI classifier: " << onlineMI->classifier << endl;
 		cout << ">>>> ErrP classifier: " << onlineErrP->classifier << endl;
 
-		onlineMI->Get("mi_hand_right")->Dump();
-		onlineMI->Get("mi_hand_left")->Dump();
-		cout << "Integration: " << config.Root()->Go("online")->
-			Go("smr")->Go("integration")->Get().Float() << endl;
-		//onlineMI->Get("mi_hand_left")->Dump();
-		onlineErrP->Get("errp_true")->Dump();
+		onlineMI->GetEx("mi_hand_right")->Dump();
+		onlineMI->GetEx("mi_hand_left")->Dump();
+		cout << "Integration: " << config.RootEx()->GoEx("online")->
+			GoEx("smr")->GoEx("integration")->GetEx().Float() << endl;
+		//onlineMI->GetEx("mi_hand_left")->Dump();
+		onlineErrP->GetEx("errp_true")->Dump();
 		cout << "Threshold: " << 
-			onlineMI->Get("mi_hand_left")->config["threshold"].Float() << endl;
+			onlineMI->GetEx("mi_hand_left")->config["threshold"].Float() << endl;
 		
 		cout << "By id: " << onlineMI->Count() << endl;
 		CCfgTask* t = NULL;
-		t = onlineMI->Get(1);
+		t = onlineMI->GetEx(1);
 		t->Dump();
-		t = onlineMI->Get(0);
+		t = onlineMI->GetEx(0);
 		t->Dump();
 
-		cout << "Go: device is: " << config.Root()->Go("options")->
-			Go("fes")->Go("dev")->Get().String() << endl;
+		cout << "Go: device is: " << config.RootEx()->GoEx("options")->
+			GoEx("fes")->GoEx("dev")->GetEx().String() << endl;
 		cout << "Quick: device is: " << 
-			config.Root()->Quick("options/fes/dev")->Get().String() << endl;
+			config.RootEx()->QuickEx("options/fes/dev")->GetEx().String() << endl;
 		cout << "QuickString: device is: " << 
-			config.Root()->QuickString("options/fes/dev") << endl;
+			config.RootEx()->QuickStringEx("options/fes/dev") << endl;
 		cout << "GDF off: " << 
-			config.Root()->QuickUInt("protocol/gdfevents/off") << endl;
+			config.RootEx()->QuickUIntEx("protocol/gdfevents/off") << endl;
 		cout << "GDF cfeedback: " << 
-			config.Root()->QuickUInt("protocol/gdfevents/cfeedback") << endl;
+			config.RootEx()->QuickUIntEx("protocol/gdfevents/cfeedback") << endl;
 		cout << "GDF cfeedbackoff: " << 
-			config.Root()->QuickUInt("protocol/gdfevents/cfeedbackoff") << endl;
+			config.RootEx()->QuickUIntEx("protocol/gdfevents/cfeedbackoff") << endl;
 
 		
 		std::string buffer;
@@ -88,9 +88,9 @@ int main(void) {
 		receiver.Dump();
 
 		cout << "Subject is: " << 
-			config.Root()->Go("subject")->Go("id")->Get().String() << endl;
+			config.RootEx()->GoEx("subject")->GoEx("id")->GetEx().String() << endl;
 		cout << "Error is: " << endl; 
-		cout << config.Root()->Go("subject")->Go("name")->Get().String() << endl;
+		cout << config.RootEx()->GoEx("subject")->GoEx("name")->GetEx().String() << endl;
 	} catch(XMLException e) {
 		cout << "Exception: " << e << endl;
 	}

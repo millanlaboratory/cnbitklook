@@ -26,7 +26,7 @@ typedef rapidxml::xml_attribute<>* XMLAttr;
 
 class XMLDocument {
 	public:
-		XMLDocument(unsigned int bsize = 20480);
+		XMLDocument(size_t bsize = 20480);
 		virtual ~XMLDocument();
 		int ImportFile(const std::string& filename);
 		int ImportBuffer(const std::string& buffer);
@@ -40,9 +40,9 @@ class XMLDocument {
 		rapidxml::xml_document<> doc;
 	public:
 		const static int Successfull = 0;
-		const static int FileInputError = 2;
+		const static int FileInputError = 1;
 		const static int BufferOverflow = 2;
-		const static int ParsingError = 2;
+		const static int ParsingError = 3;
 
 	protected:
 		unsigned int _bsize;

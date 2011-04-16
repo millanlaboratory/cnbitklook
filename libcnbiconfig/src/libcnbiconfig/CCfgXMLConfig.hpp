@@ -30,7 +30,9 @@
  *
  * Provides a function to access the CNBI defined blocks.
  * This class is highly redundant and not really useful, but
- * it simplifies data access for my users.
+ * it simplifies data access.
+ *
+ * This CCfgXMLConfig::*Ex() methods raise exceptions
  */
 class CCfgXMLConfig {
 	friend class CCfgConfig;
@@ -38,32 +40,32 @@ class CCfgXMLConfig {
 	public:
 		CCfgXMLConfig(const std::string& rootname = "cnbiconfig");
 		virtual ~CCfgXMLConfig(void);
-		bool ImportFile(const std::string& filename);
-		bool ImportBuffer(const std::string& filename);
+		virtual void ImportFileEx(const std::string& filename);
+		virtual void ImportBufferEx(const std::string& filename);
 
-		CCfgXMLConfig* Root(void);
-		CCfgXMLConfig* Go(const std::string& blockname);
-		CCfgXMLConfig* Quick(const std::string& blockpath);
-		std::string GetRaw(void);
-		CCfgXMLConfig* GetRaw(std::string* value);
-		XMLType Get(void);
-		CCfgXMLConfig* Get(XMLType* value);
-		std::string GetAttr(const std::string& name);
+		CCfgXMLConfig* RootEx(void);
+		CCfgXMLConfig* GoEx(const std::string& blockname);
+		CCfgXMLConfig* QuickEx(const std::string& blockpath);
+		std::string GetRawEx(void);
+		CCfgXMLConfig* GetRawEx(std::string* value);
+		XMLType GetEx(void);
+		CCfgXMLConfig* GetEx(XMLType* value);
+		std::string GetAttrEx(const std::string& name);
 		CCfgXMLConfig* SetBranch(void);
-		CCfgXMLConfig* Branch(void);
+		CCfgXMLConfig* BranchEx(void);
 		XMLNode Child(void);
 		XMLNode NextSibling(void);
 		void Dump(void);
-		std::string QuickString(const std::string& str);
-		bool QuickBool(const std::string& str);
-		float QuickFloat(const std::string& str);
-		int QuickInt(const std::string& str);
-		unsigned int QuickUInt(const std::string& str);
+		std::string QuickStringEx(const std::string& str);
+		bool QuickBoolEx(const std::string& str);
+		float QuickFloatEx(const std::string& str);
+		int QuickIntEx(const std::string& str);
+		unsigned int QuickUIntEx(const std::string& str);
 	protected:
 		void SearchRoot(void);
-		void CheckRoot(void);
-		void CheckBranch(void);
-		void CheckLeaf(void);
+		void CheckRootEx(void);
+		void CheckBranchEx(void);
+		void CheckLeafEx(void);
 	private:
 		static void Tokenize(const std::string& str, 
 				std::vector<std::string>& tokens, 

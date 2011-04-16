@@ -34,9 +34,9 @@ typedef CCfgTasksetMap::const_iterator	CCfgTasksetConstIter;
 class CCfgTaskset {
 	public: 
 		virtual CCfgTask* Add(CCfgTask* task);
-		virtual CCfgTask* Remove(std::string name);
-		virtual CCfgTask* Get(std::string name);
-		virtual CCfgTask* Get(unsigned int id);
+		virtual CCfgTask* RemoveEx(std::string name);
+		virtual CCfgTask* GetEx(std::string name);
+		virtual CCfgTask* GetEx(unsigned int id);
 		virtual bool Has(std::string name);
 		virtual unsigned int Count(void);
 		virtual void Clear(void);

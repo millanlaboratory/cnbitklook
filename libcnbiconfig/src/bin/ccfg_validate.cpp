@@ -32,7 +32,7 @@ int main(int argc, char *argv[]) {
 	string filename(argv[1]);
 	try {
 		config = new CCfgConfig();
-		config->LoadFile(filename);
+		config->ImportFileEx(filename);
 	} catch(XMLException e) {
 		cout << "[ccfg_validate] Exception: " << e << endl;
 		return -2;
@@ -46,15 +46,15 @@ int main(int argc, char *argv[]) {
 	
 	cout << "[ccfg_validate] XML file is valid" << endl;
 	cout << "  Experimenter: " << 
-		config->Root()->QuickString("recording/experimenter") << endl;
+		config->RootEx()->QuickStringEx("recording/experimenter") << endl;
 	cout << "  Location:     " << 
-		config->Root()->QuickString("recording/location") << endl;
+		config->RootEx()->QuickStringEx("recording/location") << endl;
 	cout << "  Experiment:   " << 
-		config->Root()->QuickString("recording/experiment") << endl;
+		config->RootEx()->QuickStringEx("recording/experiment") << endl;
 	cout << "  Project:      " << 
-		config->Root()->QuickString("recording/project") << endl;
+		config->RootEx()->QuickStringEx("recording/project") << endl;
 	cout << "  Date:         " << 
-		config->Root()->QuickString("recording/date") << endl;
+		config->RootEx()->QuickStringEx("recording/date") << endl;
 
 
 	return isvalid;
