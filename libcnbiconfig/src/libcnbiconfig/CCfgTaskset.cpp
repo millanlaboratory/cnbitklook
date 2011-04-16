@@ -18,7 +18,7 @@
 
 #include "CCfgTaskset.hpp"
 #include "XMLException.hpp"
-#include "Tools.hpp"
+#include "XMLTools.hpp"
 		
 CCfgTask* CCfgTaskset::Add(CCfgTask* task) {
 	CCfgTasksetIter it = this->tasks.find(task->name);

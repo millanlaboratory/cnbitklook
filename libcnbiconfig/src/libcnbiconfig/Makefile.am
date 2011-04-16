@@ -8,8 +8,7 @@ libcnbiconfig_include_HEADERS = CCfgConfig.hpp \
 								CCfgTaskset.hpp \
 								CCfgXMLConfig.hpp \
 								CCfgTypes.hpp \
-								Tools.hpp \
-								SmartType.hpp \
+								XMLType.hpp \
 								XMLDocument.hpp \
 								XMLException.hpp
 
@@ -22,10 +21,10 @@ libcnbiconfig_la_SOURCES = CCfgConfig.cpp \
 						   CCfgXMLConfig.cpp \
 						   CCfgXMLConfig.hpp \
 						   CCfgTypes.hpp \
-						   Tools.hpp \
-						   Tools.cpp \
-						   SmartType.cpp \
-						   SmartType.hpp \
+						   XMLTools.hpp \
+						   XMLTools.cpp \
+						   XMLType.cpp \
+						   XMLType.hpp \
 						   XMLDocument.cpp \
 						   XMLDocument.hpp \
 						   XMLException.cpp \

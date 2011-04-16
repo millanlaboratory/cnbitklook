@@ -86,8 +86,8 @@ CCfgTaskset* CCfgConfig::Offline(const std::string& offline,
 
 
 void CCfgConfig::ParseTaskset(const std::string& name, CCfgTaskset* taskset) {
-	// Use LibCCfgXMLConfig::SmartType for parsing
-	SmartType converter;
+	// Use LibCCfgXMLConfig::XMLType for parsing
+	XMLType converter;
 	
 	// Find the taskset branch and start looping
 	CCfgXMLConfig::Root()->Go("taskset")->Go(name)->SetBranch();
@@ -174,7 +174,7 @@ void CCfgConfig::ParseConfig(const std::string& mode, const std::string& modenam
 			
 			std::string taskName(node->name());
 			CCfgTask* task = taskset->Get(taskName);
-			task->config[name] = SmartType(node->value()); 
+			task->config[name] = XMLType(node->value()); 
 			
 			// Loop for next
 			node = node->next_sibling();

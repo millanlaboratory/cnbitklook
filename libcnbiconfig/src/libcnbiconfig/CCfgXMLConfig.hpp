@@ -19,14 +19,12 @@
 #ifndef XMLCONFIG_HPP
 #define XMLCONFIG_HPP
 
+#include "XMLException.hpp"
+#include "XMLType.hpp"
+#include "XMLDocument.hpp"
 #include <assert.h>
 #include <vector>
 #include <utility>
-#include <rapidxml.hpp>
-
-#include "XMLException.hpp"
-#include "SmartType.hpp"
-#include "XMLDocument.hpp"
 
 /*! \brief Simplified interface to CCfgXMLConfig
  *
@@ -47,8 +45,8 @@ class CCfgXMLConfig {
 		CCfgXMLConfig* Quick(const std::string& blockpath);
 		std::string GetRaw(void);
 		CCfgXMLConfig* GetRaw(std::string* value);
-		SmartType Get(void);
-		CCfgXMLConfig* Get(SmartType* value);
+		XMLType Get(void);
+		CCfgXMLConfig* Get(XMLType* value);
 		std::string GetAttr(const std::string& name);
 		CCfgXMLConfig* SetBranch(void);
 		CCfgXMLConfig* Branch(void);

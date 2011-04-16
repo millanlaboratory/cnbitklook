@@ -105,11 +105,11 @@ CCfgXMLConfig* CCfgXMLConfig::GetRaw(std::string* value) {
 	return this;
 }
 
-SmartType CCfgXMLConfig::Get(void) {
+XMLType CCfgXMLConfig::Get(void) {
 	this->CheckLeaf();
 	XMLNode nOld = this->_nLeaf;
 
-	SmartType value((const char*)this->_nLeaf->value());
+	XMLType value((const char*)this->_nLeaf->value());
 
 	XMLAttr nId = this->_nLeaf->first_attribute("id");
 	if(nId != NULL)
@@ -123,7 +123,7 @@ SmartType CCfgXMLConfig::Get(void) {
 	return value;
 }
 		
-CCfgXMLConfig* CCfgXMLConfig::Get(SmartType* value) {
+CCfgXMLConfig* CCfgXMLConfig::Get(XMLType* value) {
 	this->CheckLeaf();
 	value->Guess((const char*)this->_nLeaf->value());
 	return this;

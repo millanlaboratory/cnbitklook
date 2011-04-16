@@ -38,7 +38,7 @@ void CCfgTask::Dump(void) {
 	printf("  LPT:         %d\n", (int)(this->hwt));
 	
 	CCfgTaskConfigIt it = this->config.begin();
-	printf("  SmartTypes:  ");
+	printf("  XMLTypes:  ");
 	if(it == this->config.end()) {
 		printf("none\n");
 		return;

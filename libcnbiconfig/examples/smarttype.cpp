@@ -16,12 +16,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "SmartType.hpp"
+#include "XMLType.hpp"
 #include <string>
 #include <iostream>
 
 int main(void) {
-	SmartType type(true);
+	XMLType type(true);
 
 	type.Guess("tana");
 	type.Guess("1");
@@ -31,7 +31,7 @@ int main(void) {
 	type.Guess("false");
 	type.Guess("127.0.0.1");
 
-	SmartType type2(false);
+	XMLType type2(false);
 	
 	type2.Guess("1");
 	std::cout << "Got: " << type2.Int() << std::endl;

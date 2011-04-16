@@ -20,12 +20,12 @@
 #define CCFGTASK_HPP
 
 #include "CCfgTypes.hpp"
-#include "SmartType.hpp"
+#include "XMLType.hpp"
 #include <map>
 #include <string>
 
-typedef std::map<std::string, SmartType> CCfgTaskConfig;
-typedef std::map<std::string, SmartType>::iterator CCfgTaskConfigIt;
+typedef std::map<std::string, XMLType> CCfgTaskConfig;
+typedef std::map<std::string, XMLType>::iterator CCfgTaskConfigIt;
 
 /*! \brief Definition of a Task according to the CNBI XML definitions
  *
