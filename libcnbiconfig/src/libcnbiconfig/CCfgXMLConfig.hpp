@@ -36,9 +36,10 @@ class CCfgXMLConfig {
 	friend class CCfgConfig;
 
 	public:
-		CCfgXMLConfig(const std::string& filename,
-				const std::string& rootname = "cnbiconfig");
+		CCfgXMLConfig(const std::string& rootname = "cnbiconfig");
 		virtual ~CCfgXMLConfig(void);
+		bool ImportFile(const std::string& filename);
+		bool ImportBuffer(const std::string& filename);
 
 		CCfgXMLConfig* Root(void);
 		CCfgXMLConfig* Go(const std::string& blockname);

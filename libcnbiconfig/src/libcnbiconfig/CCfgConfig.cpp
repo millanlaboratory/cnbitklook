@@ -21,10 +21,13 @@
 #include <iostream>
 #include <stdlib.h>
 
-CCfgConfig::CCfgConfig(const std::string& filename) : CCfgXMLConfig(filename) {
+		
+bool CCfgConfig::LoadFile(const std::string& filename) {
+	return CCfgXMLConfig::ImportFile(filename);
 }
 
-CCfgConfig::~CCfgConfig(void) {
+bool CCfgConfig::LoadBuffer(const std::string& filename) {
+	return CCfgXMLConfig::ImportBuffer(filename);
 }
 		
 bool CCfgConfig::Validate(void) {

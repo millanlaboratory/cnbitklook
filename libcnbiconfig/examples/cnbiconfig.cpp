@@ -26,7 +26,9 @@ using namespace std;
 
 int main(void) {
 	try {
-		CCfgConfig config("../extra/example.xml");
+		CCfgConfig config;
+		config.LoadFile("../extra/example.xml");
+
 		if(config.Validate() == false) {
 			cout << "XML file is not valid\n";
 			return -1;

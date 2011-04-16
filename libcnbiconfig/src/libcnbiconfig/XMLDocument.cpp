@@ -30,19 +30,16 @@ XMLDocument::XMLDocument(unsigned int bsize) {
 }
 
 XMLDocument::~XMLDocument() {
+	delete(this->_buffer);
 }
 
-void XMLDocument::ImportFile(std::string filename) {
+int XMLDocument::ImportFile(const std::string& filename) {
 	std::ifstream file;
 	std::string cache, buffer;
 	file.open(filename.c_str(), std::ios::in);
 	
-	if(file == NULL) {
-		std::string info;
-		info += "XML file not found: ";
-		info += filename;
-		throw XMLException(info, __PRETTY_FUNCTION__);
-	}
+	if(file == NULL) 
+		return XMLDocument::FileInputError;
 
 	while(!file.eof()) {
 		getline(file, cache);
@@ -51,12 +48,17 @@ void XMLDocument::ImportFile(std::string filename) {
 	}
 	file.close();
 	
-	this->FillBuffer(&buffer);
-	this->Parse();
+	int status = this->FillBuffer(&buffer);
+	if(status != XMLDocument::Successfull)
+		return status;
+	return this->Parse();
 }
 
-void XMLDocument::ImportBuffer(std::string buffer) {
-	//TODO
+int XMLDocument::ImportBuffer(const std::string& buffer) {
+	int status = this->FillBuffer(&buffer);
+	if(status != XMLDocument::Successfull)
+		return status;
+	return this->Parse();
 }
 
 void XMLDocument::Dump(void) {
@@ -70,23 +72,21 @@ void XMLDocument::Stats(void) {
 	printf("  Buffer size: %d bytes\n", this->_bsize);
 	printf("  Buffer used: %d bytes\n", (int)strlen(this->_buffer));
 }
+
+int XMLDocument::FillBuffer(const std::string* buffer) {
+	memset(this->_buffer, 0, this->_bsize); 
+
+	if(buffer->size() > this->_bsize)
+		return BufferOverflow;
+	memcpy(this->_buffer, buffer->c_str(), buffer->size());
+	return Successfull;
+}
 	
-void XMLDocument::Parse(void) {
+int XMLDocument::Parse(void) {
 	try {
 		this->doc.parse<0>(this->_buffer);
 	} catch(rapidxml::parse_error e) {
-		// TODO: use rapidxml::parse_error::where()
-		throw XMLException("XML is malformed", __PRETTY_FUNCTION__);
+		return ParsingError;
 	}
-}
-
-void XMLDocument::FillBuffer(std::string* buffer) {
-	memset(this->_buffer, 0, this->_bsize); 
-
-	if(buffer == NULL)
-		return;
-
-	if(buffer->size() > this->_bsize)
-		throw XMLException("Buffer too small to load XML", __PRETTY_FUNCTION__);
-	memcpy(this->_buffer, buffer->c_str(), buffer->size());
+	return Successfull;
 }

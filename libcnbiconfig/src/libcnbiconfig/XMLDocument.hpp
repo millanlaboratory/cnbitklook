@@ -26,21 +26,23 @@ typedef rapidxml::xml_attribute<>* XMLAttr;
 
 class XMLDocument {
 	public:
-		XMLDocument(unsigned int bsize = 8192);
+		XMLDocument(unsigned int bsize = 20480);
 		virtual ~XMLDocument();
-		
-		virtual void ImportFile(std::string filename);
-		virtual void ImportBuffer(std::string buffer);
-
+		virtual int ImportFile(const std::string& filename);
+		virtual int ImportBuffer(const std::string& buffer);
 		virtual void Dump(void);
 		virtual void Stats(void);
-
 	protected:
-		virtual void Parse(void);
-		virtual void FillBuffer(std::string* buffer);
+		virtual int Parse(void);
+		virtual int FillBuffer(const std::string* buffer);
 
 	public:
 		rapidxml::xml_document<> doc;
+	public:
+		const static int Successfull = 0;
+		const static int FileInputError = 2;
+		const static int BufferOverflow = 2;
+		const static int ParsingError = 2;
 
 	protected:
 		unsigned int _bsize;

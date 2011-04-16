@@ -21,22 +21,22 @@
  */
 class CCfgConfig : public CCfgXMLConfig {
 	public:
-		CCfgConfig(const std::string& filename);
-		virtual ~CCfgConfig(void);
-		virtual bool Validate(void);
+		bool Validate(void);
+		bool LoadFile(const std::string& filename);
+		bool LoadBuffer(const std::string& filename);
 
-		virtual CCfgTaskset* Online(const std::string& blockname, 
+		CCfgTaskset* Online(const std::string& blockname, 
 				const std::string& taskset, ICMessage* icmessage = NULL);
-		virtual CCfgTaskset* Offline(const std::string& blockname,
+		CCfgTaskset* Offline(const std::string& blockname,
 				const std::string& taskset);
 
 	private:
-		virtual void ParseTaskset(const std::string& name,
+		void ParseTaskset(const std::string& name,
 				CCfgTaskset* taskset);
-		virtual void ParseConfig(const std::string& mode,
+		void ParseConfig(const std::string& mode,
 				const std::string& modename, const std::string& tasksetname,
 				CCfgTaskset* taskset);
-		virtual void ParseClassifier(const std::string& modename, 
+		void ParseClassifier(const std::string& modename, 
 				const std::string& tasksetname, CCfgTaskset* taskset,
 				ICMessage* icmessage);
 };

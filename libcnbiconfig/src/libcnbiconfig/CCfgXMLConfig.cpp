@@ -23,16 +23,24 @@
 
 using namespace rapidxml;
 
-CCfgXMLConfig::CCfgXMLConfig(const std::string& filename, const std::string& rootname) {
+CCfgXMLConfig::CCfgXMLConfig(const std::string& rootname) {
 	this->_nRoot = NULL;
 	this->_nLeaf = NULL;
 	this->_nLeaf = NULL;
 	this->_rootname.assign(rootname);
+}
+
+CCfgXMLConfig::~CCfgXMLConfig(void) {
+}
+
+bool CCfgXMLConfig::ImportFile(const std::string& filename) {
 	this->_document.ImportFile(filename);
 	this->SearchRoot();
 }
 
-CCfgXMLConfig::~CCfgXMLConfig(void) {
+bool CCfgXMLConfig::ImportBuffer(const std::string& filename) {
+	this->_document.ImportBuffer(filename);
+	this->SearchRoot();
 }
 	
 void CCfgXMLConfig::SearchRoot(void) {

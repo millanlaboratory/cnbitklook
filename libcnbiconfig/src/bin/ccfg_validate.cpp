@@ -31,7 +31,8 @@ int main(int argc, char *argv[]) {
 	CCfgConfig* config;
 	string filename(argv[1]);
 	try {
-		config = new CCfgConfig(filename);
+		config = new CCfgConfig();
+		config->LoadFile(filename);
 	} catch(XMLException e) {
 		cout << "[ccfg_validate] Exception: " << e << endl;
 		return -2;
