@@ -31,7 +31,6 @@ CcThread::CcThread(void) {
 CcThread::~CcThread(void) {
 }
 
-#include <iostream>
 void CcThread::Start(void) {
 	this->pBeforeStart();
 	if(this->IsRunning())
@@ -53,10 +52,6 @@ void CcThread::Stop(void) {
 }
 
 void CcThread::Join(void) {
-	/*
-	if(this->_thread == NULL)
-		return;
-	 */
 	pthread_join(this->_thread, NULL);
 }
 		
