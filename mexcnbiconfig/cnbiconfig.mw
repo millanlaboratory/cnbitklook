@@ -210,12 +210,12 @@ $ #include <stdio.h>
 	# uint retval = quickuint(CCfgConfig* cptr, std::string* spath);
 
 
-@function [tptr] = ccfgtaskset_new();
-	$ CCfgTaskset* new_taskset(void) {
-	$ 	CCfgTaskset* taskset = new CCfgTaskset();
+@function [tptr] = ccfgtaskset_new(name);
+	$ CCfgTaskset* new_taskset(std::string* name) {
+	$ 	CCfgTaskset* taskset = new CCfgTaskset(*name);
 	$ 	return taskset;
 	$ }
-	# CCfgTaskset* tptr = new_taskset();
+	# CCfgTaskset* tptr = new_taskset(std::string* name);
 
 @function [tptr] = ccfgtaskset_delete(tptr)
 	# delete(CCfgTaskset* tptr);
@@ -223,7 +223,7 @@ $ #include <stdio.h>
 @function [kptr, tptr] = ccfgtaskset_gettask(tptr, what)
 	$ CCfgTask* gettask(CCfgTaskset* tptr, std::string* what) {
 	$	try {
-	$ 		return tptr->GetEx(*what);
+	$ 		return tptr->GetTaskEx(*what);
 	$	} catch(XMLException e) {
 	$		printf("[ccfgtaskset_gettask] Exception in libcnbiconfig: %s, %s\n",
 	$			e.Caller().c_str(), e.Info().c_str());
@@ -236,7 +236,7 @@ $ #include <stdio.h>
 @function [kptr, tptr] = ccfgtaskset_gettaskbyid(tptr, id)
 	$ CCfgTask* gettaskbyid(CCfgTaskset* tptr, unsigned int id) {
 	$	try {
-	$ 		return tptr->GetEx(id);
+	$ 		return tptr->GetTaskEx(id);
 	$	} catch(XMLException e) {
 	$		printf("[ccfgtaskset_gettaskbyid] Exception in libcnbiconfig: %s, %s\n",
 	$			e.Caller().c_str(), e.Info().c_str());
@@ -274,7 +274,7 @@ $ #include <stdio.h>
 	$   if(tptr == NULL)
 	$		return NULL;
 	$	try {
-	$ 		return tptr->Has(*what);
+	$ 		return tptr->HasTask(*what);
 	$	} catch(XMLException e) {
 	$		printf("[ccfgtaskset_hastask] Exception in libcnbiconfig: %s, %s\n",
 	$			e.Caller().c_str(), e.Info().c_str());
