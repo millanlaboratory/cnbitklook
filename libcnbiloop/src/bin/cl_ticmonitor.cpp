@@ -59,6 +59,8 @@ int main(int argc, char* argv[]) {
 		// Open iC
 		if(ic.Attach(optport, optname) == false) {
 			ic.Detach();
+			if(CcCore::receivedSIGAny.Get())
+				goto shutdown;
 			CcTime::Sleep(5000);
 			continue;
 		}
@@ -66,9 +68,9 @@ int main(int argc, char* argv[]) {
 		// Wait for the first message to arrive
 		CcLogInfo("Waiting for endpoint...");
 		while(ic.WaitMessage(&serializer) != ClTobiIc::HasMessage) {
-			CcTime::Sleep(1000.00f);
 			if(CcCore::receivedSIGAny.Get())
 				goto shutdown;
+			CcTime::Sleep(1000.00f);
 		}
 
 		int status = ClTobiIc::NoMessage;
