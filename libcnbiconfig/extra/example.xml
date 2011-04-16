@@ -157,7 +157,7 @@
 			<description>Today</description>
 			<filename>b3_mi_20091202.mat</filename>
 			<icvalue>ValueProb</icvalue>
-			<iclabel>LabelClass</iclabel>
+			<iclabel>LabelBiosig</iclabel>
 		</kmi1>
 		<kerrp0>
 			<description>ErrP_classifier</description>

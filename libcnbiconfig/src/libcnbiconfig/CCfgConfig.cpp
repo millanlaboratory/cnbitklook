@@ -239,7 +239,7 @@ void CCfgConfig::ParseClassifierEx(const std::string& modename,
 	while(it != taskset->tasks.end()) {
 		std::string label;
 		
-		if(labeltype.compare("LabelBiosig") == 0) {
+		if(labeltype.compare(ICClassifier::TxtLabelBiosig) == 0) {
 			char cache[16];
 			sprintf(cache, "0x%X", it->second->gdf);
 			label.assign(cache);
