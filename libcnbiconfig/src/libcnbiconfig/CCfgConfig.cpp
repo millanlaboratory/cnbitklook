@@ -237,7 +237,16 @@ void CCfgConfig::ParseClassifierEx(const std::string& modename,
 
 	CCfgTasksetIt it = taskset->tasks.begin();
 	while(it != taskset->tasks.end()) {
-		ICClass* cclass = new ICClass(it->first, 0.00f);
+		std::string label;
+		
+		if(labeltype.compare("LabelBiosig") == 0) {
+			char cache[16];
+			sprintf(cache, "0x%X", it->second->gdf);
+			label.assign(cache);
+		} else {
+			label.assign(it->first);
+		}
+		ICClass* cclass = new ICClass(label, 0.00f);
 		classifier->classes.Add(cclass);
 		it++;
 	}

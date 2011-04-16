@@ -151,7 +151,7 @@
 			<description>Yesterday</description>
 			<filename>b3_mi_20091204.mat</filename>
 			<icvalue>ValueProb</icvalue>
-			<iclabel>LabelClass</iclabel>
+			<iclabel>LabelBiosig</iclabel>
 		</kmi0>
 		<kmi1>
 			<description>Today</description>

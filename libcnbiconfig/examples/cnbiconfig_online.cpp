@@ -43,7 +43,9 @@ int main(void) {
 			
 
 	/* We will now ask CCfgConfig to return the tasket 
-	 * identified by blockname and tasksetname
+	 * identified by blockname and tasksetname.
+	 * We also pass an ICMessage so that it gets configured depending on the
+	 * taskset.
 	 */
 	CCfgTaskset* online = NULL;
 	ICMessage message;
@@ -54,6 +56,7 @@ int main(void) {
 		cout << "Exception: " << e << endl;
 		return 1;
 	}
+	message.Dump();
 
 	/* So far so good. Each tasket has several tasks, such as
 	 * right/left mi.  The number of tasks is not fixed.
