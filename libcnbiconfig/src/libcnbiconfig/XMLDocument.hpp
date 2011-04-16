@@ -28,10 +28,10 @@ class XMLDocument {
 	public:
 		XMLDocument(unsigned int bsize = 20480);
 		virtual ~XMLDocument();
-		virtual int ImportFile(const std::string& filename);
-		virtual int ImportBuffer(const std::string& buffer);
-		virtual void Dump(void);
-		virtual void Stats(void);
+		int ImportFile(const std::string& filename);
+		int ImportBuffer(const std::string& buffer);
+		void Dump(void);
+		void Stats(void);
 	protected:
 		virtual int Parse(void);
 		virtual int FillBuffer(const std::string* buffer);
