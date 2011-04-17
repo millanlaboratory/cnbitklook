@@ -27,8 +27,9 @@
 using namespace std;
 
 void usage(void) { 
-	printf("Usage: cl_nameserver [-a IP:PORT]\n");
-	printf("Where: -a       127.0.0.1:8000 (default)\n");
+	printf("Usage: cl_nameserver [OPTION]...\n");
+	printf("  -a       TCP endpoint (127.0.0.1:8000 default)\n");
+	printf("  -h       display this help and exit\n");
 	exit(1);
 }
 

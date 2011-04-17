@@ -30,23 +30,31 @@
 
 using namespace std;
 
+void idle(void) {
+	char a;
+	printf("Press Enter to initiate acquisition");
+	cin >> a;
+}
+
 void usage(void) { 
-	printf("Usage: cl_acquisition ");
-	printf("-d [DEV] [-f HZ -a IP:PORT -n NAME]\n");
-	printf("Where: -d       gTec/Biosemi ID, GDF/BDF filename\n");
-	printf("       -f       16 (default), 32, 64...\n");
-	printf("       -a       9000 (default)\n");
-	printf("       -n       /tmp/cl.pipe.ndf. (default)\n");
+	printf("Usage: cl_acquisition [OPTION]...\n\n");
+	printf("  -d       the acquisition device: gtec, biosemi (default), GDF/BDF filename, EGD string\n");
+	printf("  -f       the buffering rate in Hz (16 default)\n");
+	printf("  -a       the TCP port for the acquisition server (9000 default)\n");
+	printf("  -n       the basename for the pipes (/tmp/cl.pipe.ndf. default)\n");
+	printf("  -i       interactive acquisition starting\n");
+	printf("  -h       display this help and exit\n");
 }
 
 int main(int argc, char* argv[]) {
 	int opt;
-	std::string optdevice;
+	std::string optdevice("biosemi");
 	std::string optfs("16");
 	CcEndpoint optendpoint("127.0.0.1:9000");
 	std::string optpipename("/tmp/cl.pipe.ndf.");
+	bool optinteractive = false;
 
-	while ((opt = getopt(argc, argv, "d:f:p:n:h")) != -1) {
+	while((opt = getopt(argc, argv, "d:f:p:n:hi")) != -1) {
 		if(opt == 'd')
 			optdevice.assign(optarg);
 		else if(opt == 'f')
@@ -55,6 +63,8 @@ int main(int argc, char* argv[]) {
 			optendpoint.SetAddress(optarg);
 		else if(opt == 'n')
 			optpipename.assign(optarg);
+		else if(opt == 'i')
+			optinteractive = true;
 		else {
 			usage();
 			return(opt == 'h') ? EXIT_SUCCESS : EXIT_FAILURE;
@@ -69,10 +79,14 @@ int main(int argc, char* argv[]) {
 			append(optpipename).append(", ").
 			append(optendpoint.GetAddress()).append("/TCP"));
 	
+	// Variables for mainloop
+	CcTimeValue ticSignals;
+	size_t gsize = -1, asize = -1;
+	
 	// Prepare NDF frame and its semafore
 	ndf_frame frame;
 	CcSemaphore semframe;
-	
+
 	// Open, Setup and Start EGD device
 	CaDevice eegdev;
 	if(eegdev.Open(optdevice) == false) {
@@ -83,18 +97,14 @@ int main(int argc, char* argv[]) {
 		CcLogFatal("Cannot setup EGD device");
 		exit(3);
 	}
-	if(eegdev.Start() == false) {
-		CcLogFatal("Cannot start EGD device");
-		exit(4);
-	}
-	// Initialize NDF frame according to EGD preferences
+	// Initialize XDF writer and NDF frame
+	CaWriter writer(&eegdev);
 	eegdev.InitNDF(&frame);
 
 	// Setup XDF writer
 	std::string tmpfn;
 	CcTime::Timestamp(&tmpfn);
 	tmpfn.append(".bdf");
-	CaWriter writer(&eegdev);
 
 	// Setup CcPipeServer
 	CcPipeServer* pipes;
@@ -135,15 +145,21 @@ int main(int argc, char* argv[]) {
 		}
 	}
 
-	CcLogInfo("Starting acquisiton");
-	CcTimeValue tvSigCheck;
-	CcTime::Tic(&tvSigCheck);
-	size_t gsize = -1, asize = -1;
+	if(optinteractive == true)
+		idle();
+
+	if(eegdev.Start() == false) {
+		CcLogFatal("Cannot start EGD device");
+		goto shutdown;
+	}
+	CcLogInfo("Started EGD device");
+
+	CcTime::Tic(&ticSignals);
 	while(true) {
 		gsize = eegdev.GetData();
 		asize = eegdev.GetAvailable();
 		if(gsize == (size_t)-1) {
-			CcLogFatal("Device is down");
+			CcLogFatal("EGD device is down");
 			break;
 		}
 		writer.Write(gsize);
@@ -156,17 +172,18 @@ int main(int argc, char* argv[]) {
 		ndf_clear_labels(&frame);
 		semframe.Post();
 		
-		if(CcTime::Toc(&tvSigCheck) >= 2000.00f) {
+		if(CcTime::Toc(&ticSignals) >= 2000.00f) {
 			if(nsclient.Connect() == false)  {
 				CcLogFatal("Lost connection with nameserver");
 				break;
 			}
 			if(CcCore::receivedSIGAny.Get()) 
 				break;
-			CcTime::Tic(&tvSigCheck);
+			CcTime::Tic(&ticSignals);
 		}
 	}
 
+shutdown:
 	// Stop and unregister ClAcqAsServer
 	server.Release();
 	server.Join();
@@ -178,8 +195,6 @@ int main(int argc, char* argv[]) {
 		pipename << "/pipe" << p;
 		nsclient.Unset(pipename.str());
 	}
-
-	CcLogInfo("Stopping acquisition");
 
 	if(writer.Close() == false)
 		CcLogError("Cannot stop XDF writer");

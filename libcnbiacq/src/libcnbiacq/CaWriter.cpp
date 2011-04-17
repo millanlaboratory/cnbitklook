@@ -39,7 +39,8 @@ CaWriter::~CaWriter(void) {
 bool CaWriter::Setup(CaDevice* device) {
 	this->_semlock.Wait();
 	if(device == NULL && this->_device == NULL) {
-		CcLogFatalS("No CaDevice is set");
+		CcLogErrorS("Setup requires a CaDevice to be set");
+		return false;
 	} else if(device != NULL) {
 		this->_device = device;
 	} 
@@ -102,7 +103,7 @@ bool CaWriter::Open(const std::string& filename) {
 bool CaWriter::Close(void) {
 	this->_semlock.Wait();
 	if(this->_file == false) {
-		CcLogError("File is not open");
+		CcLogDebug("File is not open");
 		goto failure;
 	}
 
