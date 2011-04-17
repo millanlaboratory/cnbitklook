@@ -29,13 +29,13 @@
 
 class ClTobiId : public CcSocketProxy {
 	public:
-		ClTobiId(void);
+		ClTobiId(int mode = ClTobiId::SetOnly);
 		virtual ~ClTobiId(void);
 		virtual bool Attach(const std::string& name = "/acquisition");
 		virtual bool Detach(void);
 		virtual bool IsAttached(void);
 		virtual bool GetMessage(IDSerializerRapid* serializer);
-		virtual bool SendMessage(IDSerializerRapid* serializer);
+		virtual bool SetMessage(IDSerializerRapid* serializer);
 		virtual int Count(void);
 	protected:
 		virtual void HandleConnect(CcSocket* caller);
@@ -43,6 +43,10 @@ class ClTobiId : public CcSocketProxy {
 		virtual void HandleRecv(CcSocket* caller);
 
 	public:
+		static const int SetOnly = 0;
+		static const int GetOnly = 1;
+		static const int SetGet = 2;
+
 	protected:
 		CcClient* _client;
 		std::string _name;
@@ -51,6 +55,7 @@ class ClTobiId : public CcSocketProxy {
 		
 		CcSemaphore _semqueue;
 		std::list<std::string> _queue;
+		int _mode;
 };
 
 #endif

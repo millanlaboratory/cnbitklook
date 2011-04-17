@@ -53,7 +53,7 @@ int main(int argc, char* argv[]) {
 
 	std::string absolute, relative;
 
-	ClTobiId id;
+	ClTobiId id(ClTobiId::SetGet);
 	while(true) { 
 		if(id.Attach(optname) == false) {
 			if(CcCore::receivedSIGAny.Get())
@@ -70,15 +70,15 @@ int main(int argc, char* argv[]) {
 					goto shutdown;
 				continue;
 			}
+
+			if(id.SetMessage(&serializerO) == false) {
+				CcLogFatalS("Cannot set iD event: " << messageO.GetEvent());
+				goto shutdown;
+			}
 			
 			if(CcCore::receivedSIGAny.Get())
 				goto shutdown;
 			
-			if(id.SendMessage(&serializerO) == false) {
-				CcLogFatalS("Cannot send iD event: " << messageO.GetEvent());
-				goto shutdown;
-			}
-		
 			while(id.GetMessage(&serializerI) == true) {
 				messageI.absolute.Get(&absolute);
 				messageI.relative.Get(&relative);

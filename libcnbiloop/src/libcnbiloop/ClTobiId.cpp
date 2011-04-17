@@ -21,9 +21,10 @@
 
 #include "ClTobiId.hpp" 
 
-ClTobiId::ClTobiId(void) {
+ClTobiId::ClTobiId(int mode) {
 	ClLoop::Instance();
 	this->_client = NULL;
+	this->_mode = mode;
 }
 
 ClTobiId::~ClTobiId(void) {
@@ -91,15 +92,24 @@ void ClTobiId::HandleRecv(CcSocket* caller) {
 	if(this->_semqueue.TryWait() == false) 
 		return;
 	
-	std::string buffer;
-	bool status = this->_client->datastream.Extract(&buffer, "<tobiid",
-			"/>");
-	if(status) 
-		this->_queue.push_back(buffer);
+	if(this->_mode == ClTobiId::SetOnly) {
+		this->_client->datastream.Clear();	
+	} else {
+		std::string buffer;
+		bool status = this->_client->datastream.Extract(&buffer, "<tobiid",
+				"/>");
+		if(status) 
+			this->_queue.push_back(buffer);
+	}
 	this->_semqueue.Post();
 }
 		
 bool ClTobiId::GetMessage(IDSerializerRapid* serializer) {
+	if(this->_mode == ClTobiId::SetOnly) {
+		CcLogError("iD interface configures as SetOnly");
+		return false;
+	}
+
 	this->_semqueue.Wait();
 	if(this->_queue.empty()) {
 		this->_semqueue.Post();
@@ -120,7 +130,12 @@ int ClTobiId::Count(void) {
 	return count;
 }
 		
-bool ClTobiId::SendMessage(IDSerializerRapid* serializer) {
+bool ClTobiId::SetMessage(IDSerializerRapid* serializer) {
+	if(this->_mode == ClTobiId::GetOnly) {
+		CcLogError("iD interface configures as GetOnly");
+		return false;
+	}
+	
 	std::string buffer;
 	serializer->message->absolute.Tic();
 	serializer->Serialize(&buffer);
