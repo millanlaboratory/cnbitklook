@@ -249,12 +249,12 @@
 		</errp_false>
 		<onset_true>
 			<description>MI_Onset_Detected</description>
-			<gdfevent>0x010</gdfevent>
+			<gdfevent>0x0010</gdfevent>
 			<hwtrigger>3</hwtrigger>
 		</onset_true>
 		<onset_false>
 			<description>MI_Onset_NotDetected</description>
-			<gdfevent>0x011</gdfevent>
+			<gdfevent>0x0011</gdfevent>
 			<hwtrigger>3</hwtrigger>
 		</onset_false>
 	</tasks>
@@ -271,7 +271,7 @@
 			<targetmiss>0x0382</targetmiss>
 			<beep>0x0311</beep>
 			<cueundef>0x030f</cueundef>
-			<wait>0xFFFF</wait>
+			<wait>0x0001</wait>
 			<fixation>0x0312</fixation>
 		</gdfevents>
 		<hwtriggers>

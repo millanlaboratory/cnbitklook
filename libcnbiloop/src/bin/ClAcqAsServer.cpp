@@ -168,6 +168,7 @@ bool ClAcqAsServer::CommunicationCl(CcServerMulti* server, CcAddress address) {
 }
 
 bool ClAcqAsServer::CommunicationTiD(CcServerMulti* server, CcAddress address) {
+	int idblock = TCBlock::BlockIdxUnset, ndfblock = TCBlock::BlockIdxUnset;
 	IDevent idevent;
 	IDFtype idfamily;
 	std::string message;
@@ -179,7 +180,8 @@ bool ClAcqAsServer::CommunicationTiD(CcServerMulti* server, CcAddress address) {
 	this->_serializerD->Deserialize(&message);
 	idevent = this->_messageD.GetEvent();
 	idfamily = this->_messageD.GetFamilyType();
-
+	idblock = this->_messageD.GetBlockIdx();
+	
 	// Verify family type for compatibility
 	if(idfamily != IDMessage::FamilyBiosig) {
 		CcLogWarning("TiD family type not supported");
@@ -187,21 +189,28 @@ bool ClAcqAsServer::CommunicationTiD(CcServerMulti* server, CcAddress address) {
 	}
 	
 	if(this->_messageD.absolute.IsSet()) {
-		// Add label to CaWriter
+		this->_writer->Tic(&this->_messageD);
 		this->_semframe->Wait();
+		if(idblock == TCBlock::BlockIdxUnset) {
+			ndfblock = ndf_get_fidx(this->_frame);
+			this->_messageD.SetBlockIdx(ndfblock);
+		}
 		if(ndf_add_label(this->_frame, &idevent) == NULL)
 			CcLogError("TiD event is valid but cannot be added to NDF frame");
 		// TODO add event to file
+		this->_writer->AddEvent(idevent);
 		this->_semframe->Post();
 
 		/* Perform all the necessary operations on the timestamps
 		 * and distribute to all connected clients but the sender
 		 */
-		this->_writer->Tic(&this->_messageD);
 		this->_serializerD->Serialize(&message);
 		server->SendNot(message.c_str(), address);
-		CcLogInfoS("TiD event received from " << address << 
-					" and distributed: " << idevent <<
+		
+		CcLogInfoS("TiD event from " << address << " distributed: " <<
+					this->_messageD.GetDescription() << "::" <<
+					idevent << "@" <<
+					idblock << "/" << ndfblock << 
 					" (" << this->_writer->TocOpen()/1000 << "s)");
 	} else {
 		CcLogError("TiD event is not valid and will not be distributed");

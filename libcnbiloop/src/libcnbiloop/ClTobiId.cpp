@@ -130,7 +130,7 @@ int ClTobiId::Count(void) {
 	return count;
 }
 		
-bool ClTobiId::SetMessage(IDSerializerRapid* serializer) {
+bool ClTobiId::SetMessage(IDSerializerRapid* serializer, int blockidx) {
 	if(this->_mode == ClTobiId::GetOnly) {
 		CcLogError("iD interface configures as GetOnly");
 		return false;
@@ -138,6 +138,7 @@ bool ClTobiId::SetMessage(IDSerializerRapid* serializer) {
 	
 	std::string buffer;
 	serializer->message->absolute.Tic();
+	serializer->message->SetBlockIdx(blockidx);
 	serializer->Serialize(&buffer);
 	return(this->_client->Send(&buffer) == (int)buffer.size());
 }

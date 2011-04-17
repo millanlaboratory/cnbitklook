@@ -44,16 +44,19 @@ int main(int argc, char* argv[]) {
 	CcCore::CatchSIGINT();
 	CcCore::CatchSIGTERM();
 
-	IDMessage messageI, messageO;
-	IDSerializerRapid serializerI(&messageI), serializerO(&messageO);
+	IDMessage messageI;
+	IDSerializerRapid serializerI(&messageI);
 
+#ifdef ENABLE_BOUNCE
+	IDMessage messageO;
 	messageO.SetDescription("cl_tidmonitor");
 	messageO.SetFamilyType(IDMessage::FamilyBiosig);
 	messageO.SetEvent(0xFFFF);
-
-	std::string absolute, relative;
+	IDSerializerRapid serializerO(&messageO);
+#endif
 
 	ClTobiId id(ClTobiId::SetGet);
+	std::string absolute, relative;
 	while(true) { 
 		if(id.Attach(optname) == false) {
 			if(CcCore::receivedSIGAny.Get())
@@ -65,16 +68,18 @@ int main(int argc, char* argv[]) {
 	
 		while(id.IsAttached() == true) { 
 			if(id.Count() == 0) {
-				CcTime::Sleep(500.00f);
+				CcTime::Sleep(250.00f);
 				if(CcCore::receivedSIGAny.Get())
 					goto shutdown;
 				continue;
 			}
 
+#ifdef ENABLE_BOUNCE
 			if(id.SetMessage(&serializerO) == false) {
 				CcLogFatalS("Cannot set iD event: " << messageO.GetEvent());
 				goto shutdown;
 			}
+#endif
 			
 			if(CcCore::receivedSIGAny.Get())
 				goto shutdown;
@@ -84,7 +89,7 @@ int main(int argc, char* argv[]) {
 				messageI.relative.Get(&relative);
 
 				CcLogInfoS("TiD event:" << 
-						", Family=" << messageI.GetFamily() << 
+						" Family=" << messageI.GetFamily() << 
 						", Event=" << messageI.GetEvent() << 
 						", Description=" << messageI.GetDescription() <<
 						", Block=" << messageI.GetBlockIdx() <<

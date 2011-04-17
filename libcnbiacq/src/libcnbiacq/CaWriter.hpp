@@ -37,8 +37,10 @@ class CaWriter {
 		int Write(int nswrite);
 		virtual double TocOpen(void);
 		virtual void Tic(TCBlock* block);
+		bool AddEvent(unsigned int event, double duration = 0.00f);
 	protected:
 		int SetupChannelGroup(int igrp);
+		bool SetupEvents(void);
 
 	protected:
 		struct xdf* _file;
