@@ -224,7 +224,7 @@ void CaDevice::WriteNDF(ndf_frame* frame, bool inc, bool tic) {
 		ndf_write_eeg_frame(frame, this->_eeg);
 	if(this->_exg != NULL)
 		ndf_write_exg_frame(frame, this->_exg);
-	if(this->_tri != NULL)
+	if(this->_tri != NULL) 
 		ndf_write_tri_frame(frame, this->_tri);
 }
 

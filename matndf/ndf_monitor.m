@@ -142,6 +142,7 @@ try
 			imagesc(buffer.tri');
 			ylabel('tri');
 			set(gca, 'XTickLabel', {});
+			set(gca, 'YTickLabel', {});
 			drawnow;
 		end
 
