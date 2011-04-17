@@ -57,7 +57,7 @@
 	
 	<!-- Offline Blocks -->
 	<offline>
-		<smr> <!-- This is a Block -->
+		<mi> <!-- This is a Block -->
 			<description>Offline_MI</description>
 			<taskset key="mi_rhlh"> <!-- This is a Taskset -->
 				<trials>
@@ -77,15 +77,30 @@
 					<mi_hand_left>15</mi_hand_left>
 				</trials>
 			</taskset>
+			<taskset key="mi_rlsf">
+				<trials>
+					<mi_both_feet>15</mi_both_feet>
+					<mi_hand_left>15</mi_hand_left>
+					<mi_hand_right>15</mi_hand_right>
+					<mi_rest>15</mi_rest>
+				</trials>
+			</taskset>
+			<taskset key="mi_rlbf">
+				<trials>
+					<mi_both_feet>15</mi_both_feet>
+					<mi_hand_left>15</mi_hand_left>
+					<mi_hand_right>15</mi_hand_right>
+				</trials>
+			</taskset>
 			<granularity>16</granularity>
 			<threshold>0.85</threshold>
 			<viscosity>0.05</viscosity>
-		</smr>
+		</mi>
 	</offline>
 	
 	<!-- Online Block -->
 	<online>
-		<smr>
+		<mi>
 			<description>Online_MI</description>
 			<taskset key="mi_rhlh" classifier="kmi0">
 				<threshold>
@@ -98,8 +113,8 @@
 				</trials>
 			</taskset>
 			<integration>0.96</integration>
-		</smr>
-		<smrerrp>
+		</mi>
+		<mierrp>
 			<description>Online_MI_ErrP</description>
 			<taskset key="mi_rhlh" classifier="kmi0">
 				<threshold>
@@ -125,7 +140,7 @@
 					<errp_false>0.80</errp_false>
 				</priors>
 			</taskset>
-		</smrerrp>
+		</mierrp>
 	</online>
 
 	<!-- Classifiers Block -->
@@ -246,19 +261,7 @@
 	
 	<!-- Standard Events List -->
 	<events>
-		<run_begin>
-			<description>Run_Begin</description>
-			<gdfevent>0x0302</gdfevent>
-			<hwtrigger>1</hwtrigger>
-		</run_begin>
-		<run_end>
-			<description>Run_End</description>
-			<gdfevent>0x0302</gdfevent>
-			<hwtrigger>1</hwtrigger>
-		</run_end>
-		
 		<gdfevents>
-			<off>0x8000</off>
 			<inc>0x030a</inc>
 			<trial>0x0300</trial>
 			<trialoff>0x8300</trialoff>
@@ -266,10 +269,24 @@
 			<cfeedbackoff>0x830d</cfeedbackoff>
 			<targethit>0x0381</targethit>
 			<targetmiss>0x0382</targetmiss>
-			<cross>0x0312</cross>
 			<beep>0x0311</beep>
 			<cueundef>0x030f</cueundef>
+			<wait>0xFFFF</wait>
+			<fixation>0x0312</fixation>
 		</gdfevents>
+		<hwtriggers>
+			<inc>255</inc>
+			<trial>255</trial>
+			<trialoff>255</trialoff>
+			<cfeedback>255</cfeedback>
+			<cfeedbackoff>255</cfeedbackoff>
+			<targethit>255</targethit>
+			<targetmiss>255</targetmiss>
+			<beep>255</beep>
+			<cueundef>255</cueundef>
+			<wait>255</wait>
+			<fixation>255</fixation>
+		</hwtriggers>
 	</events>
 
 	<!-- Configuration Block -->
