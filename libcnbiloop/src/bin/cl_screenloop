@@ -20,27 +20,20 @@ fi
 ACQUISITION="cl_acquisition -d $1";
 
 echo "[cl_screenloop] Starting screen session"
-screen -d -m -S cnbitk -t RPC bash
-sleep 2
+screen -d -m -S cnbitk -t "RPC Shell" bash
 
 echo "[cl_screenloop] Attaching cl_nameserver"
-screen -S cnbitk -dr -X screen -t Nameserver "cl_nameserver"
-sleep 2
+screen -S cnbitk -dr -X screen -t "Nameserver" "cl_nameserver"
 
+sleep 5
 echo "[cl_screenloop] Attaching cl_processing"
-screen -S cnbitk -dr -X screen -t Processing "cl_processing"
-sleep 2
+screen -S cnbitk -dr -X screen -t "Processing" "cl_processing"
 
 echo "[cl_screenloop] Attaching cl_acquisition"
-screen -S cnbitk -dr -X screen -t Acquisition $ACQUISITION
-sleep 2
-
-echo "[cl_screenloop] Attaching cl_monitor"
-screen -S cnbitk -dr -X screen -t NDF "cl_monitor -p /tmp/cl.pipe.ndf.5"
-sleep 2
+screen -S cnbitk -dr -X screen -t "Acquisition" $ACQUISITION
 
 echo "[cl_screenloop] Attaching cl_tidmonitor"
-screen -S cnbitk -dr -X screen -t TiD "cl_tidmonitor"
+screen -S cnbitk -dr -X screen -t "TiD Monitor" "cl_tidmonitor"
 
 
 CHECK=`screen -ls | grep cnbitk | awk '{print $1}'`;
