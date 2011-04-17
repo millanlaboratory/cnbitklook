@@ -51,7 +51,6 @@ class CcProcess : public CcObject {
 		pid_t _pid;
 	protected:
 		std::string _cmd;
-		std::stringstream _logstream;
 };
 
 #endif

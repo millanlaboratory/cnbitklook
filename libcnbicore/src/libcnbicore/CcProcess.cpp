@@ -120,7 +120,7 @@ pid_t CcProcess::Fork(void) {
 		return this->_pid;
 	}
 
-	CcLogDebugS(this->_logstream, "Forked: " << this->_pid);
+	CcLogDebugS("Forked: " << this->_pid);
 	if(CcPtable::Has(this->_pid) == false)
 		CcPtable::Add(this->_pid);
 	else
@@ -131,11 +131,11 @@ pid_t CcProcess::Fork(void) {
 int CcProcess::Terminate(void) {
 	int status = kill(this->_pid, SIGTERM);
 	if(status == 0) {
-		CcLogDebugS(this->_logstream, "Terminated: " << this->_pid);
+		CcLogDebugS("Terminated: " << this->_pid);
 		if(CcPtable::Has(this->_pid) == true)
 			CcPtable::SetDead(this->_pid);
 	} else {
-		CcLogWarningS(this->_logstream, "Can not terminate: " << this->_pid);
+		CcLogWarningS("Can not terminate: " << this->_pid);
 	}
 	return status;
 }
@@ -143,11 +143,11 @@ int CcProcess::Terminate(void) {
 int CcProcess::Kill(void) {
 	int status = kill(this->_pid, SIGKILL);
 	if(status == 0) {
-		CcLogDebugS(this->_logstream, "Killed: " << this->_pid);
+		CcLogDebugS("Killed: " << this->_pid);
 		if(CcPtable::Has(this->_pid) == true)
 			CcPtable::SetDead(this->_pid);
 	} else {
-		CcLogWarningS(this->_logstream, "Can not kill: " << this->_pid);
+		CcLogWarningS("Can not kill: " << this->_pid);
 	}
 	return status;
 }

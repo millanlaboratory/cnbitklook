@@ -85,8 +85,9 @@
 	message.str("");\
 	}
 
-#define CcLogConfigS(message, ...)\
+#define CcLogConfigS(...)\
 	{\
+	std::stringstream message;\
 	message << __VA_ARGS__;\
 	CcCore::logger.AddEntry(CcLogEntry(CcCore::LevelConfig,\
 				message.str(),\
@@ -94,8 +95,9 @@
 	message.str("");\
 	}
 
-#define CcLogExceptionS(message, ...)\
+#define CcLogExceptionS(...)\
 	{\
+	std::stringstream message;\
 	message << __VA_ARGS__;\
 	CcCore::logger.AddEntry(CcLogEntry(CcCore::LevelException,\
 				message.str(),\
@@ -103,8 +105,9 @@
 	message.str("");\
 	}
 
-#define CcLogDebugS(message, ...)\
+#define CcLogDebugS(...)\
 	{\
+	std::stringstream message;\
 	message << __VA_ARGS__;\
 	CcCore::logger.AddEntry(CcLogEntry(CcCore::LevelDebug,\
 				message.str(),\
@@ -112,8 +115,9 @@
 	message.str("");\
 	}
 
-#define CcLogInfoS(message, ...)\
+#define CcLogInfoS(...)\
 	{\
+	std::stringstream message;\
 	message << __VA_ARGS__;\
 	CcCore::logger.AddEntry(CcLogEntry(CcCore::LevelInfo,\
 				message.str(),\
@@ -121,8 +125,9 @@
 	message.str("");\
 	}
 
-#define CcLogWarningS(message, ...)\
+#define CcLogWarningS(...)\
 	{\
+	std::stringstream message;\
 	message << __VA_ARGS__;\
 	CcCore::logger.AddEntry(CcLogEntry(CcCore::LevelWarning,\
 				message.str(),\
@@ -130,8 +135,9 @@
 	message.str("");\
 	}
 
-#define CcLogErrorS(message, ...)\
+#define CcLogErrorS(...)\
 	{\
+	std::stringstream message;\
 	message << __VA_ARGS__;\
 	CcCore::logger.AddEntry(CcLogEntry(CcCore::LevelError,\
 				message.str(),\
@@ -139,8 +145,9 @@
 	message.str("");\
 	}
 
-#define CcLogFatalS(message, ...)\
+#define CcLogFatalS(...)\
 	{\
+	std::stringstream message;\
 	message << __VA_ARGS__;\
 	CcCore::logger.AddEntry(CcLogEntry(CcCore::LevelFatal,\
 				message.str(),\

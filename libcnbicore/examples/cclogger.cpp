@@ -23,7 +23,6 @@
 int main(void) {
 	CcCore::OpenLogger("ciao");
 
-	std::stringstream stream;
 	std::string message;
 	for(int i = 0; i < 1; i++) {
 		CcTime::Datetime(&message);
@@ -36,9 +35,9 @@ int main(void) {
 		CcLogFatal(message);
 		CcLogFatal(std::string("Hello ").append("world"));
 		
-		CcLogFatalS(stream, "Test with vargs 1: " << 20 << " " << 2.01f << "\n");
-		CcLogFatalS(stream, "Test with vargs 2: " << 'a' << " " << true << "\n");
-		CcLogFatalS(stream, "Test with vargs 3: " << 0x304 << " " << 1.0f << "\n");
+		CcLogFatalS("Test with vargs 1: " << 20 << " " << 2.01f);
+		CcLogFatalS("Test with vargs 2: " << 'a' << " " << true);
+		CcLogFatalS("Test with vargs 3: " << 0x304 << " " << 1.0f);
 	}
 	return 0;
 }
