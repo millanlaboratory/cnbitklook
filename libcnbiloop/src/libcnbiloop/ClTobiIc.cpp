@@ -46,14 +46,13 @@ bool ClTobiIc::Attach(const CcPort port, const std::string& name) {
 	try { 
 		this->_server->Bind(endpoint);
 	} catch(CcException e) {
-		CcLogDebugS(this->_stream, "Cannot bind to port " << port);
+		CcLogDebugS("Cannot bind to port " << port);
 		return false;
 	}
 
 	int status = ClLoop::nameserver.Set(this->_name, endpoint.GetAddress());
 	if(status != ClNamesLang::Successful) {
-		CcLogDebugS(this->_stream, "Cannot set " << name 
-				<< " as " << endpoint.GetAddress());
+		CcLogDebugS("Cannot set " << name << " as " << endpoint.GetAddress());
 		return false;
 	}
 
@@ -127,14 +126,12 @@ void ClTobiIc::HandleRecv(CcSocket* caller) {
 
 void ClTobiIc::HandleAccept(CcSocket* caller) { 
 	CcServerSingle *server = (CcServerSingle*)caller;
-	CcLogDebugS(this->_stream, "Accepted TCP endpoint: " << 
-			server->GetRemote());
+	CcLogDebugS("Accepted TCP endpoint: " << server->GetRemote());
 }
 		
 void ClTobiIc::HandleDrop(CcSocket* caller) { 
 	CcServerSingle *server = (CcServerSingle*)caller;
-	CcLogDebugS(this->_stream, "Dropped TCP endpoint: " << 
-			server->GetRemote());
+	CcLogDebugS("Dropped TCP endpoint: " << server->GetRemote());
 	this->_hasmessage.Post();
 }
 

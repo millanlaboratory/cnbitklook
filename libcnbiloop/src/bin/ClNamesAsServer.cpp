@@ -23,26 +23,26 @@
 
 void ClNamesAsServer::HandleBind(CcSocket* caller) { 
 	CcServerMulti *server = (CcServerMulti*)caller;
-	CcLogDebugS(this->_stream, "Bound TCP socket: " << server->GetLocal());
+	CcLogDebugS("Bound TCP socket: " << server->GetLocal());
 }
 
 void ClNamesAsServer::HandleRelease(CcSocket* caller) { 
 	CcServerMulti *server = (CcServerMulti*)caller;
-	CcLogDebugS(this->_stream, "Released TCP socket: " << server->GetLocal());
+	CcLogDebugS("Released TCP socket: " << server->GetLocal());
 }
 
 void ClNamesAsServer::HandleListen(CcSocket* caller) { 
 	CcServerMulti *server = (CcServerMulti*)caller;
-	CcLogDebugS(this->_stream, 
+	CcLogDebugS(
 			"Listening on TCP socket: " << server->GetLocal());
 }
 
 void ClNamesAsServer::HandleAcceptEndpoint(CcSocket* caller, CcAddress address) { 
-	CcLogDebugS(this->_stream, "Accepted TCP endpoint: " << address);
+	CcLogDebugS("Accepted TCP endpoint: " << address);
 }
 
 void ClNamesAsServer::HandleDropEndpoint(CcSocket* caller, CcAddress address) { 
-	CcLogDebugS(this->_stream, "Dropped TCP endpoint: " << address);
+	CcLogDebugS("Dropped TCP endpoint: " << address);
 }
 
 void ClNamesAsServer::HandleRecvEndpoint(CcSocket* caller, CcAddress address) { 
@@ -59,17 +59,17 @@ void ClNamesAsServer::HandleRecvEndpoint(CcSocket* caller, CcAddress address) {
 	if(this->language.IsQuery(message.c_str(), &luname)) {
 		if(this->language.CheckName(luname.c_str()) == true) { 
 			if(this->Get(luname, &luaddr) == true) {
-				CcLogInfoS(this->_stream, "Query from " << address << ": " 
+				CcLogInfoS("Query from " << address << ": " 
 						<< luname << "=" << luaddr);
 				server->Send(language.Reply(luaddr), address);
 			} else {
-				CcLogWarningS(this->_stream, "Query from " << address << ": " 
+				CcLogWarningS("Query from " << address << ": " 
 						<< luname << " NotFound");
 				server->Send(language.Error(ClNamesLang::NotFound), address);
 			}
 		} else {
 			server->Send(language.Error(ClNamesLang::AlreadySet), address);
-			CcLogWarningS(this->_stream, "Set from " << address << ": " 
+			CcLogWarningS("Set from " << address << ": " 
 					<< luname << " AlreadySet");
 		} 
 	} else if(this->language.IsSet(message.c_str(), &luname, &luaddr)) {
@@ -80,73 +80,73 @@ void ClNamesAsServer::HandleRecvEndpoint(CcSocket* caller, CcAddress address) {
 				luaddr.assign(epsolve.GetIp());
 				luaddr.append(":");
 				luaddr.append(lusolve.GetPort());
-				CcLogConfigS(this->_stream, "Local endpoint " << lusolve.GetIp() <<
+				CcLogConfigS("Local endpoint " << lusolve.GetIp() <<
 						" resolved as " << epsolve.GetIp());
 			}
 			if(this->Set(luname, luaddr) == true) {
 				this->AddMonitored(luname, address);
 				server->Send(language.Ok(), address);
-				CcLogInfoS(this->_stream, "Set from " << address << ": " 
+				CcLogInfoS("Set from " << address << ": " 
 						<< luname << "=" << luaddr);
 			} else {
 				server->Send(language.Error(ClNamesLang::AlreadySet), address);
-				CcLogWarningS(this->_stream, "Set from " << address << ": " 
+				CcLogWarningS("Set from " << address << ": " 
 						<< luname << " AlreadySet");
 			} 
 		} else {
 			server->Send(language.Error(ClNamesLang::NameFormatError), address);
-			CcLogWarningS(this->_stream, "Set from " << address << ": " 
+			CcLogWarningS("Set from " << address << ": " 
 					<< luname << " NameFormatError");
 		}
 	} else if(this->language.IsUnset(message.c_str(), &luname)) {
 		if(this->language.CheckName(luname.c_str()) == true) { 
 			if(this->Unset(luname) == true) {
 				server->Send(language.Ok(), address);
-				CcLogInfoS(this->_stream, "Unset from " << address << ": " 
+				CcLogInfoS("Unset from " << address << ": " 
 						<< luname);
 			} else {
 				server->Send(language.Error(ClNamesLang::NotFound), address);
-				CcLogWarningS(this->_stream, "Unset from " << address << ": " 
+				CcLogWarningS("Unset from " << address << ": " 
 						<< luname << " NotFound");
 			}
 		} else {
 			server->Send(language.Error(ClNamesLang::NameFormatError), address);
-			CcLogWarningS(this->_stream, "Set from " << address << ": " 
+			CcLogWarningS("Set from " << address << ": " 
 					<< luname << " NameFormatError");
 		}
 	} else if(this->language.IsStore(message.c_str(), &stname, &stcontent)) {
 		if(this->Store(stname, stcontent) == true) {
 			server->Send(language.Ok(), address);
-			CcLogInfoS(this->_stream, "Store from " << address << ": " 
+			CcLogInfoS("Store from " << address << ": " 
 					<< stname << ", " << stcontent.size() << " bytes");
 		} else {
 			server->Send(language.Error(ClNamesLang::AlreadyStored), address);
-			CcLogWarningS(this->_stream, "Store from " << address << ": " 
+			CcLogWarningS("Store from " << address << ": " 
 					<< stname << " AlreadyStored");
 		}
 	} else if(this->language.IsRetrieve(message.c_str(), &stname)) {
 		if(this->Retrieve(stname, &stcontent) == true) {
-			CcLogInfoS(this->_stream, "Retrieve from " << address << ": " 
+			CcLogInfoS("Retrieve from " << address << ": " 
 					<< stname << ", " << stcontent.size() << " bytes");
 			server->Send(language.Dispatch(stcontent), address);
 		} else {
-			CcLogWarningS(this->_stream, "Retrieve from " << address << ": " 
+			CcLogWarningS("Retrieve from " << address << ": " 
 					<< luname << " NotAvailable");
 			server->Send(language.Error(ClNamesLang::NotAvailable), address);
 		}
 	} else if(this->language.IsErase(message.c_str(), &stname)) {
 		if(this->Erase(stname) == true) {
 			server->Send(language.Ok(), address);
-			CcLogInfoS(this->_stream, "Erase from " << address << ": " 
+			CcLogInfoS("Erase from " << address << ": " 
 					<< stname);
 		} else {
 			server->Send(language.Error(ClNamesLang::NotAvailable), address);
-			CcLogWarningS(this->_stream, "Erase from " << address << ": " 
+			CcLogWarningS("Erase from " << address << ": " 
 					<< stname << " NotAvailable");
 		}
 	} else {
 		server->Send(language.Error(ClNamesLang::NotUndestood), address);
-		CcLogWarningS(this->_stream, "Message from " << address << 
+		CcLogWarningS("Message from " << address << 
 				" not understood: " << message); 
 	}
 }
@@ -221,7 +221,7 @@ void ClNamesAsServer::Main(void) {
 			address.assign((*it).second);
 			if(this->_master->Send("", address) >= TR_BYTES_NONE)
 				continue;
-			CcLogWarningS(this->_stream, "Endpoint " << address << 
+			CcLogWarningS("Endpoint " << address << 
 					" dropped: unsetting " << name);
 			this->_monitor.erase(name);
 			this->Unset(name);
@@ -235,7 +235,7 @@ void ClNamesAsServer::StartMonitor(double waitms) {
 	if(waitms <= 0.00f)
 		return;
 
-	CcLogConfigS(this->_stream, "Starting monitor: " << waitms << "ms");
+	CcLogConfigS("Starting monitor: " << waitms << "ms");
 	this->_monitorms = waitms;
 	CcThread::Start();
 }

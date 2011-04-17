@@ -87,72 +87,72 @@
 
 #define CcLogConfigS(...)\
 	{\
-	std::stringstream message;\
-	message << __VA_ARGS__;\
+	std::stringstream _cclogmessage;\
+	_cclogmessage << __VA_ARGS__;\
 	CcCore::logger.AddEntry(CcLogEntry(CcCore::LevelConfig,\
-				message.str(),\
+				_cclogmessage.str(),\
 				__PRETTY_FUNCTION__, __FILE__, __LINE__));\
-	message.str("");\
+	_cclogmessage.str("");\
 	}
 
 #define CcLogExceptionS(...)\
 	{\
-	std::stringstream message;\
-	message << __VA_ARGS__;\
+	std::stringstream _cclogmessage;\
+	_cclogmessage << __VA_ARGS__;\
 	CcCore::logger.AddEntry(CcLogEntry(CcCore::LevelException,\
-				message.str(),\
+				_cclogmessage.str(),\
 				__PRETTY_FUNCTION__, __FILE__, __LINE__));\
-	message.str("");\
+	_cclogmessage.str("");\
 	}
 
 #define CcLogDebugS(...)\
 	{\
-	std::stringstream message;\
-	message << __VA_ARGS__;\
+	std::stringstream _cclogmessage;\
+	_cclogmessage << __VA_ARGS__;\
 	CcCore::logger.AddEntry(CcLogEntry(CcCore::LevelDebug,\
-				message.str(),\
+				_cclogmessage.str(),\
 				__PRETTY_FUNCTION__, __FILE__, __LINE__));\
-	message.str("");\
+	_cclogmessage.str("");\
 	}
 
 #define CcLogInfoS(...)\
 	{\
-	std::stringstream message;\
-	message << __VA_ARGS__;\
+	std::stringstream _cclogmessage;\
+	_cclogmessage << __VA_ARGS__;\
 	CcCore::logger.AddEntry(CcLogEntry(CcCore::LevelInfo,\
-				message.str(),\
+				_cclogmessage.str(),\
 				__PRETTY_FUNCTION__, __FILE__, __LINE__));\
-	message.str("");\
+	_cclogmessage.str("");\
 	}
 
 #define CcLogWarningS(...)\
 	{\
-	std::stringstream message;\
-	message << __VA_ARGS__;\
+	std::stringstream _cclogmessage;\
+	_cclogmessage << __VA_ARGS__;\
 	CcCore::logger.AddEntry(CcLogEntry(CcCore::LevelWarning,\
-				message.str(),\
+				_cclogmessage.str(),\
 				__PRETTY_FUNCTION__, __FILE__, __LINE__));\
-	message.str("");\
+	_cclogmessage.str("");\
 	}
 
 #define CcLogErrorS(...)\
 	{\
-	std::stringstream message;\
-	message << __VA_ARGS__;\
+	std::stringstream _cclogmessage;\
+	_cclogmessage << __VA_ARGS__;\
 	CcCore::logger.AddEntry(CcLogEntry(CcCore::LevelError,\
-				message.str(),\
+				_cclogmessage.str(),\
 				__PRETTY_FUNCTION__, __FILE__, __LINE__));\
-	message.str("");\
+	_cclogmessage.str("");\
 	}
 
 #define CcLogFatalS(...)\
 	{\
-	std::stringstream message;\
-	message << __VA_ARGS__;\
+	std::stringstream _cclogmessage;\
+	_cclogmessage << __VA_ARGS__;\
 	CcCore::logger.AddEntry(CcLogEntry(CcCore::LevelFatal,\
-				message.str(),\
+				_cclogmessage.str(),\
 				__PRETTY_FUNCTION__, __FILE__, __LINE__));\
-	message.str("");\
+	_cclogmessage.str("");\
 	}
 
 #define CcLogConfigSH(message, header, ...)\

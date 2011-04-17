@@ -46,7 +46,6 @@ class ClTobiIc : public CcSocketProxy {
 		const static int HasMessage = 1;
 		const static int NoMessage = 0;
 	protected:
-		std::stringstream _stream;
 		CcServerSingle* _server;
 		std::string _name;
 		std::string _buffer;

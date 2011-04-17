@@ -47,7 +47,6 @@ int main(int argc, char* argv[]) {
 	IDMessage message;
 	IDSerializerRapid serializer(&message);
 
-	std::stringstream stream;
 	std::string absolute, relative;
 
 	ClTobiId id;
@@ -75,7 +74,7 @@ int main(int argc, char* argv[]) {
 				message.absolute.Get(&absolute);
 				message.relative.Get(&relative);
 
-				CcLogInfoS(stream, "TiD event:" << 
+				CcLogInfoS("TiD event:" << 
 						", Family=" << message.GetFamily() << 
 						", Event=" << message.GetEvent() << 
 						", Description=" << message.GetDescription() <<

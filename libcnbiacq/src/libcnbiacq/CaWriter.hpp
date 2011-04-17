@@ -30,20 +30,19 @@ class CaWriter {
 		CaWriter(CaDevice* device = NULL);
 		virtual ~CaWriter(void);
 		virtual bool Setup(CaDevice* device = NULL);
-		virtual bool Open(const std::string& filename);
-		virtual bool Open(const std::string& filename, enum xdffiletype type);
-		virtual bool Close(void);
-		virtual bool IsOpen(void);
-		virtual int Write(int nswrite);
+		bool Open(const std::string& filename);
+		bool Open(const std::string& filename, enum xdffiletype type);
+		bool Close(void);
+		bool IsOpen(void);
+		int Write(int nswrite);
 		virtual double TocOpen(void);
 		virtual void Tic(TCBlock* block);
 	protected:
-		virtual int SetupChannelGroup(int igrp);
+		int SetupChannelGroup(int igrp);
 
 	protected:
 		struct xdf* _file;
 		CaDevice* _device;
-		std::stringstream _stream;
 		CcSemaphore _semlock;
 		TCTimestamp _relative;
 };

@@ -41,26 +41,26 @@ ClAcqAsServer::~ClAcqAsServer(void) {
 
 void ClAcqAsServer::HandleBind(CcSocket* caller) { 
 	CcServerMulti *server = (CcServerMulti*)caller;
-	CcLogDebugS(this->_stream, "Bound TCP socket: " << server->GetLocal());
+	CcLogDebugS("Bound TCP socket: " << server->GetLocal());
 }
 
 void ClAcqAsServer::HandleRelease(CcSocket* caller) { 
 	CcServerMulti *server = (CcServerMulti*)caller;
-	CcLogDebugS(this->_stream, "Released TCP socket: " << server->GetLocal());
+	CcLogDebugS("Released TCP socket: " << server->GetLocal());
 }
 
 void ClAcqAsServer::HandleListen(CcSocket* caller) { 
 	CcServerMulti *server = (CcServerMulti*)caller;
-	CcLogDebugS(this->_stream, 
+	CcLogDebugS(
 			"Listening on TCP socket: " << server->GetLocal());
 }
 
 void ClAcqAsServer::HandleAcceptEndpoint(CcSocket* caller, CcAddress address) { 
-	CcLogDebugS(this->_stream, "Accepted TCP endpoint: " << address);
+	CcLogDebugS("Accepted TCP endpoint: " << address);
 }
 
 void ClAcqAsServer::HandleDropEndpoint(CcSocket* caller, CcAddress address) { 
-	CcLogDebugS(this->_stream, "Dropped TCP endpoint: " << address);
+	CcLogDebugS("Dropped TCP endpoint: " << address);
 }
 
 void ClAcqAsServer::HandleRecvEndpoint(CcSocket* caller,
@@ -104,11 +104,11 @@ bool ClAcqAsServer::CommunicationCl(CcServerMulti* server, CcAddress address) {
 	if(language.IsAddLabelGDF(message.c_str(), &gdflabel)) {
 		this->_semframe->Wait();
 		if(ndf_add_label(this->_frame, &gdflabel) == NULL) {
-			CcLogWarningS(this->_stream, "Add label GDF from " << address << 
+			CcLogWarningS("Add label GDF from " << address << 
 					": " << gdflabel << " NDFLimitReached"); 
 			server->Send(language.Error(ClAcqLang::NDFLimitReached), address);
 		} else {
-			CcLogInfoS(this->_stream, "GDF label received from " << address << 
+			CcLogInfoS("GDF label received from " << address << 
 					": " << gdflabel <<
 					" (" << this->_writer->TocOpen()/1000 << "s)");
 			server->Send(language.Ok(), address);
@@ -121,25 +121,25 @@ bool ClAcqAsServer::CommunicationCl(CcServerMulti* server, CcAddress address) {
 	} else if(language.IsOpenXDF(message.c_str(), &xdffile, &logfile, &logline)) {
 		if(this->_writer->IsOpen() == true) {
 			server->Send(language.Error(ClAcqLang::XDFAlreadyOpen), address);
-			CcLogWarningS(this->_stream, "Open XDF from " << address << ": " 
+			CcLogWarningS("Open XDF from " << address << ": " 
 					<< xdffile << " XDFAlreadyOpen");
 		} else {
 			if(this->_writer->Open(xdffile) == false) {
 				server->Send(language.Error(ClAcqLang::XDFOpenFailed), address);
-				CcLogErrorS(this->_stream, "Open XDF from " << address << ": " 
+				CcLogErrorS("Open XDF from " << address << ": " 
 						<< xdffile << " XDFOpenFailed");
 			} else {
 				if(this->_writer->Setup(NULL) == false) {
 					server->Send(language.Error(ClAcqLang::XDFSetupFailed), address);
-					CcLogErrorS(this->_stream, "Open XDF from " << address << ": " 
+					CcLogErrorS("Open XDF from " << address << ": " 
 							<< xdffile << " XDFSetupFailed");
 				} else if(this->LogXDF(logfile, xdffile, logline) == false) {
 					server->Send(language.Error(ClAcqLang::LogOpenFailed), address);
-					CcLogErrorS(this->_stream, "Open Log from " << address << ": " 
+					CcLogErrorS("Open Log from " << address << ": " 
 							<< xdffile << " LogOpenFailed");
 				} else {
 					server->Send(language.Ok(), address);
-					CcLogInfoS(this->_stream, "Open XDF from " << address << ": " 
+					CcLogInfoS("Open XDF from " << address << ": " 
 							<< xdffile);
 				}
 			}
@@ -147,21 +147,21 @@ bool ClAcqAsServer::CommunicationCl(CcServerMulti* server, CcAddress address) {
 	} else if(language.IsCloseXDF(message.c_str())) {
 		if(this->_writer->IsOpen() == false) {
 				server->Send(language.Error(ClAcqLang::XDFNotOpen), address);
-				CcLogWarningS(this->_stream, "Close XDF from " << address << ": " 
+				CcLogWarningS("Close XDF from " << address << ": " 
 						<< xdffile << " XDFNotOpen");
 		} else {
 			if(this->_writer->Close() == false) {
 				server->Send(language.Error(ClAcqLang::XDFCloseFailed), address);
-				CcLogWarningS(this->_stream, "Close XDF from " << address << ": " 
+				CcLogWarningS("Close XDF from " << address << ": " 
 						<< xdffile << " XDFCloseFailed");
 			} else {
 				server->Send(language.Ok(), address);
-				CcLogInfoS(this->_stream, "Close XDF from " << address);
+				CcLogInfoS("Close XDF from " << address);
 			}
 		}
 	} else {
 		server->Send(language.Error(ClAcqLang::NotUndestood), address);
-		CcLogWarningS(this->_stream, "Message from " << address << 
+		CcLogWarningS("Message from " << address << 
 				" not understood: " << message); 
 	}
 	return true;
@@ -200,7 +200,7 @@ bool ClAcqAsServer::CommunicationTiD(CcServerMulti* server, CcAddress address) {
 		this->_writer->Tic(&this->_messageD);
 		this->_serializerD->Serialize(&message);
 		server->SendNot(message.c_str(), address);
-		CcLogInfoS(this->_stream, "TiD event received from " << address << 
+		CcLogInfoS("TiD event received from " << address << 
 					" and distributed: " << idevent <<
 					" (" << this->_writer->TocOpen()/1000 << "s)");
 	} else {

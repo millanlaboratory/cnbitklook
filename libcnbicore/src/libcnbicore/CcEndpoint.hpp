@@ -21,8 +21,8 @@
 
 #include "CcNetworkTypes.hpp"
 #include "CcObject.hpp"
-#include <string>
 #include <libtransport/net.h>
+#include <string>
 
 typedef int CcEndpointRole;
 

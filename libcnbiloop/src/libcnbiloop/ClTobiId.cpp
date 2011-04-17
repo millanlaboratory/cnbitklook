@@ -43,7 +43,7 @@ bool ClTobiId::Attach(const std::string& name) {
 
 	CcAddress address;
 	if(ClLoop::nameserver.Query(this->_name, &address) != ClNamesLang::Successful) {
-		CcLogDebugS(this->_stream, "Query returned empty result: " << this->_name);
+		CcLogDebugS("Query returned empty result: " << this->_name);
 		return false;
 	}
 
@@ -52,7 +52,7 @@ bool ClTobiId::Attach(const std::string& name) {
 	try {
 		this->_client->Connect(endpoint);
 	} catch(CcException e) {
-		CcLogDebugS(this->_stream, "Cannot connect to " << address);
+		CcLogDebugS("Cannot connect to " << address);
 		return false;
 	}
 	
@@ -79,14 +79,12 @@ bool ClTobiId::IsAttached(void) {
 
 void ClTobiId::HandleConnect(CcSocket* caller) {
 	CcClient* client = (CcClient*)caller;
-	CcLogDebugS(this->_stream, "Connected TCP endpoint: " << 
-			client->GetRemote());
+	CcLogDebugS("Connected TCP endpoint: " << client->GetRemote());
 }
 
 void ClTobiId::HandleDisconnect(CcSocket* caller) {
 	CcClient* client = (CcClient*)caller;
-	CcLogDebugS(this->_stream, "Disconnected TCP endpoint: " << 
-			client->GetRemote());
+	CcLogDebugS("Disconnected TCP endpoint: " << client->GetRemote());
 }
 
 void ClTobiId::HandleRecv(CcSocket* caller) {

@@ -35,7 +35,6 @@ class ClClient : public CcSocketProxy {
 	public:
 	private:
 	protected:
-		std::stringstream _stream;
 		CcSemaphore _semrecv;
 		CcClient _client;
 		double _waitms;

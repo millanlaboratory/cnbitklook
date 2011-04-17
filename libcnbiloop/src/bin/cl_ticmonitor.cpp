@@ -51,7 +51,6 @@ int main(int argc, char* argv[]) {
 	ICMessage message;
 	ICSerializerRapid serializer(&message);
 
-	std::stringstream stream;
 	std::string absolute, relative;
 
 	ClTobiIc ic;
@@ -103,7 +102,7 @@ int main(int argc, char* argv[]) {
 					classifiers.append(",");
 			}
 
-			CcLogInfoS(stream, "TiC message: " << 
+			CcLogInfoS("TiC message: " << 
 					" Classifiers=" << classifiers <<
 					", Total=" << total <<
 					", Block " << message.GetBlockIdx() << 

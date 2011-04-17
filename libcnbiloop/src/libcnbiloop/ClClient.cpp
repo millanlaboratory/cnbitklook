@@ -53,7 +53,7 @@ bool ClClient::IsConnected(void) {
 void ClClient::HandleDisconnect(CcSocket* caller) { 
 	CcClient *client = (CcClient*)caller;
 	CcAddress address = client->GetLocal();
-	CcLogDebug(std::string("Endpoint dropped: ").append(address));
+	CcLogDebugS("Endpoint dropped: " << address);
 }
 
 #endif

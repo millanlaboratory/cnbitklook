@@ -103,10 +103,8 @@ bool CaDevice::Setup(float hz) {
 	this->InitFrameSize(hz);
 	this->InitGroups();
 	this->InitBuffers();
-	if(egd_acq_setup(this->_dev, 3, this->_strides, 3, this->_grp) == -1) {
-		CcLogErrorS(this->_stream, "Cannot setup acquisition: " << 
-				strerror(errno));
-	}
+	if(egd_acq_setup(this->_dev, 3, this->_strides, 3, this->_grp) == -1)
+		CcLogErrorS("Cannot setup acquisition: " << strerror(errno));
 	return true;
 }
 
@@ -128,7 +126,7 @@ bool CaDevice::Open(const std::string& devname) {
 
 	this->_dev = egd_open(devnamearg.c_str());
 	if(this->_dev == NULL) {
-		CcLogErrorS(this->_stream, "Cannot open device: " << strerror(errno));
+		CcLogErrorS("Cannot open device: " << strerror(errno));
 		return false;
 	}
 	return true;
@@ -136,7 +134,7 @@ bool CaDevice::Open(const std::string& devname) {
 
 bool CaDevice::Close(void) {
 	if(egd_close(this->_dev) == -1) {
-		CcLogErrorS(this->_stream, "Cannot close device: " << strerror(errno));
+		CcLogErrorS("Cannot close device: " << strerror(errno));
 		return false;
 	}
 	return true;
@@ -144,7 +142,7 @@ bool CaDevice::Close(void) {
 		
 bool CaDevice::Start(void) {
 	if(egd_start(this->_dev) == -1) { 
-		CcLogErrorS(this->_stream, "Cannot start device: " << strerror(errno));
+		CcLogErrorS("Cannot start device: " << strerror(errno));
 		return false;
 	}
 	return true;
@@ -152,7 +150,7 @@ bool CaDevice::Start(void) {
 
 bool CaDevice::Stop(void) {
 	if(egd_stop(this->_dev) == -1) { 
-		CcLogErrorS(this->_stream, "Cannot stop device: " << strerror(errno));
+		CcLogErrorS("Cannot stop device: " << strerror(errno));
 		return false;
 	}
 	return true;

@@ -50,7 +50,6 @@ class ClLoop {
 		static CcAddress _processing;
 		static CcAddress _acquisition;
 		static CcAddress _nameserver;
-		static std::stringstream _stream;
 	private:
 		static ClLoop* _instance;
 		static unsigned int _refCount;

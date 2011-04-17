@@ -31,7 +31,6 @@ ClNamesClient ClLoop::nameserver;
 CcAddress ClLoop::_processing;
 CcAddress ClLoop::_acquisition;
 CcAddress ClLoop::_nameserver;
-std::stringstream ClLoop::_stream;
 
 ClLoop::ClLoop(void) {
 }
@@ -94,7 +93,7 @@ bool ClLoop::IsConnected(void) {
 bool ClLoop::ConnectNameserver(void) {
 	int status = ClLoop::nameserver.Connect(ClLoop::_nameserver);
 	if(status != ClNamesLang::Successful) {
-		CcLogDebugS(ClLoop::_stream, "Cannot connect to nameserver: " <<
+		CcLogDebugS("Cannot connect to nameserver: " <<
 				ClLoop::_nameserver << ", " << status);
 		return false;
 	}
@@ -104,7 +103,7 @@ bool ClLoop::ConnectNameserver(void) {
 bool ClLoop::ConnectProcessing(void) {
 	int status = ClLoop::processing.Connect(ClLoop::_processing);
 	if(status != ClProLang::Successful) {
-		CcLogDebugS(ClLoop::_stream, "Cannot connect to processing: " <<
+		CcLogDebugS("Cannot connect to processing: " <<
 				ClLoop::_processing << ", " << status);
 		return false;
 	}
@@ -114,7 +113,7 @@ bool ClLoop::ConnectProcessing(void) {
 bool ClLoop::ConnectAcquisition(void) {
 	int status = ClLoop::acquisition.Connect(ClLoop::_acquisition);
 	if(status != ClAcqLang::Successful) {
-		CcLogDebugS(ClLoop::_stream, "Cannot connect to acquisition: " <<
+		CcLogDebugS("Cannot connect to acquisition: " <<
 				ClLoop::_acquisition << ", " << status);
 		return false;
 	}

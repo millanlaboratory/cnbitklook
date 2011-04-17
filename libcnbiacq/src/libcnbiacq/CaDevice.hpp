@@ -40,22 +40,22 @@ class CaDevice {
 		CaDevice(int stype = EGD_FLOAT, int ttype = EGD_INT32);
 		virtual ~CaDevice(void);
 		virtual bool Setup(float hz = 16.00f);
-		virtual bool Open(const std::string& devname);
-		virtual bool Close(void);
-		virtual bool Start(void);
-		virtual bool Stop(void);
-		virtual size_t GetData(void);
-		virtual size_t GetAvailable(void);
+		bool Open(const std::string& devname);
+		bool Close(void);
+		bool Start(void);
+		bool Stop(void);
+		size_t GetData(void);
+		size_t GetAvailable(void);
 		virtual void InitNDF(ndf_frame* frame);
 		virtual void WriteNDF(ndf_frame* frame, bool inc = true, bool tic = true);
-		virtual void Dump(void);
+		void Dump(void);
 	protected:
-		virtual void InitFrameSize(float hz);
-		virtual void InitCapabilities(void);
-		virtual void InitGroups(void);
-		virtual void InitBuffers(void);
-		virtual size_t SizeEGD(int egdtype);
-		virtual size_t SizeNDF(int egdtype);
+		void InitFrameSize(float hz);
+		void InitCapabilities(void);
+		void InitGroups(void);
+		void InitBuffers(void);
+		size_t SizeEGD(int egdtype);
+		size_t SizeNDF(int egdtype);
 	protected:
 		struct eegdev* _dev;
 		CaDeviceCap _cap;
@@ -67,7 +67,6 @@ class CaDevice {
 		int _stype;
 		int _ttype;
 		size_t _frames;
-		std::stringstream _stream;
 		unsigned int _presetid;
 };
 

@@ -39,7 +39,7 @@ CaWriter::~CaWriter(void) {
 bool CaWriter::Setup(CaDevice* device) {
 	this->_semlock.Wait();
 	if(device == NULL && this->_device == NULL) {
-		CcLogFatalS(this->_stream, "No CaDevice is set");
+		CcLogFatalS("No CaDevice is set");
 	} else if(device != NULL) {
 		this->_device = device;
 	} 
@@ -48,30 +48,30 @@ bool CaWriter::Setup(CaDevice* device) {
 			XDF_F_REC_DURATION, 1.0,
 			XDF_F_REC_NSAMPLE, this->_device->_cap.sampling_freq,
 			XDF_NOF) == -1) {
-		CcLogErrorS(this->_stream, "Cannot setup header: " << strerror(errno));
+		CcLogErrorS("Cannot setup header: " << strerror(errno));
 		goto failure;
 	}
 
 	if(SetupChannelGroup(0) == -1) {
-		CcLogErrorS(this->_stream, "Cannot setup EEG group: " << strerror(errno));
+		CcLogErrorS("Cannot setup EEG group: " << strerror(errno));
 		goto failure;
 	}
 	if(SetupChannelGroup(1) == -1) {
-		CcLogErrorS(this->_stream, "Cannot setup EXG group: " << strerror(errno));
+		CcLogErrorS("Cannot setup EXG group: " << strerror(errno));
 		goto failure;
 	}
 	if(SetupChannelGroup(2) == -1) {
-		CcLogErrorS(this->_stream, "Cannot setup TRI group: " << strerror(errno));
+		CcLogErrorS("Cannot setup TRI group: " << strerror(errno));
 		goto failure;
 	}
 
 	if(xdf_define_arrays(this->_file, 3, this->_device->_strides) == -1) {
-		CcLogErrorS(this->_stream, "Cannot define strides:" << strerror(errno));
+		CcLogErrorS("Cannot define strides:" << strerror(errno));
 		goto failure;
 	}
 
 	if(xdf_prepare_transfer(this->_file) == -1) {
-		CcLogErrorS(this->_stream, "Cannot prepare transfer: " << strerror(errno));
+		CcLogErrorS("Cannot prepare transfer: " << strerror(errno));
 		goto failure;
 	}
 
@@ -107,7 +107,7 @@ bool CaWriter::Close(void) {
 	}
 
 	if(xdf_close(this->_file) == -1) {
-		CcLogErrorS(this->_stream, "Cannot close file: " << strerror(errno));
+		CcLogErrorS("Cannot close file: " << strerror(errno));
 		goto failure;
 	}
 	this->_file = NULL;
@@ -188,7 +188,7 @@ bool CaWriter::Open(const std::string& filename, enum xdffiletype type) {
 
 	this->_file = xdf_open(filename.c_str(), XDF_WRITE, type);
 	if(this->_file == NULL) {
-		CcLogErrorS(this->_stream, "Cannot open file: " << strerror(errno));
+		CcLogErrorS("Cannot open file: " << strerror(errno));
 		goto failure;
 	}
 	this->_relative.Tic();

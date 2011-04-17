@@ -55,8 +55,6 @@ class ClAcqAsServer  : public CcSocketProxy {
 		IDSerializerRapid *_serializerD;
 		ndf_frame *_frame;
 		CcSemaphore *_semframe;
-		std::stringstream _stream;
-	protected:
 };
 
 #endif

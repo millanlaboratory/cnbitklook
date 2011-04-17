@@ -51,7 +51,6 @@ class ClNamesAsServer : public CcSocketProxy, protected CcThread {
 	private:
 		CcServerMulti* _master;
 		ClNamesLang language;
-		std::stringstream _stream;
 		std::map<std::string, CcAddress> _lookup;
 		std::map<std::string, CcAddress> _monitor;
 		std::map<std::string, std::string> _storage;

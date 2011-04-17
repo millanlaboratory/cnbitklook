@@ -43,7 +43,6 @@ class ClTobiId : public CcSocketProxy {
 
 	public:
 	protected:
-		std::stringstream _stream;
 		CcClient* _client;
 		std::string _name;
 		std::string _buffer;

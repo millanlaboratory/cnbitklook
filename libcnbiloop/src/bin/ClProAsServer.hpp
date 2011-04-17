@@ -42,7 +42,6 @@ class ClProAsServer : public CcSocketProxy {
 	public:
 	private:
 		ClProLang language;
-		std::stringstream _stream;
 		std::map<int, ClMatlab*> _pool;
 		CcSemaphore _sempool;
 	protected:
