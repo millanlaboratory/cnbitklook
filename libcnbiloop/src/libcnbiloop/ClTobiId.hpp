@@ -35,6 +35,7 @@ class ClTobiId : public CcSocketProxy {
 		virtual bool Detach(void);
 		virtual bool IsAttached(void);
 		virtual bool GetMessage(IDSerializerRapid* serializer);
+		virtual bool SendMessage(IDSerializerRapid* serializer);
 		virtual int Count(void);
 	protected:
 		virtual void HandleConnect(CcSocket* caller);

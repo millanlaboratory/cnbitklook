@@ -119,5 +119,12 @@ int ClTobiId::Count(void) {
 	this->_semqueue.Post();
 	return count;
 }
+		
+bool ClTobiId::SendMessage(IDSerializerRapid* serializer) {
+	std::string buffer;
+	serializer->message->absolute.Tic();
+	serializer->Serialize(&buffer);
+	return(this->_client->Send(&buffer) == (int)buffer.size());
+}
 
 #endif

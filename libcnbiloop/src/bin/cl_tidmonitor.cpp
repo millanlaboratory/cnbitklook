@@ -44,8 +44,12 @@ int main(int argc, char* argv[]) {
 	CcCore::CatchSIGINT();
 	CcCore::CatchSIGTERM();
 
-	IDMessage message;
-	IDSerializerRapid serializer(&message);
+	IDMessage messageI, messageO;
+	IDSerializerRapid serializerI(&messageI), serializerO(&messageO);
+
+	messageO.SetDescription("cl_tidmonitor");
+	messageO.SetFamilyType(IDMessage::FamilyBiosig);
+	messageO.SetEvent(0xFFFF);
 
 	std::string absolute, relative;
 
@@ -69,16 +73,21 @@ int main(int argc, char* argv[]) {
 			
 			if(CcCore::receivedSIGAny.Get())
 				goto shutdown;
+			
+			if(id.SendMessage(&serializerO) == false) {
+				CcLogFatalS("Cannot send iD event: " << messageO.GetEvent());
+				goto shutdown;
+			}
 		
-			while(id.GetMessage(&serializer) == true) {
-				message.absolute.Get(&absolute);
-				message.relative.Get(&relative);
+			while(id.GetMessage(&serializerI) == true) {
+				messageI.absolute.Get(&absolute);
+				messageI.relative.Get(&relative);
 
 				CcLogInfoS("TiD event:" << 
-						", Family=" << message.GetFamily() << 
-						", Event=" << message.GetEvent() << 
-						", Description=" << message.GetDescription() <<
-						", Block=" << message.GetBlockIdx() <<
+						", Family=" << messageI.GetFamily() << 
+						", Event=" << messageI.GetEvent() << 
+						", Description=" << messageI.GetDescription() <<
+						", Block=" << messageI.GetBlockIdx() <<
 						", A/R=" << absolute << 
 						"/" << relative);
 			}
