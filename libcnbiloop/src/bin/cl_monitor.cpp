@@ -16,6 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "ClLoop.hpp"
 #include <libndf/ndf_codec.h>
 #include <libcnbicore/CcBasic.hpp>
 #include <libcnbicore/CcPipeSink.hpp>
@@ -29,9 +30,8 @@ void usage(void) {
 }
 
 int main(int argc, char* argv[]) {
-	// Parse command line
 	int opt;
-	std::string optname;
+	std::string optname, pipename;
 	
 	while((opt = getopt(argc, argv, "p:h")) != -1) {
 		if(opt == 'p')
@@ -41,13 +41,26 @@ int main(int argc, char* argv[]) {
 			return(opt == 'h') ? EXIT_SUCCESS : EXIT_FAILURE;
 		}
 	}
-
-	if(optname.empty()) {
+	
+	if(optname.empty())
 		usage();
-		return(EXIT_FAILURE);
+	
+	CcCore::OpenLogger("cl_monitor");
+	CcCore::CatchSIGINT();
+	CcCore::CatchSIGTERM();
+
+	// Connect to loop
+	CcLogInfo("Connecting to loop...");
+	while(ClLoop::Connect() == false) {
+		if(CcCore::receivedSIGAny.Get())
+			exit(1);
+		CcTime::Sleep(2000);
 	}
 	
-	CcCore::OpenLogger("clmonitor");
+	if(ClLoop::nameserver.Query(optname, &pipename) != ClNamesLang::Successful) {
+		CcLogFatal("Cannot query pipe");
+		exit(2);
+	}
 
 	CcTimeValue tvOpen, tvRead, tvLoop;
 	double msOpen, msRead, msNDF, msLoop, msIdeal;
@@ -58,13 +71,13 @@ int main(int argc, char* argv[]) {
 		ndf_ack ack;
 
 		// Setup pipe reader 
-		CcPipeSink reader(optname);
+		CcPipeSink reader(pipename);
 		try {
 			reader.Open(-1);
 			CcTime::Tic(&tvOpen);
 		} catch(CcException e) {
 			CcLogFatal("Cannot open pipe");
-			CcTime::Sleep(5000.00);
+			CcTime::Sleep(2500.00);
 			continue;
 		}
 
@@ -82,7 +95,6 @@ int main(int argc, char* argv[]) {
 
 		CcLogInfo("ACK received, initializing NDF frame");
 		ndf_initack(&frame, &ack);
-		//ndf_dump(&frame);
 		msIdeal = 1000.00f/((double)frame.config.sf/frame.config.samples);
 
 		CcLogInfo("Receiving...");
@@ -111,6 +123,9 @@ int main(int argc, char* argv[]) {
 						msNDF - msIdeal);
 			}
 			CcTime::Tic(&tvLoop);
+
+			if(CcCore::receivedSIGAny.Get())
+				break;
 		}
 		reader.Close();
 		ndf_free(&frame);
