@@ -102,9 +102,9 @@ bool get_tasksets(CCfgConfig* config, const std::string& what,
 void usage(void) { 
 	printf("Usage: ccfg_cli [OPTION]...\n\n");
 	printf("  -x FILE     XML file\n");
-	printf("  -b          get available blocks\n");
+	printf("  -b          get available blocks (default)\n");
 	printf("  -t BLOCK    get available tasksets for block BLOCK\n");
-	printf("  -n          online\n");
+	printf("  -n          online (default)\n");
 	printf("  -f          offline\n");
 	printf("  -u          enable user-friendly output\n");
 	printf("  -U          user-friendly output only\n");
@@ -113,8 +113,13 @@ void usage(void) {
 
 int main(int argc, char *argv[]) {
 	int opt;	
-	std::string filename, what, block;
+	std::string filename, what("online"), block;
 	int mode = MODE_CONFIG, get = GET_BLOCKS;
+
+	if(argc == 1) {
+		usage();
+		return 0;
+	}
 
 	while((opt = getopt(argc, argv, "x:bt:nfuUh")) != -1) {
 		if(opt == 'x')
