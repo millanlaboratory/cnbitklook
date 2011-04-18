@@ -133,8 +133,8 @@
 			</taskset>
 			<taskset key="errp" classifier="kerrp0">
 				<priors>
-					<errp_true>0.20</errp_true>
-					<errp_false>0.80</errp_false>
+					<errp_detected>0.20</errp_detected>
+					<errp_notdetected>0.80</errp_notdetected>
 				</priors>
 			</taskset>
 		</mierrp>
@@ -197,8 +197,8 @@
 			<class id="1" key="mi_both_hands"/>
 		</mi_bfbh>
 		<errp description="Error Potentials">
-			<class id="0" key="errp_true"/>
-			<class id="1" key="errp_false"/>
+			<class id="0" key="errp_detected"/>
+			<class id="1" key="errp_notdetected"/>
 		</errp> 
 	</taskset>
 	
@@ -234,16 +234,16 @@
 			<gdfevent>0x0304</gdfevent>
 			<hwtrigger>1</hwtrigger>
 		</mi_tongue>
-		<errp_true>
+		<errp_detected>
 			<description>ErrP_Detected</description>
 			<gdfevent>0x030b</gdfevent>
 			<hwtrigger>2</hwtrigger>
-		</errp_true>
-		<errp_false>
+		</errp_detected>
+		<errp_notdetected>
 			<description>ErrP_NotDetected</description>
 			<gdfevent>0x030c</gdfevent>
 			<hwtrigger>2</hwtrigger>
-		</errp_false>
+		</errp_notdetected>
 		<onset_true>
 			<description>MI_Onset_Detected</description>
 			<gdfevent>0x0010</gdfevent>

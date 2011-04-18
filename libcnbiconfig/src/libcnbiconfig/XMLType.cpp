@@ -116,8 +116,8 @@ XMLTypeData XMLType::Guess(const char* buffer) {
 		}
 		else if(df == NULL && dl == NULL && hf != NULL) {
 			if(this->_verbose) 
-				printf("UInt\n"); 
-			this->_type = XMLType::TypeUInt;
+				printf("HexInt\n"); 
+			this->_type = XMLType::TypeHexInt;
 		}
 	}
 	else if(!isi && !isf) {
@@ -169,9 +169,9 @@ int XMLType::Int(void) {
 	return this->_vint;
 }
 
-unsigned int XMLType::UInt(void) {
-	if(this->_type != XMLType::TypeUInt)
-		throw XMLException("Type is not uint", "XMLType::UInt");
+int XMLType::HexInt(void) {
+	if(this->_type != XMLType::TypeHexInt)
+		throw XMLException("Type is not uint", "XMLType::HexInt");
 	return this->_vuint;
 }
 

@@ -182,11 +182,11 @@ int main(void) {
 		cout << "QuickString: device is: " << 
 			config.RootEx()->QuickStringEx("options/fes/dev") << endl;
 		cout << "GDF off: " << 
-			config.RootEx()->QuickUIntEx("protocol/gdfevents/off") << endl;
+			config.RootEx()->QuickHexIntEx("protocol/gdfevents/off") << endl;
 		cout << "GDF cfeedback: " << 
-			config.RootEx()->QuickUIntEx("protocol/gdfevents/cfeedback") << endl;
+			config.RootEx()->QuickHexIntEx("protocol/gdfevents/cfeedback") << endl;
 		cout << "GDF cfeedbackoff: " << 
-			config.RootEx()->QuickUIntEx("protocol/gdfevents/cfeedbackoff") << endl;
+			config.RootEx()->QuickHexIntEx("protocol/gdfevents/cfeedbackoff") << endl;
 
 		
 		std::string buffer;

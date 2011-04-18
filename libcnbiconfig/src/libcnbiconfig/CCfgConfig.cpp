@@ -131,7 +131,7 @@ void CCfgConfig::ParseTasksetEx(const std::string& name, CCfgTaskset* taskset) {
 		converter.Guess(nTasks->first_node("hwtrigger")->value());
 		task->hwt = converter.Int();
 		converter.Guess(nTasks->first_node("gdfevent")->value());
-		task->gdf = converter.UInt();
+		task->gdf = converter.HexInt();
 		
 		// Finally add task to taskset
 		taskset->AddTask(task);

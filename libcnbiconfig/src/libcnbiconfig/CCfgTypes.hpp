@@ -22,7 +22,7 @@
 /*! \var GDFEvent 
  *  \brief GDF software event 
  */
-typedef unsigned int  GDFEvent;
+typedef int  GDFEvent;
 /*! \var HWTrigger 
  *  \brief LPT hardware trigger
  */

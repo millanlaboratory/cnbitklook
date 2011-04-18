@@ -44,7 +44,7 @@ class XMLType {
 		virtual bool Bool(void);
 		virtual float Float(void);
 		virtual int  Int(void);
-		virtual unsigned int UInt(void);
+		virtual int HexInt(void);
 		virtual std::string String(void);
 
 	public:
@@ -53,7 +53,7 @@ class XMLType {
 		static const XMLTypeData TypeFloat  = 2;
 		static const XMLTypeData TypeInt    = 3;
 		static const XMLTypeData TypeString = 4;
-		static const XMLTypeData TypeUInt   = 5;
+		static const XMLTypeData TypeHexInt = 5;
 
 	protected:
 		std::string _key;
