@@ -57,7 +57,7 @@
 	
 	<!-- Offline Blocks -->
 	<offline>
-		<mi description="Offline_MI"> <!-- This is a Block -->
+		<mi description="Offline Motor Imagery"> <!-- This is a Block -->
 			<taskset key="mi_rhlh"> <!-- This is a Taskset -->
 				<trials>
 					<mi_hand_left>15</mi_hand_left>
@@ -99,7 +99,7 @@
 	
 	<!-- Online Block -->
 	<online>
-		<mi description="Online_MI">
+		<mi description="Online Motor Imagery">
 			<taskset key="mi_rhlh" classifier="kmi0">
 				<threshold>
 					<mi_hand_right>0.65</mi_hand_right>
@@ -112,7 +112,7 @@
 			</taskset>
 			<integration>0.96</integration>
 		</mi>
-		<mierrp  description="Online_MI+ErrP">
+		<mierrp  description="Online Motor Imagery + Error Potentials">
 			<taskset key="mi_rhlh" classifier="kmi0">
 				<threshold>
 					<mi_hand_left>0.85</mi_hand_left>

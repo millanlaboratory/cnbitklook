@@ -25,7 +25,7 @@
 using namespace std;
 
 int main(void) {
-	std::string blockname("smr"), tasksetname("mi_rhlh");
+	std::string blockname("mi"), tasksetname("mi_rhlh");
 	
 	CCfgConfig config;
 	try {

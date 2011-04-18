@@ -19,12 +19,18 @@
 #include "CCfgConfig.hpp"
 #include <iostream>
 #include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
 
-using namespace std;
-
+#define WHAT_ONLINE 1
+#define WHAT_OFFLINE 2
 #define MODE_CONFIG 1
 #define MODE_FRIENDLY 2
 #define MODE_BOTH 3
+#define GET_BLOCKS 1
+#define GET_TASKS  2
+
+using namespace std;
 
 bool get_blocks(CCfgConfig* config, const std::string& what, int mode) {
 	XMLNode node;
@@ -93,29 +99,62 @@ bool get_tasksets(CCfgConfig* config, const std::string& what,
 	return true;
 }
 
+void usage(void) { 
+	printf("Usage: ccfg_cli [OPTION]...\n\n");
+	printf("  -x FILE     XML file\n");
+	printf("  -b          get available blocks\n");
+	printf("  -t BLOCK    get available tasksets for block BLOCK\n");
+	printf("  -n          online\n");
+	printf("  -f          offline\n");
+	printf("  -u          enable user-friendly output\n");
+	printf("  -U          user-friendly output only\n");
+	printf("  -h          display this help and exit\n");
+}
+
 int main(int argc, char *argv[]) {
-	if(argc < 2) {
-		printf("Usage: ccfg_validate XMLFILE\n");
-		return -1;
+	int opt;	
+	std::string filename, what, block;
+	int mode = MODE_CONFIG, get = GET_BLOCKS;
+
+	while((opt = getopt(argc, argv, "x:bt:nfuUh")) != -1) {
+		if(opt == 'x')
+			filename.assign(optarg);
+		else if(opt == 'b')
+			get = GET_BLOCKS;
+		else if(opt == 't') {
+			get = GET_TASKS;
+			block.assign(optarg);
+		}
+		else if(opt == 'n')
+			what.assign("online");
+		else if(opt == 'f')
+			what.assign("offline");
+		else if(opt == 'u')
+			mode = MODE_BOTH;
+		else if(opt == 'U')
+			mode = MODE_FRIENDLY;
+		else {
+			usage();
+			return(opt == 'h') ? EXIT_SUCCESS : EXIT_FAILURE;
+		}
 	}
-		
+
 	CCfgConfig* config;
-	string filename(argv[1]);
 	try {
 		config = new CCfgConfig();
 		config->ImportFileEx(filename);
 	} catch(XMLException e) {
-		cout << "[ccfg_validate] Exception: " << e << endl;
-		return -2;
+		cout << e << endl;
+		return -1;
 	}
-
-	get_blocks(config, "online", MODE_BOTH);
-	get_tasksets(config, "online", "mi", MODE_BOTH);
 	
+	switch(get) {
+		case GET_BLOCKS:
+			get_blocks(config, what, mode);
+			break;
+		case GET_TASKS:
+			get_tasksets(config, what, block, mode);
+			break;
+	}
 	return 0;
-	
-	
-
-
-	return true;
 }
