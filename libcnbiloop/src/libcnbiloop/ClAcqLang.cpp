@@ -23,7 +23,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#define CLLA_ADD_LABEL_GDF		"[clla]add_gdf|%u[/clla]"
+#define CLLA_ADD_LABEL_GDF		"[clla]add_gdf|%d[/clla]"
 #define CLLA_ADD_LABEL_LPT		"[clla]add_lpt|%u[/clla]"
 #define CLLA_ADD_LABEL_TXT		"[clla]add_txt|%s[/clla]"
 #define CLLA_OPEN_XDF_OUT		"[clla]open_xdf|%s|%s|%s[/clla]"
