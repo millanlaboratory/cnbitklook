@@ -220,17 +220,13 @@ bool CaWriter::AddEvent(int event, double duration) {
 	this->_semlock.Wait();
 	int type = xdf_add_evttype(this->_file, event, "");
 	if(type != -1) {
-		if(xdf_add_event(this->_file, type, this->TocOpen(), duration) != -1) {
+		if(xdf_add_event(this->_file, type, this->_relative.Toc(), duration) != -1) {
 			this->_semlock.Post();
 			return true;
-		} else {
-			CcLogErrorS("Cannot add event " 
-					<< event << ": " << strerror(errno));
-		}
-	} else {
-		CcLogErrorS("Cannot add event type " 
-				<< event << ": " << strerror(errno));
+		} 
 	}
+
+	CcLogErrorS("Cannot add event " << event << ": " << strerror(errno));
 	this->_semlock.Post();
 	return false;
 }

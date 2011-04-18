@@ -43,6 +43,7 @@ void usage(void) {
 	printf("  -a       the TCP port for the acquisition server (9000 default)\n");
 	printf("  -n       the basename for the pipes (/tmp/cl.pipe.ndf. default)\n");
 	printf("  -i       interactive acquisition starting\n");
+	printf("  -p       print labels added to NDF frame\n");
 	printf("  -h       display this help and exit\n");
 }
 
@@ -52,9 +53,9 @@ int main(int argc, char* argv[]) {
 	std::string optfs("16");
 	CcEndpoint optendpoint("127.0.0.1:9000");
 	std::string optpipename("/tmp/cl.pipe.ndf.");
-	bool optinteractive = false;
+	bool optinteractive = false, optprintndf = false;
 
-	while((opt = getopt(argc, argv, "d:f:p:n:hi")) != -1) {
+	while((opt = getopt(argc, argv, "d:f:n:hip")) != -1) {
 		if(opt == 'd')
 			optdevice.assign(optarg);
 		else if(opt == 'f')
@@ -65,6 +66,8 @@ int main(int argc, char* argv[]) {
 			optpipename.assign(optarg);
 		else if(opt == 'i')
 			optinteractive = true;
+		else if(opt == 'p')
+			optprintndf = true;
 		else {
 			usage();
 			return(opt == 'h') ? EXIT_SUCCESS : EXIT_FAILURE;
@@ -168,7 +171,8 @@ int main(int argc, char* argv[]) {
 		eegdev.WriteNDF(&frame);
 		pipes->Write(frame.data.buffer, 0);
 		// TODO: write to file
-		ndf_print_labels(&frame);
+		if(optprintndf) 
+			ndf_print_labels(&frame);
 		ndf_clear_labels(&frame);
 		semframe.Post();
 		
