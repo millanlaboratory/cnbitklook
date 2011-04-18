@@ -58,7 +58,7 @@ CCfgTaskset* CCfgConfig::OnlineEx(const std::string& blockname,
 	try {
 		CCfgXMLConfig::RootEx()->GoEx("online")->GoEx(blockname)->SetBranch();
 		tasks->description = 
-			CCfgXMLConfig::BranchEx()->GoEx("description")->GetEx().String();
+			CCfgXMLConfig::BranchEx()->GetAttrEx("description");
 		this->ParseTasksetEx(taskset, tasks);
 		this->ParseClassifierEx(blockname, taskset, tasks, icmessage);
 		this->ParseConfigEx("online", blockname, taskset, tasks);
@@ -76,7 +76,7 @@ CCfgTaskset* CCfgConfig::OfflineEx(const std::string& offline,
 	try {
 		CCfgXMLConfig::RootEx()->GoEx("offline")->GoEx(offline)->SetBranch();
 		tasks->description = 
-			CCfgXMLConfig::BranchEx()->GoEx("description")->GetEx().String();
+			CCfgXMLConfig::BranchEx()->GetAttrEx("description");
 		this->ParseTasksetEx(taskset, tasks);
 		this->ParseConfigEx("offline", offline, taskset, tasks);
 	} catch(XMLException e) {

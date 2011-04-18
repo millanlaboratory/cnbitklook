@@ -57,8 +57,7 @@
 	
 	<!-- Offline Blocks -->
 	<offline>
-		<mi> <!-- This is a Block -->
-			<description>Offline_MI</description>
+		<mi description="Offline_MI"> <!-- This is a Block -->
 			<taskset key="mi_rhlh"> <!-- This is a Taskset -->
 				<trials>
 					<mi_hand_left>15</mi_hand_left>
@@ -100,8 +99,7 @@
 	
 	<!-- Online Block -->
 	<online>
-		<mi>
-			<description>Online_MI</description>
+		<mi description="Online_MI">
 			<taskset key="mi_rhlh" classifier="kmi0">
 				<threshold>
 					<mi_hand_right>0.65</mi_hand_right>
@@ -114,8 +112,7 @@
 			</taskset>
 			<integration>0.96</integration>
 		</mi>
-		<mierrp>
-			<description>Online_MI_ErrP</description>
+		<mierrp  description="Online_MI+ErrP">
 			<taskset key="mi_rhlh" classifier="kmi0">
 				<threshold>
 					<mi_hand_left>0.85</mi_hand_left>
@@ -168,38 +165,38 @@
 	<!-- Standard Task List -->
 	<taskset>
 		<!-- Offline tasksets -->
-		<mi_rlsf>
+		<mi_rlsf description="Motor Imagery 4: Right, Left, Rest, Feet">
 			<class id="0" key="mi_hand_right"/>
 			<class id="1" key="mi_hand_left"/>
 			<class id="2" key="mi_rest"/>
 			<class id="3" key="mi_both_feet"/>
 		</mi_rlsf>
-		<mi_rlbf>
+		<mi_rlbf description="Motor Imagery 3: Right, Left, Feet">
 			<class id="0" key="mi_hand_right"/>
 			<class id="1" key="mi_hand_left"/>
 			<class id="2" key="mi_both_feet"/>
 		</mi_rlbf>
-		<mi_rhlh>
+		<mi_rhlh description="Motor Imagery: Right, Left">
 			<class id="0" key="mi_hand_right"/>
 			<class id="1" key="mi_hand_left"/>
 		</mi_rhlh>
-		<mi_rhbf>
+		<mi_rhbf description="Motor Imagery: Right, Feet">
 			<class id="0" key="mi_hand_right"/>
 			<class id="1" key="mi_both_feet"/>
 		</mi_rhbf>
-		<mi_bflh>
+		<mi_bflh description="Motor Imagery: Left, Feet">
 			<class id="0" key="mi_both_feet"/>
 			<class id="1" key="mi_hand_left"/>
 		</mi_bflh>
-		<mi_bhbf>
+		<mi_bhbf description="Motor Imagery: Hands, Feet">
 			<class id="0" key="mi_both_hands"/>
 			<class id="1" key="mi_both_feet"/>
 		</mi_bhbf>
-		<mi_bfbh>
+		<mi_bfbh description="Motor Imagery: Feet, Hands">
 			<class id="0" key="mi_both_feet"/>
 			<class id="1" key="mi_both_hands"/>
 		</mi_bfbh>
-		<errp>
+		<errp description="Error Potentials">
 			<class id="0" key="errp_true"/>
 			<class id="1" key="errp_false"/>
 		</errp> 

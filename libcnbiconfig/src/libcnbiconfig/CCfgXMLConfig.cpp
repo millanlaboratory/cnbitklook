@@ -174,6 +174,10 @@ CCfgXMLConfig* CCfgXMLConfig::BranchEx(void) {
 	return this;
 }
 
+XMLNode CCfgXMLConfig::Leaf(void) {
+	return this->_nLeaf;
+}
+
 XMLNode CCfgXMLConfig::Child(void) {
 	XMLNode node = this->_nLeaf->first_node();
 	if(node != NULL)

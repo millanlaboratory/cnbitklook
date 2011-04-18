@@ -53,6 +53,7 @@ class CCfgXMLConfig {
 		std::string GetAttrEx(const std::string& name);
 		CCfgXMLConfig* SetBranch(void);
 		CCfgXMLConfig* BranchEx(void);
+		XMLNode Leaf(void);
 		XMLNode Child(void);
 		XMLNode NextSibling(void);
 		void Dump(void);
