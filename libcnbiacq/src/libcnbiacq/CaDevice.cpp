@@ -230,7 +230,7 @@ void CaDevice::WriteNDF(ndf_frame* frame, bool inc, bool tic) {
 
 void CaDevice::InitNDF(ndf_frame* frame) {
 	frame->types.tim 			= NDF_DOUBLETIME;
-	frame->types.lbl 			= NDF_INT32;
+	frame->types.lbl 			= NDF_UINT32;
 	frame->types.eeg 			= this->SizeNDF(this->_stype);
 	frame->types.exg 			= this->SizeNDF(this->_stype);
 	frame->types.tri 			= this->SizeNDF(this->_ttype);

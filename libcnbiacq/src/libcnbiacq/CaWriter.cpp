@@ -193,15 +193,6 @@ bool CaWriter::Open(const std::string& filename, enum xdffiletype type) {
 		goto failure;
 	}
 	this->_relative.Tic();
-	if(type == XDF_GDF2) {
-		if(this->SetupEvents() == false) {
-			CcLogErrorS("Cannot setup events");
-			xdf_close(this->_file);
-			this->_file = NULL;
-			this->_semlock.Post();
-			return false;
-		}
-	}
 	this->_semlock.Post();
 	return true;
 
@@ -226,41 +217,15 @@ void CaWriter::Tic(TCBlock* block) {
 }
 		
 bool CaWriter::AddEvent(int event, double duration) {
-	if(xdf_add_event(this->_file, event, this->TocOpen(), duration) == -1) {
-		CcLogErrorS("Cannot add event " << event << ": " << strerror(errno));
-		return false;
-	}
+	int define = xdf_add_evttype(this->_file, event, "");
+	//int add = xdf_add_event(this->_file, event, this->TocOpen(), duration);
+	int add = xdf_add_event(this->_file, define, this->TocOpen(), duration);
+	std::cout << "D=" << define << ", A=" << add << std::endl;
+	//if( == -1) {
+	//	CcLogErrorS("Cannot add event " << event << ": " << strerror(errno));
+	//	return false;
+	//}
 	return true;
 }
-		
-bool CaWriter::SetupEvents(void) {
-	for(int i = 0; i < 65536; i++) {
-		if(xdf_add_evttype(this->_file, i, "") == -1) {
-			CcLogErrorS("Cannot add evttype: " << strerror(errno));
-			return false;
-		}
-	}
-	//xdf_add_evttype(this->_file, 0x0300, "trial");
-	//xdf_add_evttype(this->_file, 0x8300, "trialoff");
-	//xdf_add_evttype(this->_file, 0x030d, "cfeedback");
-	//xdf_add_evttype(this->_file, 0x830d, "cfeedbackoff");
-	//xdf_add_evttype(this->_file, 0x0381, "targethit");
-	//xdf_add_evttype(this->_file, 0x0382, "targetmiss");
-	//xdf_add_evttype(this->_file, 0x0311, "beep");
-	//xdf_add_evttype(this->_file, 0x030f, "cueundef");
-	//xdf_add_evttype(this->_file, 0xFFFF, "wait");
-	//xdf_add_evttype(this->_file, 0x0312, "fixation");
 
-	//xdf_add_evttype(this->_file, 0x0302, "Right_Hand_MI");
-	//xdf_add_evttype(this->_file, 0x0301, "Left_Hand_MI");
-	//xdf_add_evttype(this->_file, 0x0305, "Both_Hands_MI");
-	//xdf_add_evttype(this->_file, 0x0303, "Both_Feet_MI");
-	//xdf_add_evttype(this->_file, 0x030f, "Rest_MI");
-	//xdf_add_evttype(this->_file, 0x0304, "Tongue_MI");
-	//xdf_add_evttype(this->_file, 0x030b, "ErrP_Detected");
-	//xdf_add_evttype(this->_file, 0x030c, "ErrP_NotDetected");
-	//xdf_add_evttype(this->_file, 0x0010, "MI_Onset_Detected");
-	//xdf_add_evttype(this->_file, 0x0011, "MI_Onset_NotDetected");
-	return true;
-}
 #endif

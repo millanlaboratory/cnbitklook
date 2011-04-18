@@ -40,7 +40,6 @@ class CaWriter {
 		bool AddEvent(int event, double duration = 0.00f);
 	protected:
 		int SetupChannelGroup(int igrp);
-		bool SetupEvents(void);
 
 	protected:
 		struct xdf* _file;
