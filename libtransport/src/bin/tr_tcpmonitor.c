@@ -60,7 +60,7 @@ int main(int argc, char * const argv[]) {
 				endpoint.remote.address, endpoint.remote.port);
 
 		while(tr_recv(&endpoint)) {
-			printf(">> %s\n", endpoint.buffer);
+			printf(">> %s\n", (char*)endpoint.buffer);
 		}
 		printf("%s Endpoint dropped the connection\n", EXAMPLE_NAME);
 		tr_close(&endpoint);

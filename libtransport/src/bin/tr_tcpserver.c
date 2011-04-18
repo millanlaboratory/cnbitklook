@@ -61,7 +61,7 @@ int main(int argc, char * const argv[]) {
 
 		tr_send(&endpoint, "Welcome Mr. Client");
 		while(tr_recv(&endpoint) != -1) {
-			printf("%s Received: %s\n", EXAMPLE_NAME, endpoint.buffer);
+			printf("%s Received: %s\n", EXAMPLE_NAME, (char*)(endpoint.buffer));
 			if(tr_send(&endpoint, "Thanks for your message") == -1)
 				break;
 		}

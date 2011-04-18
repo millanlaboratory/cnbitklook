@@ -100,8 +100,8 @@ int tr_check(tr_socket* sock) {
 }
 
 int tr_bind(tr_socket* sock, const char* port) {
-	int retopt;
-	int bndret;
+	int retopt = 0;
+	int bndret = 0;
 	struct addrinfo *ai; 
 	int opt = 1;
 
@@ -167,7 +167,7 @@ int tr_accept(tr_socket* sock, tr_socket* endpoint) {
 
 int tr_connect(tr_socket* sock, const char* host, const char* port) {
 	struct addrinfo *ai;
-	int conopt;
+	int conopt = 0;
 
 	if(getaddrinfo(host, port, &(sock->info_results), &ai) != 0)
 		return -1;

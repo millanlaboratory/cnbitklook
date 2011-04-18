@@ -44,7 +44,7 @@ int main(void) {
 			printf("%s Local socket error\n", EXAMPLE_NAME);
 			break;
 		}
-		printf("%s >> %s\n", EXAMPLE_NAME, socket.buffer);
+		printf("%s >> %s\n", EXAMPLE_NAME, (char*)socket.buffer);
 		printf("%s Remote TCP socket: %s:%u [endpoint]\n", EXAMPLE_NAME, 
 				socket.remote.address, socket.remote.port);
 	}

@@ -20,6 +20,7 @@
 #include "tcp.h"
 #include <stdio.h>
 #include <unistd.h>
+#include <string.h>
 
 #define EXAMPLE_NAME "[clientvoid]"
 
@@ -73,7 +74,7 @@ int main(int argc, char * const argv[]) {
 			printf("Buffer too big!\n");
 		} else {
 			memcpy(&brecv, socket.buffer, sizeof(int));
-			printf("%s Received: %u %d\n", EXAMPLE_NAME, srecv, brecv);
+			printf("%s Received: %u %lu\n", EXAMPLE_NAME, srecv, brecv);
 		}
 		
 		sleep(0.40);
