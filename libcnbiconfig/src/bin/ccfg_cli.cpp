@@ -55,10 +55,10 @@ bool get_blocks(CCfgConfig* config, const std::string& what, int mode) {
 			node = node->next_sibling();
 		}
 	} catch(XMLException e) { 
-		cout << e << endl;
-		return false;
+		fprintf(stderr, "Error: %s\n", e.Info().c_str());
+		return 0;
 	}
-	return true;
+	return 1;
 }
 
 bool get_tasksets(CCfgConfig* config, const std::string& what, 
@@ -93,10 +93,10 @@ bool get_tasksets(CCfgConfig* config, const std::string& what,
 			node = node->next_sibling("taskset");
 		}
 	} catch(XMLException e) { 
-		cout << e << endl;
-		return false;
+		fprintf(stderr, "Error: %s\n", e.Info().c_str());
+		return 0;
 	}
-	return true;
+	return 1;
 }
 
 void usage(void) { 
@@ -144,17 +144,17 @@ int main(int argc, char *argv[]) {
 		config = new CCfgConfig();
 		config->ImportFileEx(filename);
 	} catch(XMLException e) {
-		cout << e << endl;
+		fprintf(stderr, "Error: %s\n", e.Info().c_str());
 		return -1;
 	}
 	
 	switch(get) {
 		case GET_BLOCKS:
-			get_blocks(config, what, mode);
-			break;
+			return get_blocks(config, what, mode);
 		case GET_TASKS:
-			get_tasksets(config, what, block, mode);
-			break;
+			return get_tasksets(config, what, block, mode);
+		default:
+			return 666;
 	}
 	return 0;
 }
