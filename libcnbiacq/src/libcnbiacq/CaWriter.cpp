@@ -217,15 +217,22 @@ void CaWriter::Tic(TCBlock* block) {
 }
 		
 bool CaWriter::AddEvent(int event, double duration) {
-	int define = xdf_add_evttype(this->_file, event, "");
-	//int add = xdf_add_event(this->_file, event, this->TocOpen(), duration);
-	int add = xdf_add_event(this->_file, define, this->TocOpen(), duration);
-	std::cout << "D=" << define << ", A=" << add << std::endl;
-	//if( == -1) {
-	//	CcLogErrorS("Cannot add event " << event << ": " << strerror(errno));
-	//	return false;
-	//}
-	return true;
+	this->_semlock.Wait();
+	int type = xdf_add_evttype(this->_file, event, "");
+	if(type != -1) {
+		if(xdf_add_event(this->_file, type, this->TocOpen(), duration) != -1) {
+			this->_semlock.Post();
+			return true;
+		} else {
+			CcLogErrorS("Cannot add event " 
+					<< event << ": " << strerror(errno));
+		}
+	} else {
+		CcLogErrorS("Cannot add event type " 
+				<< event << ": " << strerror(errno));
+	}
+	this->_semlock.Post();
+	return false;
 }
 
 #endif

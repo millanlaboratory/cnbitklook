@@ -168,7 +168,7 @@ int main(int argc, char* argv[]) {
 		eegdev.WriteNDF(&frame);
 		pipes->Write(frame.data.buffer, 0);
 		// TODO: write to file
-		//ndf_print_labels(&frame);
+		ndf_print_labels(&frame);
 		ndf_clear_labels(&frame);
 		semframe.Post();
 		

@@ -234,7 +234,7 @@ void CaDevice::InitNDF(ndf_frame* frame) {
 	frame->types.eeg 			= this->SizeNDF(this->_stype);
 	frame->types.exg 			= this->SizeNDF(this->_stype);
 	frame->types.tri 			= this->SizeNDF(this->_ttype);
-	frame->config.labels 		= 32;
+	frame->config.labels 		= 8;
 	frame->config.eeg_channels 	= this->_cap.eeg_nmax;
 	frame->config.exg_channels 	= this->_cap.sensor_nmax;
 	frame->config.tri_channels 	= this->_cap.trigger_nmax;

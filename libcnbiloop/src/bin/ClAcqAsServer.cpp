@@ -178,7 +178,6 @@ bool ClAcqAsServer::CommunicationTiD(CcServerMulti* server, CcAddress address) {
 		}
 		if(ndf_add_label(this->_frame, &idevent) == NULL)
 			CcLogError("TiD event is valid but cannot be added to NDF frame");
-		// TODO add event to file
 		this->_writer->AddEvent(idevent);
 		this->_semframe->Post();
 
