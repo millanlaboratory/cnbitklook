@@ -25,29 +25,25 @@
 
 class ClNamesClient : public ClClient {
 	public:
-		virtual bool Connect(const CcAddress address = "127.0.0.1:8000");
-		virtual int Query(const std::string& name, CcAddress* address);
-		virtual int Set(const std::string& name, CcAddress address);
-		virtual int Unset(const std::string& name);
-		virtual CcAddress Query(const std::string& name);
+		bool Connect(const CcAddress address = "127.0.0.1:8000");
+		int Query(const std::string& name, CcAddress* address);
+		int Set(const std::string& name, CcAddress address);
+		int Unset(const std::string& name);
+		CcAddress Query(const std::string& name);
 		
-		virtual int Retrieve(const std::string& name, std::string* content);
-		virtual int Store(const std::string& name, const std::string& content);
-		virtual int Erase(const std::string& name);
-		virtual std::string Retrieve(const std::string& name);
+		int Retrieve(const std::string& name, std::string* content);
+		int Store(const std::string& name, const std::string& content);
+		int Erase(const std::string& name);
+		std::string Retrieve(const std::string& name);
 
-		virtual bool Store(const std::string& name, CcFile* file);
-		virtual bool Retrieve(const std::string& name, CcFile* file);
+		bool Store(const std::string& name, CcFile* file);
+		bool Retrieve(const std::string& name, CcFile* file);
 		
-		virtual bool StoreFile(const std::string& name, const std::string& filename);
-		virtual bool RetrieveFile(const std::string& name, const std::string& filename);
-	private:
-	protected:
+		bool StoreFile(const std::string& name, const std::string& filename);
+		bool RetrieveFile(const std::string& name, const std::string& filename);
 
-	public:
 	private:
 		ClNamesLang _language;
-	protected:
 };
 
 #endif

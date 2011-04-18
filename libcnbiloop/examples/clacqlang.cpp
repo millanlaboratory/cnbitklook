@@ -22,10 +22,8 @@
 using namespace std;
 
 int main(void) {
-	GDFEvent event = 0;
-	HWTrigger trigger = 0;
-	std::string label;
-	std::string filegdf, filemat, filelog;
+	string label;
+	string filegdf, filemat, filelog;
 	int id = 0;
 
 	ClAcqLang acq;
@@ -45,15 +43,6 @@ int main(void) {
 	cout << acq.CloseXDF() << endl;
 	cout << acq.IsCloseXDF(acq.message->buffer) << endl;
 
-	cout << acq.AddLabelGDF(781) << endl;
-	cout << acq.IsAddLabelGDF(acq.message->buffer, &event) << endl;
-	
-	cout << acq.AddLabelLPT(254) << endl;
-	cout << acq.IsAddLabelLPT(acq.message->buffer, &trigger) << endl;
-	
-	cout << acq.AddLabelTXT("foobar") << endl;
-	cout << acq.IsAddLabelTXT(acq.message->buffer, &label) << endl;
-	
 	cout << acq.Error(acq.NDFLimitReached) << endl;
 	cout << acq.IsError(acq.message->buffer, &id) << endl;
 	

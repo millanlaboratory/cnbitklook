@@ -26,36 +26,35 @@
 
 class ClProLang : public ClLanguage {
 	public:
-		virtual char* Fork(void);
-		virtual char* Launch(const int pid, const std::string& call);
-		virtual char* Terminate(const int pid);
-		virtual char* IsAlive(const int pid);
-		virtual char* Died(const int pid);
-		virtual char* ChangeDirectory(const int pid, const std::string& path);
-		virtual char* Include(const int pid, const std::string& path0, const std::string& path1);
-		virtual char* LaunchNDF(const int pid, const std::string& function, 
+		char* Fork(void);
+		char* Launch(const int pid, const std::string& call);
+		char* Terminate(const int pid);
+		char* IsAlive(const int pid);
+		char* Died(const int pid);
+		char* ChangeDirectory(const int pid, const std::string& path);
+		char* Include(const int pid, const std::string& path0, const std::string& path1);
+		char* LaunchNDF(const int pid, const std::string& function, 
 				const std::string& pipename, const CcAddress addressD, 
 				const CcAddress addressC, const std::string& extra);
-		virtual char* Ok(const int pid);
-		virtual char* Error(const int code);
-		virtual bool IsFork(const char* message);
-		virtual bool IsLaunch(const char* message, int* pid, std::string* call);
-		virtual bool IsTerminate(const char* message, int* pid);
-		virtual bool IsIsAlive(const char* message, int* pid);
-		virtual bool IsDied(const char* message, int* pid);
-		virtual bool IsOk(const char* message, int* pid);
-		virtual bool IsError(const char* message, int* code);
-		virtual bool IsChangeDirectory(const char* message, int* pid, std::string* path);
-		virtual bool IsInclude(const char* message, int* pid, std::string* path0, 
+		char* Ok(const int pid);
+		char* Error(const int code);
+		bool IsFork(const char* message);
+		bool IsLaunch(const char* message, int* pid, std::string* call);
+		bool IsTerminate(const char* message, int* pid);
+		bool IsIsAlive(const char* message, int* pid);
+		bool IsDied(const char* message, int* pid);
+		bool IsOk(const char* message, int* pid);
+		bool IsError(const char* message, int* code);
+		bool IsChangeDirectory(const char* message, int* pid, std::string* path);
+		bool IsInclude(const char* message, int* pid, std::string* path0, 
 				std::string* path1);
-		virtual bool IsLaunchNDF(const char* message, int* pid, std::string* function,
+		bool IsLaunchNDF(const char* message, int* pid, std::string* function,
 				std::string* pipename, std::string* addressD, 
 				std::string* addressC, std::string* extra);
 
 	public:
 		static const std::string Hdr;
 		static const std::string Trl;
-
 		static const int StatusLost = -3;
 		static const int NotSupported = -2;
 		static const int NotUndestood = -1;

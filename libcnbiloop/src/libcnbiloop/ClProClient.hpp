@@ -24,21 +24,20 @@
 
 class ClProClient : public ClClient {
 	public:
-		virtual bool Connect(const CcAddress address = "127.0.0.1:9100");
-		virtual int Fork(int* rpid);
-		virtual int ForkAndCheck(int* rpid, double waitms = 5000.00f);
-		virtual int Launch(const int pid, const std::string& call);
-		virtual int IsAlive(const int pid);
-		virtual int Terminate(const int pid);
-		virtual int ChangeDirectory(const int pid, const std::string& path);
-		virtual int Include(const int pid, const std::string& path0, 
+		bool Connect(const CcAddress address = "127.0.0.1:9100");
+		int Fork(int* rpid);
+		int ForkAndCheck(int* rpid, double waitms = 5000.00f);
+		int Launch(const int pid, const std::string& call);
+		int IsAlive(const int pid);
+		int Terminate(const int pid);
+		int ChangeDirectory(const int pid, const std::string& path);
+		int Include(const int pid, const std::string& path0, 
 				const std::string& path1);
-		virtual int LaunchNDF(const int pid, const std::string& function, 
+		int LaunchNDF(const int pid, const std::string& function, 
 				const std::string& pipename, const CcAddress addressD, 
 				const CcAddress addressC, const std::string& extra = " ");
-		
-		virtual int IncludeNDF(const int pid);
-		virtual bool Check(const int pid, double waitms = 2500.00f);
+		int IncludeNDF(const int pid);
+		bool Check(const int pid, double waitms = 2500.00f);
 	private:
 	protected:
 

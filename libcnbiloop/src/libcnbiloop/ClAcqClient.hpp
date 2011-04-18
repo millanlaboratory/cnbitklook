@@ -24,20 +24,13 @@
 
 class ClAcqClient : public ClClient {
 	public:
-		virtual bool Connect(const CcAddress address = "127.0.0.1:9000");
-		virtual int AddLabelGDF(const GDFEvent label);
-		virtual int AddLabelLPT(const HWTrigger label);
-		virtual int AddLabelTXT(const std::string& label);
-		virtual int OpenXDF(const std::string& filegdf, 
+		bool Connect(const CcAddress address = "127.0.0.1:9000");
+		int OpenXDF(const std::string& filegdf, 
 				const std::string& filelog, const std::string& linelog);
-		virtual int CloseXDF(void);
-	private:
-	protected:
+		int CloseXDF(void);
 
-	public:
 	private:
 		ClAcqLang _language;
-	protected:
 };
 
 #endif

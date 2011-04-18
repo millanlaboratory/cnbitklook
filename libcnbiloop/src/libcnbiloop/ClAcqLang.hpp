@@ -25,22 +25,19 @@
 
 class ClAcqLang : public ClLanguage {
 	public:
-		 virtual char* AddLabelGDF(const GDFEvent label);
-		 virtual char* AddLabelLPT(const HWTrigger label);
-		 virtual char* AddLabelTXT(const std::string& label);
-		 virtual char* OpenXDF(const std::string& filegdf, const std::string&
-				 filelog, const std::string& linelog);
-		 virtual char* CloseXDF(void);
-		 virtual char* Ok(void);
-		 virtual char* Error(const int code);
-		 virtual bool IsAddLabelGDF(const char* message, GDFEvent* label);
-		 virtual bool IsAddLabelLPT(const char* message, HWTrigger* label);
-		 virtual bool IsAddLabelTXT(const char* message, std::string* label);
-		 virtual bool IsOpenXDF(const char* message, std::string* filegdf,
-				 std::string* filelog, std::string* linelog);
-		 virtual bool IsCloseXDF(const char* message);
-		 virtual bool IsOk(const char* message);
-		 virtual bool IsError(const char* message, int* code);
+		char* OpenXDF(const std::string& filegdf, 
+				const std::string& filelog, 
+				const std::string& linelog);
+		char* CloseXDF(void);
+		char* Ok(void);
+		char* Error(const int code);
+		bool IsOpenXDF(const char* message, 
+				std::string* filegdf,
+				std::string* filelog, 
+				std::string* linelog);
+		bool IsCloseXDF(const char* message);
+		bool IsOk(const char* message);
+		bool IsError(const char* message, int* code);
 
 	public:
 		static const std::string Hdr;

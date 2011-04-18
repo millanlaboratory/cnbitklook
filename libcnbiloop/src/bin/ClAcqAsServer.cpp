@@ -91,8 +91,6 @@ bool ClAcqAsServer::LogXDF(const std::string& logfile,
 }
 		
 bool ClAcqAsServer::CommunicationCl(CcServerMulti* server, CcAddress address) {
-	GDFEvent gdflabel;
-	HWTrigger hwtlabel;
 	std::string txtlabel;
 	std::string message;
 	std::string xdffile, logfile, logline;
@@ -101,24 +99,7 @@ bool ClAcqAsServer::CommunicationCl(CcServerMulti* server, CcAddress address) {
 				ClAcqLang::Hdr, ClAcqLang::Trl, CcStreamer::Forward) == false)
 		return false;
 
-	if(language.IsAddLabelGDF(message.c_str(), &gdflabel)) {
-		this->_semframe->Wait();
-		if(ndf_add_label(this->_frame, &gdflabel) == NULL) {
-			CcLogWarningS("Add label GDF from " << address << 
-					": " << gdflabel << " NDFLimitReached"); 
-			server->Send(language.Error(ClAcqLang::NDFLimitReached), address);
-		} else {
-			CcLogInfoS("GDF label received from " << address << 
-					": " << gdflabel <<
-					" (" << this->_writer->TocOpen()/1000 << "s)");
-			server->Send(language.Ok(), address);
-		}
-		this->_semframe->Post();
-	} else if(language.IsAddLabelTXT(message.c_str(), &txtlabel)) {
-		server->Send(language.Error(ClAcqLang::NotSupported), address);
-	} else if(language.IsAddLabelLPT(message.c_str(), &hwtlabel)) {
-		server->Send(language.Error(ClAcqLang::NotSupported), address);
-	} else if(language.IsOpenXDF(message.c_str(), &xdffile, &logfile, &logline)) {
+	if(language.IsOpenXDF(message.c_str(), &xdffile, &logfile, &logline)) {
 		if(this->_writer->IsOpen() == true) {
 			server->Send(language.Error(ClAcqLang::XDFAlreadyOpen), address);
 			CcLogWarningS("Open XDF from " << address << ": " 

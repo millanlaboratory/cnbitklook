@@ -27,23 +27,18 @@ class ClMatlab : public CcProcess {
 		ClMatlab(const std::string& cmd = "matlab", 
 				bool write = true, bool read = true);
 		virtual ~ClMatlab(void);
-		virtual void AddPath(const std::string& path);
-		virtual void Include(const std::string& path0, const std::string& path1);
-		virtual void ChangeDirectory(const std::string& path);
+		void AddPath(const std::string& path);
+		void Include(const std::string& path0, const std::string& path1);
+		void ChangeDirectory(const std::string& path);
 		
-		virtual void Launch(const std::string function);
-		virtual void LaunchNDF(const std::string function,
+		void Launch(const std::string function);
+		void LaunchNDF(const std::string function,
 				const std::string& pipename, 
 				const CcAddress addressD,
 				const CcAddress addressC, 
 				const std::string& extra);
-	private:
 	protected:
 		virtual void Exec(void);
-
-	public:
-	private:
-	protected:
 };
 
 #endif

@@ -31,23 +31,22 @@ class ClTobiId : public CcSocketProxy {
 	public:
 		ClTobiId(int mode = ClTobiId::SetOnly);
 		virtual ~ClTobiId(void);
-		virtual bool Attach(const std::string& name = "/acquisition");
-		virtual bool Detach(void);
-		virtual bool IsAttached(void);
-		virtual bool GetMessage(IDSerializerRapid* serializer);
-		virtual bool SetMessage(IDSerializerRapid* serializer, 
+		bool Attach(const std::string& name = "/acquisition");
+		bool Detach(void);
+		bool IsAttached(void);
+		bool GetMessage(IDSerializerRapid* serializer);
+		bool SetMessage(IDSerializerRapid* serializer, 
 				int blockidx = TCBlock::BlockIdxUnset);
-		virtual int Count(void);
+		int Count(void);
 	protected:
-		virtual void HandleConnect(CcSocket* caller);
-		virtual void HandleDisconnect(CcSocket* caller);
-		virtual void HandleRecv(CcSocket* caller);
+		void HandleConnect(CcSocket* caller);
+		void HandleDisconnect(CcSocket* caller);
+		void HandleRecv(CcSocket* caller);
 
 	public:
 		static const int SetOnly = 0;
 		static const int GetOnly = 1;
 		static const int SetGet = 2;
-
 	protected:
 		CcClient* _client;
 		std::string _name;

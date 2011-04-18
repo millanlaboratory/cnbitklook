@@ -32,9 +32,6 @@ int main(void) {
 	}
 
 	while(client.Connect()) {
-		client.AddLabelGDF(781);
-		client.AddLabelLPT(1);
-		client.AddLabelTXT("ciao");
 		client.OpenXDF("test.xdf", "test.log", "antani=10");
 		client.OpenXDF("test2.xdf", "test2.log", "antani=20");
 		client.CloseXDF();

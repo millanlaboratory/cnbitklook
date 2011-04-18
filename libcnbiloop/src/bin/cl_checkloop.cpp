@@ -101,8 +101,6 @@ int main(int argc, char* argv[]) {
 		goto shutdown;
 	}
 
-	CcTimeValue tic;
-	CcTime::Tic(&tic);
 	while(true) {
 		if(CcCore::receivedSIGAny.Get())
 			goto shutdown;
@@ -119,12 +117,6 @@ int main(int argc, char* argv[]) {
 			goto shutdown;
 		}
 
-		if(CcTime::Toc(&tic) > 20000.00f) {
-			ClLoop::acquisition.AddLabelGDF(781);
-			ClLoop::acquisition.AddLabelLPT(2);
-			CcTime::Tic(&tic);
-		}
-		
 		CcTime::Sleep(1000.00f);
 	}
 

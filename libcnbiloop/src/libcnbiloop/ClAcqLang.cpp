@@ -23,9 +23,6 @@
 #include <stdio.h>
 #include <string.h>
 
-#define CLLA_ADD_LABEL_GDF		"[clla]add_gdf|%d[/clla]"
-#define CLLA_ADD_LABEL_LPT		"[clla]add_lpt|%u[/clla]"
-#define CLLA_ADD_LABEL_TXT		"[clla]add_txt|%s[/clla]"
 #define CLLA_OPEN_XDF_OUT		"[clla]open_xdf|%s|%s|%s[/clla]"
 #define CLLA_OPEN_XDF_IN		"[clla]open_xdf|%[^'|']|%[^'|']|%[^'['][/clla]"
 #define CLLA_CLOSE_XDF			"[clla]close_xdf[/clla]"
@@ -34,24 +31,6 @@
 
 const std::string ClAcqLang::Hdr = "[clla]";
 const std::string ClAcqLang::Trl = "[/clla]";
-
-char* ClAcqLang::AddLabelGDF(const GDFEvent label) {
-	snprintf(ClLanguage::message->buffer, ClLanguage::MessageSize(),
-			CLLA_ADD_LABEL_GDF, label);
-	return ClLanguage::message->buffer;
-}
-
-char* ClAcqLang::AddLabelLPT(const HWTrigger label) {
-	snprintf(ClLanguage::message->buffer, ClLanguage::MessageSize(),
-			CLLA_ADD_LABEL_LPT, label);
-	return ClLanguage::message->buffer;
-}
-
-char* ClAcqLang::AddLabelTXT(const std::string& label) {
-	snprintf(ClLanguage::message->buffer, ClLanguage::MessageSize(),
-			CLLA_ADD_LABEL_TXT, label.c_str());
-	return ClLanguage::message->buffer;
-}
 
 char* ClAcqLang::OpenXDF(const std::string& filegdf, 
 		const std::string& filelog, const std::string& linelog) {
@@ -77,21 +56,6 @@ char* ClAcqLang::Error(const int code) {
 	snprintf(ClLanguage::message->buffer, ClLanguage::MessageSize(),
 			CLLA_ERROR, code);
 	return ClLanguage::message->buffer;
-}
-
-bool ClAcqLang::IsAddLabelGDF(const char* message, GDFEvent* label) {
-	return(sscanf(message, CLLA_ADD_LABEL_GDF, label) == 1);
-}
-
-bool ClAcqLang::IsAddLabelLPT(const char* message, HWTrigger* label) {
-	return(sscanf(message, CLLA_ADD_LABEL_LPT, (unsigned int*)label) == 1);
-}
-
-bool ClAcqLang::IsAddLabelTXT(const char* message, std::string* label) {
-	if(sscanf(message, CLLA_ADD_LABEL_TXT, ClLanguage::_cache0->buffer) != 1)
-		return false;
-	label->assign(ClLanguage::_cache0->buffer);
-	return true;
 }
 
 bool ClAcqLang::IsOpenXDF(const char* message, std::string* filegdf, 

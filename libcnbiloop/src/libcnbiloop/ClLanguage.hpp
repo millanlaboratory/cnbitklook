@@ -25,8 +25,8 @@ class ClLanguage {
 	public:
 		ClLanguage(size_t msize = 4092, size_t csize = 2048);
 		virtual ~ClLanguage(void);
-		virtual size_t MessageSize(void);
-		virtual size_t CacheSize(void);
+		size_t MessageSize(void);
+		size_t CacheSize(void);
 
 	public:
 		CcBuffer<char>* message;

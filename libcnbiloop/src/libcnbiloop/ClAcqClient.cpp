@@ -25,63 +25,6 @@ bool ClAcqClient::Connect(const CcAddress address) {
 	return ClClient::Connect(address);
 }
 
-int ClAcqClient::AddLabelGDF(const GDFEvent label) {
-	int errorid = 0;
-	std::string message, reply;
-	
-	this->_language.AddLabelGDF(label);
-	bool status = ClClient::_client.SendRecv(this->_language.message->buffer,
-			&reply, ClAcqLang::Hdr, ClAcqLang::Trl, ClClient::_waitms);
-
-	if(status == false)
-		return ClAcqLang::NoReply;
-
-	if(this->_language.IsOk(reply.c_str()))
-		return ClAcqLang::Successful;
-	else if(this->_language.IsError(reply.c_str(), &errorid))
-		return errorid;
-	else
-		return ClAcqLang::StatusLost;
-}
-
-int ClAcqClient::AddLabelLPT(const HWTrigger label) {
-	int errorid = 0;
-	std::string message, reply;
-	
-	this->_language.AddLabelLPT(label);
-	bool status = ClClient::_client.SendRecv(this->_language.message->buffer,
-			&reply, ClAcqLang::Hdr, ClAcqLang::Trl, ClClient::_waitms);
-	
-	if(status == false)
-		return ClAcqLang::NoReply;
-
-	if(this->_language.IsOk(reply.c_str()))
-		return ClAcqLang::Successful;
-	else if(this->_language.IsError(reply.c_str(), &errorid))
-		return errorid;
-	else
-		return ClAcqLang::StatusLost;
-}
-
-int ClAcqClient::AddLabelTXT(const std::string& label) {
-	int errorid = 0;
-	std::string message, reply;
-	
-	this->_language.AddLabelTXT(label);
-	bool status = ClClient::_client.SendRecv(this->_language.message->buffer,
-			&reply, ClAcqLang::Hdr, ClAcqLang::Trl, ClClient::_waitms);
-	
-	if(status == false)
-		return ClAcqLang::NoReply;
-
-	if(this->_language.IsOk(reply.c_str()))
-		return ClAcqLang::Successful;
-	else if(this->_language.IsError(reply.c_str(), &errorid))
-		return errorid;
-	else
-		return ClAcqLang::StatusLost;
-}
-		
 int ClAcqClient::OpenXDF(const std::string& filegdf, 
 		const std::string& filelog, const std::string& linelog) {
 	int errorid = 0;
