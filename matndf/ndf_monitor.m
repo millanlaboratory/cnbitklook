@@ -79,6 +79,14 @@ try
 	disp('[ndf_monitor] Receiving ACK...');
 	[ndf.conf, ndf.size] = ndf_ack(ndf.sink);
 	
+	% -------------------------------------------------------------- %
+	% User EEG data configuration                                    %
+	% -------------------------------------------------------------- %
+	
+	% -------------------------------------------------------------- %
+	% /User EEG data configuration                                   %
+	% -------------------------------------------------------------- %
+	
 	% NDF ACK check
 	% - The NDF id describes the acquisition module running
 	% - Bind your modules to a particular configuration (if needed)
