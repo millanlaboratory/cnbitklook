@@ -21,6 +21,7 @@
 
 #include <string>
 #include "XMLException.hpp"
+#include "CCfgTypes.hpp"
 
 typedef int XMLTypeData;
 
@@ -44,7 +45,7 @@ class XMLType {
 		virtual bool Bool(void);
 		virtual float Float(void);
 		virtual int  Int(void);
-		virtual int HexInt(void);
+		virtual int GDFInt(void);
 		virtual std::string String(void);
 
 	public:
@@ -53,7 +54,7 @@ class XMLType {
 		static const XMLTypeData TypeFloat  = 2;
 		static const XMLTypeData TypeInt    = 3;
 		static const XMLTypeData TypeString = 4;
-		static const XMLTypeData TypeHexInt = 5;
+		static const XMLTypeData TypeGDFInt = 5;
 
 	protected:
 		std::string _key;
@@ -63,7 +64,7 @@ class XMLType {
 		float _vfloat;
 		int _vint;
 		std::string _vstring;
-		unsigned int _vuint;
+		GDFEvent _vgdf;
 
 		int _type;
 		bool _verbose;

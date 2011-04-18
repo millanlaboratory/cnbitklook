@@ -61,7 +61,7 @@ class CCfgXMLConfig {
 		bool QuickBoolEx(const std::string& str);
 		float QuickFloatEx(const std::string& str);
 		int QuickIntEx(const std::string& str);
-		unsigned int QuickHexIntEx(const std::string& str);
+		unsigned int QuickGDFIntEx(const std::string& str);
 	protected:
 		void SearchRoot(void);
 		void CheckRootEx(void);

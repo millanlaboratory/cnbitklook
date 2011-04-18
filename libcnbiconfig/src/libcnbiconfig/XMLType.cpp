@@ -84,10 +84,10 @@ XMLTypeData XMLType::Guess(const char* buffer) {
 	int isi = sscanf(buffer, "%d", &this->_vint);
 	int isf = sscanf(buffer, "%f", &this->_vfloat);
 	int iss = sscanf(buffer, "%s", temp);
-	int isx = sscanf(buffer, "%x", &this->_vuint);
+	int isx = sscanf(buffer, "%x", &this->_vgdf);
 
 	if(this->_verbose)
-		printf("  Relaxed matching for Int/Float/String/Hex: %d/%d/%d/%d\n", 
+		printf("  Relaxed matching for Int/Float/String/GDFInt: %d/%d/%d/%d\n", 
 				isi, isf, iss, isx);
 
 	if(isi && isf) {
@@ -116,8 +116,8 @@ XMLTypeData XMLType::Guess(const char* buffer) {
 		}
 		else if(df == NULL && dl == NULL && hf != NULL) {
 			if(this->_verbose) 
-				printf("HexInt\n"); 
-			this->_type = XMLType::TypeHexInt;
+				printf("GDFInt\n"); 
+			this->_type = XMLType::TypeGDFInt;
 		}
 	}
 	else if(!isi && !isf) {
@@ -169,10 +169,10 @@ int XMLType::Int(void) {
 	return this->_vint;
 }
 
-int XMLType::HexInt(void) {
-	if(this->_type != XMLType::TypeHexInt)
-		throw XMLException("Type is not uint", "XMLType::HexInt");
-	return this->_vuint;
+int XMLType::GDFInt(void) {
+	if(this->_type != XMLType::TypeGDFInt)
+		throw XMLException("Type is not uint", "XMLType::GDFInt");
+	return this->_vgdf;
 }
 
 std::string XMLType::String(void) {

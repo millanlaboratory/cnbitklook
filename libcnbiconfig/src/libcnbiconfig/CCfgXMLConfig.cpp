@@ -218,8 +218,8 @@ int CCfgXMLConfig::QuickIntEx(const std::string& str) {
 	return this->QuickEx(str)->GetEx().Int();
 }
 
-unsigned int CCfgXMLConfig::QuickHexIntEx(const std::string& str) {
-	return this->QuickEx(str)->GetEx().HexInt();
+unsigned int CCfgXMLConfig::QuickGDFIntEx(const std::string& str) {
+	return this->QuickEx(str)->GetEx().GDFInt();
 }
 
 void CCfgXMLConfig::Tokenize(const std::string& str, 
