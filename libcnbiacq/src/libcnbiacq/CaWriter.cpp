@@ -225,8 +225,8 @@ void CaWriter::Tic(TCBlock* block) {
 	this->_semlock.Post();
 }
 		
-bool CaWriter::AddEvent(unsigned int event, double duration) {
-	if(xdf_add_event(this->_file, (int)event, this->TocOpen(), duration) == -1) {
+bool CaWriter::AddEvent(int event, double duration) {
+	if(xdf_add_event(this->_file, event, this->TocOpen(), duration) == -1) {
 		CcLogErrorS("Cannot add event " << event << ": " << strerror(errno));
 		return false;
 	}
