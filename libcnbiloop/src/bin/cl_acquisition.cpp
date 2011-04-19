@@ -45,6 +45,7 @@ void usage(void) {
 	printf("  -i       interactive acquisition starting\n");
 	printf("  -p       print labels added to NDF frame\n");
 	printf("  -b       print EGD/NDF buffer informations\n");
+	printf("  -w       warn when late\n");
 	printf("  -h       display this help and exit\n");
 }
 
@@ -54,9 +55,10 @@ int main(int argc, char* argv[]) {
 	std::string optfs("16");
 	CcEndpoint optendpoint("127.0.0.1:9000");
 	std::string optpipename("/tmp/cl.pipe.ndf.");
-	bool optinteractive = false, optprintndf = false, optprintbuffers = false;
+	bool optinteractive = false, optprintndf = false, optprintbuffers = false,
+		 optwarnlate = false;
 
-	while((opt = getopt(argc, argv, "d:f:n:hipb")) != -1) {
+	while((opt = getopt(argc, argv, "d:f:n:hipwb")) != -1) {
 		if(opt == 'd')
 			optdevice.assign(optarg);
 		else if(opt == 'f')
@@ -69,6 +71,8 @@ int main(int argc, char* argv[]) {
 			optinteractive = true;
 		else if(opt == 'p')
 			optprintndf = true;
+		else if(opt == 'w')
+			optwarnlate = true;
 		else if(opt == 'b')
 			optprintbuffers = true;
 		else {
@@ -187,6 +191,8 @@ int main(int argc, char* argv[]) {
 				break;
 			CcTime::Tic(&ticSignals);
 		}
+		if(asize > 0 && optwarnlate)
+			CcLogWarningS("Running late: Get/Avail=" << gsize << "/" << asize);
 		if(optprintbuffers) 
 			printf("Get=%5.5lu, Avail=%5.5lu %s\n", 
 					gsize, asize, asize > 0 ? "Warning: running late!" : "");

@@ -6,6 +6,20 @@ if [ "z$1" == "z" ]; then
 	exit 1;
 fi
 
+if [ ! -f $HOME/.screenrc-cnbitk ]; then
+	echo "bind 's' screen -t Shell bash" \
+		>> $HOME/.screenrc-cnbitk
+	echo "hardstatus alwayslastline" \
+		>> $HOME/.screenrc-cnbitk
+	echo "hardstatus string '%{kw}%-w%{RW} %n %t %{kw}%+w %='" \
+		>> $HOME/.screenrc-cnbitk
+	echo "caption always "\
+		>> $HOME/.screenrc-cnbitk
+	echo "caption '%{wk} CnbiTk ScreenLoop %= %h  %l  %Y.%m.%d  %c%a %{wk}'" \
+		>> $HOME/.screenrc-cnbitk
+	echo "shelltitle '$ |idle'" >> $HOME/.screenrc-cnbitk
+fi
+
 CHECK=`screen -ls | grep cnbitk | awk '{print $1}'`;
 
 if [ "z$CHECK" == "z" ]; then
@@ -34,7 +48,6 @@ screen -S cnbitk -dr -X screen -t "Acquisition" $ACQUISITION
 
 echo "[cl_screenloop] Attaching cl_tidmonitor"
 screen -S cnbitk -dr -X screen -t "TiD Monitor" "cl_tidmonitor"
-
 
 CHECK=`screen -ls | grep cnbitk | awk '{print $1}'`;
 cl_rpcnotify "CnbiTk ScreenLoop" "GNU Screen attached: $CHECK";
