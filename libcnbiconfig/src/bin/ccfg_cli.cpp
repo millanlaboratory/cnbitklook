@@ -101,9 +101,37 @@ bool get_tasksets(CCfgConfig* config, const std::string& what,
 }
 
 bool get_classifier(CCfgConfig* config, const std::string& what, 
-		const std::string& block) {
+		const std::string& block, const std::string& taskset, int mode) {
+	CCfgTaskset* ts = NULL;
+	std::string classifier, filename;
+	try {
+		if(what.find("online") != std::string::npos) {
+			ts = config->OnlineEx(block, taskset);
+			classifier.assign(ts->classifier);
+		} else {
+			fprintf(stderr, "Error: cannot get classifier when modality is offline\n");
+			return false;
+		}
+	} catch(XMLException e) { 
+		fprintf(stderr, "Error: %s\n", e.Info().c_str());
+		return 0;
+	}
+	
+	filename = config->RootEx()->GoEx("classifier")->GoEx(classifier)->
+		GoEx("filename")->GetRawEx();
 
 
+	switch(mode) {
+		case MODE_CONFIG:
+			printf("%s\n", filename.c_str());
+			break;
+		case MODE_FRIENDLY:
+			printf("\"%s\"\n", classifier.c_str());
+			break;
+		case MODE_BOTH:
+			printf("%-30.30s \"%s\"\n", filename.c_str(), classifier.c_str());
+			break;
+	}
 	return true;
 }
 
@@ -112,18 +140,20 @@ void usage(void) {
 	printf("  -x FILE     XML file\n");
 	printf("  -b          get available blocks (default)\n");
 	printf("  -t BLOCK    get available tasksets for block BLOCK\n");
-	printf("  -c BLOCK    get the classifier for block BLOCK\n");
+	printf("  -c          get the classifier for BLOCK/TASKSET\n");
 	printf("  -n          online modality (default)\n");
 	printf("  -f          offline modality\n");
 	printf("  -m MODALITY 'online' (default) or 'offline'\n");
 	printf("  -u          enable user-friendly output\n");
 	printf("  -U          user-friendly output only\n");
+	printf("  -B BLOCK    set block\n");
+	printf("  -T TASKSET  set taskset\n");
 	printf("  -h          display this help and exit\n");
 }
 
 int main(int argc, char *argv[]) {
 	int opt;	
-	std::string filename, what("online"), block;
+	std::string filename, what("online"), block, taskset;
 	int mode = MODE_CONFIG, get = GET_BLOCKS;
 
 	if(argc == 1) {
@@ -131,7 +161,7 @@ int main(int argc, char *argv[]) {
 		return 0;
 	}
 
-	while((opt = getopt(argc, argv, "c:m:x:bt:nfuUh")) != -1) {
+	while((opt = getopt(argc, argv, "T:B:m:x:t:bnfuUhc")) != -1) {
 		if(opt == 'x')
 			filename.assign(optarg);
 		else if(opt == 'b')
@@ -140,10 +170,8 @@ int main(int argc, char *argv[]) {
 			get = GET_TASKS;
 			block.assign(optarg);
 		}
-		else if(opt == 'c') {
+		else if(opt == 'c') 
 			get = GET_CLASSIFIER;
-			block.assign(optarg);
-		}
 		else if(opt == 'n')
 			what.assign("online");
 		else if(opt == 'f')
@@ -152,6 +180,10 @@ int main(int argc, char *argv[]) {
 			what.assign(optarg);
 		else if(opt == 'u')
 			mode = MODE_BOTH;
+		else if(opt == 'B')
+			block.assign(optarg);
+		else if(opt == 'T')
+			taskset.assign(optarg);
 		else if(opt == 'U')
 			mode = MODE_FRIENDLY;
 		else {
@@ -175,7 +207,7 @@ int main(int argc, char *argv[]) {
 		case GET_TASKS:
 			return get_tasksets(config, what, block, mode);
 		case GET_CLASSIFIER:
-			return get_classifier(config, what, block);
+			return get_classifier(config, what, block, taskset, mode);
 		default:
 			return 666;
 	}
