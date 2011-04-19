@@ -37,11 +37,13 @@ class CcCore {
 	public:
 		static CcCore* Instance(void);
 		static void Release(void);
+		static void Exit(int retcode);
 		static unsigned int Refcount(void);
 		static void Status(void);
 		static void OpenLogger(std::string modulename,
 				CcTermType termtype = CcCore::TerminalColors,
 				CcLogLevel level = CcCore::LevelConfig);
+		static void CloseLogger(void);
 		static std::string GetDirectoryTmp(void);
 		static std::string GetDirectoryCwd(void);
 		static std::string GetDirectoryHome(void);

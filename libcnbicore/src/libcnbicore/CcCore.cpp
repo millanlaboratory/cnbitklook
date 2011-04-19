@@ -107,6 +107,11 @@ void CcCore::Release(void) {
 	if(--CcCore::_refCount < 1) 
 		CcCore::Destroy();
 }
+		
+void CcCore::Exit(int retcode) {
+	CcCore::logger.Close();
+	exit(retcode);
+}
 
 void CcCore::Destroy(void) {
 	if(CcCore::_instance == NULL) 
@@ -140,6 +145,10 @@ void CcCore::OpenLogger(std::string modulename, CcTermType termtype,
 	filename.append(".xml");
 	CcCore::logger.Open(filename, CcCore::_modulename, termtype, level);
 	CcLogConfig(std::string("CcLogger is logging in: ").append(filename));
+}
+		
+void CcCore::CloseLogger(void) {
+	CcCore::logger.Close();
 }
 
 std::string CcCore::GetDirectoryTmp(void) {
