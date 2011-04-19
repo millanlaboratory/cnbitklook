@@ -24,11 +24,12 @@
 #include "CcTime.hpp"
 #include <stdio.h>
 
-CcLogger::CcLogger(double writems) {
+CcLogger::CcLogger(bool syncdump, double writems) {
 	CcObject::SetName("CcLogger");
 	this->_listW = &this->_list1;
 	this->_listR = &this->_list2;
 	this->_writems = writems;
+	this->_syncdump = syncdump;
 }
 
 CcLogger::~CcLogger(void) {
@@ -83,9 +84,10 @@ bool CcLogger::IsOpen(void) {
 }
 
 void CcLogger::AddEntry(CcLogEntry entry) {
-	//this->DumpEntry(&entry);
 	this->_semlist.Wait();
 	this->_listW->push_back(entry);
+	if(this->_syncdump == true)
+		this->DumpEntry(&entry);
 	this->_semlist.Post();
 }
 
@@ -173,7 +175,8 @@ void CcLogger::Main(void) {
 		this->_semxml.Wait();
 		for (it = this->_listR->begin(); it != this->_listR->end(); it++) {
 			entry = &(*it);
-			this->DumpEntry(entry);
+			if(this->_syncdump == false)
+				this->DumpEntry(entry);
 			this->WriteEntry(entry);
 		}
 		this->_semxml.Post();

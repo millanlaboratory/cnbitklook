@@ -38,7 +38,7 @@ class CcLogEntry {
 		virtual std::string Serialize(void);
 		virtual CcLogLevel GetLevel(void);
 		static const std::string GetLevelTxt(CcLogLevel level);
-	protected:
+	public:
 		static const std::string TxtDebug;
 		static const std::string TxtConfig;
 		static const std::string TxtInfo;
@@ -53,6 +53,7 @@ class CcLogEntry {
 		std::string _file;
 		int _line;
 		CcLogLevel _level;
+
 };
 
 #endif

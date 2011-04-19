@@ -33,7 +33,7 @@
  */
 class CcLogger : protected CcThread {
 	public:
-		CcLogger(double writems = 5000.00f);
+		CcLogger(bool syncdump = false, double writems = 250.00f);
 		virtual ~CcLogger(void);
 		void Open(const std::string& filename, const std::string& module, 
 				const CcTermType termtype, const CcLogLevel level);
@@ -57,6 +57,7 @@ class CcLogger : protected CcThread {
 		std::list<CcLogEntry>* _listR;
 		CcSemaphore _semlist;
 		double _writems;
+		bool _syncdump;
 };
 
 #endif
