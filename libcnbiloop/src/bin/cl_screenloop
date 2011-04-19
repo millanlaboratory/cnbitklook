@@ -15,7 +15,7 @@ if [ ! -f $HOME/.screenrc-cnbitk ]; then
 		>> $HOME/.screenrc-cnbitk
 	echo "caption always "\
 		>> $HOME/.screenrc-cnbitk
-	echo "caption '%{wk} CnbiTk ScreenLoop %= %h  %l  %Y.%m.%d  %c%a %{wk}'" \
+	echo "caption string '%{wk} CnbiTk ScreenLoop %= %h  %l  %Y.%m.%d  %c%a %{wk}'" \
 		>> $HOME/.screenrc-cnbitk
 	echo "shelltitle '$ |idle'" >> $HOME/.screenrc-cnbitk
 fi
@@ -34,20 +34,21 @@ fi
 ACQUISITION="cl_acquisition -d $1";
 
 echo "[cl_screenloop] Starting screen session"
-screen -d -m -S cnbitk -t "RPC Shell" bash
+screen -c $HOME/.screenrc-cnbitk -d -m -S cnbitk 
+CHECK=`screen -ls | grep cnbitk | awk '{print $1}'`;
 
-echo "[cl_screenloop] Attaching cl_nameserver"
-screen -S cnbitk -dr -X screen -t "Nameserver" "cl_nameserver"
+echo "[cl_screenloop] Attaching cl_nameserver to $CHECK"
+screen -S $CHECK -dr -X screen "cl_nameserver"
 
 sleep 5
-echo "[cl_screenloop] Attaching cl_processing"
-screen -S cnbitk -dr -X screen -t "Processing" "cl_processing"
+echo "[cl_screenloop] Attaching cl_processing to $CHECK"
+screen -S $CHECK -dr -X screen "cl_processing"
 
-echo "[cl_screenloop] Attaching cl_acquisition"
-screen -S cnbitk -dr -X screen -t "Acquisition" $ACQUISITION
+echo "[cl_screenloop] Attaching cl_acquisition to $CHECK"
+screen -S $CHECK -dr -X screen  $ACQUISITION
 
-echo "[cl_screenloop] Attaching cl_tidmonitor"
-screen -S cnbitk -dr -X screen -t "TiD Monitor" "cl_tidmonitor"
+echo "[cl_screenloop] Attaching cl_tidmonitor to $CHECK"
+screen -S $CHECK -dr -X screen "cl_tidmonitor"
 
 CHECK=`screen -ls | grep cnbitk | awk '{print $1}'`;
 cl_rpcnotify "CnbiTk ScreenLoop" "GNU Screen attached: $CHECK";
