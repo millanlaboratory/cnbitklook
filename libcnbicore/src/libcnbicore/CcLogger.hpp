@@ -33,19 +33,19 @@
 class CcLogger : public CcObject {
 	public:
 		CcLogger(void);
-		~CcLogger(void);
-		virtual void Open(std::string filename, std::string module, 
-				CcTermType termtype, CcLogLevel level);
-		virtual void Close(void);
-		virtual bool IsOpen(void);
-		virtual void AddEntry(CcLogEntry entry);
+		virtual ~CcLogger(void);
+		void Open(const std::string& filename, const std::string& module, 
+				const CcTermType termtype, const CcLogLevel level);
+		void Close(void);
+		bool IsOpen(void);
+		void AddEntry(CcLogEntry entry);
 	private:
+		virtual void WriteEntry(CcLogEntry* entry);
 		virtual void DumpEntry(CcLogEntry* entry);
 
 	private:
 		CcSemaphore _sem;
 		std::ofstream _file;
-		bool _isopen;
 		CcTermType _termtype;
 		CcLogLevel _level;
 };

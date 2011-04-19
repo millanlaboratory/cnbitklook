@@ -27,15 +27,14 @@
 CcLogger::CcLogger(void) {
 	CcObject::SetName("CcLogger");
 	this->_sem.Wait();
-	this->_isopen = false;
 	this->_sem.Post();
 }
 
 CcLogger::~CcLogger(void) {
 }
 
-void CcLogger::Open(std::string filename, std::string module,
-		CcTermType termtype, CcLogLevel level) {
+void CcLogger::Open(const std::string& filename, const std::string& module,
+		const CcTermType termtype, const CcLogLevel level) {
 	
 	if(CcObject::IsVerbose())
 		printf("[CcLogger::Open] Opening file: %s\n", filename.c_str());
@@ -43,7 +42,6 @@ void CcLogger::Open(std::string filename, std::string module,
 	std::string timestamp;
 	CcTime::Datetime(&timestamp);
 	this->_file.open(filename.c_str());
-	this->_isopen = true;
 	this->_termtype = termtype;
 	this->_level = level;
 
@@ -67,35 +65,40 @@ void CcLogger::Close(void) {
 		printf("[CcLogger::Close] Closing file\n");
 	this->_sem.Wait();
 	this->_file.close();
-	this->_isopen = false;
 	this->_sem.Post();
 }
 bool CcLogger::IsOpen(void) {
 	bool result;
 	this->_sem.Wait();
-	result = this->_isopen;
+	result = this->_file.is_open();
 	this->_sem.Post();
 	return result;
 }
 
 void CcLogger::AddEntry(CcLogEntry entry) {
-	long pos;
 	this->_sem.Wait();
-	if(this->_isopen) {
-		pos = this->_file.tellp();
-		this->_file.seekp(pos - 11);
-		this->_file << "\t\t";
-		this->_file << entry.Serialize();
-		this->_file << std::endl;
-		this->_file << "</CcLogger>";
-		this->_file.flush();
-	}
-	if(this->_termtype >= CcCore::TerminalEnabled)
-		this->DumpEntry(&entry);
+	
+	this->DumpEntry(&entry);
+	this->WriteEntry(&entry);
 	this->_sem.Post();
 }
 
+void CcLogger::WriteEntry(CcLogEntry* entry) {
+	if(this->_file.is_open() == false)
+		return;
+
+	long pos = this->_file.tellp();
+	this->_file.seekp(pos - 11);
+	this->_file << "\t\t";
+	this->_file << entry->Serialize();
+	this->_file << std::endl;
+	this->_file << "</CcLogger>";
+	this->_file.flush();
+}
+
 void CcLogger::DumpEntry(CcLogEntry* entry) {
+	if(this->_termtype < CcCore::TerminalEnabled)
+		return;
 	if(entry->GetLevel() < this->_level)
 		return;
 	
