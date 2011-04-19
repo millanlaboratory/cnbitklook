@@ -44,6 +44,7 @@ void usage(void) {
 	printf("  -n       the basename for the pipes (/tmp/cl.pipe.ndf. default)\n");
 	printf("  -i       interactive acquisition starting\n");
 	printf("  -p       print labels added to NDF frame\n");
+	printf("  -b       print EGD/NDF buffer informations\n");
 	printf("  -h       display this help and exit\n");
 }
 
@@ -53,9 +54,9 @@ int main(int argc, char* argv[]) {
 	std::string optfs("16");
 	CcEndpoint optendpoint("127.0.0.1:9000");
 	std::string optpipename("/tmp/cl.pipe.ndf.");
-	bool optinteractive = false, optprintndf = false;
+	bool optinteractive = false, optprintndf = false, optprintbuffers = false;
 
-	while((opt = getopt(argc, argv, "d:f:n:hip")) != -1) {
+	while((opt = getopt(argc, argv, "d:f:n:hipb")) != -1) {
 		if(opt == 'd')
 			optdevice.assign(optarg);
 		else if(opt == 'f')
@@ -68,6 +69,8 @@ int main(int argc, char* argv[]) {
 			optinteractive = true;
 		else if(opt == 'p')
 			optprintndf = true;
+		else if(opt == 'b')
+			optprintbuffers = true;
 		else {
 			usage();
 			CcCore::Exit(opt == 'h' ? EXIT_SUCCESS : EXIT_FAILURE);
@@ -170,14 +173,13 @@ int main(int argc, char* argv[]) {
 		semframe.Wait();
 		eegdev.WriteNDF(&frame);
 		pipes->Write(frame.data.buffer, 0);
-		// TODO: write to file
 		if(optprintndf) 
 			ndf_print_labels(&frame);
 		ndf_clear_labels(&frame);
 		semframe.Post();
 		
 		if(CcTime::Toc(&ticSignals) >= 500.00f) {
-			if(nsclient.Connect() == false)  {
+			if(nsclient.IsConnected() == false)  {
 				CcLogFatal("Lost connection with nameserver");
 				break;
 			}
@@ -185,6 +187,9 @@ int main(int argc, char* argv[]) {
 				break;
 			CcTime::Tic(&ticSignals);
 		}
+		if(optprintbuffers) 
+			printf("Get=%5.5lu, Avail=%5.5lu %s\n", 
+					gsize, asize, asize > 0 ? "Warning: running late!" : "");
 	}
 
 shutdown:

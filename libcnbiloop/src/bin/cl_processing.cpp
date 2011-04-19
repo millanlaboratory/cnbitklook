@@ -73,7 +73,7 @@ int main(int argc, char* argv[]) {
 	}
 
 	while(true) {
-		if(nsclient.Connect() == false)  {
+		if(nsclient.IsConnected() == false)  {
 			CcLogFatal("Lost connection with nameserver");
 			break;
 		}
