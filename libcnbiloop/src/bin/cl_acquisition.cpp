@@ -176,7 +176,7 @@ int main(int argc, char* argv[]) {
 		ndf_clear_labels(&frame);
 		semframe.Post();
 		
-		if(CcTime::Toc(&ticSignals) >= 2000.00f) {
+		if(CcTime::Toc(&ticSignals) >= 500.00f) {
 			if(nsclient.Connect() == false)  {
 				CcLogFatal("Lost connection with nameserver");
 				break;

@@ -79,7 +79,7 @@ int main(int argc, char* argv[]) {
 			break;
 		if(CcCore::receivedSIGTERM.Get()) 
 			break;
-		CcTime::Sleep(1000.00f);
+		CcTime::Sleep(500.00f);
 	}
 	nsclient.Unset("/nameserver");
 	server.Release();
