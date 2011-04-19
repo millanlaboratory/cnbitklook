@@ -22,13 +22,14 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#define WHAT_ONLINE 1
-#define WHAT_OFFLINE 2
-#define MODE_CONFIG 1
-#define MODE_FRIENDLY 2
-#define MODE_BOTH 3
-#define GET_BLOCKS 1
-#define GET_TASKS  2
+#define WHAT_ONLINE 	1
+#define WHAT_OFFLINE 	2
+#define MODE_CONFIG 	1
+#define MODE_FRIENDLY 	2
+#define MODE_BOTH		3
+#define GET_BLOCKS 		1
+#define GET_TASKS  		2
+#define GET_CLASSIFIER	3
 
 using namespace std;
 
@@ -99,13 +100,22 @@ bool get_tasksets(CCfgConfig* config, const std::string& what,
 	return 1;
 }
 
+bool get_classifier(CCfgConfig* config, const std::string& what, 
+		const std::string& block) {
+
+
+	return true;
+}
+
 void usage(void) { 
 	printf("Usage: ccfg_cli [OPTION]...\n\n");
 	printf("  -x FILE     XML file\n");
 	printf("  -b          get available blocks (default)\n");
 	printf("  -t BLOCK    get available tasksets for block BLOCK\n");
-	printf("  -n          online (default)\n");
-	printf("  -f          offline\n");
+	printf("  -c BLOCK    get the classifier for block BLOCK\n");
+	printf("  -n          online modality (default)\n");
+	printf("  -f          offline modality\n");
+	printf("  -m MODALITY 'online' (default) or 'offline'\n");
 	printf("  -u          enable user-friendly output\n");
 	printf("  -U          user-friendly output only\n");
 	printf("  -h          display this help and exit\n");
@@ -121,7 +131,7 @@ int main(int argc, char *argv[]) {
 		return 0;
 	}
 
-	while((opt = getopt(argc, argv, "x:bt:nfuUh")) != -1) {
+	while((opt = getopt(argc, argv, "c:m:x:bt:nfuUh")) != -1) {
 		if(opt == 'x')
 			filename.assign(optarg);
 		else if(opt == 'b')
@@ -130,10 +140,16 @@ int main(int argc, char *argv[]) {
 			get = GET_TASKS;
 			block.assign(optarg);
 		}
+		else if(opt == 'c') {
+			get = GET_CLASSIFIER;
+			block.assign(optarg);
+		}
 		else if(opt == 'n')
 			what.assign("online");
 		else if(opt == 'f')
 			what.assign("offline");
+		else if(opt == 'm')
+			what.assign(optarg);
 		else if(opt == 'u')
 			mode = MODE_BOTH;
 		else if(opt == 'U')
@@ -158,6 +174,8 @@ int main(int argc, char *argv[]) {
 			return get_blocks(config, what, mode);
 		case GET_TASKS:
 			return get_tasksets(config, what, block, mode);
+		case GET_CLASSIFIER:
+			return get_classifier(config, what, block);
 		default:
 			return 666;
 	}

@@ -57,7 +57,7 @@
 	
 	<!-- Offline Blocks -->
 	<offline>
-		<mi description="Offline Motor Imagery"> <!-- This is a Block -->
+		<mi description="Offline MI"> <!-- This is a Block -->
 			<taskset key="mi_rhlh"> <!-- This is a Taskset -->
 				<trials>
 					<mi_hand_left>15</mi_hand_left>
@@ -95,11 +95,19 @@
 			<threshold>0.85</threshold>
 			<viscosity>0.05</viscosity>
 		</mi>
+		<errp  description="Offline ErrPs">
+			<taskset key="errp" classifier="kerrp0">
+				<trials>
+					<errp_detected>20</errp_detected>
+					<errp_notdetected>80</errp_notdetected>
+				</trials>
+			</taskset>
+		</errp>
 	</offline>
 	
 	<!-- Online Block -->
 	<online>
-		<mi description="Online Motor Imagery">
+		<mi description="Online MI">
 			<taskset key="mi_rhlh" classifier="kmi0">
 				<threshold>
 					<mi_hand_right>0.65</mi_hand_right>
@@ -112,7 +120,7 @@
 			</taskset>
 			<integration>0.96</integration>
 		</mi>
-		<mierrp  description="Online Motor Imagery + Error Potentials">
+		<mierrp  description="Online MI+ErrPs">
 			<taskset key="mi_rhlh" classifier="kmi0">
 				<threshold>
 					<mi_hand_left>0.85</mi_hand_left>
