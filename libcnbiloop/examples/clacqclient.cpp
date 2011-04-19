@@ -28,7 +28,7 @@ int main(void) {
 	ClAcqClient client;
 	if(client.Connect("127.0.0.1:9000") == false) {
 		CcLogFatal("Cannot connect to endpoint");
-		exit(1);
+		CcCore::Exit(1);
 	}
 
 	while(client.Connect()) {
@@ -37,5 +37,5 @@ int main(void) {
 		client.CloseXDF();
 		CcTime::Sleep(2000.00f);
 	}
-	return 0;
+	CcCore::Exit(0);
 }

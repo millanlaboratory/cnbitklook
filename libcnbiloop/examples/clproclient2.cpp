@@ -28,7 +28,7 @@ int main(void) {
 	ClProClient client;
 	if(client.Connect("127.0.0.1:9100") == false) {
 		CcLogFatal("Cannot connect to endpoint");
-		exit(1);
+		CcCore::Exit(1);
 	}
 
 	int pid0 = 0, pid1 = 1;
@@ -58,5 +58,5 @@ int main(void) {
 	client.Terminate(pid0);
 	client.Terminate(pid1);
 
-	return 0;
+	CcCore::Exit(0);
 }

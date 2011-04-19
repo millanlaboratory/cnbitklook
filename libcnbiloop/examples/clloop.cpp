@@ -30,7 +30,7 @@ int main(void) {
 	if(ClLoop::Connect() == true)
 		cout << "Connected" << endl;
 	else
-		return 1;
+		CcCore::Exit(1);
 	
 	while(true) {
 		if(CcCore::receivedSIGINT.Get() || CcCore::receivedSIGTERM.Get())
@@ -39,6 +39,5 @@ int main(void) {
 		CcTime::Sleep(1000.00f);
 	}
 	ClLoop::Disconnect();
-
-	return 0;
+	CcCore::Exit(0);
 }

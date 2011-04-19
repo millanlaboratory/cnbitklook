@@ -29,7 +29,7 @@ int main(void) {
 	ClNamesClient client;
 	if(client.Connect("127.0.0.1:8000") == false) {
 		CcLogFatal("Cannot connect to endpoint");
-		exit(1);
+		CcCore::Exit(1);
 	}
 	
 	CcAddress address;
@@ -81,6 +81,5 @@ int main(void) {
 		client.RetrieveFile("huge", "huge.txt");
 		client.Erase("huge");
 	}
-
-	return 0;
+	CcCore::Exit(0);
 }

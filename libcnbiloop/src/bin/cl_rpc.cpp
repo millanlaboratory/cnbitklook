@@ -66,13 +66,13 @@ void usage(void) {
 	printf(" terminate PID                     terminate PID\n");
 	printf(" cwd PID PATH                      changes working directory of PID\n");
 	printf(" include PID PATH1 PATH2           have PID include PATH1 and PATH2\n");
-	exit(1);
+	CcCore::Exit(1);
 }
 
 void connect(void) {
 	if(ClLoop::Connect() == false) {
 		printf("Error: cannot connect to loop\n");
-		exit(1);
+		CcCore::Exit(1);
 	}
 }
 
@@ -344,5 +344,5 @@ int main(int argc, char* argv[]) {
 		usage();
 	}
 	ClLoop::Disconnect();
-	return 0;
+	CcCore::Exit(0);
 }

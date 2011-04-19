@@ -22,7 +22,7 @@ void usage(void) {
 	printf("Usage: cl_ticmonitor [OPTION]...\n\n");
 	printf("  -n       acquisition name (/acquisition default)\n");
 	printf("  -h       display this help and exit\n");
-	exit(1);
+	CcCore::Exit(1);
 }
 
 int main(int argc, char* argv[]) {
@@ -34,7 +34,7 @@ int main(int argc, char* argv[]) {
 			optname.assign(optarg);
 		else {
 			usage();
-			return(opt == 'h') ? EXIT_SUCCESS : EXIT_FAILURE;
+			CcCore::Exit(opt == 'h' ? EXIT_SUCCESS : EXIT_FAILURE);
 		}
 	}
 
@@ -100,6 +100,5 @@ int main(int argc, char* argv[]) {
 
 shutdown:
 	id.Detach();
-
-	return 0;
+	CcCore::Exit(0);
 }

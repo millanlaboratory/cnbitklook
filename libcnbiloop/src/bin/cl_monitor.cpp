@@ -39,13 +39,13 @@ int main(int argc, char* argv[]) {
 			optname.assign(optarg);
 		else {
 			usage();
-			return(opt == 'h') ? EXIT_SUCCESS : EXIT_FAILURE;
+			CcCore::Exit(opt == 'h' ? EXIT_SUCCESS : EXIT_FAILURE);
 		}
 	}
 	
 	if(optname.empty()) {
 		usage();
-		exit(1);
+		CcCore::Exit(1);
 	}
 	
 	CcCore::OpenLogger("cl_monitor");
@@ -56,13 +56,13 @@ int main(int argc, char* argv[]) {
 	CcLogInfo("Connecting to loop...");
 	while(ClLoop::Connect() == false) {
 		if(CcCore::receivedSIGAny.Get())
-			exit(1);
+			CcCore::Exit(1);
 		CcTime::Sleep(2000);
 	}
 	
 	if(ClLoop::nameserver.Query(optname, &pipename) != ClNamesLang::Successful) {
 		CcLogFatal("Cannot query pipe");
-		exit(2);
+		CcCore::Exit(2);
 	}
 
 	CcTimeValue tvOpen, tvRead, tvLoop;
@@ -89,11 +89,11 @@ int main(int argc, char* argv[]) {
 		connected = reader.Read(&ack.buffer, NDF_ACK_SIZET, &(ack.bsize));
 		if(connected == false) {
 			CcLogFatal("Source is down");
-			exit(1);
+			CcCore::Exit(1);
 		}
 		if(ack.bsize != NDF_ACK_SIZET) {
 			CcLogFatal("ACK not received correctly");
-			exit(2);
+			CcCore::Exit(2);
 		}
 
 		CcLogInfo("ACK received, initializing NDF frame");
@@ -133,5 +133,5 @@ int main(int argc, char* argv[]) {
 		reader.Close();
 		ndf_free(&frame);
 	}
-	return 0;
+	CcCore::Exit(0);
 }

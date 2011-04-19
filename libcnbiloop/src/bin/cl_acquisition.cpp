@@ -70,7 +70,7 @@ int main(int argc, char* argv[]) {
 			optprintndf = true;
 		else {
 			usage();
-			return(opt == 'h') ? EXIT_SUCCESS : EXIT_FAILURE;
+			CcCore::Exit(opt == 'h' ? EXIT_SUCCESS : EXIT_FAILURE);
 		}
 	}
 	CcCore::OpenLogger("cl_acquisition");
@@ -94,11 +94,11 @@ int main(int argc, char* argv[]) {
 	CaDevice eegdev;
 	if(eegdev.Open(optdevice) == false) {
 		CcLogFatal("Cannot open EGD device");
-		exit(2);
+		CcCore::Exit(2);
 	}
 	if(eegdev.Setup((float)atof(optfs.c_str())) == false) {
 		CcLogFatal("Cannot setup EGD device");
-		exit(3);
+		CcCore::Exit(3);
 	}
 	// Initialize XDF writer and NDF frame
 	CaWriter writer(&eegdev);
@@ -124,16 +124,16 @@ int main(int argc, char* argv[]) {
 		server.Bind(optendpoint, 2);
 	} catch(CcException e) {
 		CcLogFatal("Cannot bind socket");
-		exit(1);
+		CcCore::Exit(1);
 	}
 	if(nsclient.Connect() == false) {
 		CcLogFatal("Cannot connect to nameserver");
-		exit(2);
+		CcCore::Exit(2);
 	}
 	int nsstatus = nsclient.Set("/acquisition", server.GetLocal());
 	if(nsstatus != ClNamesLang::Successful) {
 		CcLogFatal("Cannot register with nameserver");
-		exit(3);
+		CcCore::Exit(3);
 	}
 	
 	// Register pipes on nameserver
@@ -144,7 +144,7 @@ int main(int argc, char* argv[]) {
 		int nsstatus = nsclient.Set(pipename.str(), pipepath.str());
 		if(nsstatus != ClNamesLang::Successful) {
 			CcLogFatal("Cannot register pipes with nameserver");
-			exit(5);
+			CcCore::Exit(5);
 		}
 	}
 
@@ -210,5 +210,5 @@ shutdown:
 	delete pipes;
 	ndf_free(&frame);
 
-	return 0;
+	CcCore::Exit(0);
 }

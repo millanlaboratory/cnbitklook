@@ -38,7 +38,7 @@ int main(int argc, char* argv[]) {
 			optport.assign(optarg);
 		else {
 			usage();
-			return(opt == 'h') ? EXIT_SUCCESS : EXIT_FAILURE;
+			CcCore::Exit(opt == 'h' ? EXIT_SUCCESS : EXIT_FAILURE);
 		}
 	}
 	
@@ -59,19 +59,19 @@ int main(int argc, char* argv[]) {
 		server.Bind(endpoint, 2);
 	} catch(CcException e) {
 		CcLogFatal("Cannot bind socket");
-		exit(1);
+		CcCore::Exit(1);
 	}
 
 	CcTime::Sleep(1000.00f);
 	if(nsclient.Connect(endpoint.GetAddress()) == false) {
 		CcLogFatal("Cannot connect to nameserver");
-		exit(2);
+		CcCore::Exit(2);
 	}
 	
 	int nsstatus = nsclient.Set("/nameserver", server.GetLocal());
 	if(nsstatus != ClNamesLang::Successful) {
 		CcLogFatal("Cannot register with nameserver");
-		exit(3);
+		CcCore::Exit(3);
 	}
 	
 	while(true) {
@@ -83,6 +83,6 @@ int main(int argc, char* argv[]) {
 	}
 	nsclient.Unset("/nameserver");
 	server.Release();
-
-	return 0;
+	
+	CcCore::Exit(0);
 }

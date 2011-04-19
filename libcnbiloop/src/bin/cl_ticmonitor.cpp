@@ -37,7 +37,7 @@ int main(int argc, char* argv[]) {
 			optname.assign(optarg);
 		else {
 			usage();
-			return(opt == 'h') ? EXIT_SUCCESS : EXIT_FAILURE;
+			CcCore::Exit(opt == 'h' ? EXIT_SUCCESS : EXIT_FAILURE);
 		}
 	}
 
@@ -112,6 +112,5 @@ int main(int argc, char* argv[]) {
 
 shutdown:
 	ic.Detach();
-
-	return 0;
+	CcCore::Exit(0);
 }

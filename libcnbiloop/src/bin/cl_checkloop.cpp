@@ -26,7 +26,7 @@ void usage(void) {
 	printf("Usage: cl_checkloop [OPTION]\n\n");
 	printf("  -p       true/false, enable ndf_monitor scope\n");
 	printf("  -h       display this help and exit\n");
-	exit(0);
+	CcCore::Exit(0);
 }
 
 int main(int argc, char* argv[]) {
@@ -37,7 +37,8 @@ int main(int argc, char* argv[]) {
 		if(opt == 'p')
 			optplot.assign(optarg);
 		else {
-			return(opt == 'h') ? EXIT_SUCCESS : EXIT_FAILURE;
+			usage();
+			CcCore::Exit(opt == 'h' ? EXIT_SUCCESS : EXIT_FAILURE);
 		}
 	}
 
@@ -48,7 +49,7 @@ int main(int argc, char* argv[]) {
 	ClLoop::Instance();
 	if(ClLoop::Connect() == false) {
 		CcLogFatal("Cannot connect to loop");
-		exit(1);
+		CcCore::Exit(1);
 	}
 	
 	std::string timestamp, filebdf, filelog;
@@ -64,11 +65,11 @@ int main(int argc, char* argv[]) {
 	int pid0, pid1;
 	if(ClLoop::processing.ForkAndCheck(&pid0) != ClProLang::Successful) {
 		CcLogFatal("Cannot spawn PID0");
-		exit(2);
+		CcCore::Exit(2);
 	}
 	if(ClLoop::processing.ForkAndCheck(&pid1) != ClProLang::Successful) {
 		CcLogFatal("Cannot spawn PID1");
-		exit(2);
+		CcCore::Exit(2);
 	}
 
 	ClLoop::nameserver.Erase("ndf_monitor::scope");
@@ -126,5 +127,5 @@ shutdown:
 	ClLoop::processing.Terminate(pid0);
 	ClLoop::processing.Terminate(pid1);
 
-	return 0;
+	CcCore::Exit(0);
 }

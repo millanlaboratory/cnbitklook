@@ -25,7 +25,7 @@
 void usage(void) { 
 	printf("Usage: cl_processing [OPTION]...\n\n");
 	printf("  -p       TCP port (9100 default)\n");
-	printf("  -h       display this help and exit\n");
+	printf("  -h       display this help and CcCore::Exit(\n");
 }
 
 int main(int argc, char* argv[]) {
@@ -38,7 +38,7 @@ int main(int argc, char* argv[]) {
 			optport.assign(optarg);
 		else {
 			usage();
-			return(opt == 'h') ? EXIT_SUCCESS : EXIT_FAILURE;
+			CcCore::Exit(opt == 'h' ? EXIT_SUCCESS : EXIT_FAILURE);
 		}
 	}
 	
@@ -58,18 +58,18 @@ int main(int argc, char* argv[]) {
 		server.Bind(CcEndpoint("0.0.0.0", optport), 2);
 	} catch(CcException e) {
 		CcLogFatal("Cannot bind socket");
-		exit(1);
+		CcCore::Exit(1);
 	}
 
 	if(nsclient.Connect() == false) {
 		CcLogFatal("Cannot connect to nameserver");
-		exit(2);
+		CcCore::Exit(2);
 	}
 
 	int nsstatus = nsclient.Set("/processing", server.GetLocal());
 	if(nsstatus != ClNamesLang::Successful) {
 		CcLogFatal("Cannot register with nameserver");
-		exit(3);
+		CcCore::Exit(3);
 	}
 
 	while(true) {
@@ -86,5 +86,5 @@ int main(int argc, char* argv[]) {
 	nsclient.Unset("/processing");
 	server.Release();
 
-	return 0;
+	CcCore::Exit(0);
 }
