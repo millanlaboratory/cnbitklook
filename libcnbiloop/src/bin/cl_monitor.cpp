@@ -25,7 +25,7 @@
 using namespace std;
 
 void usage(void) { 
-	printf("Usage: cl_monitor [OPTION]n\n");
+	printf("Usage: cl_monitor [OPTION]...\n\n");
 	printf("  -p       pipe name\n");
 	printf("  -h       display this help and exit\n");
 }
@@ -68,7 +68,8 @@ int main(int argc, char* argv[]) {
 	CcTimeValue tvOpen, tvRead, tvLoop;
 	double msOpen, msRead, msNDF, msLoop, msIdeal;
 	unsigned long frametot;
-	while(true) {
+	double loop = true;
+	while(loop == true) {
 		frametot = 0;
 		ndf_frame frame;
 		ndf_ack ack;
@@ -102,7 +103,7 @@ int main(int argc, char* argv[]) {
 
 		CcLogInfo("Receiving...");
 		CcTime::Tic(&tvLoop);
-		while(true) { 
+		while(loop) { 
 			fflush(stdout);
 			CcTime::Tic(&tvRead);
 			connected = reader.Read(frame.data.buffer, frame.data.bsize, &rsize);
@@ -128,7 +129,7 @@ int main(int argc, char* argv[]) {
 			CcTime::Tic(&tvLoop);
 
 			if(CcCore::receivedSIGAny.Get())
-				break;
+				loop = false;
 		}
 		reader.Close();
 		ndf_free(&frame);

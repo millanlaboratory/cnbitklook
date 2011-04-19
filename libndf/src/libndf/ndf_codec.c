@@ -234,15 +234,19 @@ void* ndf_tri(const ndf_frame* frame) {
 	return frame->offset.tri;
 }
 
-void ndf_timevaltic(ndf_frame* frame) {
-	//assert(frame->sizes.tim_type == ndf_sizeof(NDF_TIMEVAL));
+int ndf_timevaltic(ndf_frame* frame) {
+	if(frame->sizes.tim_type != ndf_sizeof(NDF_TIMEVAL))
+		return -1;
+
 	struct timeval tic;
 	gettimeofday(&tic, 0);
 	ndf_set_timestamp(frame, &tic);
+	return 0;
 }
 
 double ndf_timevaltoc(const ndf_frame* frame) {
-	assert(frame->sizes.tim_type == ndf_sizeof(NDF_TIMEVAL));
+	if(frame->sizes.tim_type != ndf_sizeof(NDF_TIMEVAL))
+		return -1;
 	struct timeval tic;
 	struct timeval toc;
 	gettimeofday(&toc, 0);
@@ -262,8 +266,9 @@ void ndf_doubletimetic(ndf_frame* frame) {
 }
 
 double ndf_doubletimetoc(const ndf_frame* frame) {
-	assert(frame->sizes.tim_type == ndf_sizeof(NDF_DOUBLETIME));
-	
+	if(frame->sizes.tim_type != ndf_sizeof(NDF_DOUBLETIME))
+		return -1;
+
 	double ticv, tocv;
 	struct timeval toc;
 	gettimeofday(&toc, 0);

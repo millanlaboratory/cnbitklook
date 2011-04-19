@@ -128,7 +128,7 @@ void* ndf_exg(const ndf_frame* frame);
 void* ndf_tri(const ndf_frame* frame);
 void ndf_tic(ndf_frame* frame);
 double ndf_toc(const ndf_frame* frame);
-void ndf_timevaltic(ndf_frame* frame);
+int ndf_timevaltic(ndf_frame* frame);
 double ndf_timevaltoc(const ndf_frame* frame);
 void ndf_doubletimetic(ndf_frame* frame);
 double ndf_doubletimetoc(const ndf_frame* frame);
