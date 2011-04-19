@@ -23,16 +23,17 @@
 #include "CcLogEntry.hpp"
 #include "CcObject.hpp"
 #include "CcSemaphore.hpp"
+#include "CcThread.hpp"
 #include <fstream>
 #include <iostream>
 #include <string>
-
+#include <list>
 
 /*! \brief XML logger
  */
-class CcLogger : public CcObject {
+class CcLogger : protected CcThread {
 	public:
-		CcLogger(void);
+		CcLogger(double writems = 5000.00f);
 		virtual ~CcLogger(void);
 		void Open(const std::string& filename, const std::string& module, 
 				const CcTermType termtype, const CcLogLevel level);
@@ -42,12 +43,20 @@ class CcLogger : public CcObject {
 	private:
 		virtual void WriteEntry(CcLogEntry* entry);
 		virtual void DumpEntry(CcLogEntry* entry);
+		void Main(void);
+		void SwitchList(void);
 
 	private:
-		CcSemaphore _sem;
-		std::ofstream _file;
 		CcTermType _termtype;
 		CcLogLevel _level;
+		std::ofstream _filexml;
+		CcSemaphore _semxml;
+		std::list<CcLogEntry> _list1;
+		std::list<CcLogEntry> _list2;
+		std::list<CcLogEntry>* _listW;
+		std::list<CcLogEntry>* _listR;
+		CcSemaphore _semlist;
+		double _writems;
 };
 
 #endif

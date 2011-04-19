@@ -24,10 +24,11 @@
 #include "CcTime.hpp"
 #include <stdio.h>
 
-CcLogger::CcLogger(void) {
+CcLogger::CcLogger(double writems) {
 	CcObject::SetName("CcLogger");
-	this->_sem.Wait();
-	this->_sem.Post();
+	this->_listW = &this->_list1;
+	this->_listR = &this->_list2;
+	this->_writems = writems;
 }
 
 CcLogger::~CcLogger(void) {
@@ -38,62 +39,67 @@ void CcLogger::Open(const std::string& filename, const std::string& module,
 	
 	if(CcObject::IsVerbose())
 		printf("[CcLogger::Open] Opening file: %s\n", filename.c_str());
-	this->_sem.Wait();
+	this->_semxml.Wait();
 	std::string timestamp;
 	CcTime::Datetime(&timestamp);
-	this->_file.open(filename.c_str());
+	this->_filexml.open(filename.c_str());
 	this->_termtype = termtype;
 	this->_level = level;
 
-	this->_file << "<?xml version='1.0'?>\n";
-	this->_file <<	"<!--20100715 M. Tavella <michele.tavella@epfl.ch>-->\n";
-	this->_file <<	"<?xml-stylesheet type='text/xsl' href='cclogger.xsl'?>\n";
-	this->_file <<	"<CcLogger ";
-	this->_file <<	"xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' ";
-	this->_file <<	"xmlns:xsd='http://www.w3.org/2001/XMLSchema' timestamp='";
-	this->_file << timestamp;
-	this->_file <<	"' module='";
-	this->_file <<	module;
-	this->_file <<	"'>\n";
-	this->_file << "</CcLogger>";
-	this->_file.flush();
-	this->_sem.Post();
+	this->_filexml << "<?xml version='1.0'?>\n";
+	this->_filexml <<	"<!--20100715 M. Tavella <michele.tavella@epfl.ch>-->\n";
+	this->_filexml <<	"<?xml-stylesheet type='text/xsl' href='cclogger.xsl'?>\n";
+	this->_filexml <<	"<CcLogger ";
+	this->_filexml <<	"xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' ";
+	this->_filexml <<	"xmlns:xsd='http://www.w3.org/2001/XMLSchema' timestamp='";
+	this->_filexml << timestamp;
+	this->_filexml <<	"' module='";
+	this->_filexml <<	module;
+	this->_filexml <<	"'>\n";
+	this->_filexml << "</CcLogger>";
+	this->_filexml.flush();
+	this->_semxml.Post();
+
+	CcThread::Start();
 }
 
 void CcLogger::Close(void) {
 	if(CcObject::IsVerbose())
 		printf("[CcLogger::Close] Closing file\n");
-	this->_sem.Wait();
-	this->_file.close();
-	this->_sem.Post();
+	this->_semxml.Wait();
+	this->_filexml.close();
+	this->_semxml.Post();
+
+	CcThread::Stop();
+	CcThread::Join();
 }
+
 bool CcLogger::IsOpen(void) {
 	bool result;
-	this->_sem.Wait();
-	result = this->_file.is_open();
-	this->_sem.Post();
+	this->_semxml.Wait();
+	result = this->_filexml.is_open();
+	this->_semxml.Post();
 	return result;
 }
 
 void CcLogger::AddEntry(CcLogEntry entry) {
-	this->_sem.Wait();
-	
-	this->DumpEntry(&entry);
-	this->WriteEntry(&entry);
-	this->_sem.Post();
+	//this->DumpEntry(&entry);
+	this->_semlist.Wait();
+	this->_listW->push_back(entry);
+	this->_semlist.Post();
 }
 
 void CcLogger::WriteEntry(CcLogEntry* entry) {
-	if(this->_file.is_open() == false)
+	if(this->_filexml.is_open() == false)
 		return;
 
-	long pos = this->_file.tellp();
-	this->_file.seekp(pos - 11);
-	this->_file << "\t\t";
-	this->_file << entry->Serialize();
-	this->_file << std::endl;
-	this->_file << "</CcLogger>";
-	this->_file.flush();
+	long pos = this->_filexml.tellp();
+	this->_filexml.seekp(pos - 11);
+	this->_filexml << "\t\t";
+	this->_filexml << entry->Serialize();
+	this->_filexml << std::endl;
+	this->_filexml << "</CcLogger>";
+	this->_filexml.flush();
 }
 
 void CcLogger::DumpEntry(CcLogEntry* entry) {
@@ -150,6 +156,38 @@ void CcLogger::DumpEntry(CcLogEntry* entry) {
 			default:
 				break;
 		}
+	}
+}
+
+void CcLogger::Main(void) {
+	std::list<CcLogEntry>::iterator it;
+	CcLogEntry* entry;
+
+	while(CcThread::IsRunning()) {
+		CcTime::Sleep(this->_writems);
+
+		this->_semlist.Wait();
+		this->SwitchList();
+		this->_semlist.Post();
+			
+		this->_semxml.Wait();
+		for (it = this->_listR->begin(); it != this->_listR->end(); it++) {
+			entry = &(*it);
+			this->DumpEntry(entry);
+			this->WriteEntry(entry);
+		}
+		this->_semxml.Post();
+		this->_listR->clear();
+	}
+}
+		
+void CcLogger::SwitchList(void) {
+	if(this->_listR == &this->_list1) {
+		this->_listR = &this->_list2;
+		this->_listW = &this->_list1;
+	} else {
+		this->_listR = &this->_list1;
+		this->_listW = &this->_list2;
 	}
 }
 
