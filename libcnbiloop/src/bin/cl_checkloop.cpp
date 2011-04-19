@@ -23,9 +23,10 @@
 using namespace std;
 
 void usage(void) { 
-	printf("Usage: cl_checkloop [-p]\n");
-	printf("Where: -p      true/false\n");
-	exit(1);
+	printf("Usage: cl_checkloop [OPTION]\n\n");
+	printf("  -p       true/false, enable ndf_monitor scope\n");
+	printf("  -h       display this help and exit\n");
+	exit(0);
 }
 
 int main(int argc, char* argv[]) {
@@ -36,7 +37,6 @@ int main(int argc, char* argv[]) {
 		if(opt == 'p')
 			optplot.assign(optarg);
 		else {
-			usage();
 			return(opt == 'h') ? EXIT_SUCCESS : EXIT_FAILURE;
 		}
 	}

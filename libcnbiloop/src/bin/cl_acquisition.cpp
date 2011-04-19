@@ -38,7 +38,7 @@ void idle(void) {
 
 void usage(void) { 
 	printf("Usage: cl_acquisition [OPTION]...\n\n");
-	printf("  -d       the acquisition device: gtec, biosemi (default), GDF/BDF filename, EGD string\n");
+	printf("  -d       the device: gtec, biosemi (default), GDF/BDF file, EGD string\n");
 	printf("  -f       the buffering rate in Hz (16 default)\n");
 	printf("  -a       the TCP port for the acquisition server (9000 default)\n");
 	printf("  -n       the basename for the pipes (/tmp/cl.pipe.ndf. default)\n");

@@ -17,13 +17,11 @@
 */
 
 #include "ClTobiId.hpp"
-#include <iostream>
-
-using namespace std;
 
 void usage(void) { 
-	printf("Usage: cl_tidmonitor -n NAME\n");
-	printf("Where: -n       /acquisition (default)\n");
+	printf("Usage: cl_ticmonitor [OPTION]...\n\n");
+	printf("  -n       acquisition name (/acquisition default)\n");
+	printf("  -h       display this help and exit\n");
 	exit(1);
 }
 

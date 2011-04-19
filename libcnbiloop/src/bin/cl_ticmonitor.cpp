@@ -17,15 +17,12 @@
 */
 
 #include "ClTobiIc.hpp"
-#include <iostream>
-
-using namespace std;
 
 void usage(void) { 
-	printf("Usage: cl_ticmonitor -p TCPPORT -n NAME\n");
-	printf("Where: -p       9500 (default)\n");
-	printf("Where: -n       /feedback0 (default)\n");
-	exit(1);
+	printf("Usage: cl_ticmonitor [OPTION]...\n\n");
+	printf("  -p       TCP port (9500 default)\n");
+	printf("  -n       TCP server name (/feedback0 default)\n");
+	printf("  -h       display this help and exit\n");
 }
 
 int main(int argc, char* argv[]) {

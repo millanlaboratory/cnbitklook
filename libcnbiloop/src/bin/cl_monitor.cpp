@@ -25,8 +25,9 @@
 using namespace std;
 
 void usage(void) { 
-	printf("Usage: clmonitor -p PIPENAME\n");
-	exit(1);
+	printf("Usage: cl_monitor [OPTION]n\n");
+	printf("  -p       pipe name\n");
+	printf("  -h       display this help and exit\n");
 }
 
 int main(int argc, char* argv[]) {
@@ -42,8 +43,10 @@ int main(int argc, char* argv[]) {
 		}
 	}
 	
-	if(optname.empty())
+	if(optname.empty()) {
 		usage();
+		exit(1);
+	}
 	
 	CcCore::OpenLogger("cl_monitor");
 	CcCore::CatchSIGINT();

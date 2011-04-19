@@ -20,27 +20,22 @@
 #include "ClNamesClient.hpp"
 #include <libcnbicore/CcBasic.hpp>
 #include <libcnbicore/CcServerMulti.hpp>
-#include <iostream>
 #include <stdlib.h>
-#include <stdio.h>
-
-using namespace std;
 
 void usage(void) { 
-	printf("Usage: cl_nameserver [OPTION]...\n");
-	printf("  -a       TCP endpoint (127.0.0.1:8000 default)\n");
+	printf("Usage: cl_nameserver [OPTION]...\n\n");
+	printf("  -p       TCP port (8000 default)\n");
 	printf("  -h       display this help and exit\n");
-	exit(1);
 }
 
 int main(int argc, char* argv[]) {
 	int opt;
 	std::string optopt;
-	CcEndpoint optendpoint("127.0.0.1:8000");
+	CcPort optport("8000");
 	
-	while ((opt = getopt(argc, argv, "a:h")) != -1) {
-		if(opt == 'a')
-			optendpoint.SetAddress(optarg);
+	while((opt = getopt(argc, argv, "p:h")) != -1) {
+		if(opt == 'p')
+			optport.assign(optarg);
 		else {
 			usage();
 			return(opt == 'h') ? EXIT_SUCCESS : EXIT_FAILURE;
@@ -51,37 +46,40 @@ int main(int argc, char* argv[]) {
 	CcCore::CatchSIGINT();
 	CcCore::CatchSIGTERM();
 
-	CcLogInfo(std::string("Processing configured: ").
-			append(optendpoint.GetAddress()).append("/TCP"));
+	CcLogInfoS("Nameserver configured: " << optport << "/TCP");
 	
 	// Setup TCP server
+	CcEndpoint endpoint("0.0.0.0", optport);
 	CcServerMulti server(true, 5*CCCORE_1MB);
 	ClNamesAsServer handler;
 	ClNamesClient nsclient;
 	handler.StartMonitor();
 	try {
 		handler.Register(&server);
-		server.Bind(optendpoint, 2);
+		server.Bind(endpoint, 2);
 	} catch(CcException e) {
 		CcLogFatal("Cannot bind socket");
 		exit(1);
 	}
+
 	CcTime::Sleep(1000.00f);
-	if(nsclient.Connect(optendpoint.GetAddress()) == false) {
+	if(nsclient.Connect(endpoint.GetAddress()) == false) {
 		CcLogFatal("Cannot connect to nameserver");
 		exit(2);
 	}
+	
 	int nsstatus = nsclient.Set("/nameserver", server.GetLocal());
 	if(nsstatus != ClNamesLang::Successful) {
 		CcLogFatal("Cannot register with nameserver");
 		exit(3);
 	}
+	
 	while(true) {
 		if(CcCore::receivedSIGINT.Get()) 
 			break;
 		if(CcCore::receivedSIGTERM.Get()) 
 			break;
-		CcTime::Sleep(2000.00f);
+		CcTime::Sleep(1000.00f);
 	}
 	nsclient.Unset("/nameserver");
 	server.Release();

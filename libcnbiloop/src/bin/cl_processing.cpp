@@ -20,27 +20,22 @@
 #include "ClNamesClient.hpp"
 #include <libcnbicore/CcBasic.hpp>
 #include <libcnbicore/CcServerMulti.hpp>
-#include <iostream>
 #include <stdlib.h>
-#include <stdio.h>
-
-using namespace std;
 
 void usage(void) { 
-	printf("Usage: cl_processing [-a IP:PORT]\n");
-	printf("Where: -a       127.0.0.1:9100 (default)\n");
-	exit(1);
+	printf("Usage: cl_processing [OPTION]...\n\n");
+	printf("  -p       TCP port (9100 default)\n");
+	printf("  -h       display this help and exit\n");
 }
 
 int main(int argc, char* argv[]) {
-	// Parse command line
 	int opt;
 	std::string optopt;
-	CcEndpoint optendpoint("127.0.0.1:9100");
-	
-	while((opt = getopt(argc, argv, "a:h")) != -1) {
-		if(opt == 'a')
-			optendpoint.SetAddress(optarg);
+	CcPort optport("9100");
+
+	while((opt = getopt(argc, argv, "p:h")) != -1) {
+		if(opt == 'p')
+			optport.assign(optarg);
 		else {
 			usage();
 			return(opt == 'h') ? EXIT_SUCCESS : EXIT_FAILURE;
@@ -51,29 +46,32 @@ int main(int argc, char* argv[]) {
 	CcCore::CatchSIGINT();
 	CcCore::CatchSIGTERM();
 	
-	CcLogInfo(std::string("Processing configured: ").
-			append(optendpoint.GetAddress()).append("/TCP"));
+	CcLogInfoS("Processing configured: " << optport << "/TCP");
 	
 	// Setup TCP server
-	CcServerMulti server(true, 5*CCCORE_1MB);
+	CcServerMulti server(true, 2*CCCORE_1MB);
 	ClProAsServer handler;
 	ClNamesClient nsclient;
+
 	try { 
 		handler.Register(&server);
-		server.Bind(optendpoint, 2);
+		server.Bind(CcEndpoint("0.0.0.0", optport), 2);
 	} catch(CcException e) {
 		CcLogFatal("Cannot bind socket");
 		exit(1);
 	}
+
 	if(nsclient.Connect() == false) {
 		CcLogFatal("Cannot connect to nameserver");
 		exit(2);
 	}
+
 	int nsstatus = nsclient.Set("/processing", server.GetLocal());
 	if(nsstatus != ClNamesLang::Successful) {
 		CcLogFatal("Cannot register with nameserver");
 		exit(3);
 	}
+
 	while(true) {
 		if(nsclient.Connect() == false)  {
 			CcLogFatal("Lost connection with nameserver");
@@ -83,7 +81,7 @@ int main(int argc, char* argv[]) {
 			break;
 		if(CcCore::receivedSIGTERM.Get()) 
 			break;
-		CcTime::Sleep(2000);
+		CcTime::Sleep(1000.00f);
 	}
 	nsclient.Unset("/processing");
 	server.Release();
