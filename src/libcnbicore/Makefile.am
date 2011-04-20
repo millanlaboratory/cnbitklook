@@ -1,4 +1,5 @@
 lib_LTLIBRARIES = libcnbicore.la
+AM_CPPFLAGS = $(CPPFLAGS) -I$(top_srcdir)/src
 
 libcnbicore_includedir = $(includedir)/libcnbicore
 libcnbicore_include_HEADERS = CcBasic.hpp \
@@ -111,7 +112,8 @@ libcnbicore_la_SOURCES = CcBasic.hpp \
 			CcFile.cpp \
 			CcFile.hpp
 
-libcnbicore_la_LDFLAGS = -version-info $(CURRENT):$(REVISION):$(AGE)
+libcnbicore_la_LDFLAGS = $(AM_LDFLAGS) -version-info $(CURRENT):$(REVISION):$(AGE)
+libcnbicore_la_LIBADD = $(top_builddir)/src/libtransport/libtransport.la
 
 bin_PROGRAMS = cc_endianness  cc_architecture
 cc_endianness_SOURCES = cc_endianness.cpp

@@ -16,12 +16,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "net.h"
-#include "tcp.h"
+#include <libtransport/net.h>
+#include <libtransport/tcp.h>
 #include <stdio.h>
 #include <unistd.h>
 
-#define EXAMPLE_NAME "[tr_tcpservert]"
+#define EXAMPLE_NAME "[serverchar]"
 
 int main(int argc, char * const argv[]) {
 	if(argc < 2) {
@@ -34,8 +34,9 @@ int main(int argc, char * const argv[]) {
 	tr_init_socket_default(&socket);
 	tr_tcpserver(&socket);
 
-	tr_socket endpoint0;
-	tr_socket endpoint1;
+	tr_socket endpoint;
+	tr_init_socket_default(&endpoint);
+	tr_tcpendpoint(&endpoint);
 	
 	printf("%s Opening socket\n", EXAMPLE_NAME);
 	tr_open(&socket);
@@ -51,43 +52,22 @@ int main(int argc, char * const argv[]) {
 	
 
 	printf("%s Entering accept loop\n", EXAMPLE_NAME);
-		
-	tr_init_socket_default(&endpoint0);
-	tr_tcpendpoint(&endpoint0);
-	tr_accept(&socket, &endpoint0);
-	printf("%s Accepted 0\n", EXAMPLE_NAME);
-
-	tr_init_socket_default(&endpoint1);
-	tr_tcpendpoint(&endpoint1);
-	tr_accept(&socket, &endpoint1);
-	printf("%s Accepted 1\n", EXAMPLE_NAME);
-
 	while(1) {
-		tr_send(&endpoint0, "Welcome Mr. Client 0\0");
-		tr_send(&endpoint1, "Welcome Mr. Client 1\0");
-		tr_recv(&endpoint0);
-		tr_recv(&endpoint1);
+		printf("%s Waiting for endpoint\n", EXAMPLE_NAME);
+		tr_accept(&socket, &endpoint);
+	
+		printf("%s Remote TCP socket: %s:%u [endpoint]\n", EXAMPLE_NAME, 
+				endpoint.remote.address, endpoint.remote.port);
+
+		tr_send(&endpoint, "Welcome Mr. Client");
+		while(tr_recv(&endpoint) != -1) {
+			printf("%s Received: %s\n", EXAMPLE_NAME, (char*)endpoint.buffer);
+			if(tr_send(&endpoint, "Thanks for your message") == -1)
+				break;
+		}
+		printf("%s Endpoint dropped the connection\n", EXAMPLE_NAME);
+		tr_close(&endpoint);
 	}
-
-
-	//while(1) {
-	//	tr_init_socket_default(&endpoint);
-	//	tr_tcpendpoint(&endpoint);
-	//	printf("%s Waiting for endpoint\n", EXAMPLE_NAME);
-	//	tr_accept(&socket, &endpoint);
-	//
-	//	printf("%s Remote TCP socket: %s:%u [endpoint]\n", EXAMPLE_NAME, 
-	//			endpoint.remote.address, endpoint.remote.port);
-
-	//	tr_send(&endpoint, "Welcome Mr. Client");
-	//	while(tr_recv(&endpoint) != -1) {
-	//		printf("%s Received: %s\n", EXAMPLE_NAME, endpoint.buffer);
-	//		if(tr_send(&endpoint, "Thanks for your message") == -1)
-	//			break;
-	//	}
-	//	printf("%s Endpoint dropped the connection\n", EXAMPLE_NAME);
-	//	tr_close(&endpoint);
-	//}
 
 	printf("%s Closing socket\n", EXAMPLE_NAME);
 	tr_close(&socket);

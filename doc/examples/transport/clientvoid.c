@@ -16,8 +16,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "net.h"
-#include "tcp.h"
+#include <libtransport/net.h>
+#include <libtransport/tcp.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>

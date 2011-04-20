@@ -1,7 +1,6 @@
-# 09-09-23  Michele Tavella <michele.tavella@epfl.ch>
-AM_CFLAGS = -I$(top_srcdir)/src/libtransport
+AM_CPPFLAGS = $(CPPFLAGS) -I$(top_srcdir)/src
 
-noinst_PROGRAMS = resolver \
+check_PROGRAMS = resolver \
 				  clientchar \
 				  serverchar \
 				  clientvoid \
