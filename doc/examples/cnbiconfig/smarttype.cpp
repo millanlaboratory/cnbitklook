@@ -16,7 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "XMLType.hpp"
+#include <libcnbiconfig/XMLType.hpp>
 #include <string>
 #include <iostream>
 

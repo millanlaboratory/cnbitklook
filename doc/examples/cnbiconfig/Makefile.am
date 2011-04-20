@@ -1,7 +1,6 @@
-# 09-09-23  Michele Tavella <michele.tavella@epfl.ch>
-AM_CPPFLAGS = -I$(top_srcdir)/src/libcnbiconfig
+AM_CPPFLAGS = $(CPPFLAGS) -I$(top_srcdir)/src
 
-noinst_PROGRAMS = cnbiconfig_online \
+check_PROGRAMS = cnbiconfig_online \
 				  cnbiconfig_offline \
 				  cnbitask \
 				  xmlconfig \

@@ -5,5 +5,6 @@ SUBDIRS = src/libndf \
 	  src/libtransport \
 	  src/libtranspipe \
           src/libcnbicore \
-	  doc
+          src/libcnbiconfig \
+	  doc extra
  
