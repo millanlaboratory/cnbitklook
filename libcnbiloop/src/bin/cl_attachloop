@@ -10,7 +10,7 @@ if [ "z$CHECK" == "z" ]; then
 else
 	echo "[cl_attachloop] Session found: $CHECK";
 	cl_rpcnotify "CnbiTk ScreenLoop" "Attached to GNU Scren $CHECK"
-	screen -rd 
+	screen -rd $CHECK
 fi
 
 exit 0;
