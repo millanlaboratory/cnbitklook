@@ -32,8 +32,6 @@ LT_INIT([win32-dll disable-static])
 AC_SUBST(LIBTOOL_DEPS)
 
 # Checks for libraries.
-AC_SEARCH_LIBS([tp_init], [transpipe],
-        [], AC_MSG_ERROR([The libtranspipe library must be installed.]))
 AC_SEARCH_LIBS([pthread_create], [pthread],
         [], AC_MSG_ERROR([The libpthread library must be installed.]))
 
@@ -47,5 +45,6 @@ AC_SUBST(AM_LDFLAGS)
 AC_CONFIG_FILES([Makefile doc/Makefile \
 	src/libcnbicore/Makefile doc/examples/cnbicore/Makefile src/libcnbicore/cnbicore.pc
 	src/libtransport/Makefile doc/examples/transport/Makefile src/libtransport/transport.pc
+	src/libtranspipe/Makefile doc/examples/transpipe/Makefile src/libtranspipe/transpipe.pc
 	src/libndf/Makefile doc/examples/ndf/Makefile src/libndf/ndf.pc])
 AC_OUTPUT

@@ -113,7 +113,8 @@ libcnbicore_la_SOURCES = CcBasic.hpp \
 			CcFile.hpp
 
 libcnbicore_la_LDFLAGS = $(AM_LDFLAGS) -version-info $(CURRENT):$(REVISION):$(AGE)
-libcnbicore_la_LIBADD = $(top_builddir)/src/libtransport/libtransport.la
+libcnbicore_la_LIBADD = $(top_builddir)/src/libtransport/libtransport.la \
+                        $(top_builddir)/src/libtranspipe/libtranspipe.la
 
 bin_PROGRAMS = cc_endianness  cc_architecture
 cc_endianness_SOURCES = cc_endianness.cpp
