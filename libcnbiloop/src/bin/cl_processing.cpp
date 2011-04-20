@@ -49,7 +49,7 @@ int main(int argc, char* argv[]) {
 	CcLogInfoS("Processing configured: " << optport << "/TCP");
 	
 	// Setup TCP server
-	CcServerMulti server(true, 2*CCCORE_1MB);
+	CcServerMulti server(true, 1000.00f, 2*CCCORE_1MB);
 	ClProAsServer handler;
 	ClNamesClient nsclient;
 

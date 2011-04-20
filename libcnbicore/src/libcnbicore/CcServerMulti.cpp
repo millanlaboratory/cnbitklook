@@ -26,7 +26,7 @@
 #include <stdio.h>
 #include <list>
 
-CcServerMulti::CcServerMulti(bool multistream, size_t bsize, 
+CcServerMulti::CcServerMulti(bool multistream, double acceptms, size_t bsize, 
 		unsigned maxconns) : CcServer(CcServer::AsServer, bsize, maxconns) {
 	CcSocket::SetName("CcServerMulti");
 
@@ -36,6 +36,7 @@ CcServerMulti::CcServerMulti(bool multistream, size_t bsize,
 
 	this->_endpointPtr = NULL;
 	this->_multistream.Set(multistream);
+	this->_acceptms = acceptms;
 }
 
 CcServerMulti::~CcServerMulti(void) {
@@ -64,7 +65,7 @@ void CcServerMulti::Main(void) {
 				continue;
 			CcTime::Sleep(CCASYNC_WAIT_MRECV);
 			
-			if(CcTime::Toc(&acceptdt) < CCASYNC_WAIT_MACCEPT)
+			if(CcTime::Toc(&acceptdt) < this->_acceptms)
 				continue;
 
 			if(this->Accept(&address)) {

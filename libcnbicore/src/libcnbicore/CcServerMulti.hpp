@@ -33,8 +33,8 @@
  */
 class CcServerMulti : public CcServer {
 	public:
-		CcServerMulti(bool multistream = true, size_t bsize = CCCORE_1MB, 
-				unsigned maxconns = 256);
+		CcServerMulti(bool multistream = true, double acceptms = CCASYNC_WAIT_MACCEPT, 
+				size_t bsize = CCCORE_1MB, unsigned maxconns = 256);
 		virtual ~CcServerMulti(void);
 		
 		virtual int Recv(void); 
@@ -71,6 +71,7 @@ class CcServerMulti : public CcServer {
 		CcSemaphore _semendpoints;
 		tr_socket* _endpointPtr;
 		CcThreadSafe<bool> _multistream;
+		double _acceptms;
 	public:
 		CcCallback1<CcSocketProxy, CcSocket*> iOnAccept;
 		CcCallback1<CcSocketProxy, CcSocket*> iOnDrop;

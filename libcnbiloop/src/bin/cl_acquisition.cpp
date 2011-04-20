@@ -123,7 +123,7 @@ int main(int argc, char* argv[]) {
 	pipes->Open(optpipename, 6);
 
 	// Setup, Bind and register ClAcqAsServer
-	CcServerMulti server(true, 5*CCCORE_1MB);
+	CcServerMulti server(true, 2000.00f, 5*CCCORE_1MB);
 	ClAcqAsServer handler(&writer, &frame, &semframe);
 	ClNamesClient nsclient;
 	try {
