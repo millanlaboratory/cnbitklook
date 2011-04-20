@@ -37,6 +37,15 @@ AC_SEARCH_LIBS([pthread_create], [pthread],
         AC_SUBST([PTHREAD_LIBS], "$LIBS"), AC_MSG_ERROR([The libpthread library must be installed.]))
 LIBS="$save_LIBS"
 
+# Check acquisition libs
+save_LIBS="$LIBS"
+AC_SEARCH_LIBS([xdf_open], [xdffileio], [],
+        AC_MSG_ERROR([The xdffileio library must be installed.]))
+AC_SEARCH_LIBS([egd_open], [eegdev], [],
+        AC_MSG_ERROR([The eegdev library must be installed.]))
+AC_SUBST([ACQ_LIBS], "$LIBS")
+LIBS="$save_LIBS"
+
 
 AC_LANG_PUSH([C++])
 AC_CHECK_HEADERS([rapidxml.hpp rapidxml_print.hpp], [], 
@@ -59,6 +68,7 @@ AC_CONFIG_FILES([Makefile doc/Makefile extra/Makefile
 	src/libcnbicore/Makefile doc/examples/cnbicore/Makefile src/libcnbicore/cnbicore.pc
 	src/libtransport/Makefile doc/examples/transport/Makefile src/libtransport/transport.pc
 	src/libtranspipe/Makefile doc/examples/transpipe/Makefile src/libtranspipe/transpipe.pc
+	src/libcnbiacq/Makefile src/libcnbiacq/cnbiacq.pc
 	src/libcnbiconfig/Makefile doc/examples/cnbiconfig/Makefile src/libcnbiconfig/cnbiconfig.pc
 	src/libndf/Makefile doc/examples/ndf/Makefile src/libndf/ndf.pc])
 AC_OUTPUT
