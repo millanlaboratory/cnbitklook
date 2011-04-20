@@ -1,7 +1,6 @@
-# 09-09-23  Michele Tavella <michele.tavella@epfl.ch>
-AM_CPPFLAGS = -I$(top_srcdir)/src/libcnbiloop
+AM_CPPFLAGS = $(CPPFLAGS) -I$(top_srcdir)/src
 
-noinst_PROGRAMS = clacqlang \
+check_PROGRAMS = clacqlang \
 				  clprolang \
 				  clnameslang \
 				  clacqclient \

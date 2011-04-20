@@ -16,7 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ClNamesLang.hpp"
+#include <libcnbiloop/ClNamesLang.hpp>
 #include <iostream>
 
 using namespace std;

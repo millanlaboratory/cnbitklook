@@ -57,6 +57,11 @@ AC_SEARCH_LIBS_CLASS([ICMessage], [tobiic], [#include <libtobiic/ICMessage.hpp>]
             AC_SUBST([TOBIIC_LIBS], "$LIBS"), AC_MSG_ERROR([The tobiic library cannot be found.]))
 LIBS="$save_LIBS"
 
+save_LIBS="$LIBS"
+AC_SEARCH_LIBS_CLASS([IDMessage], [tobiid], [#include <libtobiid/IDMessage.hpp>],
+            AC_SUBST([TOBIID_LIBS], "$LIBS"), AC_MSG_ERROR([The tobiid library cannot be found.]))
+LIBS="$save_LIBS"
+
 AC_HEADER_STDBOOL
 
 AC_SUBST([CURRENT],[lib_current])
@@ -70,5 +75,6 @@ AC_CONFIG_FILES([Makefile doc/Makefile extra/Makefile
 	src/libtranspipe/Makefile doc/examples/transpipe/Makefile src/libtranspipe/transpipe.pc
 	src/libcnbiacq/Makefile src/libcnbiacq/cnbiacq.pc
 	src/libcnbiconfig/Makefile doc/examples/cnbiconfig/Makefile src/libcnbiconfig/cnbiconfig.pc
+	src/libcnbiloop/Makefile doc/examples/cnbiloop/Makefile src/libcnbiloop/cnbiloop.pc
 	src/libndf/Makefile doc/examples/ndf/Makefile src/libndf/ndf.pc])
 AC_OUTPUT

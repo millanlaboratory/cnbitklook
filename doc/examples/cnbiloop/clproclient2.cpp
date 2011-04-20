@@ -16,7 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ClAcqClient.hpp"
+#include <libcnbiloop/ClProClient.hpp>
 #include <libcnbicore/CcBasic.hpp>
 #include <iostream>
 
@@ -25,17 +25,38 @@ using namespace std;
 int main(void) {
 	CcCore::OpenLogger("clclientacq");
 
-	ClAcqClient client;
-	if(client.Connect("127.0.0.1:9000") == false) {
+	ClProClient client;
+	if(client.Connect("127.0.0.1:9100") == false) {
 		CcLogFatal("Cannot connect to endpoint");
 		CcCore::Exit(1);
 	}
 
+	int pid0 = 0, pid1 = 1;
+	if(client.ForkAndCheck(&pid0) != ClProLang::Successful)
+		return 1;
+	if(client.ForkAndCheck(&pid1) != ClProLang::Successful)
+		return 1;
+	cout << "Spawned " << pid0 << endl;
+	cout << "Spawned " << pid1 << endl;
+
+	client.ChangeDirectory(pid0, "/tmp/");
+	client.LaunchNDF(pid0, "ndf_monitor", "/tmp/cl.pipe.ndf.0", 
+			"127.0.0.1:9000", "127.0.0.1:9500", "");
+	
+	client.ChangeDirectory(pid1, "/tmp/");
+	client.LaunchNDF(pid1, "ndf_monitor", "/tmp/cl.pipe.ndf.1", 
+			"127.0.0.1:9000", "127.0.0.1:9501", "");
+
 	while(client.Connect()) {
-		client.OpenXDF("test.xdf", "test.log", "antani=10");
-		client.OpenXDF("test2.xdf", "test2.log", "antani=20");
-		client.CloseXDF();
-		CcTime::Sleep(2000.00f);
+		if(client.IsAlive(pid0) != ClProLang::Successful)
+			break;
+		if(client.IsAlive(pid1) != ClProLang::Successful)
+			break;
+		CcTime::Sleep(1000.00f);
 	}
+
+	client.Terminate(pid0);
+	client.Terminate(pid1);
+
 	CcCore::Exit(0);
 }

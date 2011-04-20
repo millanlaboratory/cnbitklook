@@ -7,5 +7,6 @@ SUBDIRS = src/libndf \
           src/libcnbicore \
           src/libcnbiacq \
           src/libcnbiconfig \
+          src/libcnbiloop \
 	  doc extra
  

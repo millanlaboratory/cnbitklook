@@ -16,7 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ClProClient.hpp"
+#include <libcnbiloop/ClProClient.hpp>
 #include <libcnbicore/CcBasic.hpp>
 #include <iostream>
 

@@ -16,28 +16,26 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ClLoop.hpp"
+#include <libcnbiloop/ClAcqClient.hpp>
 #include <libcnbicore/CcBasic.hpp>
 #include <iostream>
 
 using namespace std;
 
 int main(void) {
-	CcCore::OpenLogger("clloop");
-	CcCore::CatchSIGINT();
-	CcCore::CatchSIGTERM();
-	
-	if(ClLoop::Connect() == true)
-		cout << "Connected" << endl;
-	else
-		CcCore::Exit(1);
-	
-	while(true) {
-		if(CcCore::receivedSIGINT.Get() || CcCore::receivedSIGTERM.Get())
-			break;
+	CcCore::OpenLogger("clclientacq");
 
-		CcTime::Sleep(1000.00f);
+	ClAcqClient client;
+	if(client.Connect("127.0.0.1:9000") == false) {
+		CcLogFatal("Cannot connect to endpoint");
+		CcCore::Exit(1);
 	}
-	ClLoop::Disconnect();
+
+	while(client.Connect()) {
+		client.OpenXDF("test.xdf", "test.log", "antani=10");
+		client.OpenXDF("test2.xdf", "test2.log", "antani=20");
+		client.CloseXDF();
+		CcTime::Sleep(2000.00f);
+	}
 	CcCore::Exit(0);
 }
