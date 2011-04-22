@@ -1,8 +1,0 @@
-09-09-23  Michele Tavella <michele.tavella@epfl.ch>
-- check if we really want to set SO_REUSEADDR:
-status = setsockopt(sock->id, SOL_SOCKET, SO_REUSEADDR,
-		(const char*)&optval, sizeof(optval));
-
-09-09-25  Michele Tavella <michele.tavella@epfl.ch>
-- errcodes
-- sprintfs
