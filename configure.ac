@@ -69,7 +69,7 @@ AC_SUBST([REVISION],[lib_revision])
 AC_SUBST([AGE],[lib_age])
 AC_SUBST(AM_LDFLAGS)
 
-AC_CONFIG_FILES([Makefile doc/Makefile extra/Makefile 
+AC_CONFIG_FILES([Makefile doc/Makefile extra/Makefile doc/doxygen.cfg
 	src/libcnbicore/Makefile doc/examples/cnbicore/Makefile src/libcnbicore/cnbicore.pc
 	src/libtransport/Makefile doc/examples/transport/Makefile src/libtransport/transport.pc
 	src/libtranspipe/Makefile doc/examples/transpipe/Makefile src/libtranspipe/transpipe.pc
