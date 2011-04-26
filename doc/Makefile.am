@@ -11,11 +11,16 @@ html: html/index.html
 html/index.html:
 	doxygen $(builddir)/doxygen.cfg
 
-install-html-local: html/index.html
-	cp -r html $(htmldir)
+installdirs-local: installdirs-html
+
+installdirs-html:
+	$(INSTALL) -d $(htmldir)
+
+install-html-local: html/index.html installdirs-html
+	cp -ru html $(htmldir)
 
 uninstall-local:
-	rm -rf $(htmldir)
+	rm -rf $(htmldir)/html
 
 clean-local:
 	rm -rf html
