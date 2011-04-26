@@ -33,15 +33,14 @@ class CcThread : public CcObject {
 		CcThread(void);
 		virtual ~CcThread(void);
 		virtual void Main(void) = 0;
-		virtual void Start(void);
-		virtual void Stop(void);
-		virtual void Join(void);
-		long GetId(void);
-		virtual bool IsRunning(void);
-		virtual bool IsStopping(void);
+		void Start(void);
+		void Stop(void);
+		void Join(void);
+		bool IsRunning(void);
+		bool IsStopping(void);
 	private:
-		virtual void Running(bool status);
-		virtual void Stopping(bool status);
+		void Running(bool status);
+		void Stopping(bool status);
 	protected:
 		virtual void pBeforeStart(void) {};
 		virtual void pAfterStart(void) {};

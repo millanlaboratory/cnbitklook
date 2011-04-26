@@ -55,10 +55,6 @@ void CcThread::Join(void) {
 	pthread_join(this->_thread, NULL);
 }
 		
-long CcThread::GetId(void) {
-	return (long)this->_thread;
-}
-
 bool CcThread::IsRunning(void) { 	
 	this->_mutex.Lock();
 	bool status = this->_running;
