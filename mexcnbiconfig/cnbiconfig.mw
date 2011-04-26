@@ -196,18 +196,18 @@ $ #include <stdio.h>
 	# std::string* spath = new std::string(cstring path);
 	# int retval = quickint(CCfgConfig* cptr, std::string* spath);
 
-@function [retval, cptr] = ccfg_quickuint(cptr, path)
-	$ int quickuint(CCfgConfig* cptr, std::string* path) {
+@function [retval, cptr] = ccfg_quickgdf(cptr, path)
+	$ int quickgdf(CCfgConfig* cptr, std::string* path) {
 	$	try {
-	$ 		return cptr->QuickUIntEx(*path);
+	$ 		return cptr->QuickGDFIntEx(*path);
 	$	} catch(XMLException e) {
-	$		printf("[ccfg_quickuint] Exception in libcnbiconfig: %s, %s\n",
+	$		printf("[ccfg_quickgdfint] Exception in libcnbiconfig: %s, %s\n",
 	$			e.Caller().c_str(), e.Info().c_str());
 	$		return 0;
 	$	}
 	$ }
 	# std::string* spath = new std::string(cstring path);
-	# uint retval = quickuint(CCfgConfig* cptr, std::string* spath);
+	# uint retval = quickgdf(CCfgConfig* cptr, std::string* spath);
 
 
 @function [tptr] = ccfgtaskset_new(name);
