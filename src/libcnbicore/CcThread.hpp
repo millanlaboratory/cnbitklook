@@ -19,7 +19,7 @@
 #ifndef CCTHREAD_HPP
 #define CCTHREAD_HPP
 
-#include "CcMutex.hpp"
+#include "CcSemaphore.hpp"
 #include "CcObject.hpp"
 #include <pthread.h>
 
@@ -35,24 +35,20 @@ class CcThread : public CcObject {
 		virtual void Main(void) = 0;
 		void Start(void);
 		void Stop(void);
-		void Join(void);
+		void Wait(void);
+		int Join(void);
 		bool IsRunning(void);
-		bool IsStopping(void);
-	private:
-		void Running(bool status);
-		void Stopping(bool status);
+		bool IsStarted(void);
 	protected:
 		virtual void pBeforeStart(void) {};
 		virtual void pAfterStart(void) {};
 		virtual void pBeforeStop(void) {};
 		virtual void pAfterStop(void) {};
-
-	public:
-		CcMutex _mutex;
+	
 	private:
-		bool _running;
-		bool _stopping;
-		pthread_t  _thread;
+		CcSemaphore _semstatus, _semthread;
+		bool _running, _started;
+		pthread_t _thread;
 };
 
 #endif

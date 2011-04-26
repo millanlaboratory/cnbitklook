@@ -15,6 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+#include <libcnbicore/CcTime.hpp>
 #include <libcnbicore/CcMutex.hpp>
 #include <libcnbicore/CcThread.hpp>
 #include <pthread.h>
@@ -23,114 +24,39 @@
 
 using namespace std;
 
-class Worker : public CcThread {
+class AThread : public CcThread {
 	public:
 		virtual void Main(void) {
 			while(this->IsRunning()) {
-				printf("Hello world: %d\n", this->dt);
-				sleep(this->dt);
+				printf("Hello world\n");
+				CcTime::Sleep(1000);
 			}
+			printf("Finished...\n");
 		}
-	public:
-		int dt;
 };
-
-
-class Simis : public CcThread {
-	public:
-		Simis(CcMutex *ptr) {
-			this->mutex = ptr;
-		}
-
-		virtual void Main(void) {
-			while(IsRunning()) {
-				this->mutex->Lock();
-				printf("Simis is using the shared resource!\n");
-				sleep(1);
-				this->mutex->Release();
-				sleep(3);
-			}
-		}
-
-	public:
-		CcMutex *mutex;
-};
-
-
-class Michele : public CcThread {
-	public:
-		Michele(CcMutex *ptr) {
-			this->mutex = ptr;
-		}
-
-		virtual void Main(void) {
-			while(IsRunning()) {
-				this->mutex->Lock();
-				printf("Michele is using the shared resource!\n");
-				sleep(1);
-				this->mutex->Release();
-				sleep(1);
-			}
-		}
-	
-	public:
-		CcMutex *mutex;
-};
-
-class Tito : public CcThread {
-	public:
-		Tito(CcMutex *ptr) {
-			this->mutex = ptr;
-		}
-
-		virtual void Main(void) {
-			while(IsRunning()) {
-				if(this->mutex->TryLock()) {
-					printf("Tito is using the shared resource!\n");
-					sleep(1);
-					this->mutex->Release();
-					sleep(10);
-				} else {
-					printf("Tito can not use the shared resource....\n");
-					sleep(1);
-				}
-			}
-		}
-	
-	public:
-		CcMutex *mutex;
-};
-
 
 
 int main (void) {
+	AThread t;
+	printf(">> Joining\n");
+	t.Join(); 
 
-	CcMutex sync;
+	for(int i = 0; i < 2; i++) {
+		printf(">> Starting iter=%d\n", i);
+		t.Start();
+		CcTime::Sleep(3000);
+		printf(">> Stopping\n");
+		t.Stop();
+		printf(">> Joining\n");
+		int status = t.Join(); 
+		printf(">> Joined: %d\n", status);
 		
-	Michele michele(&sync);
-	Simis simis(&sync);
-	Tito tito(&sync);
+		CcTime::Sleep(1000);
+	}
+	AThread* s = new AThread();
+	s->Start();
+	CcTime::Sleep(5000);
+	delete s;
 
-	tito.Start();
-	michele.Start();
-	simis.Start();
-
-	Worker *w1 = new Worker();
-	Worker *w2 = new Worker();
-
-	w1->dt = 1;
-	w2->dt = 2;
-
-	w1->Start();
-	w2->Start();
-
-	sleep(5);
-	w1->Stop();
-	w2->Stop();
-
-
-	michele.Join();
-	simis.Join();
-	tito.Join();
 	return 0;
 }

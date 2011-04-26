@@ -24,63 +24,57 @@
 
 CcThread::CcThread(void) {
 	CcObject::SetName("CcThread");
-	this->Running(false);
-	this->Stopping(false);
+	this->_running = false;
 }
 
 CcThread::~CcThread(void) {
+	this->Stop();
+	this->Join();
 }
 
 void CcThread::Start(void) {
 	this->pBeforeStart();
-	if(this->IsRunning())
+	this->_semstatus.Wait();
+	this->_semthread.Wait();
+	if(this->_running == true) {
+		this->_semstatus.Post();
 		return;
+	}
 
 	int status = 0;
-	this->_mutex.Lock();
 	status = pthread_create(&this->_thread, NULL, CcThreadrunner, (void *)this);
 	this->_running = (status == 0);
-	this->_mutex.Release();
+	this->_started = (status == 0);
+	this->_semthread.Post();
+	this->_semstatus.Post();
 	this->pAfterStart();
 }
 
 void CcThread::Stop(void) {
 	this->pBeforeStop();
-	this->Running(false);
-	this->Stopping(true);
+	this->_semstatus.Wait();
+	this->_running = false;
+	this->_semstatus.Post();
 	this->pAfterStop();
 }
 
-void CcThread::Join(void) {
-	pthread_join(this->_thread, NULL);
+int CcThread::Join(void) {
+	this->_semthread.Wait();
+	int status = -1;
+	if(this->_started == true) {
+		status = pthread_join(this->_thread, NULL);
+		this->_started = (status == 0);
+	}
+	this->_semthread.Post();
+	return status;
 }
 		
 bool CcThread::IsRunning(void) { 	
-	this->_mutex.Lock();
+	this->_semstatus.Wait();
 	bool status = this->_running;
-	this->_mutex.Release();
+	this->_semstatus.Post();
 
 	return status;
 }
 		
-bool CcThread::IsStopping(void) {
-	this->_mutex.Lock();
-	bool status = this->_stopping;
-	this->_mutex.Release();
-
-	return status;
-}
-
-void CcThread::Running(bool status) {
-	this->_mutex.Lock();
-	this->_running = status;
-	this->_mutex.Release();
-}
-
-void CcThread::Stopping(bool status) {
-	this->_mutex.Lock();
-	this->_stopping = status;
-	this->_mutex.Release();
-}
-
 #endif

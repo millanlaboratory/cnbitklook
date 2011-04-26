@@ -5,6 +5,7 @@ check_PROGRAMS = ccmutex \
 				  ccsemaphore \
 				  ccstreamer \
 				  ccthread \
+				  ccmultithread \
 				  cctime \
 				  ccclient \
 				  cclogentry \
@@ -27,6 +28,7 @@ ccptable_SOURCES = ccptable.cpp
 ccprocess_SOURCES = ccprocess.cpp
 ccthreadsafe_SOURCES = ccthreadsafe.cpp
 ccthread_SOURCES = ccthread.cpp
+ccmultithread_SOURCES = ccmultithread.cpp
 cctime_SOURCES = cctime.cpp
 cclogger_SOURCES = cclogger.cpp
 cclogentry_SOURCES = cclogentry.cpp
