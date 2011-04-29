@@ -53,6 +53,7 @@ int main (void) {
 		
 		CcTime::Sleep(1000);
 	}
+	
 	AThread* s = new AThread();
 	s->Start();
 	CcTime::Sleep(5000);

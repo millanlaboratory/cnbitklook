@@ -49,9 +49,10 @@ int tr_sendtcp(tr_socket* sock, void* buffer, size_t bsize) {
 	if(sock->protocol != TR_PROTO_TCP)
 		return TR_PROTO_NOTSUPPORTED;
 	
+	/*
 	size_t bytes = 0, tbytes = 0, csize = 0;
 	if(bsize <= sock->maxbsize) {
-		tbytes = send(sock->fd, buffer + bytes, bsize, MSG_NOSIGNAL);
+		tbytes = send(sock->fd, buffer, bsize, MSG_NOSIGNAL);
 	} else { 
 		while(1) {
 			csize = tbytes + sock->maxbsize < bsize ? sock->maxbsize : bsize - tbytes;
@@ -65,4 +66,7 @@ int tr_sendtcp(tr_socket* sock, void* buffer, size_t bsize) {
 		}
 	}
 	return tbytes;
+	*/
+	return send(sock->fd, buffer, bsize, MSG_NOSIGNAL);
+
 }

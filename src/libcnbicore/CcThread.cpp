@@ -35,12 +35,12 @@ CcThread::~CcThread(void) {
 void CcThread::Start(void) {
 	this->pBeforeStart();
 	this->_semstatus.Wait();
-	this->_semthread.Wait();
 	if(this->_running == true) {
 		this->_semstatus.Post();
 		return;
 	}
 
+	this->_semthread.Wait();
 	int status = 0;
 	status = pthread_create(&this->_thread, NULL, CcThreadrunner, (void *)this);
 	this->_running = (status == 0);
@@ -59,13 +59,16 @@ void CcThread::Stop(void) {
 }
 
 int CcThread::Join(void) {
-	this->_semthread.Wait();
 	int status = -1;
-	if(this->_started == true) {
+	
+	this->_semthread.Wait();
+	bool started = this->_started;
+	this->_semthread.Post();
+
+	if(started == true) {
 		status = pthread_join(this->_thread, NULL);
 		this->_started = (status == 0);
 	}
-	this->_semthread.Post();
 	return status;
 }
 		

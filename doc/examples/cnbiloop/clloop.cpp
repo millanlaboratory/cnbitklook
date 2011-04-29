@@ -35,8 +35,7 @@ int main(void) {
 	while(true) {
 		if(CcCore::receivedSIGINT.Get() || CcCore::receivedSIGTERM.Get())
 			break;
-
-		CcTime::Sleep(1000.00f);
+		CcTime::Sleep(500.00f);
 	}
 	ClLoop::Disconnect();
 	CcCore::Exit(0);
