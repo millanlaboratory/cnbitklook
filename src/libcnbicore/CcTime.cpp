@@ -52,8 +52,9 @@ void CcTime::Daystamp(std::string* timestamp) {
 
 	t = time(NULL);
 	tmp = localtime(&t);
-	sprintf(temp, "%04d%02d%02d", 
-			tmp->tm_year + 1900, tmp->tm_mon + 1, tmp->tm_mday);
+	sprintf(temp, "%04d%02d%02d-%02d%02d%02d", 
+			tmp->tm_year + 1900, tmp->tm_mon + 1, tmp->tm_mday, 
+			tmp->tm_hour, tmp->tm_min, tmp->tm_sec);
 
 	timestamp->clear();
 	timestamp->assign(temp);
@@ -83,7 +84,7 @@ void CcTime::Sleep(double ms) {
 	tm.tv_sec = 0;
 	tm.tv_usec = (long)1000*ms;
 
-	select(NULL, NULL, NULL, NULL, &tm);
+	select(0, NULL, NULL, NULL, &tm);
 }
 
 double CcTime::Sleep(double ms0, double ms1) {

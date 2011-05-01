@@ -30,8 +30,42 @@
 #define GET_BLOCKS 		1
 #define GET_TASKS  		2
 #define GET_CLASSIFIER	3
+#define GET_FILENAME	4	
+#define GET_LOGLINE		5
+#define GET_LOGFILENAME	6
 
 using namespace std;
+
+void get_daystamp(std::string* timestamp) {
+	char temp[128];
+
+	struct tm *tmp = NULL; 
+	time_t t;
+
+	t = time(NULL);
+	tmp = localtime(&t);
+	sprintf(temp, "%04d%02d%02d.%02d%02d%02d", 
+			tmp->tm_year + 1900, tmp->tm_mon + 1, tmp->tm_mday, 
+			tmp->tm_hour, tmp->tm_min, tmp->tm_sec);
+
+	timestamp->clear();
+	timestamp->assign(temp);
+}
+
+void get_datestamp(std::string* timestamp) {
+	char temp[128];
+
+	struct tm *tmp = NULL; 
+	time_t t;
+
+	t = time(NULL);
+	tmp = localtime(&t);
+	sprintf(temp, "%04d%02d%02d", 
+			tmp->tm_year + 1900, tmp->tm_mon + 1, tmp->tm_mday);
+
+	timestamp->clear();
+	timestamp->assign(temp);
+}
 
 bool get_blocks(CCfgConfig* config, const std::string& what, int mode) {
 	XMLNode node;
@@ -135,12 +169,59 @@ bool get_classifier(CCfgConfig* config, const std::string& what,
 	return true;
 }
 
+bool get_filename(CCfgConfig* config, const std::string& what, 
+		const std::string& block, const std::string& taskset) {
+	
+	std::string subjectid = 
+		config->RootEx()->QuickStringEx("subject/id");
+	std::string daystamp;
+	get_daystamp(&daystamp);
+
+	printf("%s.%s.%s.%s.%s\n",
+			subjectid.c_str(), daystamp.c_str(),
+			what.c_str(), block.c_str(), taskset.c_str());
+
+	return true;
+}
+
+bool get_logline(CCfgConfig* config, const std::string& what, 
+		const std::string& block, const std::string& taskset) {
+	std::string subjectid = 
+		config->RootEx()->QuickStringEx("subject/id");
+	std::string experimenter = 
+		config->RootEx()->QuickStringEx("recording/experimenter");
+	
+	std::string daystamp;
+	get_daystamp(&daystamp);
+
+	printf("\"Experimenter=%s Subject=%s Daystamp=%s Modality=%s Block=%s Taskset=%s\"\n",
+			experimenter.c_str(), subjectid.c_str(), daystamp.c_str(), 
+			what.c_str(), block.c_str(), taskset.c_str());
+
+	return true;
+}
+
+bool get_logfilename(CCfgConfig* config) {
+	std::string subjectid = 
+		config->RootEx()->QuickStringEx("subject/id");
+	
+	std::string datestamp;
+	get_datestamp(&datestamp);
+
+	printf("%s.%s.log\n", subjectid.c_str(), datestamp.c_str());
+
+	return true;
+}
+
 void usage(void) { 
 	printf("Usage: ccfg_cli [OPTION]...\n\n");
 	printf("  -x FILE     XML file\n");
 	printf("  -b          get available blocks (default)\n");
 	printf("  -t BLOCK    get available tasksets for block BLOCK\n");
 	printf("  -c          get the classifier for BLOCK/TASKSET\n");
+	printf("  -F          get the basename for an XDF file\n");
+	printf("  -L          get the filename for the XDF file log\n");
+	printf("  -l          get the logline for an XDF file\n");
 	printf("  -n          online modality (default)\n");
 	printf("  -f          offline modality\n");
 	printf("  -m MODALITY 'online' (default) or 'offline'\n");
@@ -161,7 +242,7 @@ int main(int argc, char *argv[]) {
 		return 0;
 	}
 
-	while((opt = getopt(argc, argv, "T:B:m:x:t:bnfuUhc")) != -1) {
+	while((opt = getopt(argc, argv, "T:B:m:x:t:bnfuUhcFLl")) != -1) {
 		if(opt == 'x')
 			filename.assign(optarg);
 		else if(opt == 'b')
@@ -170,6 +251,12 @@ int main(int argc, char *argv[]) {
 			get = GET_TASKS;
 			block.assign(optarg);
 		}
+		else if(opt == 'F') 
+			get = GET_FILENAME;
+		else if(opt == 'L') 
+			get = GET_LOGFILENAME;
+		else if(opt == 'l') 
+			get = GET_LOGLINE;
 		else if(opt == 'c') 
 			get = GET_CLASSIFIER;
 		else if(opt == 'n')
@@ -208,6 +295,12 @@ int main(int argc, char *argv[]) {
 			return get_tasksets(config, what, block, mode);
 		case GET_CLASSIFIER:
 			return get_classifier(config, what, block, taskset, mode);
+		case GET_FILENAME:
+			return get_filename(config, what, block, taskset);
+		case GET_LOGFILENAME:
+			return get_logfilename(config);
+		case GET_LOGLINE:
+			return get_logline(config, what, block, taskset);
 		default:
 			return 666;
 	}

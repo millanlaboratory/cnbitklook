@@ -20,6 +20,7 @@
 	<protocol>
 		<mi_offline>
 			<scenes>
+				<wait>1000.00</wait>
 				<begin>5000.00</begin>
 				<end>5000.00</end>
 			</scenes>
@@ -184,23 +185,23 @@
 			<class id="1" key="mi_hand_left"/>
 			<class id="2" key="mi_both_feet"/>
 		</mi_rlbf>
-		<mi_rhlh description="Motor Imagery: Right, Left">
+		<mi_rhlh description="Motor Imagery 2: Right, Left">
 			<class id="0" key="mi_hand_right"/>
 			<class id="1" key="mi_hand_left"/>
 		</mi_rhlh>
-		<mi_rhbf description="Motor Imagery: Right, Feet">
+		<mi_rhbf description="Motor Imagery 2: Right, Feet">
 			<class id="0" key="mi_hand_right"/>
 			<class id="1" key="mi_both_feet"/>
 		</mi_rhbf>
-		<mi_bflh description="Motor Imagery: Left, Feet">
+		<mi_bflh description="Motor Imagery 2: Left, Feet">
 			<class id="0" key="mi_both_feet"/>
 			<class id="1" key="mi_hand_left"/>
 		</mi_bflh>
-		<mi_bhbf description="Motor Imagery: Hands, Feet">
+		<mi_bhbf description="Motor Imagery 2: Hands, Feet">
 			<class id="0" key="mi_both_hands"/>
 			<class id="1" key="mi_both_feet"/>
 		</mi_bhbf>
-		<mi_bfbh description="Motor Imagery: Feet, Hands">
+		<mi_bfbh description="Motor Imagery 2: Feet, Hands">
 			<class id="0" key="mi_both_feet"/>
 			<class id="1" key="mi_both_hands"/>
 		</mi_bfbh>
