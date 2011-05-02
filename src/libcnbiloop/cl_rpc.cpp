@@ -49,7 +49,7 @@ void usage(void) {
 	printf("Usage: cl_rpc [COMMAND] [OPTION]..\n\n");
 	printf("Valid commands are:\n");
 	printf(" help                              display this help and exit\n");
-	printf(" help                              display the examples and exit\n");
+	printf(" example                           display the examples and exit\n");
 	printf(" openxdf XDFFILE LOGFILE LOGLINE   open XDFFILE and adds LOGLINE to LOGFILE\n");
 	printf(" closexdf                          close the currently open XDFFILE\n");
 	printf(" set NAME IP:PORT                  sets a NAME\n");

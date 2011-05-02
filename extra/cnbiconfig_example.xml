@@ -33,6 +33,22 @@
 				<boom>1000.00</boom>
 			</trial>
 		</mi_offline>
+		<errp>
+			<scenes>
+				<begin>5000.00</begin>
+				<end>5000.00</end>
+			</scenes>
+			<trial>
+				<waitmin>2000.00</waitmin>
+				<waitmax>3500.00</waitmax>
+				<fixation>2000.00</fixation>
+				<cue>1000.00</cue>
+				<cfeedback>1000.00</cfeedback>
+				<step>2000.00</step>
+				<waitcorr>500.00</waitcorr>
+				<stepcorr>500.00</stepcorr>
+			</trial>
+		</errp>
 	</protocol>
 
 	<!-- Parameters Block -->
@@ -96,14 +112,11 @@
 			<threshold>0.85</threshold>
 			<viscosity>0.05</viscosity>
 		</mi>
-		<mierrp  description="Offline ErrPs">
-			<taskset key="errp" classifier="kerrp0">
-				<trials>
-					<errp_detected>20</errp_detected>
-					<errp_notdetected>80</errp_notdetected>
-				</trials>
-			</taskset>
-		</errp>
+		<errp6x240 description="Offline ErrPs (6 bars, 240 trials)">
+			<taskset key="errp"></taskset>
+			<squares>6</squares>
+			<trials>240</trials>
+		</errp6x240>
 	</offline>
 	
 	<!-- Online Block -->
@@ -121,6 +134,11 @@
 			</taskset>
 			<integration>0.96</integration>
 		</mi>
+		<errp6x240 description="Online ErrPs (6 bars, 240 trials)">
+			<taskset key="errp"></taskset>
+			<squares>6</squares>
+			<trials>240</trials>
+		</errp6x240>
 		<mierrp  description="Online MI+ErrPs">
 			<taskset key="mi_rhlh" classifier="kmi0">
 				<threshold>
@@ -141,10 +159,8 @@
 				</integration>
 			</taskset>
 			<taskset key="errp" classifier="kerrp0">
-				<priors>
-					<errp_detected>0.20</errp_detected>
-					<errp_notdetected>0.80</errp_notdetected>
-				</priors>
+				<squares>6</squares>
+				<trials>240</trials>
 			</taskset>
 		</mierrp>
 	</online>
@@ -279,6 +295,9 @@
 			<cueundef>0x030f</cueundef>
 			<wait>0x0001</wait>
 			<fixation>0x0312</fixation>
+			<stepcorr>0x0312</stepcorr>
+			<steperr>0x0312</steperr>
+			<correction>0x0312</correction>
 		</gdfevents>
 		<hwtriggers>
 			<inc>255</inc>
@@ -292,6 +311,9 @@
 			<cueundef>255</cueundef>
 			<wait>255</wait>
 			<fixation>255</fixation>
+			<stepcorr>255</stepcorr>
+			<steperr>255</steperr>
+			<correction>255</correction>
 		</hwtriggers>
 	</events>
 
