@@ -38,6 +38,7 @@ class ClTobiId : public CcSocketProxy {
 		bool SetMessage(IDSerializerRapid* serializer, 
 				int blockidx = TCBlock::BlockIdxUnset);
 		int Count(void);
+		int Clear(void);
 	protected:
 		void HandleConnect(CcSocket* caller);
 		void HandleDisconnect(CcSocket* caller);

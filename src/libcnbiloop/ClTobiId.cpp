@@ -130,6 +130,15 @@ int ClTobiId::Count(void) {
 	return count;
 }
 		
+int ClTobiId::Clear(void) {
+	int count = 0;
+	this->_semqueue.Wait();
+	count = this->_queue.size();
+	this->_queue.clear();
+	this->_semqueue.Post();
+	return count;
+}
+		
 bool ClTobiId::SetMessage(IDSerializerRapid* serializer, int blockidx) {
 	if(this->_mode == ClTobiId::GetOnly) {
 		CcLogError("iD interface configures as GetOnly");

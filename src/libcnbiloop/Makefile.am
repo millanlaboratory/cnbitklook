@@ -4,15 +4,16 @@ bin_PROGRAMS = cl_processing \
 	cl_monitor \
 	cl_nameserver \
 	cl_tidmonitor \
+	cl_tidsender \
 	cl_ticmonitor \
 	cl_checkloop \
 	cl_rpc \
 	cl_acquisition 
 
 dist_bin_SCRIPTS = cl_rpcnotify \
-	           cl_grpc \
-		   cl_screenloop \
-		   cl_attachloop
+				   cl_grpc \
+				   cl_screenloop \
+				   cl_attachloop
 
 AM_CPPFLAGS = $(CPPFLAGS) -I$(top_srcdir)/src
 
@@ -56,6 +57,7 @@ cl_processing_SOURCES = cl_processing.cpp ClProAsServer.cpp ClProAsServer.hpp
 cl_nameserver_SOURCES = cl_nameserver.cpp ClNamesAsServer.cpp ClNamesAsServer.hpp
 cl_monitor_SOURCES = cl_monitor.cpp
 cl_tidmonitor_SOURCES = cl_tidmonitor.cpp
+cl_tidsender_SOURCES = cl_tidsender.cpp
 cl_ticmonitor_SOURCES = cl_ticmonitor.cpp
 cl_checkloop_SOURCES = cl_checkloop.cpp
 cl_rpc_SOURCES = cl_rpc.cpp

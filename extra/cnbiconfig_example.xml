@@ -42,11 +42,10 @@
 				<waitmin>2000.00</waitmin>
 				<waitmax>3500.00</waitmax>
 				<fixation>2000.00</fixation>
-				<cue>1000.00</cue>
-				<cfeedback>1000.00</cfeedback>
+				<cue>2000.00</cue>
+				<cfeedback>2000.00</cfeedback>
 				<step>2000.00</step>
-				<waitcorr>500.00</waitcorr>
-				<stepcorr>500.00</stepcorr>
+				<waitundo>700.00</waitundo>
 			</trial>
 		</errp>
 	</protocol>
@@ -135,7 +134,7 @@
 			<integration>0.96</integration>
 		</mi>
 		<errp description="Online ErrPs (6 bars, 240 trials)">
-			<taskset key="errp"></taskset>
+			<taskset key="errp" classifier="kerrp0"></taskset>
 			<squares>6</squares>
 			<trials>240</trials>
 		</errp>
