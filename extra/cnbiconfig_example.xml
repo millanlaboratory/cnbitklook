@@ -112,11 +112,11 @@
 			<threshold>0.85</threshold>
 			<viscosity>0.05</viscosity>
 		</mi>
-		<errp6x240 description="Offline ErrPs (6 bars, 240 trials)">
+		<errp description="Offline ErrPs (6 bars, 240 trials)">
 			<taskset key="errp"></taskset>
 			<squares>6</squares>
 			<trials>240</trials>
-		</errp6x240>
+		</errp>
 	</offline>
 	
 	<!-- Online Block -->
@@ -134,11 +134,11 @@
 			</taskset>
 			<integration>0.96</integration>
 		</mi>
-		<errp6x240 description="Online ErrPs (6 bars, 240 trials)">
+		<errp description="Online ErrPs (6 bars, 240 trials)">
 			<taskset key="errp"></taskset>
 			<squares>6</squares>
 			<trials>240</trials>
-		</errp6x240>
+		</errp>
 		<mierrp  description="Online MI+ErrPs">
 			<taskset key="mi_rhlh" classifier="kmi0">
 				<threshold>
@@ -294,10 +294,10 @@
 			<beep>0x0311</beep>
 			<cueundef>0x030f</cueundef>
 			<wait>0x0001</wait>
-			<fixation>0x0312</fixation>
-			<stepcorr>0x0312</stepcorr>
-			<steperr>0x0312</steperr>
-			<correction>0x0312</correction>
+			<fixation>0x0001</fixation>
+			<stepcorr>0x0001</stepcorr>
+			<steperr>0x0001</steperr>
+			<correction>0x0001</correction>
 		</gdfevents>
 		<hwtriggers>
 			<inc>255</inc>
