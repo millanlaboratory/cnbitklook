@@ -128,7 +128,7 @@ void CcCore::Status(void) {
 void CcCore::OpenLogger(std::string modulename, CcTermType termtype,
 		CcLogLevel level) {
 	std::string timestamp;
-	CcTime::Datetime(&timestamp);
+	CcTime::Daystamp(&timestamp);
 
 	std::string directory = CcCore::GetDirectoryTmp();
 	if(mkdir(directory.c_str(), 0755) == -1) 

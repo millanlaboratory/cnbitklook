@@ -19,7 +19,7 @@
 #include "ClTobiId.hpp"
 
 void usage(void) { 
-	printf("Usage: cl_ticmonitor [OPTION]...\n\n");
+	printf("Usage: cl_tidmonitor [OPTION]...\n\n");
 	printf("  -n       acquisition name (/acquisition default)\n");
 	printf("  -h       display this help and exit\n");
 	CcCore::Exit(1);

@@ -38,7 +38,7 @@ void idle(void) {
 
 void usage(void) { 
 	printf("Usage: cl_acquisition [OPTION]...\n\n");
-	printf("  -d       the device: gtec, biosemi (default), GDF/BDF file, EGD string\n");
+	printf("  -d       the device: gtec, biosemi, GDF/BDF file, EGD string\n");
 	printf("  -f       the buffering rate in Hz (16 default)\n");
 	printf("  -a       the TCP port for the acquisition server (9000 default)\n");
 	printf("  -n       the basename for the pipes (/tmp/cl.pipe.ndf. default)\n");
@@ -51,7 +51,7 @@ void usage(void) {
 
 int main(int argc, char* argv[]) {
 	int opt;
-	std::string optdevice("biosemi");
+	std::string optdevice("");
 	std::string optfs("16");
 	CcEndpoint optendpoint("127.0.0.1:9000");
 	std::string optpipename("/tmp/cl.pipe.ndf.");

@@ -120,8 +120,7 @@ bool ClAcqAsServer::CommunicationCl(CcServerMulti* server, CcAddress address) {
 							<< xdffile << " LogOpenFailed");
 				} else {
 					server->Send(language.Ok(), address);
-					CcLogInfoS("Open XDF from " << address << ": " 
-							<< xdffile);
+					CcLogInfoS("Open XDF from " << address << ": " << xdffile);
 				}
 			}
 		}

@@ -117,9 +117,5 @@ libcnbicore_la_LIBADD = $(top_builddir)/src/libtransport/libtransport.la \
                         $(top_builddir)/src/libtranspipe/libtranspipe.la \
 			$(PTHREAD_LIBS)
 
-bin_PROGRAMS = cc_endianness  cc_architecture
-cc_endianness_SOURCES = cc_endianness.cpp
-cc_architecture_SOURCES = cc_architecture.cpp
-
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = cnbicore.pc

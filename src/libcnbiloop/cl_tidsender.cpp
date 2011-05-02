@@ -64,11 +64,12 @@ int main(int argc, char* argv[]) {
 			CcTime::Sleep(5000);
 			continue;
 		}
-		
-		CcTime::Sleep(2000.00f);
-		printf("\n");
+	
+		CcLogConfigS("iD sender now attached to: " << optname);
+		CcTime::Sleep(1000.00f);
+		printf("\n\nPress 'enter' to send GDF=%u, 'q' to quit:\n");
 		while(id.IsAttached() == true) { 
-			printf("Press 'Enter' to send GDF=%u ('q' to quit): ", event);
+			printf(">> ", event);
 			switch(getchar()) {
 				case 'q':
 					goto shutdown;
@@ -76,17 +77,10 @@ int main(int argc, char* argv[]) {
 				default:
 					break;
 			}
-
 			id.SetMessage(&serializerI);
-
-			if(CcCore::receivedSIGAny.Get()) {
-				CcLogWarning("User asked to go down");
-				goto shutdown;
-			}
 		}
 		id.Detach();
 	}
-
 
 shutdown:
 	id.Detach();

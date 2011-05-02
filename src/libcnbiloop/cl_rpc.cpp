@@ -201,6 +201,7 @@ int main(int argc, char* argv[]) {
 		connect();
 	
 		status = ClLoop::acquisition.OpenXDF(arg1, arg2, arg3);
+		printf("STATUS: %d\n", status);
 		acquisition(status);
 		return(status);
 
