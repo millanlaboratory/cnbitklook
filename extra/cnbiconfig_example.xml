@@ -112,7 +112,12 @@
 			<viscosity>0.05</viscosity>
 		</mi>
 		<errp description="Offline ErrPs (6 bars, 240 trials)">
-			<taskset key="errp"></taskset>
+			<taskset key="errp">
+				<trials>
+					<errp_detected>0</errp_detected>
+					<errp_notdetected>0</errp_notdetected>
+				</trials>
+			</taskset>
 			<squares>6</squares>
 			<trials>240</trials>
 		</errp>
@@ -134,7 +139,12 @@
 			<integration>0.96</integration>
 		</mi>
 		<errp description="Online ErrPs (6 bars, 240 trials)">
-			<taskset key="errp" classifier="kerrp0"></taskset>
+			<taskset key="errp" classifier="kerrp0">
+				<trials>
+					<errp_detected>0</errp_detected>
+					<errp_notdetected>0</errp_notdetected>
+				</trials>
+			</taskset>
 			<squares>6</squares>
 			<trials>240</trials>
 		</errp>
@@ -182,7 +192,7 @@
 			<description>ErrP_classifier</description>
 			<filename>a0_errp_20091204.mat</filename>
 			<icvalue>ValueProb</icvalue>
-			<iclabel>LabelClass</iclabel>
+			<iclabel>LabelBiosig</iclabel>
 		</kerrp0>
 	</classifier>
 	
@@ -296,7 +306,6 @@
 			<fixation>0x0001</fixation>
 			<stepcorr>0x0001</stepcorr>
 			<steperr>0x0001</steperr>
-			<correction>0x0001</correction>
 		</gdfevents>
 		<hwtriggers>
 			<inc>255</inc>
@@ -312,7 +321,6 @@
 			<fixation>255</fixation>
 			<stepcorr>255</stepcorr>
 			<steperr>255</steperr>
-			<correction>255</correction>
 		</hwtriggers>
 	</events>
 
