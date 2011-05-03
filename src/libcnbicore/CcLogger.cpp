@@ -24,6 +24,16 @@
 #include "CcTime.hpp"
 #include <stdio.h>
 
+#define	DARK_WHITE    	"\033[1;37m"
+#define DARK_BLUE		"\033[1;34m"
+#define LIGHT_PURPLE 	"\033[1;35m"
+#define LIGHT_WHITE  	"\033[1m"
+#define LIGHT_GREEN		"\033[1;32m"
+#define LIGHT_YELLOW 	"\033[1;33m"
+#define LIGHT_RED		"\033[0;31m"
+#define DARK_RED 		"\033[1;31m"
+#define NOCOLOR			"\033[0m"
+
 CcLogger::CcLogger(bool syncdump, double writems) {
 	CcObject::SetName("CcLogger");
 	this->_listW = &this->_list1;
@@ -119,50 +129,77 @@ void CcLogger::DumpEntry(CcLogEntry* entry) {
 		return;
 	else if(this->_termtype == CcCore::TerminalEnabled) {
 		printf("[%s] %s\n", 
-				entry->_caller.c_str(), entry->_message.c_str());
+				entry->_timestamp.c_str(), entry->_message.c_str());
 		return;
 	}
+/*
+#define	DARK_WHITE    	"\033[1;37m"
+#define DARK_BLUE		"\033[1;34m"
+#define LIGHT_PURPLE 	"\033[1;35m"
+#define LIGHT_WHITE  	"\033[1m"
+#define LIGHT_GREEN		"\033[1;32m"
+#define LIGHT_YELLOW 	"\033[1;33m"
+#define LIGHT_RED		"\033[0;31m"
+#define DARK_RED 		"\033[1;31m"
+#define NOCOLOR			"\033[0m"
+	*/
 
 	else if(this->_termtype == CcCore::TerminalColors) {
+		const char* color = NULL;
+		std::string level;
 		switch(entry->_level) {
 			case CcCore::LevelConfig:
-				printf("\033[1;37m%s::\033[1;34m[%s]\033[0m\n %s\n", 
-						CcCore::GetModulename().c_str(), 
-						entry->_caller.c_str(), entry->_message.c_str());
+				level.assign("Cfg");
+				color = DARK_BLUE;
 				break;
 			case CcCore::LevelException:
-				printf("\033[1;37m%s::\033[1;35m[%s]\033[0m\n %s\n", 
-						CcCore::GetModulename().c_str(), 
-						entry->_caller.c_str(), entry->_message.c_str());
+				level.assign("Exc");
+				color = LIGHT_PURPLE;
 				break;
 			case CcCore::LevelDebug:
-				printf("\033[1;37m%s::\033[1m[%s]\033[0m\n %s\n", 
-						CcCore::GetModulename().c_str(), 
-						entry->_caller.c_str(), entry->_message.c_str());
+				level.assign("Dbg");
+				color = LIGHT_WHITE;
 				break;
 			case CcCore::LevelInfo:
-				printf("\033[1;37m%s::\033[1;32m[%s]\033[0m\n %s\n", 
-						CcCore::GetModulename().c_str(), 
-						entry->_caller.c_str(), entry->_message.c_str());
+				level.assign("Inf");
+				color = LIGHT_GREEN;
 				break;
 			case CcCore::LevelWarning:
-				printf("\033[1;37m%s::\033[1;33m[%s]\033[0m\n %s\n", 
-						CcCore::GetModulename().c_str(), 
-						entry->_caller.c_str(), entry->_message.c_str());
+				level.assign("Wrg");
+				color = LIGHT_YELLOW;
 				break;
 			case CcCore::LevelError:
-				printf("\033[1;37m%s::\033[0;31m[%s]\033[0m\n %s\n", 
-						CcCore::GetModulename().c_str(), 
-						entry->_caller.c_str(), entry->_message.c_str());
+				level.assign("Err");
+				color = LIGHT_RED;
 				break;
 			case CcCore::LevelFatal:
-				printf("\033[1;37m%s::\033[1;31m[%s]\033[0m\n %s\n", 
-						CcCore::GetModulename().c_str(), 
-						entry->_caller.c_str(), entry->_message.c_str());
+				level.assign("Ftl");
+				color = DARK_RED;
 				break;
 			default:
+				color = NOCOLOR;
 				break;
 		}
+
+		printf("%s[%s%s %s%-3.3s %s]%s %s\n", 
+				(const char*)color, 
+				DARK_WHITE, 
+				CcCore::GetModulename().c_str(), 
+				color, 
+				level.c_str(),
+				entry->_timestamp.c_str(), 
+				NOCOLOR,
+				entry->_message.c_str());
+		/*
+		printf("%s[%s%s %s%-3.3s]%s %s\n", 
+				(const char*)color, 
+				DARK_WHITE, 
+				CcCore::GetModulename().c_str(), 
+				color, 
+				level.c_str(),
+				NOCOLOR,
+				entry->_message.c_str());
+		 */
 	}
 }
 

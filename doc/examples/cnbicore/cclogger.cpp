@@ -17,13 +17,14 @@
 */
 
 #include <stdio.h>
+#include <libcnbicore/CcBasic.hpp>
 #include <libcnbicore/CcLog.hpp>
 #include <libcnbicore/CcTime.hpp>
 
 int main(void) {
 	CcCore::OpenLogger("ciao");
 
-	std::string message;
+	std::string message("ciao");
 	for(int i = 0; i < 1; i++) {
 		CcTime::Datetime(&message);
 		CcLogConfig(message);
@@ -33,11 +34,10 @@ int main(void) {
 		CcLogWarning(message);
 		CcLogError(message);
 		CcLogFatal(message);
-		CcLogFatal(std::string("Hello ").append("world"));
 		
 		CcLogFatalS("Test with vargs 1: " << 20 << " " << 2.01f);
-		CcLogFatalS("Test with vargs 2: " << 'a' << " " << true);
-		CcLogFatalS("Test with vargs 3: " << 0x304 << " " << 1.0f);
+		CcLogErrorS("Test with vargs 2: " << 'a' << " " << true);
+		CcLogWarningS("Test with vargs 3: " << 0x304 << " " << 1.0f);
 	}
-	return 0;
+	CcCore::Exit(0);	
 }

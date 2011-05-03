@@ -37,7 +37,7 @@ CcLogEntry::CcLogEntry(CcLogLevel level, std::string message,
 	this->_file.assign(file);
 	this->_line = line;
 	this->_level = level;
-	CcTime::Datetime(&this->_timestamp);
+	CcTime::Daystamp(&this->_timestamp);
 }
 
 CcLogEntry::CcLogEntry(CcLogLevel level, std::stringstream message, 
@@ -47,7 +47,7 @@ CcLogEntry::CcLogEntry(CcLogLevel level, std::stringstream message,
 	this->_line = line;
 	this->_level = level;
 	this->_message = message.str();
-	CcTime::Datetime(&this->_timestamp);
+	CcTime::Daystamp(&this->_timestamp);
 }
 
 CcLogEntry::~CcLogEntry(void) {

@@ -131,7 +131,7 @@ void ClNamesAsServer::HandleRecvEndpoint(CcSocket* caller, CcAddress address) {
 			server->Send(language.Dispatch(stcontent), address);
 		} else {
 			CcLogWarningS("Retrieve from " << address << ": " 
-					<< luname << " NotAvailable");
+					<< stname << " NotAvailable");
 			server->Send(language.Error(ClNamesLang::NotAvailable), address);
 		}
 	} else if(this->language.IsErase(message.c_str(), &stname)) {
