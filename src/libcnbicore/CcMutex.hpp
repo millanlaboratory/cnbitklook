@@ -22,7 +22,9 @@
 #include "CcObject.hpp"
 #include <pthread.h>
 
-//! Wrapper for pthread mutex 
+/*! \brief Wrapper for pthread mutex
+ *
+ */
 class CcMutex : public CcObject {
 	public:
 		CcMutex(void);

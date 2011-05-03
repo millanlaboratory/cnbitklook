@@ -21,6 +21,11 @@
 
 #include "CcBasic.hpp"
 
+/*! \brief Buffer template class
+ *
+ * The template class implements a simple buffer that can be used for buffering
+ * data from the network or, for example, from an EEG device
+ */
 template <class T=void>
 class CcBuffer : public CcObject {
 	public:

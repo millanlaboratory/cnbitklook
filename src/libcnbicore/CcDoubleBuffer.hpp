@@ -22,7 +22,13 @@
 #include "CcSemaphore.hpp"
 #include "CcBuffer.hpp"
 
-/*! \brief Simple double buffer for async reads/writes
+/*! \brief Double buffer 
+ *
+ * This class implements a simple double-buffering controller that switches
+ * between a reading and a writing buffer. The class uses a void pointer to
+ * represent the internal buffer. The internal buffers are of CcBuffer type.
+ *
+ * This class becomes particularly handy to manage asynchronous read/writes.
  */
 class CcDoubleBuffer : public CcObject {
 	public:

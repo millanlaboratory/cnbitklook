@@ -29,7 +29,9 @@
 #include <string>
 #include <list>
 
-/*! \brief XML logger
+/*! \brief Event logger
+ *
+ * This class, together with CcCore, provides
  */
 class CcLogger : protected CcThread {
 	public:

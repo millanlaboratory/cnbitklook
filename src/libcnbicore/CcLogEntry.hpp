@@ -24,7 +24,11 @@
 #include <sstream>
 class CcLogger;
 
-/*! \brief Entry for CcLogger
+/*! \brief Log entry for CcLogger
+ *
+ * CcLogger is a threaded logger that logs both to file and to STDO. Objects of
+ * the CcLogEntry class can be passed to the logger and are internally used to
+ * handle the log entry cues.
  */
 class CcLogEntry {
 	friend class CcLogger;

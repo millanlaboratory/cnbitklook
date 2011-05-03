@@ -27,6 +27,9 @@
 typedef int CcEndpointRole;
 
 /*! \brief TCP/UDP endpoint
+ *
+ * This class represents a TCP/UDP connection endpoint, and can be used both by
+ * a variety of classes such as CcServerSingle and CcServerMulti.
  */
 class CcEndpoint : public CcObject {
 	public:

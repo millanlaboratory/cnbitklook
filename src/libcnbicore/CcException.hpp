@@ -22,10 +22,10 @@
 #include "CcObject.hpp"
 #include <string>
 
-/*! \brief Exception class
+/*! \brief Exception
  * 
- * Implements a simple exception with functionalities to help the user
- * unserstanding which piece of code was kicked by Chuck Norris.
+ * Implements an exeption and provides the method to set the calling function,
+ * an information string and the exception message.
  */
 class CcException : public CcObject {
 	public:

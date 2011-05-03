@@ -23,7 +23,7 @@
 
 /*! \brief Callback template class
  *
- * Implements a callback.
+ * Implements a no-arguments callback.
  */
 template <class Sender>
 class CcCallback0 {
@@ -55,9 +55,9 @@ class CcCallback0 {
 		Method _method;
 };
 
-/*! \brief Callback template class (1 argument)
+/*! \brief Callback template class
  *
- * Implements a callback with a single argument.
+ * Implements a 1 argument callback.
  */
 template <class Sender, typename Arg>
 class CcCallback1 {
@@ -89,9 +89,9 @@ class CcCallback1 {
 		Method _method;
 };
 
-/*! \brief Callback template class (2 arguments)
+/*! \brief Callback template class
  *
- * Implements a callback with two arguments.
+ * Implements a 2 arguments callback.
  */
 template <class Sender, typename Arg1, typename Arg2>
 class CcCallback2 {
@@ -123,12 +123,11 @@ class CcCallback2 {
 		Method _method;
 };
 
-/*! \brief Callback template class (3 arguments)
+/*! \brief Callback template class
  *
- * Implements a callback with three arguments.
+ * Implements a 3 arguments callback.
  */
-template <class Sender, typename Arg1, typename Arg2,
-		 typename Arg3>
+template <class Sender, typename Arg1, typename Arg2, typename Arg3>
 class CcCallback3 {
 	public:
 		CcCallback3(void) {

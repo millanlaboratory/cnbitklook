@@ -23,7 +23,8 @@
 #include <pthread.h>
 #include <semaphore.h>
 
-//! Wrapper for pthread semaphore
+/*! \brief Wrapper for pthread semaphore
+ */
 class CcSemaphore : public CcObject {
 	public:
 		CcSemaphore(unsigned int count = 1);

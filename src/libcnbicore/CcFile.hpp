@@ -22,6 +22,10 @@
 #include "CcBasic.hpp"
 #include <string>
 
+/*! \brief File wrapper
+ *
+ * This class simplifies file access by simplifying the read/write operations.
+ */
 class CcFile : public CcObject {
 	public:
 		CcFile(void);

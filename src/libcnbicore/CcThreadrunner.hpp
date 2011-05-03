@@ -21,6 +21,10 @@
 
 #include "CcThread.hpp"
 
+/*! \brief Threaded pipe sink 
+ *
+ * Used to receive point-to-point data
+ */
 void* CcThreadrunner(void* implementation);
 
 #endif

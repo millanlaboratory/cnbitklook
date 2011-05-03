@@ -29,9 +29,14 @@ typedef int CcTermType;
 typedef int CcLogLevel;
 template <class T> class CcThreadSafe;
 
-/*! \brief Singleton core class
+/*! \brief Core module for libcnbicore
  *
- * This class provides core functionalities to all the classes in libcnbicore
+ * This class, implemented as a singleton, provides core functionalities to all
+ * the classes in libcnbicore. 
+ * It allows for example to manage and configure the logging by providing a
+ * single instance of CcLogger within a binary.
+ * It also provides a unified access to other resources such as signals and 
+ * default working directories.
  */
 class CcCore {
 	public:

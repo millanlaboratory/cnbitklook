@@ -24,6 +24,8 @@
 #include <map>
 #include <sys/types.h>
 
+/*! \brief Process table
+ */
 class CcPtable : public CcObject {
 	public:
 		static CcPtable* Instance(void);

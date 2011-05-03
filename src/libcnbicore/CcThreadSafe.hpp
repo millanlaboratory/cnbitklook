@@ -22,7 +22,8 @@
 #include "CcObject.hpp"
 #include "CcSemaphore.hpp"
 
-//! \brief Thread safe container
+/*! \brief Thread safe container
+ */
 template <class T = bool>
 class CcThreadSafe : public CcObject {
 	public:

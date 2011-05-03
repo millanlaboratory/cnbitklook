@@ -22,7 +22,9 @@
 #include "CcObject.hpp"
 #include "CcStreamer.hpp"
 
-/*! \brief Interface for classes that deserialize data from CcStreamer
+/*! \brief Interface for CcStreamer deserializers 
+ * 
+ * It allows an easy integration with CcStreamer. 
  */
 class CcDeserializer : public CcObject {
 	public:
