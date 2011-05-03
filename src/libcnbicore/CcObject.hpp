@@ -23,7 +23,7 @@
 #include <string>
 #include <iostream>
 
-/*! \brief The LibCNBICore base object
+/*! \brief Root object
  *
  * All the classes in LibCNBICore inherit from CcObject. 
  * Nothing special for the time being.
@@ -37,8 +37,6 @@ class CcObject {
 		CcObject* SetName(std::string name);
 		std::string GetName(void) const;
 		unsigned int GetInstances(void) const;
-		void SetVerbose(bool verbose);
-		bool IsVerbose(void) const;
 		const void DumpInfo(void) const;
 
 	private:
@@ -47,7 +45,6 @@ class CcObject {
 		std::string _objectDatetime;
 		static unsigned int _objectInstances;
 		unsigned int _objectId;
-		bool _verbose;
 		CcCore* _core;
 
 	public:

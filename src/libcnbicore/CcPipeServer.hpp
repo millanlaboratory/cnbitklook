@@ -22,9 +22,10 @@
 #include "CcPipeWriter.hpp"
 #include <vector>
 
-/*! \brief Multi-threaded pipe server that supports ACK
- *
- * Used to multicast data configuring the enpoints
+/*! \brief Asynchronous pipe writer 
+ * 
+ * Used to multicast data configuring the enpoints. As soon ad a connection is
+ * estabilidshe
  */
 class CcPipeServer : public CcObject {
 	public:

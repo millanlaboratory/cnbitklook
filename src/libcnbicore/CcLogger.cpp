@@ -48,9 +48,8 @@ CcLogger::~CcLogger(void) {
 void CcLogger::Open(const std::string& filename, const std::string& module,
 		const CcTermType termtype, const CcLogLevel level) {
 	
-	if(CcObject::IsVerbose())
-		printf("[CcLogger::Open] Opening file (sync=%d, wait=%f): %s\n", 
-				this->_syncdump, this->_writems, filename.c_str());
+	//printf("[CcLogger::Open] Opening file (sync=%d, wait=%f): %s\n", 
+	//		this->_syncdump, this->_writems, filename.c_str());
 	this->_semxml.Wait();
 	std::string timestamp;
 	CcTime::Datetime(&timestamp);
@@ -86,8 +85,7 @@ void CcLogger::Close(void) {
 		this->_filexml.close();
 	this->_semxml.Post();
 	
-	if(CcObject::IsVerbose())
-		printf("[CcLogger::Close] File is close and thread is down\n");
+	//printf("[CcLogger::Close] File is close and thread is down\n");
 }
 
 bool CcLogger::IsOpen(void) {

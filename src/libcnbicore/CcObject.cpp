@@ -32,7 +32,6 @@ CcObject::CcObject(const char* name, bool verbose) {
 	this->_objectName.assign(name);
 	CcTime::Datetime(&this->_objectDatetime);
 	CcTime::Timestamp(&this->_objectTimestamp);
-	this->_verbose = verbose;
 	this->_core = CcCore::Instance();
 }
 
@@ -61,16 +60,7 @@ const void CcObject::DumpInfo(void) const {
 	printf("|-- Instances:    %d\n", CcObject::_objectInstances);
 	printf("|-- Pointer:      %p\n", (void*)this);
 	printf("|-- Timestamp:    %s\n", this->_objectTimestamp.c_str());
-	printf("|-- Datetime:     %s\n", this->_objectDatetime.c_str());
-	printf("`-- Verbose flag: %d\n", this->_verbose);
-}
-
-void CcObject::SetVerbose(bool verbose) {
-	this->_verbose = verbose;
-}
-
-bool CcObject::IsVerbose(void) const {
-	return this->_verbose;
+	printf("`-- Datetime:     %s\n", this->_objectDatetime.c_str());
 }
 
 std::ostream &operator<<(std::ostream& output, const CcObject& obj) {

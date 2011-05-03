@@ -27,7 +27,9 @@
 #include "CcStreamer.hpp"
 #include <string>
 
-/*! \brief TCP client
+/*! \brief Asynchronous TCP client
+ *
+ * It relies  on CcSocket and more deeply on libtransport.
  */
 class CcClient : public CcSocket, public CcThread {
 	public: 

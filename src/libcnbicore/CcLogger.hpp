@@ -31,7 +31,10 @@
 
 /*! \brief Event logger
  *
- * This class, together with CcCore, provides
+ * This class, together with CcCore, provides one of the most important
+ * components of libcnbicore. The user can add CcLogEntry objects to the logger,
+ * that will serialize them on an XML file. Furthermore, CcLogger supports
+ * coloured STDO (with Bash).
  */
 class CcLogger : protected CcThread {
 	public:

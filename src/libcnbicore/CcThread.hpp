@@ -23,10 +23,10 @@
 #include "CcObject.hpp"
 #include <pthread.h>
 
-/*! \brief Wrapper for pthread thread
+/*! \brief pthread wrapper
  *
- * Simple thread implementation. It wraps pthread and provides a virtual Main()
- * method.
+ * Simple thread implementation, does not do much more than wrapping pthread and
+ * providing a pure virtual method to implement the thread's main loop.
  */
 class CcThread : public CcObject {
 	public:

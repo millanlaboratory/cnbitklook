@@ -24,9 +24,9 @@
 #include <libtranspipe/tp_namedpipe.h>
 #include <string>
 
-/*! \brief Named pipe interface
+/*! \brief Named pipe 
  *
- * Simple wrapper for libtranspipe, forcing users to catch exceptions
+ * Simple wrapper for libtranspipe. Raises exceptions.
  */
 class CcPipe : public CcObject {
 	public:

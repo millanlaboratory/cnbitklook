@@ -30,7 +30,7 @@
 /* Forward declaration */
 class CcPipeReaderProxy;
 
-/*! \brief Threaded pipe sink 
+/*! \brief Asynchronous pipe reader
  *
  * Used to receive point-to-point data
  */
