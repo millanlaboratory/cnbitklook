@@ -144,7 +144,7 @@ void CcCore::OpenLogger(std::string modulename, CcTermType termtype,
 	filename.append(CcCore::_modulename);
 	filename.append(".xml");
 	CcCore::logger.Open(filename, CcCore::_modulename, termtype, level);
-	CcLogConfig(std::string("CcLogger is logging in: ").append(filename));
+	CcLogConfig(std::string("Log file: ").append(filename));
 }
 		
 void CcCore::CloseLogger(void) {
