@@ -44,8 +44,8 @@
 				<fixation>2000.00</fixation>
 				<cue>2000.00</cue>
 				<cfeedback>2000.00</cfeedback>
-				<step>2000.00</step>
-				<waitundo>700.00</waitundo>
+				<step>2500.00</step>
+				<waitundo>1000.00</waitundo>
 			</trial>
 		</errp>
 	</protocol>
