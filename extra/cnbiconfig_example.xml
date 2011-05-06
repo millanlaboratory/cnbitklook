@@ -342,8 +342,9 @@
 			<nameserver>127.0.0.1:8000</nameserver>
 		</clloop>
 		<cptriggerlpt> 
+			<forcelpt>false</forcelpt>
 			<port>-1</port>
-			<duration>4</duration>
+			<duration>15</duration>
 			<level>0</level>
 		</cptriggerlpt>
 		<csmrengine>
