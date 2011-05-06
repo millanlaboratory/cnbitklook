@@ -347,12 +347,12 @@
 			<level>0</level>
 		</cptriggerlpt>
 		<csmrengine>
-			<caption>CSmrEngine</caption>
+			<caption>CnbiTk</caption>
+			<width>800</width>
+			<height>600</height>
+			<x>0</x>
+			<y>0</y>
 			<bpp>24</bpp>
-			<width>600</width>
-			<height>800</height>
-			<x>100</x>
-			<y>100</y>
 		</csmrengine>
 	</configuration>
 </cnbiconfig>
