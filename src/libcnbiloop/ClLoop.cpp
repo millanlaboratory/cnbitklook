@@ -77,11 +77,22 @@ bool ClLoop::Connect(CcAddress nameserver) {
 	return true;
 }
 		
+bool ClLoop::Connect(CCfgConfig* configuration) {
+	CcAddress nameserver;
+	try {
+	nameserver =
+		configuration->RootEx()->QuickStringEx("configuration/clloop/nameserver");
+	} catch(CcException e) {
+		CcLogError("Configuration failed, using default values");
+		return ClLoop::Connect();
+	}
+	return ClLoop::Connect(nameserver);
+}
+		
 void ClLoop::Disconnect(void) {
 	ClLoop::processing.Disconnect();
 	ClLoop::acquisition.Disconnect();
 	ClLoop::nameserver.Disconnect();
-	//ClLoop::Release();
 }
 		
 bool ClLoop::IsConnected(void) {

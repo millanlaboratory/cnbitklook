@@ -338,15 +338,21 @@
 
 	<!-- Configuration Block -->
 	<configuration>
-		<clservers>
+		<clloop>
 			<nameserver>127.0.0.1:8000</nameserver>
-			<acquisition>127.0.0.1:9000</acquisition>
-			<processing>127.0.0.1:9100</processing>
-		</clservers>
+		</clloop>
 		<cptriggerlpt> 
 			<port>-1</port>
 			<duration>4</duration>
 			<level>0</level>
 		</cptriggerlpt>
+		<csmrengine>
+			<caption>CSmrEngine</caption>
+			<bpp>24</bpp>
+			<width>600</width>
+			<height>800</height>
+			<x>100</x>
+			<y>100</y>
+		</csmrengine>
 	</configuration>
 </cnbiconfig>

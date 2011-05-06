@@ -23,6 +23,7 @@
 #include "ClAcqClient.hpp"
 #include "ClNamesClient.hpp"
 #include <libcnbicore/CcBasic.hpp>
+#include <libcnbiconfig/CCfgConfig.hpp>
 
 class ClLoop {
 	public:
@@ -31,6 +32,7 @@ class ClLoop {
 		static unsigned int Refcount(void);
 
 		static bool Connect(CcAddress nameserver = "127.0.0.1:8000");
+		static bool Connect(CCfgConfig* configuration);
 		static void Disconnect(void);
 		static bool IsConnected(void);
 	protected:

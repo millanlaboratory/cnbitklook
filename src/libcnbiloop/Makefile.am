@@ -46,8 +46,9 @@ libcnbiloop_la_SOURCES = ClMatlab.cpp ClMatlab.hpp \
 
 libcnbiloop_la_LDFLAGS = $(AM_LDLAGS) -version-info $(CURRENT):$(REVISION):$(AGE) 
 libcnbiloop_la_LIBADD = $(builddir)/../libcnbicore/libcnbicore.la \
-                        $(builddir)/../libndf/libndf.la \
-			$(TOBIIC_LIBS) $(TOBIID_LIBS)
+						$(builddir)/../libndf/libndf.la \
+						$(builddir)/../libcnbiconfig/libcnbiconfig.la \
+						$(TOBIIC_LIBS) $(TOBIID_LIBS)
 
 LDADD = libcnbiloop.la
 
@@ -61,4 +62,3 @@ cl_tidsender_SOURCES = cl_tidsender.cpp
 cl_ticmonitor_SOURCES = cl_ticmonitor.cpp
 cl_checkloop_SOURCES = cl_checkloop.cpp
 cl_rpc_SOURCES = cl_rpc.cpp
-
