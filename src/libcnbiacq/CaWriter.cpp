@@ -218,9 +218,11 @@ void CaWriter::Tic(TCBlock* block) {
 		
 bool CaWriter::AddEvent(int event, double duration) {
 	this->_semlock.Wait();
+	double onset = this->_relative.Toc()/1000.00f;
 	int type = xdf_add_evttype(this->_file, event, "");
 	if(type != -1) {
-		if(xdf_add_event(this->_file, type, this->_relative.Toc(), duration) != -1) {
+		CcLogFatalS(onset);
+		if(xdf_add_event(this->_file, type, onset, duration) != -1) {
 			this->_semlock.Post();
 			return true;
 		} 
