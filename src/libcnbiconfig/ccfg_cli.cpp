@@ -106,12 +106,12 @@ bool get_tasksets(CCfgConfig* config, const std::string& what,
 		node = config->RootEx()->GoEx(what)->GoEx(block)->
 			GoEx("taskset")->Leaf();
 		while(node != NULL) {
-			key = node->first_attribute("key");
+			key = node->first_attribute("ttype");
 			if(key == NULL)
 				break;
 			name = key->value();
 
-			desc = config->RootEx()->GoEx("taskset")->GoEx(name)->
+			desc = config->RootEx()->GoEx("tasksets")->GoEx(name)->
 				GetAttrEx("description");
 
 			switch(mode) {
