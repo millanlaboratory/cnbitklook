@@ -29,7 +29,7 @@ int main(void) {
 	
 	CCfgConfig config;
 	try {
-		config.ImportFileEx("../extra/example.xml");
+		config.ImportFileEx("../extra/cnbiconfig_example.xml");
 		cout << "File loaded" << endl;
 	} catch(XMLException e) {
 		cout << "Exception: " << e << endl;

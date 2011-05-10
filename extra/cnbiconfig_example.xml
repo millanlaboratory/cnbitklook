@@ -74,25 +74,25 @@
 	<!-- Offline Blocks -->
 	<offline>
 		<mi description="Offline MI"> <!-- This is a Block -->
-			<taskset key="mi_rhlh"> <!-- This is a Taskset -->
+			<taskset ttype="mi_rhlh"> <!-- This is a Taskset -->
 				<trials>
 					<mi_hand_left>15</mi_hand_left>
 					<mi_hand_right>15</mi_hand_right>
 				</trials>
 			</taskset>
-			<taskset key="mi_rhbf">
+			<taskset ttype="mi_rhbf">
 				<trials>
 					<mi_hand_right>15</mi_hand_right>
 					<mi_both_feet>15</mi_both_feet>
 				</trials>
 			</taskset>
-			<taskset key="mi_bflh">
+			<taskset ttype="mi_bflh">
 				<trials>
 					<mi_both_feet>15</mi_both_feet>
 					<mi_hand_left>15</mi_hand_left>
 				</trials>
 			</taskset>
-			<taskset key="mi_rlsf">
+			<taskset ttype="mi_rlsf">
 				<trials>
 					<mi_both_feet>15</mi_both_feet>
 					<mi_hand_left>15</mi_hand_left>
@@ -100,7 +100,7 @@
 					<mi_rest>15</mi_rest>
 				</trials>
 			</taskset>
-			<taskset key="mi_rlbf">
+			<taskset ttype="mi_rlbf">
 				<trials>
 					<mi_both_feet>15</mi_both_feet>
 					<mi_hand_left>15</mi_hand_left>
@@ -112,7 +112,7 @@
 			<viscosity>0.05</viscosity>
 		</mi>
 		<errp description="Offline ErrPs (6 bars, 240 trials)">
-			<taskset key="errp">
+			<taskset ttype="errp">
 				<trials>
 					<errp_detected>0</errp_detected>
 					<errp_notdetected>0</errp_notdetected>
@@ -126,7 +126,7 @@
 	<!-- Online Block -->
 	<online>
 		<mi description="Online MI">
-			<taskset key="mi_rhlh" classifier="kmi0">
+			<taskset ttype="mi_rhlh" ctype="mi" classifier="kmi0">
 				<threshold>
 					<mi_hand_right>0.65</mi_hand_right>
 					<mi_hand_left>0.95</mi_hand_left>
@@ -139,7 +139,7 @@
 			<integration>0.96</integration>
 		</mi>
 		<errp description="Online ErrPs (6 bars, 240 trials)">
-			<taskset key="errp" classifier="kerrp0">
+			<taskset ttype="errp" ctype="mi" classifier="kerrp0">
 				<trials>
 					<errp_detected>0</errp_detected>
 					<errp_notdetected>0</errp_notdetected>
@@ -149,7 +149,7 @@
 			<trials>240</trials>
 		</errp>
 		<mierrp  description="Online MI+ErrPs">
-			<taskset key="mi_rhlh" classifier="kmi0">
+			<taskset ttype="mi_rhlh" ctype="mi" classifier="kmi0">
 				<threshold>
 					<mi_hand_left>0.85</mi_hand_left>
 					<mi_hand_right>0.92</mi_hand_right>
@@ -167,7 +167,7 @@
 					<mi_hand_right>0.92</mi_hand_right>
 				</integration>
 			</taskset>
-			<taskset key="errp" classifier="kerrp0">
+			<taskset ttype="errp" ctype="errp" classifier="kerrp0">
 				<squares>6</squares>
 				<trials>240</trials>
 			</taskset>
@@ -179,26 +179,84 @@
 		<kmi0>
 			<description>Yesterday</description>
 			<filename>b3_mi_20091204.mat</filename>
-			<icvalue>ValueProb</icvalue>
-			<iclabel>LabelBiosig</iclabel>
+			<tobi>
+				<icvalue>ValueProb</icvalue>
+				<iclabel>LabelBiosig</iclabel>
+			</tobi>
+			<ndf>
+				<function>ndf_null</function>
+				<pipename></pipename>
+				<id>/acquisition</id>
+				<ic>/feedback</ic>
+				<extra></extra>
+			</ndf>
 		</kmi0>
 		<kmi1>
 			<description>Today</description>
 			<filename>b3_mi_20091202.mat</filename>
-			<icvalue>ValueProb</icvalue>
-			<iclabel>LabelBiosig</iclabel>
+			<tobi>
+				<icvalue>ValueProb</icvalue>
+				<iclabel>LabelBiosig</iclabel>
+			</tobi>
+			<ndf>
+				<function>ndf_null</function>
+				<pipename></pipename>
+				<id>/acquisition</id>
+				<ic>/feedback</ic>
+				<extra></extra>
+			</ndf>
 		</kmi1>
 		<kerrp0>
 			<description>ErrP_classifier</description>
 			<filename>a0_errp_20091204.mat</filename>
-			<icvalue>ValueProb</icvalue>
-			<iclabel>LabelBiosig</iclabel>
+			<tobi>
+				<icvalue>ValueProb</icvalue>
+				<iclabel>LabelBiosig</iclabel>
+			</tobi>
+			<ndf>
+				<function>ndf_null</function>
+				<pipename></pipename>
+				<id>/acquisition</id>
+				<ic>/feedback</ic>
+				<extra></extra>
+			</ndf>
 		</kerrp0>
 	</classifier>
-	
+
+
+	<!-- Standard classifier type list -->
+	<classifiers>
+		<mi description="Standard MI">
+			<tobi>
+				<icvalue>ValueProb</icvalue>
+				<iclabel>LabelBiosig</iclabel>
+			</tobi>
+			<ndf>
+				<function>ndf_mi</function>
+				<pipename>/pipe0</pipename>
+				<id>/acquisition</id>
+				<ic>/feedback</ic>
+				<extra></extra>
+			</ndf>
+		</mi>
+		<errp description="Standards ErrP">
+			<tobi>
+				<icvalue>ValueProb</icvalue>
+				<iclabel>LabelBiosig</iclabel>
+			</tobi>
+			<ndf>
+				<function>ndf_errp</function>
+				<pipename>/pipe1</pipename>
+				<id>/acquisition</id>
+				<ic>/feedback</ic>
+				<extra></extra>
+			</ndf>
+		</errp>
+	</classifiers>
+
+
 	<!-- Standard Task List -->
-	<taskset>
-		<!-- Offline tasksets -->
+	<tasksets>
 		<mi_rlsf description="Motor Imagery 4: Right, Left, Rest, Feet">
 			<class id="0" key="mi_hand_right"/>
 			<class id="1" key="mi_hand_left"/>
@@ -234,7 +292,7 @@
 			<class id="0" key="errp_detected"/>
 			<class id="1" key="errp_notdetected"/>
 		</errp> 
-	</taskset>
+	</tasksets>
 	
 	<!-- Standard Task List -->
 	<tasks>

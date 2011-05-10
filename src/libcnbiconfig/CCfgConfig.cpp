@@ -24,18 +24,19 @@
 bool CCfgConfig::Validate(void) {
 	try {
 		// Test main nodes
-		CCfgXMLConfig::RootEx()->GoEx("recording");
 		CCfgXMLConfig::RootEx()->GoEx("classifier");
 		CCfgXMLConfig::RootEx()->GoEx("configuration");
-		CCfgXMLConfig::RootEx()->GoEx("options");
+		CCfgXMLConfig::RootEx()->GoEx("events");
 		CCfgXMLConfig::RootEx()->GoEx("offline");
 		CCfgXMLConfig::RootEx()->GoEx("online");
+		CCfgXMLConfig::RootEx()->GoEx("options");
 		CCfgXMLConfig::RootEx()->GoEx("parameters");
+		CCfgXMLConfig::RootEx()->GoEx("protocol");
+		CCfgXMLConfig::RootEx()->GoEx("recording");
 		CCfgXMLConfig::RootEx()->GoEx("subject");
 		CCfgXMLConfig::RootEx()->GoEx("tasks");
-		CCfgXMLConfig::RootEx()->GoEx("events");
-		CCfgXMLConfig::RootEx()->GoEx("taskset");
-		CCfgXMLConfig::RootEx()->GoEx("protocol");
+		CCfgXMLConfig::RootEx()->GoEx("tasksets");
+		CCfgXMLConfig::RootEx()->GoEx("classifiers");
 		
 		// Test mandatory nodes
 		CCfgXMLConfig::RootEx()->QuickEx("subject/id");
@@ -93,7 +94,7 @@ void CCfgConfig::ParseTasksetEx(const std::string& name, CCfgTaskset* taskset) {
 	XMLType converter;
 	
 	// Find the taskset branch and start looping
-	CCfgXMLConfig::RootEx()->GoEx("taskset")->GoEx(name)->SetBranch();
+	CCfgXMLConfig::RootEx()->GoEx("tasksets")->GoEx(name)->SetBranch();
 	XMLNode node = CCfgXMLConfig::Child();
 	while(true) {
 		if(node == NULL)
@@ -149,7 +150,7 @@ void CCfgConfig::ParseConfigEx(const std::string& mode, const std::string& moden
 	
 	std::string tname;
 	while(node != NULL) {
-		tname = CCfgXMLConfig::GetAttrEx("key");
+		tname = CCfgXMLConfig::GetAttrEx("ttype");
 		if(tname.compare(tasksetname) == 0) {
 			node = CCfgXMLConfig::Child();
 			break;
@@ -195,7 +196,7 @@ void CCfgConfig::ParseClassifierEx(const std::string& modename,
 	std::string tname;
 	std::string classifiername;
 	while(node != NULL) {
-		tname = CCfgXMLConfig::GetAttrEx("key");
+		tname = CCfgXMLConfig::GetAttrEx("ttype");
 		if(tname.compare(tasksetname) == 0) {
 			classifiername = CCfgXMLConfig::GetAttrEx("classifier");
 			taskset->classifier.assign(classifiername);
@@ -218,8 +219,10 @@ void CCfgConfig::ParseClassifierEx(const std::string& modename,
 
 	CCfgXMLConfig::RootEx()->GoEx("classifier")->GoEx(classifiername)->SetBranch();
 	std::string description = CCfgXMLConfig::BranchEx()->QuickStringEx("description");
-	std::string valuetype = CCfgXMLConfig::BranchEx()->QuickStringEx("icvalue");
-	std::string labeltype = CCfgXMLConfig::BranchEx()->QuickStringEx("iclabel");
+	std::string valuetype = 
+		CCfgXMLConfig::BranchEx()->GoEx("tobi")->QuickStringEx("icvalue");
+	std::string labeltype = 
+		CCfgXMLConfig::BranchEx()->GoEx("tobi")->QuickStringEx("iclabel");
 	ICClassifier* classifier = new ICClassifier(classifiername, description);
 	if(classifier->SetValueType(valuetype) == false) {
 		std::string info;
