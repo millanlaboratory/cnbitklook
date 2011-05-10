@@ -31,11 +31,10 @@ class CCfgConfig : public CCfgXMLConfig {
 		void ParseTasksetEx(const std::string& name,
 				CCfgTaskset* taskset);
 		void ParseConfigEx(const std::string& mode,
-				const std::string& modename, const std::string& tasksetname,
+				const std::string& bname, const std::string& tname,
 				CCfgTaskset* taskset);
-		void ParseClassifierEx(const std::string& modename, 
-				const std::string& tasksetname, CCfgTaskset* taskset,
-				ICMessage* icmessage);
+		void ParseClassifierEx(const std::string& bl, const std::string& ts,
+				CCfgTaskset* taskset, ICMessage* icmessage);
 };
 
 #endif

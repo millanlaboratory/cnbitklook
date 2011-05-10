@@ -142,9 +142,9 @@ void CCfgConfig::ParseTasksetEx(const std::string& name, CCfgTaskset* taskset) {
 }
 
 
-void CCfgConfig::ParseConfigEx(const std::string& mode, const std::string& modename,
+void CCfgConfig::ParseConfigEx(const std::string& mode, const std::string& block,
 		const std::string& tasksetname, CCfgTaskset* taskset) {
-	CCfgXMLConfig::RootEx()->GoEx(mode)->GoEx(modename)->GoEx("taskset")->SetBranch();
+	CCfgXMLConfig::RootEx()->GoEx(mode)->GoEx(block)->GoEx("taskset")->SetBranch();
 	XMLNode node = CCfgXMLConfig::_nBranch;
 	
 	std::string tname;
@@ -161,7 +161,7 @@ void CCfgConfig::ParseConfigEx(const std::string& mode, const std::string& moden
 		info += "Taskset ";
 		info += tasksetname;
 		info += " not found in mode ";
-		info += modename;
+		info += block;
 		throw XMLException(info, __PRETTY_FUNCTION__);
 	}
 
@@ -186,54 +186,96 @@ void CCfgConfig::ParseConfigEx(const std::string& mode, const std::string& moden
 	}
 }
 		
-void CCfgConfig::ParseClassifierEx(const std::string& modename, 
-		const std::string& tasksetname, CCfgTaskset* taskset, 
-		ICMessage* icmessage) {
-	CCfgXMLConfig::RootEx()->GoEx("online")->GoEx(modename)->GoEx("taskset")->SetBranch();
-	XMLNode node = CCfgXMLConfig::_nBranch;
+void CCfgConfig::ParseClassifierEx(const std::string& bl, const std::string& ts,
+		CCfgTaskset* taskset, ICMessage* icmessage) {
+	CCfgXMLConfig::RootEx()->GoEx("online")->GoEx(bl)->GoEx("taskset")->SetBranch();
 	
-	std::string tname;
-	std::string classifiername;
-	while(node != NULL) {
+	/* Among the tasksets, find the one named ts 
+	 * and make sure tnode points to it
+	 */
+	std::string tname, cname, ctype;
+	XMLNode tnode = CCfgXMLConfig::_nBranch;
+	while(tnode != NULL) {
 		tname = CCfgXMLConfig::GetAttrEx("ttype");
-		if(tname.compare(tasksetname) == 0) {
-			classifiername = CCfgXMLConfig::GetAttrEx("classifier");
-			taskset->classifier.assign(classifiername);
-			node = CCfgXMLConfig::Child();
+		if(tname.compare(ts) == 0) {
+			cname = CCfgXMLConfig::GetAttrEx("classifier");
+			ctype = CCfgXMLConfig::GetAttrEx("ctype");
+			//taskset->classifier.assign(cname);
+			tnode = CCfgXMLConfig::Child();
 			break;
 		}
-		node = CCfgXMLConfig::NextSibling();
+		tnode = CCfgXMLConfig::NextSibling();
 	}
-	if(node == NULL) {
+
+	/* If tnode points to NULL, it means the taskset ts
+	 * was not found within block bl
+	 */
+	if(tnode == NULL) {
 		std::string info;
-		info += "Taskset ";
-		info += tasksetname;
-		info += " not found in mode ";
-		info += modename;
+		info += "Block ";
+		info += bl;
+		info += " does not contain taskset ";
+		info += ts;
 		throw XMLException(info, __PRETTY_FUNCTION__);
 	}
+
+	/* We need to use cname to get the description and filename for the
+	 * classifier cname
+	 */
+	CCfgXMLConfig::RootEx()->GoEx("classifier")->GoEx(cname)->SetBranch();
+
+	std::string cdesc, cfile;
+	cdesc = CCfgXMLConfig::BranchEx()->QuickStringEx("description");
+	cfile = CCfgXMLConfig::BranchEx()->QuickStringEx("filename");
+
+	taskset->classifier.name = cname;
+	taskset->classifier.description = cdesc;
+	taskset->classifier.filename = cfile;
+	
+	/* Configure ICMessage icmessage
+	 * - we need to use ctype to find the right classifier type in
+	 *   cnbiconfig/classifiers
+	 * - then we need to get all the IC and NDF parameters
+	 */
+	CCfgXMLConfig::RootEx()->GoEx("classifiers")->GoEx(ctype)->SetBranch();
+
+	taskset->ndf.function =
+		CCfgXMLConfig::BranchEx()->GoEx("ndf")->QuickStringEx("function");
+	taskset->ndf.pipename =
+		CCfgXMLConfig::BranchEx()->GoEx("ndf")->QuickStringEx("pipename");
+	taskset->ndf.id = 
+		CCfgXMLConfig::BranchEx()->GoEx("ndf")->QuickStringEx("id");
+	taskset->ndf.ic = 
+		CCfgXMLConfig::BranchEx()->GoEx("ndf")->QuickStringEx("ic");
+	taskset->ndf.extra =
+		CCfgXMLConfig::BranchEx()->GoEx("ndf")->QuickStringEx("extra");
+	if(taskset->ndf.extra.compare("none") == 0)
+		taskset->ndf.extra.assign("");
 
 	if(icmessage == NULL)
 		return;
 
-	CCfgXMLConfig::RootEx()->GoEx("classifier")->GoEx(classifiername)->SetBranch();
-	std::string description = CCfgXMLConfig::BranchEx()->QuickStringEx("description");
-	std::string valuetype = 
-		CCfgXMLConfig::BranchEx()->GoEx("tobi")->QuickStringEx("icvalue");
-	std::string labeltype = 
-		CCfgXMLConfig::BranchEx()->GoEx("tobi")->QuickStringEx("iclabel");
-	ICClassifier* classifier = new ICClassifier(classifiername, description);
-	if(classifier->SetValueType(valuetype) == false) {
+	/* Configure ICMessage icmessage
+	 * - we need to use ctype to find the right classifier type in
+	 *   cnbiconfig/classifiers
+	 * - then we need to get all the IC and NDF parameters
+	 */
+	std::string vtype, ltype;
+	vtype = CCfgXMLConfig::BranchEx()->GoEx("tobi")->QuickStringEx("icvalue");
+	ltype = CCfgXMLConfig::BranchEx()->GoEx("tobi")->QuickStringEx("iclabel");
+	
+	ICClassifier* classifier = new ICClassifier(cname, cdesc);
+	if(classifier->SetValueType(vtype) == false) {
 		std::string info;
 		info += "ICVtype not known: ";
-		info += valuetype;
+		info += vtype;
 		throw XMLException(info, __PRETTY_FUNCTION__);
 	}
 
-	if(classifier->SetLabelType(labeltype) == false) {
+	if(classifier->SetLabelType(ltype) == false) {
 		std::string info;
 		info += "ICLtype not known: ";
-		info += labeltype;
+		info += ltype;
 		throw XMLException(info, __PRETTY_FUNCTION__);
 	}
 
@@ -241,7 +283,7 @@ void CCfgConfig::ParseClassifierEx(const std::string& modename,
 	while(it != taskset->tasks.end()) {
 		std::string label;
 		
-		if(labeltype.compare(ICClassifier::TxtLabelBiosig) == 0) {
+		if(ltype.compare(ICClassifier::TxtLabelBiosig) == 0) {
 			char cache[16];
 			sprintf(cache, "0x%X", it->second->gdf);
 			label.assign(cache);
@@ -252,6 +294,5 @@ void CCfgConfig::ParseClassifierEx(const std::string& modename,
 		classifier->classes.Add(cclass);
 		it++;
 	}
-
 	icmessage->classifiers.Add(classifier);
 }

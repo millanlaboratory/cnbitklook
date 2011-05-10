@@ -175,47 +175,14 @@
 		<kmi0>
 			<description>Yesterday</description>
 			<filename>b3_mi_20091204.mat</filename>
-			<tobi>
-				<icvalue>ValueProb</icvalue>
-				<iclabel>LabelBiosig</iclabel>
-			</tobi>
-			<ndf>
-				<function>ndf_null</function>
-				<pipename></pipename>
-				<id>/acquisition</id>
-				<ic>/feedback</ic>
-				<extra></extra>
-			</ndf>
 		</kmi0>
 		<kmi1>
 			<description>Today</description>
 			<filename>b3_mi_20091202.mat</filename>
-			<tobi>
-				<icvalue>ValueProb</icvalue>
-				<iclabel>LabelBiosig</iclabel>
-			</tobi>
-			<ndf>
-				<function>ndf_null</function>
-				<pipename></pipename>
-				<id>/acquisition</id>
-				<ic>/feedback</ic>
-				<extra></extra>
-			</ndf>
 		</kmi1>
 		<kerrp0>
 			<description>ErrP_classifier</description>
-			<filename>a0_errp_20091204.mat</filename>
-			<tobi>
-				<icvalue>ValueProb</icvalue>
-				<iclabel>LabelBiosig</iclabel>
-			</tobi>
-			<ndf>
-				<function>ndf_null</function>
-				<pipename></pipename>
-				<id>/acquisition</id>
-				<ic>/feedback</ic>
-				<extra></extra>
-			</ndf>
+			<filename>b3_errp_20091202.mat</filename>
 		</kerrp0>
 	</classifier>
 
@@ -231,8 +198,8 @@
 				<function>ndf_mi</function>
 				<pipename>/pipe0</pipename>
 				<id>/acquisition</id>
-				<ic>/feedback</ic>
-				<extra></extra>
+				<ic>/mi_online</ic>
+				<extra>none</extra>
 			</ndf>
 		</mi>
 		<errp description="Standards ErrP">
@@ -244,8 +211,8 @@
 				<function>ndf_errp</function>
 				<pipename>/pipe1</pipename>
 				<id>/acquisition</id>
-				<ic>/feedback</ic>
-				<extra></extra>
+				<ic>/errp_online</ic>
+				<extra>none</extra>
 			</ndf>
 		</errp>
 	</classifiers>

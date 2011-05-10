@@ -19,12 +19,12 @@
 #include "CCfgTaskset.hpp"
 #include "XMLException.hpp"
 #include "XMLTools.hpp"
-		
-		
+#include <stdio.h>
+
 CCfgTaskset::CCfgTaskset(const std::string& name) {
 	this->name.assign(name);
 	this->description.assign("unknown");
-	this->classifier.assign("unknown");
+	//this->classifier.assign("unknown");
 }
 
 CCfgTask* CCfgTaskset::AddTask(CCfgTask* task) {
@@ -107,4 +107,20 @@ CCfgTasksetConstIt CCfgTaskset::Begin(void) const {
 CCfgTasksetConstIt CCfgTaskset::End(void) const {
 	CCfgTasksetConstIt it = this->tasks.end();
 	return it;
+}
+
+void CCfgTaskset::DumpNDF(void) {
+	printf("NDF config for taskset %s\n", this->name.c_str());
+	printf(" Function:      %s\n", this->ndf.function.c_str());
+	printf(" Pipename:      %s\n", this->ndf.pipename.c_str());
+	printf(" iD:            %s\n", this->ndf.id.c_str());
+	printf(" iC:            %s\n", this->ndf.ic.c_str());
+	printf(" Extra:         %s\n", this->ndf.extra.c_str());
+}
+
+void CCfgTaskset::DumpClassifier(void) {
+	printf("Classifier config for taskset %s\n", this->name.c_str());
+	printf(" Name:          %s\n", this->classifier.name.c_str());
+	printf(" Description:   %s\n", this->classifier.description.c_str());
+	printf(" Filename:      %s\n", this->classifier.filename.c_str());
 }

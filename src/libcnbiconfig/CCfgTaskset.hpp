@@ -26,6 +26,20 @@ typedef std::map<std::string, CCfgTask*> CCfgTasksetMap;
 typedef CCfgTasksetMap::iterator CCfgTasksetIt;
 typedef CCfgTasksetMap::const_iterator	CCfgTasksetConstIt;
 
+typedef struct CCfgClassifier_struct {
+	std::string name;
+	std::string description;
+	std::string filename;
+} CCfgClassifier;
+
+typedef struct CCfgNDF_struct {
+	std::string function;
+	std::string pipename;
+	std::string id;
+	std::string ic;
+	std::string extra;
+} CCfgNDF;
+
 /*! \brief The taskset is a map of CCfgTask objects sorted by the GDFEvent
  * 
  * A set of CCfgTask constitutes a CCfgTaskset, which simply wraps a
@@ -34,13 +48,15 @@ typedef CCfgTasksetMap::const_iterator	CCfgTasksetConstIt;
 class CCfgTaskset {
 	public: 
 		CCfgTaskset(const std::string& name);
-		virtual CCfgTask* AddTask(CCfgTask* task);
-		virtual CCfgTask* RemoveTaskEx(const std::string& name);
-		virtual CCfgTask* GetTaskEx(const std::string& name);
-		virtual CCfgTask* GetTaskEx(unsigned int id);
-		virtual bool HasTask(std::string name);
-		virtual unsigned int Count(void);
-		virtual void Clear(void);
+		CCfgTask* AddTask(CCfgTask* task);
+		CCfgTask* RemoveTaskEx(const std::string& name);
+		CCfgTask* GetTaskEx(const std::string& name);
+		CCfgTask* GetTaskEx(unsigned int id);
+		bool HasTask(std::string name);
+		unsigned int Count(void);
+		void Clear(void);
+		void DumpClassifier(void);
+		void DumpNDF(void);
 
 		CCfgTasksetIt Begin(void);
 		CCfgTasksetIt End(void);
@@ -51,12 +67,9 @@ class CCfgTaskset {
 		CCfgTasksetMap tasks;
 		std::string name;
 		std::string description;
-		std::string classifier;
-		std::string ndf_function;
-		std::string ndf_pipeneme;
-		std::string ndf_id;
-		std::string ndf_ic;
-		std::string ndf_extra;
+		
+		CCfgClassifier classifier;
+		CCfgNDF ndf;
 };
 
 #endif
