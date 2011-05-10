@@ -24,19 +24,18 @@
 bool CCfgConfig::Validate(void) {
 	try {
 		// Test main nodes
-		CCfgXMLConfig::RootEx()->GoEx("classifier");
-		CCfgXMLConfig::RootEx()->GoEx("configuration");
-		CCfgXMLConfig::RootEx()->GoEx("events");
+		CCfgXMLConfig::RootEx()->GoEx("subject");
+		CCfgXMLConfig::RootEx()->GoEx("recording");
+		CCfgXMLConfig::RootEx()->GoEx("protocol");
+		CCfgXMLConfig::RootEx()->GoEx("options");
 		CCfgXMLConfig::RootEx()->GoEx("offline");
 		CCfgXMLConfig::RootEx()->GoEx("online");
-		CCfgXMLConfig::RootEx()->GoEx("options");
-		CCfgXMLConfig::RootEx()->GoEx("parameters");
-		CCfgXMLConfig::RootEx()->GoEx("protocol");
-		CCfgXMLConfig::RootEx()->GoEx("recording");
-		CCfgXMLConfig::RootEx()->GoEx("subject");
-		CCfgXMLConfig::RootEx()->GoEx("tasks");
-		CCfgXMLConfig::RootEx()->GoEx("tasksets");
+		CCfgXMLConfig::RootEx()->GoEx("classifier");
 		CCfgXMLConfig::RootEx()->GoEx("classifiers");
+		CCfgXMLConfig::RootEx()->GoEx("tasksets");
+		CCfgXMLConfig::RootEx()->GoEx("tasks");
+		CCfgXMLConfig::RootEx()->GoEx("events");
+		CCfgXMLConfig::RootEx()->GoEx("configuration");
 		
 		// Test mandatory nodes
 		CCfgXMLConfig::RootEx()->QuickEx("subject/id");
