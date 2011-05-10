@@ -52,6 +52,11 @@ class CCfgTaskset {
 		std::string name;
 		std::string description;
 		std::string classifier;
+		std::string ndf_function;
+		std::string ndf_pipeneme;
+		std::string ndf_id;
+		std::string ndf_ic;
+		std::string ndf_extra;
 };
 
 #endif
