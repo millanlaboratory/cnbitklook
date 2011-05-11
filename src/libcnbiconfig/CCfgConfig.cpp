@@ -247,10 +247,6 @@ void CCfgConfig::ParseClassifierEx(const std::string& bl, const std::string& ts,
 		CCfgXMLConfig::BranchEx()->GoEx("ndf")->QuickStringEx("id");
 	taskset->ndf.ic = 
 		CCfgXMLConfig::BranchEx()->GoEx("ndf")->QuickStringEx("ic");
-	taskset->ndf.extra =
-		CCfgXMLConfig::BranchEx()->GoEx("ndf")->QuickStringEx("extra");
-	if(taskset->ndf.extra.compare("none") == 0)
-		taskset->ndf.extra.assign("");
 
 	if(icmessage == NULL)
 		return;

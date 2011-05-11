@@ -14,12 +14,12 @@
 %   You should have received a copy of the GNU General Public License
 %   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
-%   function ndf_monitor(pipename, addressD, addressC, optplot)
+%   function ndf_monitor(pipename, addressD, addressC)
 function ndf_monitor(pipename, addressD, addressC)
 
-if(nargin < 3 | isempty(addressC)); addressC = ''; end
-if(nargin < 2 | isempty(addressD)); addressD = ''; end
-if(nargin < 1 | isempty(pipename)); pipename = '/pipe0'; end
+if(nargin < 3); addressC = ''; end
+if(nargin < 2); addressD = ''; end
+if(nargin < 1); pipename = ''; end
 
 % Include all the required toolboxes
 ndf_include();
@@ -37,8 +37,25 @@ try
 	% -------------------------------------------------------------- %
 	% User initialization                                            %
 	% -------------------------------------------------------------- %
-	optplot = cl_retrieve(loop.cl, 'ndf_monitor::scope');
-	optplot = strcmp(optplot, 'true');
+	cfg = {};
+	cfg.ns.block   = cl_retrieve(loop.cl, 'ndf_monitor::block');
+	cfg.ns.taskset = cl_retrieve(loop.cl, 'ndf_monitor::taskset');
+	cfg.ns.xml     = cl_retrieve(loop.cl, 'ndf_monitor::xml');
+		
+	cfg.taskset = ccfg_onlinem(config, ...
+		cfg.ns.block,
+		cfg.ns.taskset);
+
+	[cfg.classifier.name, cfg.classifier.description, cfg.classifier.filename] = ...
+		ccfgtaskset_getclassifier(cfg.ns.taskset);
+	[cfg.ndf.function, cfg.ndf.pipename, cfg.ndf.id, cfg.ndf.ic] = ...
+		ccfgtaskset_getndf(cfg.ns.taskset);
+	if(isempty(addressC)); addressC = cfg.ndf.ic; end
+	if(isempty(addressD)); addressD = cfg.ndf.id; end
+	if(isempty(pipename)); pipename = cfg.ndf.pipename; end
+
+	cfg.ns.scope   = cl_retrieve(loop.cl, 'ndf_monitor::scope');
+	cfg.scope = strcmp(configuration.ns.scope, 'true');
 	% -------------------------------------------------------------- %
 	% /User initialization                                           %
 	% -------------------------------------------------------------- %
@@ -133,7 +150,7 @@ try
 		% -------------------------------------------------------------- %
 		% User main loop                                                 %
 		% -------------------------------------------------------------- %
-		if(optplot == true)
+		if(configuration.scope == true)
 			eegc3_figure(1);
 			subplot(7, 1, 1:4)
 			imagesc(eegc3_car(eegc3_dc(buffer.eeg))');

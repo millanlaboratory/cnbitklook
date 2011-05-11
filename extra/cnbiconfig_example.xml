@@ -121,6 +121,19 @@
 	
 	<!-- Online Block -->
 	<online>
+		<check description="Loop check">
+			<taskset ttype="mi_rhlh" ctype="check" classifier="kmi0">
+				<threshold>
+					<mi_hand_right>0.65</mi_hand_right>
+					<mi_hand_left>0.95</mi_hand_left>
+				</threshold>
+				<trials>
+					<mi_hand_right>150</mi_hand_right>
+					<mi_hand_left>250</mi_hand_left>
+				</trials>
+			</taskset>
+			<integration>0.96</integration>
+		</check>
 		<mi description="Online MI">
 			<taskset ttype="mi_rhlh" ctype="mi" classifier="kmi0">
 				<threshold>
@@ -189,6 +202,18 @@
 
 	<!-- Standard classifier type list -->
 	<classifiers>
+		<check description="Fake NDF monitor classifier">
+			<tobi>
+				<icvalue>ValueProb</icvalue>
+				<iclabel>LabelBiosig</iclabel>
+			</tobi>
+			<ndf>
+				<function>ndf_monitor</function>
+				<pipename>/pipe0</pipename>
+				<id>/acquisition</id>
+				<ic>/feedback</ic>
+			</ndf>
+		</check>
 		<mi description="Standard MI">
 			<tobi>
 				<icvalue>ValueProb</icvalue>
@@ -196,10 +221,9 @@
 			</tobi>
 			<ndf>
 				<function>ndf_mi</function>
-				<pipename>/pipe0</pipename>
+				<pipename>/pipe1</pipename>
 				<id>/acquisition</id>
 				<ic>/mi_online</ic>
-				<extra>none</extra>
 			</ndf>
 		</mi>
 		<errp description="Standards ErrP">
@@ -209,10 +233,9 @@
 			</tobi>
 			<ndf>
 				<function>ndf_errp</function>
-				<pipename>/pipe1</pipename>
+				<pipename>/pipe2</pipename>
 				<id>/acquisition</id>
 				<ic>/errp_online</ic>
-				<extra>none</extra>
 			</ndf>
 		</errp>
 	</classifiers>

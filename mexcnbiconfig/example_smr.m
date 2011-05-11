@@ -38,9 +38,6 @@ end
 [ndf.function, ndf.pipename, ndf.id, ndf.ic] = ...
 	ccfgtaskset_getndf(taskset);
 
-	kk
-
-	
 tasktot = ccfgtaskset_count(taskset);
 fprintf(1, 'Taskset has %d tasks\n', tasktot);
 tasks = {};

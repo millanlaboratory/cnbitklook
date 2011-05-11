@@ -115,7 +115,6 @@ void CCfgTaskset::DumpNDF(void) {
 	printf(" Pipename:      %s\n", this->ndf.pipename.c_str());
 	printf(" iD:            %s\n", this->ndf.id.c_str());
 	printf(" iC:            %s\n", this->ndf.ic.c_str());
-	printf(" Extra:         %s\n", this->ndf.extra.c_str());
 }
 
 void CCfgTaskset::DumpClassifier(void) {
