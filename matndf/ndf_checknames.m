@@ -26,8 +26,7 @@ if(isempty(pipename) == false)
 			disp(['[ndf_checknames] Warning: pipename not found!']);
 		end
 	else
-		disp('[ndf_checknames] Pipename in wrong format, killing matlab');
-		exit;
+		disp('[ndf_checknames] Warning: pipename in wrong format');
 	end
 else
 	disp('[ndf_checknames] Pipename is empty, XML configuration required');
@@ -40,8 +39,7 @@ if(isempty(addressD) == false)
 			disp(['[ndf_checknames] Warning: iD address not found!']);
 		end
 	else
-		disp('[ndf_checknames] iD address in wrong format, killing matlab');
-		exit;
+		disp('[ndf_checknames] Warning: iD address in wrong format');
 	end
 else
 	disp('[ndf_checknames] iD address is empty, XML configuration required');
@@ -54,8 +52,7 @@ if(isempty(addressC) == false)
 			disp(['[ndf_checknames] Warning: iC address not found!']);
 		end
 	else
-		disp('[ndf_checknames] iC address in wrong format, killing matlab');
-		exit;
+		disp('[ndf_checknames] Warning: iC address in wrong format');
 	end
 else
 	disp('[ndf_checknames] iC address is empty, XML configuration required');

@@ -14,26 +14,12 @@
 %   You should have received a copy of the GNU General Public License
 %   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
-%	function status = ndf_tobi_connectic(tobi);
-function isconnected = ndf_tobi_connectic(tobi, cl, addressC);
+%   function cl = ndf_cl()
+function cl = ndf_cl()
 
-
-if(tr_connected(tobi.iC.socket) < 0) 
-	isconnected = false;
-	tr_close(tobi.iC.socket);
-	
-	% This is meant to be used with extreme care because 
-	% it introduces a delay in the loop
-	if(nargin == 3)
-		addressC = cl_query(cl, addressC);
-		if(isempty(addressC) == false)
-			tobi.iC.address = addressC;
-			tobi.iC.ipport 	= regexp(tobi.iC.address, ':', 'split');
-		end
-	end
-	if(length(tobi.iC.ipport) == 2)
-		tr_connect(tobi.iC.socket, tobi.iC.ipport{1}, tobi.iC.ipport{2});
-	end
-else
-	isconnected = true;
+cl = cl_new();
+if(cl_connect(cl) == false)
+	disp('[ndf_monitor] Cannot connect to CNBI Loop, killing matlab');
+	ndf_cl_close(cl);
+	exit;
 end

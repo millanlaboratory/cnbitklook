@@ -15,13 +15,26 @@
 %   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
 %	function status = ndf_tobi_connectid(tobi);
-function isconnected = ndf_tobi_connectid(tobi);
+function isconnected = ndf_tobi_connectid(tobi, cl, addressD);
+
 
 if(tr_connected(tobi.iD.socket) < 0) 
 	isconnected = false;
 	tr_close(tobi.iD.socket);
-	tr_connect(tobi.iD.socket, tobi.iD.ipport{1}, tobi.iD.ipport{2});
-	tr_set_nonblocking(tobi.iD.socket, 1);
+
+	% This is meant to be used with extreme care because 
+	% it introduces a delay in the loop
+	if(nargin == 3)
+		addressD = cl_query(cl, addressD);
+		if(isempty(addressD) == false)
+			tobi.iD.address = addressD;
+			tobi.iD.ipport 	= regexp(tobi.iD.address, ':', 'split');
+		end
+	end
+	if(length(tobi.iD.ipport) == 2)
+		tr_connect(tobi.iD.socket, tobi.iD.ipport{1}, tobi.iD.ipport{2});
+		tr_set_nonblocking(tobi.iD.socket, 1);
+	end
 else
 	isconnected = true;
 end

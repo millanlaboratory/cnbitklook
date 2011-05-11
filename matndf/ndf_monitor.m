@@ -32,38 +32,30 @@ try
 	%   will be set according to what is stored in the XML configuration
 	% - also, if the nameserver query fails, pn, aD and aC will be empty and
 	%   their values will be set according to the XML configuration
-	%
-	% 2011-05-11  Michele Tavella <michele.tavella@epfl.ch>
-	% TODO I believe that the behaviour above might be a bit confusing, 
-	% so please feel free to do what you think is best to increase ease of use
-	%[pn, aD, aC] = ndf_checknames(loop.cl, pn, aD, aC);
-	[pn, aD, aC] = ndf_checknames(loop.cl, pn, aD, aC);
+	cfg = ndf_cl_getconfig(loop.cl, 'ndfcheck_online', pn, aD, aC);
+	[pn, aD, aC] = ndf_checknames(loop.cl, cfg.ndf.pn, cfg.ndf.id, cfg.ndf.ic);
 	
-	% Get the configuration
-	cfg = ndf_cl_getconfig(loop.cl, 'ndfcheck_online');
+	if(isempty(pn))
+		%|| isempty(aD) || isempty(aC))
+		disp('[ndf_monitor] NDF configuration failed, killing matlab:');
+		disp(['  Pipename:   "' pn '"']);
+		disp(['  iD address: "' aD '"']);
+		disp(['  iC address: "' aC '"']);
+		exit;
+	end
 	
-	% If one among pn, aD or aC is empty, then get their values from the
-	% configuration and re-check the names
-	if(isempty(aC)); aC = cfg.ndf.ic; end
-	if(isempty(aD)); aD = cfg.ndf.id; end
-	if(isempty(pn)); pn = cfg.ndf.pn; end
-	[pn, aD, aC] = ndf_checknames(loop.cl, pn, aD, aC);
-	
-
-
 	% Prepare TOBI structure
 	% - when retrieving the taskset from the XML configuration, we also ask 
 	%   for an iC message to be returned configured according to the taskset
 	% - later on we will also aks for an iD message, but as today this is not
 	%   implemented yet
 	tobi = ndf_tobi(aD, aC, cfg.messageC);
-
 	% -------------------------------------------------------------- %
 	% User initialization                                            %
 	% -------------------------------------------------------------- %
-	cfg.ns.scope = cl_retrieve(loop.cl, 'ndfcheck_online::scope');
-	cfg.scope = strcmp(cfg.ns.scope, 'true');
-	cfg.scope = 1;
+	cfg.ns.plot = cl_retrieve(loop.cl, 'ndfcheck_online::plot');
+	cfg.plot = strcmp(cfg.ns.plot, 'true');
+	%cfg.plot = 1;
 	% -------------------------------------------------------------- %
 	% /User initialization                                           %
 	% -------------------------------------------------------------- %
@@ -73,7 +65,6 @@ try
 	ndf.size  = 0;
 	ndf.frame = ndf_frame();
 	ndf.sink  = ndf_sink(pn);
-		
 
 	% -------------------------------------------------------------- %
 	% User TOBI configuration                                        %
@@ -146,7 +137,7 @@ try
 		% -------------------------------------------------------------- %
 		% User main loop                                                 %
 		% -------------------------------------------------------------- %
-		if(configuration.scope == true)
+		if(cfg.plot == true)
 			eegc3_figure(1);
 			subplot(7, 1, 1:4)
 			imagesc(eegc3_car(eegc3_dc(buffer.eeg))');
@@ -189,8 +180,14 @@ try
 		
 		% Same as before, for TiC
 		if(ndf_tobi_connectic(tobi) == true)
-			icmessage_setvalue(tobi.iC.message, ... 
-				'ndf_monitor', 'frame', ndf.frame.index);
+			for t = 0:ccfgtaskset_count(cfg.taskset) - 1
+				taskname = ccfgtaskset_gettaskbyid(cfg.taskset, t);
+				tasklabel = num2str(ccfgtask_getgdf(taskname));
+				icmessage_setvalue(tobi.iC.message, ...
+					cfg.classifier.name, ...
+					tasklabel, ...
+					ndf.frame.index);
+			end
 			ndf_tobi_sendc(tobi, ndf.frame.index);
 		end
 		% -------------------------------------------------------------- %
@@ -209,16 +206,10 @@ catch exception
 	disp(exception);
 	disp(exception.stack);
 	disp('[ndf_monitor] Killing Matlab...');
-	if(exit('ndf.sink', 'var') == 1)
-		ndf_close(ndf.sink);
-	end
-	if(exit('tobi', 'var') == 1)
-		ndf_tobi_close(tobi);
-	end
-	if(exit('loop.cl', 'var') == 1)
-		cl_disconnect(loop.cl);
-		cl_delete(loop.cl);
-	end
+	%ndf_close(ndf.sink);
+	%ndf_tobi_close(tobi);
+	%cl_disconnect(loop.cl);
+	%cl_delete(loop.cl);
 	exit;
 end
 
