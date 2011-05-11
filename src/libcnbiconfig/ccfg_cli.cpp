@@ -137,11 +137,9 @@ bool get_tasksets(CCfgConfig* config, const std::string& what,
 bool get_classifier(CCfgConfig* config, const std::string& what, 
 		const std::string& block, const std::string& taskset, int mode) {
 	CCfgTaskset* ts = NULL;
-	//std::string classifier, filename;
 	try {
 		if(what.find("online") != std::string::npos) {
 			ts = config->OnlineEx(block, taskset);
-			//classifier.assign(ts->classifier.name);
 		} else {
 			fprintf(stderr, "Error: cannot get classifier when modality is offline\n");
 			return false;
@@ -151,10 +149,6 @@ bool get_classifier(CCfgConfig* config, const std::string& what,
 		return 0;
 	}
 	
-	//filename = config->RootEx()->GoEx("classifier")->GoEx(classifier)->
-	//	GoEx("filename")->GetRawEx();
-
-
 	switch(mode) {
 		case MODE_CONFIG:
 			printf("%s\n", ts->classifier.filename.c_str());
