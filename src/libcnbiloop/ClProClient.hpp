@@ -34,8 +34,8 @@ class ClProClient : public ClClient {
 		int Include(const int pid, const std::string& path0, 
 				const std::string& path1);
 		int LaunchNDF(const int pid, const std::string& function, 
-				const std::string& pipename, const CcAddress addressD, 
-				const CcAddress addressC, const std::string& extra = " ");
+				const std::string& pipename, const CcAddress iD, 
+				const CcAddress iC);
 		int IncludeNDF(const int pid);
 		bool Check(const int pid, double waitms = 2500.00f);
 	private:

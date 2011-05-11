@@ -167,14 +167,12 @@ int ClProClient::Include(const int pid, const std::string& path0,
 }
 
 int ClProClient::LaunchNDF(const int pid, const std::string& function, 
-	const std::string& pipename, const CcAddress addressD, 
-	const CcAddress addressC, const std::string& extra) {
+	const std::string& pipename, const CcAddress iD, const CcAddress iC) {
 	int rpid = 0;
 	int errorid = 0;
 	std::string message, reply;
 	
-	this->_language.LaunchNDF(pid, function, pipename, addressD, addressC,
-			extra);
+	this->_language.LaunchNDF(pid, function, pipename, iD, iC);
 	bool status = ClClient::_client.SendRecv(this->_language.message->buffer,
 			&reply, ClProLang::Hdr, ClProLang::Trl, ClClient::_waitms);
 

@@ -38,7 +38,7 @@ void ClProAsServer::HandleRecvEndpoint(CcSocket* caller, CcAddress address) {
 
 	int pid;
 	std::string function, path0, path1;
-	std::string pipename, addressD, addressC, extra;
+	std::string pipename, addressD, addressC;
 	
 	if(this->language.IsFork(message.c_str())) {
 		pid = this->Fork();
@@ -121,7 +121,7 @@ void ClProAsServer::HandleRecvEndpoint(CcSocket* caller, CcAddress address) {
 					<< pid << " " << path0 << ", " << path1);
 		}
 	} else if(this->language.IsLaunchNDF(message.c_str(), &pid, &function,
-				&pipename, &addressD, &addressC, &extra)) {
+				&pipename, &addressD, &addressC)) {
 		ClMatlab* process = this->Get(pid);
 		if(process == NULL) {
 			server->Send(language.Error(ClProLang::NotFound), address);
@@ -130,18 +130,16 @@ void ClProAsServer::HandleRecvEndpoint(CcSocket* caller, CcAddress address) {
 					" M-Fun=" << function << 
 					", NDF=" << pipename << 
 					", TiD=" << addressD << 
-					", TiC=" << addressC << 
-					", Args=" << extra << "NotFound");
+					", TiC=" << addressC << " NotFound");
 		} else {
-			process->LaunchNDF(function, pipename, addressD, addressC, extra);
+			process->LaunchNDF(function, pipename, addressD, addressC);
 			server->Send(language.Ok(pid), address);
 			CcLogInfoS("LaunchNDF from " << address << ": " 
 					<< pid << 
 					" M-Fun=" << function << 
 					", NDF=" << pipename << 
 					", TiD=" << addressD << 
-					", TiC=" << addressC << 
-					", Args=" << extra);
+					", TiC=" << addressC);
 		}
 	} else {
 		CcLogWarningS("Message from " << address << 

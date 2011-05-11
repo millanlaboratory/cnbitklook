@@ -35,8 +35,7 @@ class ClMatlab : public CcProcess {
 		void LaunchNDF(const std::string function,
 				const std::string& pipename, 
 				const CcAddress addressD,
-				const CcAddress addressC, 
-				const std::string& extra);
+				const CcAddress addressC);
 	protected:
 		virtual void Exec(void);
 };

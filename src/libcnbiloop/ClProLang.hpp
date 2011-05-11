@@ -34,8 +34,8 @@ class ClProLang : public ClLanguage {
 		char* ChangeDirectory(const int pid, const std::string& path);
 		char* Include(const int pid, const std::string& path0, const std::string& path1);
 		char* LaunchNDF(const int pid, const std::string& function, 
-				const std::string& pipename, const CcAddress addressD, 
-				const CcAddress addressC, const std::string& extra);
+				const std::string& pipename, const CcAddress iD, 
+				const CcAddress iC);
 		char* Ok(const int pid);
 		char* Error(const int code);
 		bool IsFork(const char* message);
@@ -49,8 +49,8 @@ class ClProLang : public ClLanguage {
 		bool IsInclude(const char* message, int* pid, std::string* path0, 
 				std::string* path1);
 		bool IsLaunchNDF(const char* message, int* pid, std::string* function,
-				std::string* pipename, std::string* addressD, 
-				std::string* addressC, std::string* extra);
+				std::string* pipename, std::string* iD, 
+				std::string* iC);
 
 	public:
 		static const std::string Hdr;

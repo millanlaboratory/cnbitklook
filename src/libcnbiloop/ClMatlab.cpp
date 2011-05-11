@@ -89,7 +89,7 @@ end\n"
 #define CLMATLAB_LAUNCHNDF "\
 try;\
 	while(1);\
-		%s('%s', '%s', '%s'%s);\
+		%s('%s', '%s', '%s');\
 	end;\
 catch e;\
 	disp(['Exception: ' exception.message ]);\
@@ -143,18 +143,11 @@ void ClMatlab::Launch(const std::string function) {
 }
 
 void ClMatlab::LaunchNDF(const std::string function, const std::string& pipename, 
-		const CcAddress addressD, const CcAddress addressC, 
-		const std::string& extra) {
+		const CcAddress addressD, const CcAddress addressC) {
 	char buffer[2048];
 
-	std::string optional("");
-	if(extra.empty() == false) {
-		optional.assign(", ");
-		optional.append(extra);
-	}
-	
 	sprintf(buffer, CLMATLAB_LAUNCHNDF, function.c_str(), pipename.c_str(),
-			addressD.c_str(), addressC.c_str(), optional.c_str());
+			addressD.c_str(), addressC.c_str());
 
 	CcLogDebug(std::string("Lanching NDF: ").append(buffer));
 	CcProcess::Write(buffer);

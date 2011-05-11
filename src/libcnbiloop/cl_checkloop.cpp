@@ -79,13 +79,13 @@ int main(int argc, char* argv[]) {
 	ClLoop::processing.ChangeDirectory(pid0, "/tmp/");
 	ClLoop::processing.IncludeNDF(pid0) ;
 	ClLoop::processing.LaunchNDF(pid0, "ndf_monitor", "/pipe0", 
-			"/acquisition", "/feedback0", "");
+			"/acquisition", "/feedback0");
 
 	ClLoop::nameserver.Set("/feedback1", "127.0.0.1:9501");
 	ClLoop::processing.ChangeDirectory(pid1, "/tmp/");
 	ClLoop::processing.IncludeNDF(pid1) ;
 	ClLoop::processing.LaunchNDF(pid1, "ndf_monitor", "/pipe1", 
-			"/acquisition", "/feedback1", "");
+			"/acquisition", "/feedback1");
 	
 	if(ClLoop::processing.Check(pid0) == false) {
 		CcLogFatal("PID0 is dead");

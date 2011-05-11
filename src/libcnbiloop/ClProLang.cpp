@@ -34,8 +34,8 @@
 #define CLLP_CWD_IN					"[cllp]cwd|%d|%[^'['][/cllp]"
 #define CLLP_INCLUDE_IN				"[cllp]include|%d|%s|%s[/cllp]"
 #define CLLP_INCLUDE_OUT			"[cllp]include|%d|%[^'|']|%[^'['][/cllp]"
-#define CLLP_LAUNCH_NDFMATLAB_OUT 	"[cllp]launch_ndfmatlab|%d|%s|%s|%s|%s|%s[/cllp]"
-#define CLLP_LAUNCH_NDFMATLAB_IN  	"[cllp]launch_ndfmatlab|%d|%[^'|']|%[^'|']|%[^'|']|%[^'|']|%[^'['][/cllp]"
+#define CLLP_LAUNCH_NDFMATLAB_OUT 	"[cllp]launch_ndfmatlab|%d|%s|%s|%s|%s[/cllp]"
+#define CLLP_LAUNCH_NDFMATLAB_IN  	"[cllp]launch_ndfmatlab|%d|%[^'|']|%[^'|']|%[^'|']|%[^'['][/cllp]"
 
 const std::string ClProLang::Hdr = "[cllp]";
 const std::string ClProLang::Trl = "[/cllp]";
@@ -129,16 +129,14 @@ char* ClProLang::Include(const int pid, const std::string& path0,
 
 char* ClProLang::LaunchNDF(int pid,
 		const std::string& function, const std::string& pipename,
-		const CcAddress addressD, const CcAddress addressC, 
-		const std::string& extra) {
+		const CcAddress iD, const CcAddress iC) {
 	snprintf(ClLanguage::message->buffer, ClLanguage::MessageSize(),
 			CLLP_LAUNCH_NDFMATLAB_OUT, 
 			pid,
 			function.c_str(), 
 			pipename.c_str(),
-			addressD.c_str(), 
-			addressC.c_str(), 
-			extra.c_str());
+			iD.c_str(), 
+			iC.c_str());
 	return ClLanguage::message->buffer;
 }
 
@@ -170,27 +168,23 @@ bool ClProLang::IsInclude(const char* message, int* pid,
 
 }
 
-bool ClProLang::IsLaunchNDF(const char* message, 
-		int* pid,
+bool ClProLang::IsLaunchNDF(const char* message, int* pid,
 		std::string* function, std::string* pipename, 
-		std::string* addressD, std::string* addressC, 
-		std::string* extra) {
+		std::string* iD, std::string* iC) {
 
 	int count = sscanf(message, CLLP_LAUNCH_NDFMATLAB_IN, 
 			pid,
 			ClLanguage::_cache0->buffer,  
 			ClLanguage::_cache1->buffer,  
 			ClLanguage::_cache2->buffer,  
-			ClLanguage::_cache3->buffer,  
-			ClLanguage::_cache4->buffer);
-	if(count < 6-1)
+			ClLanguage::_cache3->buffer);
+	if(count < 5)
 		return false;
 
 	function->assign(ClLanguage::_cache0->buffer);
 	pipename->assign(ClLanguage::_cache1->buffer);
-	addressD->assign(ClLanguage::_cache2->buffer);
-	addressC->assign(ClLanguage::_cache3->buffer);
-	extra->assign(ClLanguage::_cache4->buffer);
+	iD->assign(ClLanguage::_cache2->buffer);
+	iC->assign(ClLanguage::_cache3->buffer);
 
 	return true;
 }
