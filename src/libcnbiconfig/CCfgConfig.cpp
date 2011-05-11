@@ -279,14 +279,17 @@ void CCfgConfig::ParseClassifierEx(const std::string& bl, const std::string& ts,
 	while(it != taskset->tasks.end()) {
 		std::string label;
 		
+		ICClass* cclass = NULL;
 		if(ltype.compare(ICClassifier::TxtLabelBiosig) == 0) {
-			char cache[16];
-			sprintf(cache, "0x%X", it->second->gdf);
-			label.assign(cache);
+			//char cache[16];
+			//sprintf(cache, "0x%X", it->second->gdf);
+			//label.assign(cache);
+			cclass = new ICClass(it->second->gdf, 0.00f);
 		} else {
-			label.assign(it->first);
+			//label.assign(it->first);
+			cclass = new ICClass(it->first, 0.00f);
 		}
-		ICClass* cclass = new ICClass(label, 0.00f);
+		//ICClass* cclass = new ICClass(label, 0.00f);
 		classifier->classes.Add(cclass);
 		it++;
 	}

@@ -21,13 +21,13 @@
 void usage(void) { 
 	printf("Usage: cl_ticmonitor [OPTION]...\n\n");
 	printf("  -p       TCP port (9500 default)\n");
-	printf("  -n       TCP server name (/feedback0 default)\n");
+	printf("  -n       TCP server name (/ctrl0 default)\n");
 	printf("  -h       display this help and exit\n");
 }
 
 int main(int argc, char* argv[]) {
 	int opt;
-	std::string optname("/feedback0");
+	std::string optname("/ctrl0");
 	CcPort optport("9500");
 	
 	while((opt = getopt(argc, argv, "p:n:h")) != -1) {

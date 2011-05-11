@@ -28,6 +28,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define PIPELINES 10
+
 using namespace std;
 
 void idle(void) {
@@ -58,7 +60,7 @@ int main(int argc, char* argv[]) {
 	bool optinteractive = false, optprintndf = false, optprintbuffers = false,
 		 optwarnlate = false;
 
-	while((opt = getopt(argc, argv, "d:f:n:hipwb")) != -1) {
+	while((opt = getopt(argc, argv, "d:f:l:n:hipwb")) != -1) {
 		if(opt == 'd')
 			optdevice.assign(optarg);
 		else if(opt == 'f')
@@ -84,10 +86,12 @@ int main(int argc, char* argv[]) {
 	CcCore::CatchSIGINT();
 	CcCore::CatchSIGTERM();
 
-	CcLogInfo(std::string("Acquisition configured: ").
-			append(optfs).append("Hz, ").
-			append(optpipename).append(", ").
-			append(optendpoint.GetAddress()).append("/TCP"));
+	CcLogInfoS("Acquisition configured: " << 
+			optfs << "Hz, " << 
+			optpipename << ", " << 
+			optendpoint.GetAddress() << "/TCP");
+	CcLogInfoS("Total pipelines set to " << PIPELINES << ": " <<
+			"/pipe[0," << PIPELINES << "] --> /ctrl[0," << PIPELINES << "]");
 	
 	// Variables for mainloop
 	CcTimeValue ticSignals;
@@ -120,7 +124,7 @@ int main(int argc, char* argv[]) {
 	CcPipeServer* pipes;
 	pipes = new CcPipeServer(frame.ack.buffer, frame.ack.bsize,
 			frame.data.bsize);
-	pipes->Open(optpipename, 6);
+	pipes->Open(optpipename, PIPELINES);
 
 	// Setup, Bind and register ClAcqAsServer
 	CcServerMulti server(true, 2000.00f, 5*CCCORE_1MB);
@@ -144,7 +148,7 @@ int main(int argc, char* argv[]) {
 	}
 	
 	// Register pipes on nameserver
-	for(int p = 0; p < 6; p++) { 
+	for(int p = 0; p < PIPELINES; p++) { 
 		std::stringstream pipename, pipepath;
 		pipename << "/pipe" << p;
 		pipepath << optpipename << p;
@@ -152,6 +156,16 @@ int main(int argc, char* argv[]) {
 		if(nsstatus != ClNamesLang::Successful) {
 			CcLogFatal("Cannot register pipes with nameserver");
 			CcCore::Exit(5);
+		}
+	}
+	for(int p = 0; p < PIPELINES; p++) { 
+		std::stringstream ctlname, ctrladdr;
+		ctlname << "/ctrl" << p;
+		ctrladdr << "127.0.0.1:590" << p;
+		int nsstatus = nsclient.Set(ctlname.str(), ctrladdr.str());
+		if(nsstatus != ClNamesLang::Successful) {
+			CcLogFatal("Cannot register controllers with nameserver");
+			CcCore::Exit(6);
 		}
 	}
 
@@ -204,11 +218,17 @@ shutdown:
 	server.Join();
 	nsclient.Unset("/acquisition");
 	
-	// Register pipes on nameserver
-	for(int p = 0; p < 6; p++) { 
+	// Deregister pipes on nameserver
+	for(int p = 0; p < PIPELINES; p++) { 
 		std::stringstream pipename;
 		pipename << "/pipe" << p;
 		nsclient.Unset(pipename.str());
+	}
+	// Deregister pipes on nameserver
+	for(int p = 0; p < PIPELINES; p++) { 
+		std::stringstream ctrl;
+		ctrl << "/ctrl" << p;
+		nsclient.Unset(ctrl.str());
 	}
 
 	if(writer.Close() == false)

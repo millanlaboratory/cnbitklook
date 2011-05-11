@@ -30,7 +30,7 @@ $ #include <stdio.h>
 	$ }
 	# CCfgConfig *cptr = new_config();
 
-@function [status, cptr] = ccfg_importfile(cptr, filename);
+@function [cptr] = ccfg_importfile(cptr, filename);
 	$ CCfgConfig* importfile(CCfgConfig* config, std::string* filename) {
 	$	try {
 	$		config->ImportFileEx(*filename);
