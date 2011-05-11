@@ -389,12 +389,12 @@
 			<wait>0x0001</wait>
 			<fixation>0x0001</fixation>
 			<errp>
-				<start>0x0001</start>
-				<stop>0x0001</stop>
+				<start>0x0010</start>
+				<stop>0x0011</stop>
 				<correct>0x0001</correct>
 				<error>0x0001</error>
-				<left>0x0001</left>
-				<right>0x0001</right>
+				<left>0x0400</left>
+				<right>0x0401</right>
 			</errp>
 		</gdfevents>
 		<hwtriggers>
