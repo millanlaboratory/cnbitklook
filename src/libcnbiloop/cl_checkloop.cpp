@@ -123,7 +123,7 @@ int main(int argc, char* argv[]) {
 
 shutdown:
 	ClLoop::acquisition.CloseXDF();
-	ClLoop::nameserver.Erase("ndf_monitor::scope");
+	ClLoop::nameserver.Erase("ndf_monitor::plot");
 	ClLoop::processing.Terminate(pid0);
 	ClLoop::processing.Terminate(pid1);
 

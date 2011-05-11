@@ -1,0 +1,62 @@
+%   Copyright (C) 2010 Michele Tavella <tavella.michele@gmail.com>
+%
+%   This file is part of matndf
+%
+%   The libndf library is free software: you can redistribute it and/or
+%   modify it under the terms of the version 3 of the GNU General Public
+%   License as published by the Free Software Foundation.
+%
+%   This program is distributed in the hope that it will be useful,
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%   GNU General Public License for more details.
+%
+%   You should have received a copy of the GNU General Public License
+%   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+%
+%   function [addressD, addressC] = ndf_checknames(cl, pipename, addressD, addressC)
+function [pipename, addressD, addressC] = ndf_checknames(cl, pipename, addressD, addressC)
+
+% See weather addressD and addressC are valid port names (i.e. /PORT),
+% otherwise die
+if(isempty(pipename) == false)
+	if(cl_checkname(pipename) == true)
+		pipename = cl_query(cl, pipename);
+		if(isempty(pipename))
+			disp(['[ndf_checknames] Warning: pipename not found!']);
+		end
+	else
+		disp('[ndf_checknames] Pipename in wrong format, killing matlab');
+		exit;
+	end
+else
+	disp('[ndf_checknames] Pipename is empty, XML configuration required');
+end
+
+if(isempty(addressD) == false)
+	if(cl_checkname(addressD) == true)
+		addressD = cl_query(cl, addressD);
+		if(isempty(addressD))
+			disp(['[ndf_checknames] Warning: iD address not found!']);
+		end
+	else
+		disp('[ndf_checknames] iD address in wrong format, killing matlab');
+		exit;
+	end
+else
+	disp('[ndf_checknames] iD address is empty, XML configuration required');
+end
+
+if(isempty(addressC) == false)
+	if(cl_checkname(addressC) == true)
+		addressC = cl_query(cl, addressC);
+		if(isempty(addressC))
+			disp(['[ndf_checknames] Warning: iC address not found!']);
+		end
+	else
+		disp('[ndf_checknames] iC address in wrong format, killing matlab');
+		exit;
+	end
+else
+	disp('[ndf_checknames] iC address is empty, XML configuration required');
+end

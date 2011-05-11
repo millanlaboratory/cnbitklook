@@ -14,46 +14,56 @@
 %   You should have received a copy of the GNU General Public License
 %   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
-%   function ndf_monitor(pipename, addressD, addressC)
-function ndf_monitor(pipename, addressD, addressC)
-
-if(nargin < 3); addressC = ''; end
-if(nargin < 2); addressD = ''; end
-if(nargin < 1); pipename = ''; end
-
+%   function ndf_checkonline(pipename, aD, aC)
+function ndf_checkonline(pn, aD, aC)
 % Include all the required toolboxes
 ndf_include();
 
 % Prepare and enter main loop
 try 
 	% Prepare Loop structure
-	loop.cl   = {};
-	loop.tic  = 0;
-	loop.toc  = 0;
+	loop.cl   = ndf_cl();
 	loop.jump = ndf_jump();
-	[loop.cl, pipename, addressD, addressC] = ...
-		ndf_cl(pipename, addressD, addressC);	
 	
+	% Check the names
+	% - if in format /name, then query the nameserver for the IPs/filenames
+	% - otherwise, keep them as they are
+	% - if pn, aD or aC are empty after calling ndf_checknames, their value
+	%   will be set according to what is stored in the XML configuration
+	% - also, if the nameserver query fails, pn, aD and aC will be empty and
+	%   their values will be set according to the XML configuration
+	%
+	% 2011-05-11  Michele Tavella <michele.tavella@epfl.ch>
+	% TODO I believe that the behaviour above might be a bit confusing, 
+	% so please feel free to do what you think is best to increase ease of use
+	%[pn, aD, aC] = ndf_checknames(loop.cl, pn, aD, aC);
+	[pn, aD, aC] = ndf_checknames(loop.cl, pn, aD, aC);
+	
+	% Get the configuration
+	cfg = ndf_cl_getconfig(loop.cl, 'ndfcheck_online');
+	
+	% If one among pn, aD or aC is empty, then get their values from the
+	% configuration and re-check the names
+	if(isempty(aC)); aC = cfg.ndf.ic; end
+	if(isempty(aD)); aD = cfg.ndf.id; end
+	if(isempty(pn)); pn = cfg.ndf.pn; end
+	[pn, aD, aC] = ndf_checknames(loop.cl, pn, aD, aC);
+	
+
+
+	% Prepare TOBI structure
+	% - when retrieving the taskset from the XML configuration, we also ask 
+	%   for an iC message to be returned configured according to the taskset
+	% - later on we will also aks for an iD message, but as today this is not
+	%   implemented yet
+	tobi = ndf_tobi(aD, aC, cfg.messageC);
+
 	% -------------------------------------------------------------- %
 	% User initialization                                            %
 	% -------------------------------------------------------------- %
-	cfg = {};
-	cfg.ns.block   = cl_retrieve(loop.cl, 'ndf_monitor::block');
-	cfg.ns.taskset = cl_retrieve(loop.cl, 'ndf_monitor::taskset');
-	cfg.ns.xml     = cl_retrieve(loop.cl, 'ndf_monitor::xml');
-		
-	cfg.taskset = ccfg_onlinem(config, cfg.ns.block, cfg.ns.taskset);
-
-	[cfg.classifier.name, cfg.classifier.description, cfg.classifier.filename] = ...
-		ccfgtaskset_getclassifier(cfg.ns.taskset);
-	[cfg.ndf.function, cfg.ndf.pipename, cfg.ndf.id, cfg.ndf.ic] = ...
-		ccfgtaskset_getndf(cfg.ns.taskset);
-	if(isempty(addressC)); addressC = cfg.ndf.ic; end
-	if(isempty(addressD)); addressD = cfg.ndf.id; end
-	if(isempty(pipename)); pipename = cfg.ndf.pipename; end
-
-	cfg.ns.scope   = cl_retrieve(loop.cl, 'ndf_monitor::scope');
-	cfg.scope = strcmp(configuration.ns.scope, 'true');
+	cfg.ns.scope = cl_retrieve(loop.cl, 'ndfcheck_online::scope');
+	cfg.scope = strcmp(cfg.ns.scope, 'true');
+	cfg.scope = 1;
 	% -------------------------------------------------------------- %
 	% /User initialization                                           %
 	% -------------------------------------------------------------- %
@@ -62,10 +72,9 @@ try
 	ndf.conf  = {};
 	ndf.size  = 0;
 	ndf.frame = ndf_frame();
-	ndf.sink  = ndf_sink(pipename);
-	% Prepare TOBI structure
-	tobi      = ndf_tobi(addressD, addressC);
+	ndf.sink  = ndf_sink(pn);
 		
+
 	% -------------------------------------------------------------- %
 	% User TOBI configuration                                        %
 	% -------------------------------------------------------------- %
@@ -73,17 +82,6 @@ try
 	idmessage_setdescription(tobi.iD.message, 'ndf_monitor');
 	idmessage_setfamilytype(tobi.iD.message, idmessage_familytype('biosig'));
 	idmessage_setevent(tobi.iD.message, 0);
-
-	% Configure TiC message
-	icmessage_addclassifier(tobi.iC.message, ...
-		'ndf_monitor', ...
-		'matndf passive monitor', ...
-		icmessage_getvaluetype('prob'), ...
-		icmessage_getlabeltype('custom'));
-	icmessage_addclass(tobi.iC.message, ...
-		'ndf_monitor', ... 
-		'frame', ...
-		781);
 	% -------------------------------------------------------------- %
 	% /User TOBI configuration                                       %
 	% -------------------------------------------------------------- %
@@ -124,11 +122,11 @@ try
 	% - ndf_jump*.m are methods to verify whether your script is
 	%   running too slow
 	disp('[ndf_monitor] Receiving NDF frames...');
-	loop.tic = ndf_tic();
+	loop.jump.tic = ndf_tic();
 	while(true) 
 		% Read NDF frame from pipe
-		loop.toc = ndf_toc(loop.tic);
-		loop.tic = ndf_tic();
+		loop.jump.toc = ndf_toc(loop.jump.tic);
+		loop.jump.tic = ndf_tic();
 		[ndf.frame, ndf.size] = ndf_read(ndf.sink, ndf.conf, ndf.frame);
 
 		% Acquisition is down, exit
@@ -152,7 +150,7 @@ try
 			eegc3_figure(1);
 			subplot(7, 1, 1:4)
 			imagesc(eegc3_car(eegc3_dc(buffer.eeg))');
-			title(sprintf('Frame=%6.6d, Dl=%7.2f (ms)', ndf.frame.index, loop.toc));
+			title(sprintf('Frame=%6.6d, Dl=%7.2f (ms)', ndf.frame.index, loop.jump.toc));
 			set(gca, 'XTickLabel', {});
 			ylabel('eeg');
 			
@@ -211,10 +209,16 @@ catch exception
 	disp(exception);
 	disp(exception.stack);
 	disp('[ndf_monitor] Killing Matlab...');
-	ndf_close(ndf.sink);
-	ndf_tobi_close(tobi);
-	cl_disconnect(loop.cl);
-	cl_delete(loop.cl);
+	if(exit('ndf.sink', 'var') == 1)
+		ndf_close(ndf.sink);
+	end
+	if(exit('tobi', 'var') == 1)
+		ndf_tobi_close(tobi);
+	end
+	if(exit('loop.cl', 'var') == 1)
+		cl_disconnect(loop.cl);
+		cl_delete(loop.cl);
+	end
 	exit;
 end
 

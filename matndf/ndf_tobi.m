@@ -14,8 +14,15 @@
 %   You should have received a copy of the GNU General Public License
 %   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
-%   function tobi = ndf_tobi(addressD, addressC)
-function tobi = ndf_tobi(addressD, addressC)
+%   function tobi = ndf_tobi(addressD, addressC, messageC, messageD)
+function tobi = ndf_tobi(addressD, addressC, messageC, messageD)
+
+if(nargin < 3)
+	messageC = 0;
+end
+if(nargin < 4)
+	messageD = 0;
+end
 
 tobi = {};
 
@@ -23,7 +30,13 @@ tobi = {};
 tobi.iD.socket  	= [];
 tobi.iD.address 	= '127.0.0.1:9000';
 tobi.iD.ipport  	= {'127.0.0.1', '9000'};
-tobi.iD.message 	= idmessage_new();
+if(messageD == 0)
+	disp('[ndf_tobi] Creating new TOBI iD message');
+	tobi.iD.message = idmessage_new();
+else
+	disp('[ndf_tobi] Using existing TOBI iD message');
+	tobi.iD.message = messageD;
+end
 tobi.iD.serializer 	= idserializerrapid_new(tobi.iD.message);
 tobi.iD.buffer 		= '';
 tobi.iD.cache 		= '';
@@ -35,7 +48,13 @@ tobi.iD.queue 		= {};
 tobi.iC.socket  	= [];
 tobi.iC.address 	= '127.0.0.1:9500';
 tobi.iC.ipport  	= {'127.0.0.1', '9500'};
-tobi.iC.message 	= icmessage_new();
+if(messageC == 0)
+	disp('[ndf_tobi] Creating new TOBI iC message');
+	tobi.iC.messag 	= icmessage_new();
+else
+	disp('[ndf_tobi] Using existing TOBI iC message');
+	tobi.iC.message	= messageC;
+end
 tobi.iC.serializer  = icserializerrapid_new(tobi.iC.message);
 tobi.iC.cache 		= '';
 tobi.iC.hdr 		= '<tobiic';
@@ -45,13 +64,13 @@ if(nargin >= 2 | isempty(addressD) == false)
 	tobi.iD.address = addressD;
 	tobi.iD.ipport 	= regexp(tobi.iD.address, ':', 'split');
 end
-disp(['[ndf_tobi] TOBI iD endpoint:' tobi.iD.address]);
+disp(['[ndf_tobi] TOBI iD endpoint: ' tobi.iD.address]);
 
 if(nargin >= 3 | isempty(addressC) == false)
 	tobi.iC.address = addressC;
 	tobi.iC.ipport 	= regexp(tobi.iC.address, ':', 'split');
 end
-disp(['[ndf_tobi] TOBI iC endpoint:' tobi.iC.address]);
+disp(['[ndf_tobi] TOBI iC endpoint: ' tobi.iC.address]);
 
 % iD socket
 % - Create a new TCP socket for sending/receiving events

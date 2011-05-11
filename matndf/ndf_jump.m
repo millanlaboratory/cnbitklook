@@ -26,3 +26,5 @@ jump.diff = 0;
 jump.isjumping = 0;
 jump.wait.waits = waits;
 jump.wait.tic = 0;
+jump.tic = 0;
+jump.toc = 0;

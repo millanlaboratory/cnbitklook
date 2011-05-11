@@ -130,8 +130,8 @@
 				<speed>100</speed>
 			</taskset>
 		</va>
-		<check description="Loop check">
-			<taskset ttype="mi_rhlh" ctype="check" classifier="kmi0">
+		<ndfcheck description="NDF loop check">
+			<taskset ttype="mi_rhlh" ctype="ndfcheck" classifier="kmi0">
 				<threshold>
 					<mi_hand_right>0.65</mi_hand_right>
 					<mi_hand_left>0.95</mi_hand_left>
@@ -142,7 +142,7 @@
 				</trials>
 			</taskset>
 			<integration>0.96</integration>
-		</check>
+		</ndfcheck>
 		<mi description="Online MI">
 			<taskset ttype="mi_rhlh" ctype="mi" classifier="kmi0">
 				<threshold>
@@ -215,18 +215,6 @@
 
 	<!-- Standard classifier type list -->
 	<classifiers>
-		<check description="Fake NDF monitor classifier">
-			<tobi>
-				<icvalue>ValueProb</icvalue>
-				<iclabel>LabelBiosig</iclabel>
-			</tobi>
-			<ndf>
-				<function>ndf_monitor</function>
-				<pipename>/pipe0</pipename>
-				<id>/acquisition</id>
-				<ic>/feedback</ic>
-			</ndf>
-		</check>
 		<mi description="Standard MI">
 			<tobi>
 				<icvalue>ValueProb</icvalue>
@@ -251,6 +239,18 @@
 				<ic>/errp_online</ic>
 			</ndf>
 		</errp>
+		<ndfcheck description="Fake NDF classifier">
+			<tobi>
+				<icvalue>ValueProb</icvalue>
+				<iclabel>LabelBiosig</iclabel>
+			</tobi>
+			<ndf>
+				<function>ndf_monitor</function>
+				<pipename>/pipe0</pipename>
+				<id>/acquisition</id>
+				<ic>/feedback</ic>
+			</ndf>
+		</ndfcheck>
 		<va description="Standard VA classifier">
 			<tobi>
 				<icvalue>ValueProb</icvalue>
