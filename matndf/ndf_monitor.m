@@ -42,9 +42,7 @@ try
 	cfg.ns.taskset = cl_retrieve(loop.cl, 'ndf_monitor::taskset');
 	cfg.ns.xml     = cl_retrieve(loop.cl, 'ndf_monitor::xml');
 		
-	cfg.taskset = ccfg_onlinem(config, ...
-		cfg.ns.block,
-		cfg.ns.taskset);
+	cfg.taskset = ccfg_onlinem(config, cfg.ns.block, cfg.ns.taskset);
 
 	[cfg.classifier.name, cfg.classifier.description, cfg.classifier.filename] = ...
 		ccfgtaskset_getclassifier(cfg.ns.taskset);

@@ -121,6 +121,15 @@
 	
 	<!-- Online Block -->
 	<online>
+		<va description="Visual Attention">
+			<taskset ttype="va_rl" ctype="va" classifier="kva0">
+				<integration>
+					<va_right>0.85</va_right>
+					<va_left>0.90</va_left>
+				</integration>
+				<speed>100</speed>
+			</taskset>
+		</va>
 		<check description="Loop check">
 			<taskset ttype="mi_rhlh" ctype="check" classifier="kmi0">
 				<threshold>
@@ -197,6 +206,10 @@
 			<description>ErrP_classifier</description>
 			<filename>b3_errp_20091202.mat</filename>
 		</kerrp0>
+		<kva0>
+			<description>Luca's first classifier</description>
+			<filename>b4_va_20111204.mat</filename>
+		</kva0>
 	</classifier>
 
 
@@ -238,6 +251,18 @@
 				<ic>/errp_online</ic>
 			</ndf>
 		</errp>
+		<va description="Standard VA classifier">
+			<tobi>
+				<icvalue>ValueProb</icvalue>
+				<iclabel>LabelBiosig</iclabel>
+			</tobi>
+			<ndf>
+				<function>ndf_va</function>
+				<pipename>/pipe3</pipename>
+				<id>/acquisition</id>
+				<ic>/feedbackva</ic>
+			</ndf>
+		</va>
 	</classifiers>
 
 
@@ -278,6 +303,10 @@
 			<class id="0" key="errp_detected"/>
 			<class id="1" key="errp_notdetected"/>
 		</errp> 
+		<va_rl description="Visual Attention 2: Right, Left">
+			<class id="0" key="va_left"/>
+			<class id="1" key="va_right"/>
+		</va_rl> 
 	</tasksets>
 	
 	<!-- Standard Task List -->
@@ -332,6 +361,16 @@
 			<gdfevent>0x0011</gdfevent>
 			<hwtrigger>3</hwtrigger>
 		</onset_false>
+		<va_right>
+			<description>VA_Right</description>
+			<gdfevent>0x0000</gdfevent>
+			<hwtrigger>1</hwtrigger>
+		</va_right>
+		<va_left>
+			<description>VA_Left</description>
+			<gdfevent>0x0000</gdfevent>
+			<hwtrigger>1</hwtrigger>
+		</va_left>
 	</tasks>
 	
 	<!-- Standard Events List -->
