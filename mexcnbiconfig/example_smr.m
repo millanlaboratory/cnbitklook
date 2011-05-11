@@ -15,19 +15,32 @@
 %   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 clear all;
-addpath('../mextobiic');
+if(mtpath_include('/opt/mextobiic') == 0)
+	mtpath_include('$CNBITK_MATLAB/mextobiic');
+end
 
 config = ccfg_new();
-ccfg_importfile(config, '../libcnbiconfig/extra/example.xml');
+ccfg_importfile(config, '../extra/cnbiconfig_example.xml');
 
 % Allocate ICMessage and ICSerializerRapid wrappers
 ic.message = icmessage_new();
 ic.serializer = icserializerrapid_new(ic.message);
 
-taskset = ccfg_onlinem(config, 'smr', 'mi_rhlh', ic.message);
-ic.classifier = ccfgtaskset_getclassifier(taskset);
+taskset = ccfg_onlinem(config, 'mi', 'mi_rhlh', ic.message);
 
+if(taskset == 0)
+	disp('Error: taskset not found');
+	return;
+end
 
+[ic.classifier.name, ic.classifier.description, ic.classifier.filename] = ...
+	ccfgtaskset_getclassifier(taskset);
+[ndf.function, ndf.pipename, ndf.id, ndf.ic] = ...
+	ccfgtaskset_getndf(taskset);
+
+	kk
+
+	
 tasktot = ccfgtaskset_count(taskset);
 fprintf(1, 'Taskset has %d tasks\n', tasktot);
 tasks = {};
@@ -43,8 +56,8 @@ for i = 1:1000
 	cprobs = rand(1, tasktot);
 	cprobs = cprobs ./ sum(cprobs);
 	for t = 1:tasktot
-		icmessage_setvalue(ic.message, ic.classifier, labels{t}, cprobs(t));
-		icmessage_setvalue(ic.message, ic.classifier, labels{t}, cprobs(t));
+		icmessage_setvalue(ic.message, ic.classifier.name, labels{t}, cprobs(t));
+		icmessage_setvalue(ic.message, ic.classifier.name, labels{t}, cprobs(t));
 	end
 	buffer = icmessage_serialize(ic.serializer);
 	fprintf(1, 'It %d: %s\n', i, buffer);

@@ -15,10 +15,12 @@
 %   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 clear all;
-addpath('../mextobiic');
+if(mtpath_include('/opt/mextobiic') == 0)
+	mtpath_include('$CNBITK_MATLAB/mextobiic');
+end
 
 config = ccfg_new();
-ccfg_importfile(config, '../libcnbiconfig/extra/example.xml');
+ccfg_importfile(config, '../extra/cnbiconfig_example.xml');
 
 ccfg_root(config);
 ccfg_setbranch(config);

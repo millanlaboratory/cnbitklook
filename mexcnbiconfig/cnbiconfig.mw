@@ -257,17 +257,39 @@ $ #include <stdio.h>
 	$ }
 	# int count = counttasks(CCfgTaskset* tptr);
 
-@function [classifier, tptr] = ccfgtaskset_getclassifier(tptr)
-	$ void getclassifier(CCfgTaskset* tptr, char* buffer) {
+@function [name, desc, file, tptr] = ccfgtaskset_getclassifier(tptr)
+	$ void getclassifier(CCfgTaskset* tptr, char* name, char* desc, char* file) {
 	$	try {
-	$ 		strcpy(buffer, tptr->classifier.c_str()); 
+	$ 		strcpy(name, tptr->classifier.name.c_str()); 
+	$ 		strcpy(desc, tptr->classifier.description.c_str()); 
+	$ 		strcpy(file, tptr->classifier.filename.c_str()); 
 	$	} catch(XMLException e) {
 	$		printf("[ccfgtaskset_getclassifier] Exception in libcnbiconfig: %s, %s\n",
 	$			e.Caller().c_str(), e.Info().c_str());
 	$	}
 	$ }
-	classifier = '';
-	# getclassifier(CCfgTaskset* tptr, inout cstring[4096] classifier);
+	name = '';
+	desc = '';
+	file = '';
+	# getclassifier(CCfgTaskset* tptr, inout cstring[4096] name, inout  cstring[4096] desc, inout cstring[4096] file);
+
+@function [fun, pipe, id, ic] = ccfgtaskset_getndf(tptr)
+	$ void getndf(CCfgTaskset* tptr, char* fun, char* pipe, char* id, char* ic) {
+	$	try {
+	$ 		strcpy(fun,  tptr->ndf.function.c_str()); 
+	$ 		strcpy(pipe, tptr->ndf.pipename.c_str()); 
+	$ 		strcpy(id,   tptr->ndf.id.c_str()); 
+	$ 		strcpy(ic,   tptr->ndf.ic.c_str()); 
+	$	} catch(XMLException e) {
+	$		printf("[ccfgtaskset_getclassifier] Exception in libcnbiconfig: %s, %s\n",
+	$			e.Caller().c_str(), e.Info().c_str());
+	$	}
+	$ }
+	fun = '';
+	pipe = '';
+	id = '';
+	ic = '';
+	# getndf(CCfgTaskset* tptr, inout cstring[4096] fun, inout cstring[4096] pipe, inout cstring[4096] id, inout cstring[4096] ic);
 
 @function [retval, tptr] = ccfgtaskset_hastask(tptr, what)
 	$ bool hastask(CCfgTaskset* tptr, std::string* what) {
