@@ -72,8 +72,8 @@ int main(int argc, char* argv[]) {
 		CcCore::Exit(2);
 	}
 
-	ClLoop::nameserver.Erase("ndf_monitor::scope");
-	ClLoop::nameserver.Store("ndf_monitor::scope", optplot);
+	ClLoop::nameserver.Erase("ndf_monitor::plot");
+	ClLoop::nameserver.Store("ndf_monitor::plot", optplot);
 
 	//ClLoop::nameserver.Set("/feedback0", "127.0.0.1:9500");
 	ClLoop::processing.ChangeDirectory(pid0, "/tmp/");

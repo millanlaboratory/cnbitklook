@@ -126,7 +126,7 @@ void ClProAsServer::HandleRecvEndpoint(CcSocket* caller, CcAddress address) {
 		if(process == NULL) {
 			server->Send(language.Error(ClProLang::NotFound), address);
 			CcLogInfoS("LaunchNDF from " << address << ": " 
-					<< pid << 
+					" PID=" << pid << 
 					" M-Fun=" << function << 
 					", NDF=" << pipename << 
 					", TiD=" << addressD << 
@@ -135,8 +135,8 @@ void ClProAsServer::HandleRecvEndpoint(CcSocket* caller, CcAddress address) {
 			process->LaunchNDF(function, pipename, addressD, addressC);
 			server->Send(language.Ok(pid), address);
 			CcLogInfoS("LaunchNDF from " << address << ": " 
-					<< pid << 
-					" M-Fun=" << function << 
+					" PID=" << pid << 
+					", M-Fun=" << function << 
 					", NDF=" << pipename << 
 					", TiD=" << addressD << 
 					", TiC=" << addressC);
