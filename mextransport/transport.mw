@@ -30,8 +30,11 @@ $ #include <stdlib.h>
 @function [sptr] = tr_delete(sptr);
 	# free(tr_socket* sptr);
 
+@function [sptr] = tr_init_socket(sptr, bsize, mconn);
+	# tr_init_socket(tr_socket* sptr, int bsize, int mconn);
+
 @function [sptr] = tr_init_socket_default(sptr);
-	# tr_init_socket_default(tr_socket* sptr);
+	# tr_init_socket(tr_socket* sptr, int 1024, int 1);
 
 @function [sptr] = tr_tcpclient(sptr);
 	# tr_tcpclient(tr_socket* sptr);
