@@ -28,7 +28,8 @@
 
 class ClAcqAsServer  : public CcSocketProxy {
 	public:
-		ClAcqAsServer(CaWriter* writer);
+		ClAcqAsServer(CaWriter* writer, 
+				ndf_frame* frame, CcSemaphore* semframe);
 		virtual ~ClAcqAsServer(void);
 
 		virtual void HandleBind(CcSocket* caller);
@@ -41,6 +42,7 @@ class ClAcqAsServer  : public CcSocketProxy {
 
 	private:
 		virtual bool CommunicationCl(CcServerMulti* server, CcAddress address);
+		virtual bool CommunicationTiD(CcServerMulti* server, CcAddress address);
 		virtual bool LogXDF(const std::string& logfile, const std::string& xdffile, 
 				const std::string& logline); 
 	protected:
@@ -49,6 +51,10 @@ class ClAcqAsServer  : public CcSocketProxy {
 		ClAcqLang language;
 	private:
 		CaWriter* _writer;
+		IDMessage _messageD;
+		IDSerializerRapid *_serializerD;
+		ndf_frame *_frame;
+		CcSemaphore *_semframe;
 };
 
 #endif

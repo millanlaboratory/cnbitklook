@@ -24,11 +24,19 @@
 #include <iostream>
 #include <fstream>
 
-ClAcqAsServer::ClAcqAsServer(CaWriter* writer) {
+ClAcqAsServer::ClAcqAsServer(CaWriter* writer, ndf_frame* frame,
+		CcSemaphore* semframe) {
 	this->_writer = writer;
+	this->_frame = frame;
+	this->_semframe = semframe;
+	this->_serializerD = new IDSerializerRapid(&this->_messageD);
 }
 
 ClAcqAsServer::~ClAcqAsServer(void) {
+	if(this->_serializerD == NULL)
+		return;
+	delete this->_serializerD;
+	this->_serializerD = NULL;
 }
 
 void ClAcqAsServer::HandleBind(CcSocket* caller) { 
@@ -134,6 +142,56 @@ bool ClAcqAsServer::CommunicationCl(CcServerMulti* server, CcAddress address) {
 		server->Send(language.Error(ClAcqLang::NotUndestood), address);
 		CcLogWarningS("Message from " << address << 
 				" not understood: " << message); 
+	}
+	return true;
+}
+
+bool ClAcqAsServer::CommunicationTiD(CcServerMulti* server, CcAddress address) {
+	int idblock = TCBlock::BlockIdxUnset, ndfblock = TCBlock::BlockIdxUnset;
+	IDevent idevent;
+	IDFtype idfamily;
+	std::string message;
+
+	if(server->datastreams[address]->Extract(&message, 
+			"<tobiid", "/>", CcStreamer::Forward) == false)
+		return false;
+
+	this->_serializerD->Deserialize(&message);
+	idevent = this->_messageD.GetEvent();
+	idfamily = this->_messageD.GetFamilyType();
+	idblock = this->_messageD.GetBlockIdx();
+	
+	// Verify family type for compatibility
+	if(idfamily != IDMessage::FamilyBiosig) {
+		CcLogWarning("TiD family type not supported");
+		return true;
+	}
+	
+	if(this->_messageD.absolute.IsSet()) {
+		this->_writer->Tic(&this->_messageD);
+		this->_semframe->Wait();
+		if(idblock == TCBlock::BlockIdxUnset) {
+			ndfblock = ndf_get_fidx(this->_frame);
+			this->_messageD.SetBlockIdx(ndfblock);
+		}
+		if(ndf_add_label(this->_frame, &idevent) == NULL)
+			CcLogError("TiD event is valid but cannot be added to NDF frame");
+		this->_writer->AddEvent(idevent);
+		this->_semframe->Post();
+
+		/* Perform all the necessary operations on the timestamps
+		 * and distribute to all connected clients but the sender
+		 */
+		this->_serializerD->Serialize(&message);
+		server->SendNot(message.c_str(), address);
+		
+		CcLogInfoS("TiD event from " << address << " distributed: " <<
+					this->_messageD.GetDescription() << "::" <<
+					idevent << "@" <<
+					idblock << "/" << ndfblock << 
+					" (" << this->_writer->TocOpen()/1000 << "s)");
+	} else {
+		CcLogError("TiD event is not valid and will not be distributed");
 	}
 	return true;
 }

@@ -52,7 +52,7 @@ libcnbiloop_la_LIBADD = $(builddir)/../libcnbicore/libcnbicore.la \
 
 LDADD = libcnbiloop.la
 
-cl_acquisition_SOURCES = cl_acquisition.cpp ClAcqAsServer.cpp ClAcqAsServer.hpp
+cl_acquisition_SOURCES = cl_acquisition.cpp ClAcqAsServer.cpp ClAcqAsServer.hpp ClTobiIdAsServer.cpp ClTobiIdAsServer.hpp
 cl_acquisition_LDADD = libcnbiloop.la $(top_builddir)/src/libcnbiacq/libcnbiacq.la
 cl_processing_SOURCES = cl_processing.cpp ClProAsServer.cpp ClProAsServer.hpp
 cl_nameserver_SOURCES = cl_nameserver.cpp ClNamesAsServer.cpp ClNamesAsServer.hpp
