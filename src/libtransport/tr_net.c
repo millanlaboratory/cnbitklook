@@ -31,8 +31,7 @@ void tr_init_host(tr_host* host) {
 	host->valid = TR_HOST_NOTVALID;
 }
 
-void tr_init_socket(tr_socket* sock, size_t bsize, 
-		unsigned int max_conns) {
+void tr_init_socket(tr_socket* sock, size_t bsize, unsigned int max_conns) {
 	memset(sock, 0, sizeof(sock));
 	sock->fd = TR_SOCKET_UNDEF;
 	sock->type = TR_TYPE_UNDEF;
@@ -52,10 +51,6 @@ void tr_init_socket(tr_socket* sock, size_t bsize,
 	tr_init_host(&(sock->remote));
 
 	sock->maxbsize = 0;
-}
-
-void tr_init_socket_default(tr_socket* sock) {
-	tr_init_socket(sock, (size_t)10240, (unsigned int)256);
 }
 
 int tr_open(tr_socket* sock) {

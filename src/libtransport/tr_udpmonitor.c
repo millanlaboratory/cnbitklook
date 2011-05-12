@@ -26,7 +26,7 @@
 int main(void) { 
 	printf("%s Starting up\n", EXAMPLE_NAME);
 	tr_socket socket;
-	tr_init_socket_default(&socket);
+	tr_init_socket(&socket, 1024, 1);
 	tr_udpserver(&socket);
 	
 	printf("%s Opening socket\n", EXAMPLE_NAME);

@@ -94,7 +94,7 @@ bool CcServerMulti::Accept(CcAddress* raddress) {
 	tr_socket* endpoint = NULL;
 	if(this->_endpointPtr == NULL) {
 		this->_endpointPtr = new tr_socket;
-		tr_init_socket_default(this->_endpointPtr);
+		tr_init_socket(this->_endpointPtr, CcSocket::_bsize, CcSocket::_maxconn);
 		tr_tcpendpoint(this->_endpointPtr);
 	}
 	endpoint = this->_endpointPtr;

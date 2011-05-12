@@ -49,16 +49,7 @@ void tr_init_host(tr_host* host);
  * @param bsize Buffer size
  * @param max_conns Maximum number of connections
  */
-void tr_init_socket(tr_socket* sock, size_t bsize, 
-		unsigned int max_conns);
-
-/*! \brief Initialize the tr_socket structure
- *
- * Default values
- *
- * @param sock The socket
- */
-void tr_init_socket_default(tr_socket* sock);
+void tr_init_socket(tr_socket* sock, size_t bsize, unsigned int max_conns);
 
 /*! \brief Open the socket
  * 
