@@ -176,7 +176,7 @@ int CcClient::Recv(void) {
 	}
 
 	CcSocket::_sembuffer.Wait();
-	bytes = tr_recv_ptr(CcSocket::_socket, CcSocket::_buffer); 
+	bytes = tr_recvb(CcSocket::_socket, CcSocket::_buffer, CcSocket::_bsize); 
 	if(bytes == TR_BYTES_ERROR || bytes == TR_BYTES_NONE) {
 		CcSocket::_semsocket.Post();
 		CcSocket::_sembuffer.Post();

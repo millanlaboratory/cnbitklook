@@ -114,7 +114,7 @@ int CcServerSingle::Recv(void) {
 
 	CcSocket::_sembuffer.Wait();
 	this->_semendpoint.Wait();
-	bytes = tr_recv_ptr(&this->_endpoint, CcSocket::_buffer);
+	bytes = tr_recvb(&this->_endpoint, CcSocket::_buffer, CcSocket::_bsize);
 	this->_semendpoint.Post();
 
 	if(bytes == TR_BYTES_ERROR || bytes == TR_BYTES_NONE) {

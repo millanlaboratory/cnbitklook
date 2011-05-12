@@ -383,7 +383,7 @@ int CcServerMulti::ImplRecv(CcAddress address) {
 	CcSocket::_sembuffer.Wait();
 	CcSocket::_semsocket.Wait();
 	CcSocketMapIt it = this->_endpoints.find(address);
-	bytes = tr_recv_ptr(&(*it->second), CcSocket::_buffer);
+	bytes = tr_recvb(&(*it->second), CcSocket::_buffer, CcSocket::_bsize);
 	CcSocket::_semsocket.Post();
 
 	if(bytes == TR_BYTES_NONE || bytes == TR_BYTES_NONE) {
