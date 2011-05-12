@@ -24,6 +24,7 @@ void usage(void) {
 	printf("Usage: cl_tidsender [OPTION]...\n\n");
 	printf("  -n       acquisition name (/acquisition default)\n");
 	printf("  -e       GDF event (default 666)\n");
+	printf("  -d       delay (in ms) for automatic mode (default disabled)\n");
 	printf("  -h       display this help and exit\n");
 	CcCore::Exit(1);
 }
@@ -31,14 +32,16 @@ void usage(void) {
 int main(int argc, char* argv[]) {
 	int opt;
 	std::string optname("/acquisition");
-	//GDFEvent event = 666;
 	unsigned int event = 666;
+	float ms = 0.00f;
 	
-	while((opt = getopt(argc, argv, "n:e:h")) != -1) {
+	while((opt = getopt(argc, argv, "n:d:e:h")) != -1) {
 		if(opt == 'n') {
 			optname.assign(optarg);
 		} else if(opt == 'e') {
 			sscanf(optarg, "%u", &event); 
+		} else if(opt == 'd') {
+			sscanf(optarg, "%f", &ms); 
 		} else {
 			usage();
 			CcCore::Exit(opt == 'h' ? EXIT_SUCCESS : EXIT_FAILURE);
@@ -67,17 +70,28 @@ int main(int argc, char* argv[]) {
 	
 		CcLogConfigS("iD sender now attached to: " << optname);
 		CcTime::Sleep(1000.00f);
-		printf("\n\nPress 'enter' to send GDF=%u, 'q' to quit:\n");
-		while(id.IsAttached() == true) { 
-			printf(">> ", event);
-			switch(getchar()) {
-				case 'q':
-					goto shutdown;
-					break;
-				default:
-					break;
+
+		if(ms == 0) {
+			printf("\n\nPress 'enter' to send GDF=%u, 'q' to quit:\n", event);
+			while(id.IsAttached() == true) { 
+				printf(">> ");
+				switch(getchar()) {
+					case 'q':
+						goto shutdown;
+						break;
+					default:
+						break;
+				}
+				id.SetMessage(&serializerI);
 			}
-			id.SetMessage(&serializerI);
+		} else { 
+			printf("\n\nSending GDF=%u every %f ms\n", event, ms);
+			while(id.IsAttached() == true) { 
+				id.SetMessage(&serializerI);
+				CcTime::Sleep(ms);
+				if(CcCore::receivedSIGAny.Get())
+					goto shutdown;
+			}
 		}
 		id.Detach();
 	}

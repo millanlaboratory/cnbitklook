@@ -127,7 +127,12 @@ int main(int argc, char* argv[]) {
 	pipes->Open(optpipename, PIPELINES);
 
 	// Setup, Bind and register ClAcqAsServer
-	CcServerMulti server(true, 2000.00f, 5*CCCORE_1MB);
+	/* 2011-05-12  Michele Tavella <michele.tavella@epfl.ch>
+	 * Found delay in starting iD communication. Must be inspected.
+	 * This is a temporary patch/hack.
+	 */
+	CcServerMulti server(true, 5000.00f, 5*CCCORE_1MB);
+	//CcServerMulti server(true, 1.00f, 5*CCCORE_1MB);
 	ClAcqAsServer handler(&writer, &frame, &semframe);
 	ClNamesClient nsclient;
 	try {

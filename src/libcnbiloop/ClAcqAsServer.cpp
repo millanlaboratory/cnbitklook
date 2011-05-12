@@ -63,8 +63,7 @@ void ClAcqAsServer::HandleDropEndpoint(CcSocket* caller, CcAddress address) {
 	CcLogDebugS("Dropped TCP endpoint: " << address);
 }
 
-void ClAcqAsServer::HandleRecvEndpoint(CcSocket* caller,
-		CcAddress address) { 
+void ClAcqAsServer::HandleRecvEndpoint(CcSocket* caller, CcAddress address) { 
 	CcServerMulti* server = (CcServerMulti*)caller;
 
 	while(this->CommunicationTiD(server, address));

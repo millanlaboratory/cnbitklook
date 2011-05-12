@@ -61,6 +61,19 @@ bool ClTobiId::Attach(const std::string& name) {
 	CB_CcSocket(this->_client->iOnDisconnect, this, HandleDisconnect);
 	CB_CcSocket(this->_client->iOnRecv, this, HandleRecv);
 
+	/* 2011-05-12  Michele Tavella <michele.tavella@epfl.ch>
+	 * Found delay in starting iD communication. Must be inspected.
+	 * This is a temporary patch/hack.
+	 */
+	//CcTime::Sleep(5000);
+
+	for(int i = 0; i < 50; i++) {
+		//CcLogFatalS("Connected: " << this->_client->IsConnected());
+		CcLogFatalS("Connected: " << this->_client->IsConnected() << " " <<
+			this->_client->Send("ciao"));
+		CcTime::Sleep(250);
+	}
+
 	return true;
 }
 
@@ -89,15 +102,16 @@ void ClTobiId::HandleDisconnect(CcSocket* caller) {
 }
 
 void ClTobiId::HandleRecv(CcSocket* caller) {
-	if(this->_semqueue.TryWait() == false) 
-		return;
+	//if(this->_semqueue.TryWait() == false) 
+	//	return;
+	this->_semqueue.Wait();
 	
 	if(this->_mode == ClTobiId::SetOnly) {
 		this->_client->datastream.Clear();	
 	} else {
 		std::string buffer;
 		bool status = this->_client->datastream.Extract(&buffer, "<tobiid",
-				"/>");
+				"/>", CcStreamer::Forward);
 		if(status) 
 			this->_queue.push_back(buffer);
 	}

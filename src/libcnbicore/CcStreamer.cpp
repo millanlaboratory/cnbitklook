@@ -44,7 +44,6 @@ bool CcStreamer::Extract(std::string *buffer, std::string hdr, std::string trl,
 		CcStreamerDirection direction) {
 	this->_mtxstream.Wait();
 	
-	
 	if(this->_stream.empty()) {
 		this->_mtxstream.Post();
 		return false;

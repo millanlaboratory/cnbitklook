@@ -58,20 +58,17 @@ int main(void) {
 			"ndf_monitor", 
 			"/tmp/pipe.whatever", 
 			"127.0.0.1:9000", 
-			"127.0.0.1:9500", 
-			"10, 14, 46") << endl;
+			"127.0.0.1:9500") << endl;
 	cout << pro.IsLaunchNDF(pro.message->buffer, 
 			&pid,
 			&function,
 			&pipename,
 			&addressD,
-			&addressC,
-			&extra) << endl;
+			&addressC) << endl;
 	cout << function << endl;
 	cout << pipename << endl;
 	cout << addressD << endl;
 	cout << addressC << endl;
-	cout << extra << endl;
 	
 	function.clear();
 	pipename.clear();
@@ -82,20 +79,17 @@ int main(void) {
 			"ndf_monitor", 
 			"/tmp/pipe.whatever", 
 			"127.0.0.1:9000", 
-			"127.0.0.1:9500", 
-			"") << endl;
+			"127.0.0.1:9500") << endl;
 	cout << pro.IsLaunchNDF(pro.message->buffer, 
 			&pid,
 			&function,
 			&pipename,
 			&addressD,
-			&addressC,
-			&extra) << endl;
+			&addressC) << endl;
 	cout << function << endl;
 	cout << pipename << endl;
 	cout << addressD << endl;
 	cout << addressC << endl;
-	cout << extra << endl;
 
 	return 0;
 }
