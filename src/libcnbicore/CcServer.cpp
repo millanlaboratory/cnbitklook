@@ -99,7 +99,7 @@ void CcServer::Bind(const unsigned int port, const unsigned int wait) {
 	
 	CcThread::Start();
 	while(CcThread::IsRunning() == false) 
-		CcTime::Sleep(CCASYNC_WAIT_THREAD);
+		CcTime::Sleep(CCASYNC_WAIT_CONNECT);
 	this->Listen();
 }
 		

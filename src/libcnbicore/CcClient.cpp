@@ -96,7 +96,7 @@ void CcClient::Connect(const CcIp ip, const CcPortUInt port,
 	this->pOnConnect();
 	CcThread::Start();
 	while(CcThread::IsRunning() == false) 
-		CcTime::Sleep(CCASYNC_WAIT_THREAD);
+		CcTime::Sleep(CCASYNC_WAIT_CONNECT);
 }
 
 void CcClient::Disconnect(void) {
