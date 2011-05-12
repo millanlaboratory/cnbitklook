@@ -223,9 +223,8 @@
 			<ndf>
 				<function>ndf_monitor</function>
 				<pipename>/pipe0</pipename>
-				<id>/acquisition</id>
+				<id>/bus</id>
 				<ic>/ctrl0</ic>
-				<ic2>/ticmonitor</ic2>
 			</ndf>
 		</ndfcheck>
 		<mi description="Standard MI classifier (pipeline 1)">
@@ -236,7 +235,7 @@
 			<ndf>
 				<function>ndf_mi</function>
 				<pipename>/pipe1</pipename>
-				<id>/acquisition</id>
+				<id>/bus</id>
 				<ic>/ctrl1</ic>
 			</ndf>
 		</mi>
@@ -248,7 +247,7 @@
 			<ndf>
 				<function>ndf_errp</function>
 				<pipename>/pipe2</pipename>
-				<id>/acquisition</id>
+				<id>/bus</id>
 				<ic>/ctrl2</ic>
 			</ndf>
 		</errp>
@@ -260,7 +259,7 @@
 			<ndf>
 				<function>ndf_va</function>
 				<pipename>/pipe3</pipename>
-				<id>/acquisition</id>
+				<id>/bus</id>
 				<ic>/ctrl3</ic>
 			</ndf>
 		</va>
