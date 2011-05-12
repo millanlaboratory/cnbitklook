@@ -50,7 +50,7 @@ int main(int argc, char* argv[]) {
 	
 	// Setup TCP server
 	CcEndpoint endpoint("0.0.0.0", optport);
-	CcServerMulti server(true, 2*250.00f, CCCORE_1MB);
+	CcServerMulti server(true, 50.00f, 5.00f, CCCORE_1MB);
 	ClNamesAsServer handler;
 	ClNamesClient nsclient;
 	handler.StartMonitor();
@@ -59,19 +59,19 @@ int main(int argc, char* argv[]) {
 		server.Bind(endpoint, 2);
 	} catch(CcException e) {
 		CcLogFatal("Cannot bind socket");
-		CcCore::Exit(1);
+		CcCore::Exit(2);
 	}
 
 	CcTime::Sleep(1000.00f);
 	if(nsclient.Connect(endpoint.GetAddress()) == false) {
 		CcLogFatal("Cannot connect to nameserver");
-		CcCore::Exit(2);
+		CcCore::Exit(3);
 	}
 	
 	int nsstatus = nsclient.Set("/nameserver", server.GetLocal());
 	if(nsstatus != ClNamesLang::Successful) {
 		CcLogFatal("Cannot register with nameserver");
-		CcCore::Exit(3);
+		CcCore::Exit(4);
 	}
 	
 	while(true) {

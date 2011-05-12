@@ -16,8 +16,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CLACQASSERVER_HPP 
-#define CLACQASSERVER_HPP 
+#ifndef CLTOBIIDASSERVER_HPP 
+#define CLTOBIIDASSERVER_HPP 
 
 #include "ClAcqLang.hpp"
 #include <libcnbiacq/CaWriter.hpp>
@@ -26,11 +26,11 @@
 #include <libcnbicore/CcBasic.hpp>
 #include <libcnbicore/CcServerMulti.hpp>
 
-class ClAcqAsServer  : public CcSocketProxy {
+class ClTobiIdAsServer  : public CcSocketProxy {
 	public:
-		ClAcqAsServer(CaWriter* writer, 
+		ClTobiIdAsServer(CaWriter* writer, 
 				ndf_frame* frame, CcSemaphore* semframe);
-		virtual ~ClAcqAsServer(void);
+		virtual ~ClTobiIdAsServer(void);
 
 		virtual void HandleBind(CcSocket* caller);
 		virtual void HandleRelease(CcSocket* caller);
@@ -41,14 +41,9 @@ class ClAcqAsServer  : public CcSocketProxy {
 		void Register(CcServerMulti* server);
 
 	private:
-		virtual bool CommunicationCl(CcServerMulti* server, CcAddress address);
 		virtual bool CommunicationTiD(CcServerMulti* server, CcAddress address);
-		virtual bool LogXDF(const std::string& logfile, const std::string& xdffile, 
-				const std::string& logline); 
 	protected:
 
-	public:
-		ClAcqLang language;
 	private:
 		CaWriter* _writer;
 		IDMessage _messageD;

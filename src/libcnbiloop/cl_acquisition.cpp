@@ -17,6 +17,7 @@
 */
 
 #include "ClAcqAsServer.hpp" 
+#include "ClTobiIdAsServer.hpp" 
 #include "ClAcqLang.hpp"
 #include "ClNamesClient.hpp"
 #include <libcnbiacq/CaWriter.hpp>
@@ -42,7 +43,8 @@ void usage(void) {
 	printf("Usage: cl_acquisition [OPTION]...\n\n");
 	printf("  -d       the device: gtec, biosemi, GDF/BDF file, EGD string\n");
 	printf("  -f       the buffering rate in Hz (16 default)\n");
-	printf("  -a       the TCP port for the acquisition server (9000 default)\n");
+	printf("  -A       the TCP port for the acquisition server (9000 default)\n");
+	printf("  -B       the TCP port for the acquisition server (9000 default)\n");
 	printf("  -n       the basename for the pipes (/tmp/cl.pipe.ndf. default)\n");
 	printf("  -i       interactive acquisition starting\n");
 	printf("  -p       print labels added to NDF frame\n");
@@ -55,18 +57,20 @@ int main(int argc, char* argv[]) {
 	int opt;
 	std::string optdevice("");
 	std::string optfs("16");
-	CcEndpoint optendpoint("127.0.0.1:9000");
+	CcEndpoint optepAcq("0.0.0.0:9000"), optepBus("0.0.0.0:9001");
 	std::string optpipename("/tmp/cl.pipe.ndf.");
 	bool optinteractive = false, optprintndf = false, optprintbuffers = false,
 		 optwarnlate = false;
 
-	while((opt = getopt(argc, argv, "d:f:l:n:hipwb")) != -1) {
+	while((opt = getopt(argc, argv, "A:B:d:f:l:n:hipwb")) != -1) {
 		if(opt == 'd')
 			optdevice.assign(optarg);
 		else if(opt == 'f')
 			optfs.assign(optarg);
-		else if(opt == 'a')
-			optendpoint.SetAddress(optarg);
+		else if(opt == 'A')
+			optepAcq.SetAddress(optarg);
+		else if(opt == 'B')
+			optepBus.SetAddress(optarg);
 		else if(opt == 'n')
 			optpipename.assign(optarg);
 		else if(opt == 'i')
@@ -88,11 +92,10 @@ int main(int argc, char* argv[]) {
 
 	CcLogInfoS("Acquisition configured: " << 
 			optfs << "Hz, " << 
-			optpipename << ", " << 
-			optendpoint.GetAddress() << "/TCP");
+			optpipename << "[0," << PIPELINES-1 << "]");
 	CcLogInfoS("Total pipelines set to " << PIPELINES << ": " <<
-			"/pipe[0," << PIPELINES << "] --> /ctrl[0," << PIPELINES << "]");
-	
+			"/pipe[0," << PIPELINES-1 << "] and /ctrl[0," << PIPELINES-1 << "]");
+
 	// Variables for mainloop
 	CcTimeValue ticSignals;
 	size_t gsize = -1, asize = -1;
@@ -126,29 +129,46 @@ int main(int argc, char* argv[]) {
 			frame.data.bsize);
 	pipes->Open(optpipename, PIPELINES);
 
-	// Setup, Bind and register ClAcqAsServer
-	/* 2011-05-12  Michele Tavella <michele.tavella@epfl.ch>
-	 * Found delay in starting iD communication. Must be inspected.
-	 * This is a temporary patch/hack.
-	 */
-	CcServerMulti server(true, 100.00f, CCCORE_1MB);
-	ClAcqAsServer acquisition(&writer, &frame, &semframe);
+	// Initialize nameserver client
 	ClNamesClient nsclient;
+	int nsstatus;
+	
+	CcServerMulti serverAcq(true, 50.00f, 5.00f, CCCORE_1MB);
+	ClAcqAsServer handleAcq(&writer);
 	try {
-		acquisition.Register(&server);
-		server.Bind(optendpoint, 2);
+		handleAcq.Register(&serverAcq);
+		serverAcq.Bind(optepAcq, 2);
 	} catch(CcException e) {
-		CcLogFatal("Cannot bind socket");
-		CcCore::Exit(1);
+		CcLogFatal("Cannot bind acquisition socket");
+		CcCore::Exit(4);
 	}
+
+	CcServerMulti serverBus(true, 2.50f, 1.00f, CCCORE_1MB);
+	ClTobiIdAsServer handleBus(&writer, &frame, &semframe);
+	try {
+		handleBus.Register(&serverBus);
+		serverBus.Bind(optepBus, 2);
+	} catch(CcException e) {
+		CcLogFatal("Cannot bind bus socket");
+		CcCore::Exit(5);
+	}
+
 	if(nsclient.Connect() == false) {
 		CcLogFatal("Cannot connect to nameserver");
-		CcCore::Exit(2);
+		CcCore::Exit(6);
 	}
-	int nsstatus = nsclient.Set("/acquisition", server.GetLocal());
+
+
+	nsstatus = nsclient.Set("/acquisition", serverAcq.GetLocal());
 	if(nsstatus != ClNamesLang::Successful) {
-		CcLogFatal("Cannot register with nameserver");
-		CcCore::Exit(3);
+		CcLogFatal("Cannot register acquisition with nameserver");
+		CcCore::Exit(7);
+	}
+	
+	nsstatus = nsclient.Set("/bus", serverBus.GetLocal());
+	if(nsstatus != ClNamesLang::Successful) {
+		CcLogFatal("Cannot register bus with nameserver");
+		CcCore::Exit(8);
 	}
 	
 	// Register pipes on nameserver
@@ -159,7 +179,7 @@ int main(int argc, char* argv[]) {
 		int nsstatus = nsclient.Set(pipename.str(), pipepath.str());
 		if(nsstatus != ClNamesLang::Successful) {
 			CcLogFatal("Cannot register pipes with nameserver");
-			CcCore::Exit(5);
+			CcCore::Exit(9);
 		}
 	}
 	for(int p = 0; p < PIPELINES; p++) { 
@@ -169,7 +189,7 @@ int main(int argc, char* argv[]) {
 		int nsstatus = nsclient.Set(ctlname.str(), ctrladdr.str());
 		if(nsstatus != ClNamesLang::Successful) {
 			CcLogFatal("Cannot register controllers with nameserver");
-			CcCore::Exit(6);
+			CcCore::Exit(10);
 		}
 	}
 
@@ -218,9 +238,13 @@ int main(int argc, char* argv[]) {
 
 shutdown:
 	// Stop and unregister ClAcqAsServer
-	server.Release();
-	server.Join();
+	serverAcq.Release();
+	serverAcq.Join();
 	nsclient.Unset("/acquisition");
+	
+	serverBus.Release();
+	serverBus.Join();
+	nsclient.Unset("/bus");
 	
 	// Deregister pipes on nameserver
 	for(int p = 0; p < PIPELINES; p++) { 

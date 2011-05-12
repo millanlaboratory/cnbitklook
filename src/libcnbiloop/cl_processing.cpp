@@ -49,7 +49,7 @@ int main(int argc, char* argv[]) {
 	CcLogInfoS("Processing configured: " << optport << "/TCP");
 	
 	// Setup TCP server
-	CcServerMulti server(true, 100.00f, CCCORE_1MB);
+	CcServerMulti server(true, 50.00f, 5.00f, CCCORE_1MB);
 	ClProAsServer handler;
 	ClNamesClient nsclient;
 
@@ -58,18 +58,18 @@ int main(int argc, char* argv[]) {
 		server.Bind(CcEndpoint("0.0.0.0", optport), 2);
 	} catch(CcException e) {
 		CcLogFatal("Cannot bind socket");
-		CcCore::Exit(1);
+		CcCore::Exit(2);
 	}
 
 	if(nsclient.Connect() == false) {
 		CcLogFatal("Cannot connect to nameserver");
-		CcCore::Exit(2);
+		CcCore::Exit(3);
 	}
 
 	int nsstatus = nsclient.Set("/processing", server.GetLocal());
 	if(nsstatus != ClNamesLang::Successful) {
 		CcLogFatal("Cannot register with nameserver");
-		CcCore::Exit(3);
+		CcCore::Exit(4);
 	}
 
 	while(true) {

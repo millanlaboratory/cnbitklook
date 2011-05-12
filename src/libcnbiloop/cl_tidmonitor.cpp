@@ -20,14 +20,14 @@
 
 void usage(void) { 
 	printf("Usage: cl_tidmonitor [OPTION]...\n\n");
-	printf("  -n       acquisition name (/acquisition default)\n");
+	printf("  -n       bus name (/bus default)\n");
 	printf("  -h       display this help and exit\n");
 	CcCore::Exit(1);
 }
 
 int main(int argc, char* argv[]) {
 	int opt;
-	std::string optname("/acquisition");
+	std::string optname("/bus");
 	
 	while((opt = getopt(argc, argv, "n:h")) != -1) {
 		if(opt == 'n')

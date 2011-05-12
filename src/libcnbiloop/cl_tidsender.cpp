@@ -22,7 +22,7 @@
 
 void usage(void) { 
 	printf("Usage: cl_tidsender [OPTION]...\n\n");
-	printf("  -n       acquisition name (/acquisition default)\n");
+	printf("  -n       iD bus name (/bus default)\n");
 	printf("  -e       GDF event (default 666)\n");
 	printf("  -d       delay (in ms) for automatic mode (default disabled)\n");
 	printf("  -h       display this help and exit\n");
@@ -31,7 +31,7 @@ void usage(void) {
 
 int main(int argc, char* argv[]) {
 	int opt;
-	std::string optname("/acquisition");
+	std::string optname("/bus");
 	unsigned int event = 666;
 	float ms = 0.00f;
 	
@@ -54,6 +54,7 @@ int main(int argc, char* argv[]) {
 
 	IDMessage messageI;
 	IDSerializerRapid serializerI(&messageI);
+	messageI.SetDescription("cl_tidsender");
 	messageI.SetFamilyType(IDMessage::FamilyBiosig);
 	messageI.SetEvent(event);
 
