@@ -31,7 +31,7 @@ class ClTobiId : public CcSocketProxy {
 	public:
 		ClTobiId(int mode = ClTobiId::SetOnly);
 		virtual ~ClTobiId(void);
-		bool Attach(const std::string& name = "/acquisition");
+		bool Attach(const std::string& name = "/bus");
 		bool Detach(void);
 		bool IsAttached(void);
 		bool GetMessage(IDSerializerRapid* serializer);
