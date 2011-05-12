@@ -16,8 +16,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "net.h"
-#include "udp.h"
+#include "tr_net.h"
+#include "tr_udp.h"
 #include <stdio.h>
 #include <unistd.h>
 

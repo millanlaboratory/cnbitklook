@@ -16,8 +16,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
  
-#include "udp.h"
-#include "net.h"
+#include "tr_udp.h"
+#include "tr_net.h"
 #include <string.h>
 
 void tr_udpserver(tr_socket* sock) {

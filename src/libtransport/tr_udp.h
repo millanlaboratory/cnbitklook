@@ -23,9 +23,9 @@
 extern "C" {
 #endif 
 
-#include "types.h"
+#include "tr_types.h"
 
-/*! \file udp.h 
+/*! \file tr_udp.h 
  *	\brief Low-level UDP functionalities
  */ 
 

@@ -19,7 +19,7 @@
 #ifndef CCNETWORKTYPES_HPP
 #define CCNETWORKTYPES_HPP
 
-#include <libtransport/types.h>
+#include <libtransport/tr_types.h>
 #include <map>
 #include <vector>
 #include <string>

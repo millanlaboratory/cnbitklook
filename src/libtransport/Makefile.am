@@ -7,17 +7,21 @@ bin_PROGRAMS = tr_tcpserver\
 			   tr_udpclient
 
 libtransport_includedir=$(includedir)/libtransport
-libtransport_include_HEADERS = net.h\
-			tcp.h\
-			udp.h\
-			names.h\
-			types.h
+libtransport_include_HEADERS = tr_net.h\
+							   tr_tcp.h\
+							   tr_udp.h\
+							   tr_names.h\
+							   tr_types.h
 
-libtransport_la_SOURCES = net.h net.c\
-			  tcp.h tcp.c\
-			  udp.h udp.c\
-			  names.h names.c\
-			  types.h
+libtransport_la_SOURCES = tr_net.h\
+						  tr_net.c\
+						  tr_tcp.h\
+						  tr_tcp.c\
+						  tr_udp.h\
+						  tr_udp.c\
+						  tr_names.h\
+						  tr_names.c\
+						  tr_types.h
 
 libtransport_la_LDFLAGS = $(AM_LDFLAGS) -version-info $(CURRENT):$(REVISION):$(AGE)
 pkgconfigdir = $(libdir)/pkgconfig
@@ -36,4 +40,3 @@ tr_udpmonitor_SOURCES = tr_udpmonitor.c
 tr_udpmonitor_LDADD = libtransport.la
 tr_tcpmonitor_SOURCES = tr_tcpmonitor.c
 tr_tcpmonitor_LDADD = libtransport.la
-

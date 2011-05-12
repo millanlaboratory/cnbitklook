@@ -20,7 +20,7 @@
 #define CCCLIENT_CPP
 		
 #include "CcClient.hpp"
-#include <libtransport/tcp.h>
+#include <libtransport/tr_tcp.h>
 #include <stdio.h>
 #include <string.h>
 

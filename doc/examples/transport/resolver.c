@@ -16,8 +16,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <libtransport/names.h>
-#include <libtransport/types.h>
+#include <libtransport/tr_names.h>
+#include <libtransport/tr_types.h>
 #include <stdio.h>
 #include <unistd.h>
 

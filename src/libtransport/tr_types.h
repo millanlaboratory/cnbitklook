@@ -26,7 +26,7 @@
 extern "C" {
 #endif 
 
-/*! \file types.h 
+/*! \file tr_types.h 
  *	\brief Socket and host data types
  */ 
 

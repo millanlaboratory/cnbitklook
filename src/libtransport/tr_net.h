@@ -23,10 +23,10 @@
 extern "C" {
 #endif 
 
-#include "types.h"
+#include "tr_types.h"
 
 
-/*! \file net.h 
+/*! \file tr_net.h 
  *	\brief Abstraction layer for TCP and UDP networking 
  *
  *	You should use the generic functions here defined unless you need to work at

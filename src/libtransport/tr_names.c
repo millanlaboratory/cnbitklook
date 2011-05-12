@@ -16,8 +16,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
  
-#include "names.h"
-#include "types.h"
+#include "tr_names.h"
+#include "tr_types.h"
 #include <netinet/in.h>
 #include <string.h>
 

@@ -23,7 +23,7 @@
 #include "CcFlags.hpp"
 #include "CcException.hpp"
 #include "CcLog.hpp"
-#include <libtransport/tcp.h>
+#include <libtransport/tr_tcp.h>
 #include <stdio.h>
 
 CcServer::CcServer(CcServerRole role, unsigned int bsize, unsigned int maxconns)

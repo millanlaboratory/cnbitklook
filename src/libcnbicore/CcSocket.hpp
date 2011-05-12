@@ -26,7 +26,7 @@
 #include "CcSemaphore.hpp"
 #include "CcStreamer.hpp"
 #include "CcThreadSafe.hpp"
-#include <libtransport/net.h>
+#include <libtransport/tr_net.h>
 
 /* Forward declaration */
 class CcSocketProxy;

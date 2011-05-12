@@ -16,7 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
  
-#include "tcp.h"
+#include "tr_tcp.h"
 #include <string.h>
 
 

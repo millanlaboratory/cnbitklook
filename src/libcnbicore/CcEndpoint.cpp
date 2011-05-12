@@ -22,7 +22,7 @@
 #include "CcEndpoint.hpp"
 #include "CcSocket.hpp"
 #include "CcBasic.hpp"
-#include <libtransport/names.h>
+#include <libtransport/tr_names.h>
 #include <sstream>
 #include <string.h>
 
