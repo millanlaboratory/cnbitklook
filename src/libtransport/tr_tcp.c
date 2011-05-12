@@ -42,7 +42,6 @@ int tr_recvtcpb(tr_socket* sock, void* buffer, size_t bsize) {
 	if(sock->protocol != TR_PROTO_TCP)
 		return TR_PROTO_NOTSUPPORTED;
 
-	memset(buffer, '\0', bsize);
 	return recv(sock->fd, buffer, bsize, 0);
 }
 

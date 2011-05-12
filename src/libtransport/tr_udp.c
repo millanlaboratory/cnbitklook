@@ -38,7 +38,6 @@ int tr_recvudpb(tr_socket* sock, void* buffer, size_t bsize) {
 	if(sock->protocol != TR_PROTO_UDP)
 		return TR_PROTO_NOTSUPPORTED;
 
-	memset(buffer, '\0', bsize);
 	int addr_len = sizeof(sock->address_endpoint);
 	int status = recvfrom(sock->fd, buffer, bsize, 0,
 			(struct sockaddr *)&sock->address_endpoint, (socklen_t*)&addr_len);

@@ -33,7 +33,7 @@
  */
 class CcClient : public CcSocket, public CcThread {
 	public: 
-		CcClient(size_t bsize = CCCORE_1MB, unsigned int maxconns = 256);
+		CcClient(size_t bsize = 128*CCCORE_1KB, unsigned int maxconns = 1);
 		virtual ~CcClient(void);
 		virtual void Connect(const CcEndpoint endpoint, const unsigned int wait = 0);
 		virtual void Connect(const CcAddress address, const unsigned int wait = 0);

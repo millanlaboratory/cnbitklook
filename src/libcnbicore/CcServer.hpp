@@ -35,8 +35,8 @@ typedef int CcServerRole;
 class CcServer : public CcSocket, public CcThread {
 	public:
 		CcServer(CcServerRole role = CcServer::AsServer, 
-				unsigned int bsize = CCCORE_1MB, 
-				unsigned int maxconns = 256);
+				unsigned int bsize = 128*CCCORE_1KB, 
+				unsigned int maxconns = 32);
 		~CcServer(void);
 		virtual int Recv(void) = 0; 
 		virtual int Send(const char* message) = 0;

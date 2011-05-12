@@ -34,7 +34,7 @@
 class CcServerMulti : public CcServer {
 	public:
 		CcServerMulti(bool multistream = true, double acceptms = CCASYNC_WAIT_MACCEPT, 
-				size_t bsize = CCCORE_1MB, unsigned maxconns = 256);
+				size_t bsize = 128*CCCORE_1KB, unsigned maxconns = 256);
 		virtual ~CcServerMulti(void);
 		
 		virtual int Recv(void); 

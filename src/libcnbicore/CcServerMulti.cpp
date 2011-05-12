@@ -61,12 +61,14 @@ void CcServerMulti::Main(void) {
 		CcSocket::_semsocket.Post();
 		
 		while(CcThread::IsRunning()) {
-			if(this->Recv() >= 0) 
+			if(this->Recv() >= 0) {
 				continue;
+			}
 			CcTime::Sleep(CCASYNC_WAIT_MRECV);
 			
 			if(CcTime::Toc(&acceptdt) < this->_acceptms)
 				continue;
+
 			if(this->Accept(&address)) {
 				this->_semendpoints.Wait();
 				if(this->ImplHasEndpoint(address)) {

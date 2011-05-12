@@ -150,11 +150,9 @@ int tr_accept(tr_socket* sock, tr_socket* endpoint) {
 			&addrlen);
 	endpoint->type = TR_TYPE_ENDPOINT;
 
-
 	// Fill local and remote host structures
 	tr_gethost_local(endpoint, &(endpoint->local));
 	tr_gethost_remote(endpoint, &(endpoint->remote));
-	
 	tr_getmaxbsize(endpoint);
 	
 	return endpoint->fd;

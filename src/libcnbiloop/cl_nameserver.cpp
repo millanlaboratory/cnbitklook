@@ -50,7 +50,7 @@ int main(int argc, char* argv[]) {
 	
 	// Setup TCP server
 	CcEndpoint endpoint("0.0.0.0", optport);
-	CcServerMulti server(true, 500.00f, 5*CCCORE_1MB);
+	CcServerMulti server(true, 2*250.00f, CCCORE_1MB);
 	ClNamesAsServer handler;
 	ClNamesClient nsclient;
 	handler.StartMonitor();

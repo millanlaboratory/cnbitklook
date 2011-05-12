@@ -203,11 +203,11 @@ void CcClient::Main(void) {
 	while(CcThread::IsRunning()) {
 		bytes = this->Recv();
 		switch(bytes) {
-			case TR_BYTES_ERROR:
-				CcThread::Stop();
-				break;
 			case TR_BYTES_NONE:
 				CcTime::Sleep(CCASYNC_WAIT_RECV);
+				break;
+			case TR_BYTES_ERROR:
+				CcThread::Stop();
 				break;
 			default:
 				continue;
