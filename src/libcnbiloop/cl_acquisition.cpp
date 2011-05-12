@@ -132,10 +132,10 @@ int main(int argc, char* argv[]) {
 	 * This is a temporary patch/hack.
 	 */
 	CcServerMulti server(true, 100.00f, CCCORE_1MB);
-	ClAcqAsServer handler(&writer, &frame, &semframe);
+	ClAcqAsServer acquisition(&writer, &frame, &semframe);
 	ClNamesClient nsclient;
 	try {
-		handler.Register(&server);
+		acquisition.Register(&server);
 		server.Bind(optendpoint, 2);
 	} catch(CcException e) {
 		CcLogFatal("Cannot bind socket");

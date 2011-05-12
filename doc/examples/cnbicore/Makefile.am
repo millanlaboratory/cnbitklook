@@ -1,28 +1,28 @@
 AM_CPPFLAGS = -I$(top_srcdir)/src
 
 check_PROGRAMS = ccmutex \
-				  ccobject \
-				  ccsemaphore \
-				  ccstreamer \
-				  ccthread \
-				  ccmultithread \
-				  cctime \
-				  ccclient \
-				  cclogentry \
-				  cclogger \
-				  ccserversingle \
-				  ccservermulti \
-				  ccthreadsafe \
-				  ccprocess \
-				  ccptable \
-				  ccpipesink \
-				  ccpipesource \
-				  ccpipewriter \
-				  ccpipereader \
-				  ccpipeserver \
-				  ccdoublebuffer \
-				  ccendpoint \
-				  ccfile
+				 ccobject \
+				 ccsemaphore \
+				 ccstreamer \
+				 ccthread \
+				 ccmultithread \
+				 cctime \
+				 ccclient \
+				 cclogentry \
+				 cclogger \
+				 ccserversingle \
+				 ccservermulti \
+				 ccthreadsafe \
+				 ccprocess \
+				 ccptable \
+				 ccpipesink \
+				 ccpipesource \
+				 ccpipewriter \
+				 ccpipereader \
+				 ccpipeserver \
+				 ccdoublebuffer \
+				 ccendpoint \
+				 ccfile
 
 ccptable_SOURCES = ccptable.cpp
 ccprocess_SOURCES = ccprocess.cpp
