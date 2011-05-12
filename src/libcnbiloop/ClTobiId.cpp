@@ -67,12 +67,12 @@ bool ClTobiId::Attach(const std::string& name) {
 	 */
 	//CcTime::Sleep(5000);
 
-	for(int i = 0; i < 50; i++) {
-		//CcLogFatalS("Connected: " << this->_client->IsConnected());
-		CcLogFatalS("Connected: " << this->_client->IsConnected() << " " <<
-			this->_client->Send("ciao"));
-		CcTime::Sleep(250);
-	}
+	//for(int i = 0; i < 50; i++) {
+	//	//CcLogFatalS("Connected: " << this->_client->IsConnected());
+	//	CcLogFatalS("Connected: " << this->_client->IsConnected() << " " <<
+	//		this->_client->Send("ciao"));
+	//	CcTime::Sleep(250);
+	//}
 
 	return true;
 }

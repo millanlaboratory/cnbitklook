@@ -67,7 +67,6 @@ void CcServerMulti::Main(void) {
 			
 			if(CcTime::Toc(&acceptdt) < this->_acceptms)
 				continue;
-			CcLogFatal("ACCEPTING NOW");
 			if(this->Accept(&address)) {
 				this->_semendpoints.Wait();
 				if(this->ImplHasEndpoint(address)) {
@@ -77,7 +76,6 @@ void CcServerMulti::Main(void) {
 				this->_semendpoints.Post();
 			}
 			CcTime::Tic(&acceptdt);
-			CcLogFatal("DONE ACCEPTING");
 		}
 	}
 	this->Drop();
