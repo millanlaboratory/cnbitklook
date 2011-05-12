@@ -148,7 +148,7 @@ int tr_recv(tr_socket* sock);
  * @return -1 if the connection is not valid, the number of received bytes
  * otherwise
  */
-int tr_recv_ptr(tr_socket* sock, void* buffer);
+int tr_recvb(tr_socket* sock, void* buffer, size_t bsize);
 
 /*! \brief Send data
  * 

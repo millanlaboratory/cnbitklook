@@ -208,23 +208,23 @@ int tr_connected(tr_socket* sock) {
 int tr_recv(tr_socket* sock) {
 	switch(sock->protocol) {
 		case TR_PROTO_TCP:
-			return tr_recvtcp(sock, sock->buffer);
+			return tr_recvtcp(sock);
 			break;
 		case TR_PROTO_UDP:
-			return tr_recvudp(sock, sock->buffer);
+			return tr_recvudp(sock);
 			break;
 		default:
 			return -2;
 	}
 }
 
-int tr_recv_ptr(tr_socket* sock, void* buffer) {
+int tr_recvb(tr_socket* sock, void* buffer, size_t bsize) {
 	switch(sock->protocol) {
 		case TR_PROTO_TCP:
-			return tr_recvtcp(sock, buffer);
+			return tr_recvtcpb(sock, buffer, bsize);
 			break;
 		case TR_PROTO_UDP:
-			return tr_recvudp(sock, buffer);
+			return tr_recvudpb(sock, buffer, bsize);
 			break;
 		default:
 			return -2;

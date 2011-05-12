@@ -38,11 +38,14 @@ void tr_tcpendpoint(tr_socket* sock);
 //! Initialize the tr_socket as a TCP client socket
 void tr_tcpclient(tr_socket* sock);
 
+//! Receive as TCP on the internal buffer
+int tr_recvtcp(tr_socket* sock);
+
 //! Receive as TCP
-int tr_recvtcp(tr_socket* sock, void* buffer);
+int tr_recvtcpb(tr_socket* sock, void* buffer, size_t bsize);
 
 //! Send as TCP
-int tr_sendtcp(tr_socket* sock, void* message, size_t bsize);
+int tr_sendtcp(tr_socket* sock, const void* message, size_t bsize);
 
 #ifdef __cplusplus
 }

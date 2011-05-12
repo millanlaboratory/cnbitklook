@@ -19,7 +19,6 @@
 #include "tr_tcp.h"
 #include <string.h>
 
-
 void tr_tcpserver(tr_socket* sock) {
 	sock->protocol = TR_PROTO_TCP;
 	sock->type = TR_TYPE_SERVER;
@@ -35,38 +34,40 @@ void tr_tcpclient(tr_socket* sock) {
 	sock->type = TR_TYPE_CLIENT;
 }
 
-int tr_recvtcp(tr_socket* sock, void* buffer) {
+int tr_recvtcp(tr_socket* sock) {
+	return tr_recvtcpb(sock, sock->buffer, sock->bsize);
+}
+
+int tr_recvtcpb(tr_socket* sock, void* buffer, size_t bsize) {
 	if(sock->protocol != TR_PROTO_TCP)
 		return TR_PROTO_NOTSUPPORTED;
 
-	memset(buffer, '\0', sock->bsize);
-	return recv(sock->fd, buffer, sock->bsize, 0);
+	memset(buffer, '\0', bsize);
+	return recv(sock->fd, buffer, bsize, 0);
 }
 
-#include <stdio.h>
-
-int tr_sendtcp(tr_socket* sock, void* buffer, size_t bsize) {
+int tr_sendtcp(tr_socket* sock, const void* buffer, size_t bsize) {
 	if(sock->protocol != TR_PROTO_TCP)
 		return TR_PROTO_NOTSUPPORTED;
 	
-	/*
-	size_t bytes = 0, tbytes = 0, csize = 0;
-	if(bsize <= sock->maxbsize) {
-		tbytes = send(sock->fd, buffer, bsize, MSG_NOSIGNAL);
-	} else { 
-		while(1) {
-			csize = tbytes + sock->maxbsize < bsize ? sock->maxbsize : bsize - tbytes;
-
-			bytes = send(sock->fd, buffer + tbytes, csize, MSG_NOSIGNAL);
-			if(bytes != -1) {
-				tbytes += bytes;
-			}
-			if(tbytes == bsize)
-				break;
-		}
-	}
-	return tbytes;
-	*/
 	return send(sock->fd, buffer, bsize, MSG_NOSIGNAL);
-
 }
+
+/*
+size_t bytes = 0, tbytes = 0, csize = 0;
+if(bsize <= sock->maxbsize) {
+	tbytes = send(sock->fd, buffer, bsize, MSG_NOSIGNAL);
+} else { 
+	while(1) {
+		csize = tbytes + sock->maxbsize < bsize ? sock->maxbsize : bsize - tbytes;
+
+		bytes = send(sock->fd, buffer + tbytes, csize, MSG_NOSIGNAL);
+		if(bytes != -1) {
+			tbytes += bytes;
+		}
+		if(tbytes == bsize)
+			break;
+	}
+}
+return tbytes;
+*/

@@ -30,21 +30,24 @@ void tr_udpclient(tr_socket* sock) {
 	sock->type = TR_TYPE_CLIENT;
 }
 
-int tr_recvudp(tr_socket* sock, void* buffer) {
+int tr_recvudp(tr_socket* sock) {
+	return tr_recvudpb(sock, sock->buffer, sock->bsize);
+}
+
+int tr_recvudpb(tr_socket* sock, void* buffer, size_t bsize) {
 	if(sock->protocol != TR_PROTO_UDP)
 		return TR_PROTO_NOTSUPPORTED;
 
-	memset(buffer, '\0', sock->bsize);
+	memset(buffer, '\0', bsize);
 	int addr_len = sizeof(sock->address_endpoint);
-	int status = recvfrom(sock->fd, 
-			sock->buffer, sock->bsize, 0,
+	int status = recvfrom(sock->fd, buffer, bsize, 0,
 			(struct sockaddr *)&sock->address_endpoint, (socklen_t*)&addr_len);
 	
 	tr_gethost_remote(sock, &(sock->remote));
 	return status;
 }
 
-int tr_sendudp(tr_socket* sock, void* buffer, size_t bsize) {
+int tr_sendudp(tr_socket* sock, const void* buffer, size_t bsize) {
 	if(sock->protocol != TR_PROTO_UDP)
 		return TR_PROTO_NOTSUPPORTED;
 
