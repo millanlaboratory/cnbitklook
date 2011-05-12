@@ -38,16 +38,12 @@
  */
 #define CCCORE_1KB				      1024 
 #define CCCORE_1MB				   1048576
+#define CCASYNC_WAIT_CONNECT		 5.000
 #define CCASYNC_WAIT_ACCEPT		   250.000
-#define CCASYNC_WAIT_CONNECT		 1.000
-#define CCASYNC_WAIT_RECV			 5.000
-#define CCASYNC_WAIT_DRAW			 0.020
-#define CCASYNC_WAIT_BEEP			 0.200
-#define CCASYNC_WAIT_EVENTS 		 0.050
-#define CCASYNC_WAIT_THREAD		 	15.000
-#define CCASYNC_WAIT_POLL			 0.500
 #define CCASYNC_WAIT_MACCEPT	   250.000
 #define CCASYNC_WAIT_MRECV			 5.000
+#define CCASYNC_WAIT_RECV			 5.000
+#define CCASYNC_WAIT_THREAD		 	10.000
 
 /*! \mainpage libcnbicore
  *
