@@ -31,7 +31,7 @@ int main(int argc, char * const argv[]) {
 
 	printf("%s Starting up\n", EXAMPLE_NAME);
 	tr_socket socket;
-	tr_init_socket_default(&socket);
+	tr_init_socket(&socket, 1024, 10);
 	tr_tcpserver(&socket);
 
 	tr_socket endpoint0;
@@ -52,12 +52,12 @@ int main(int argc, char * const argv[]) {
 
 	printf("%s Entering accept loop\n", EXAMPLE_NAME);
 		
-	tr_init_socket_default(&endpoint0);
+	tr_init_socket(&endpoint0, 1024, 1);
 	tr_tcpendpoint(&endpoint0);
 	tr_accept(&socket, &endpoint0);
 	printf("%s Accepted 0\n", EXAMPLE_NAME);
 
-	tr_init_socket_default(&endpoint1);
+	tr_init_socket(&endpoint1, 1024, 1);
 	tr_tcpendpoint(&endpoint1);
 	tr_accept(&socket, &endpoint1);
 	printf("%s Accepted 1\n", EXAMPLE_NAME);

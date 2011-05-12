@@ -31,11 +31,11 @@ int main(int argc, char * const argv[]) {
 
 	printf("%s Starting up\n", EXAMPLE_NAME);
 	tr_socket socket;
-	tr_init_socket_default(&socket);
+	tr_init_socket(&socket, 128, 1);
 	tr_tcpserver(&socket);
 
 	tr_socket endpoint;
-	tr_init_socket_default(&endpoint);
+	tr_init_socket(&endpoint, 128, 1);
 	tr_tcpendpoint(&endpoint);
 	
 	printf("%s Opening socket\n", EXAMPLE_NAME);
