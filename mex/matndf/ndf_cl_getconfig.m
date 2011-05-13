@@ -15,7 +15,7 @@
 % along with this program.  If not, see <http://www.gnu.org/licenses/>.
 function cfg = ndf_cl_getconfig(cl, name, pn, aD, aC);
 
-	if(nargin < 3); pn = ''; end
+if(nargin < 3); pn = ''; end
 if(nargin < 4); aD = ''; end
 if(nargin < 5); aC = ''; end
 
@@ -25,10 +25,11 @@ if(nargin < 5); aC = ''; end
 % - xml			the XML filename
 % - path		the working directory
 cfg = {};
-cfg.ns.block   = cl_retrieve(cl, [name '::block']);
-cfg.ns.taskset = cl_retrieve(cl, [name '::taskset']);
-cfg.ns.xml     = cl_retrieve(cl, [name '::xml']);
-cfg.ns.path    = cl_retrieve(cl, [name '::path']);
+cfg.ns.modality = cl_retrieve(cl, [name '::modality']);
+cfg.ns.block    = cl_retrieve(cl, [name '::block']);
+cfg.ns.taskset  = cl_retrieve(cl, [name '::taskset']);
+cfg.ns.xml      = cl_retrieve(cl, [name '::xml']);
+cfg.ns.path     = cl_retrieve(cl, [name '::path']);
 
 cfg.config = ccfg_new();
 if(ccfg_importfile(cfg.config, cfg.ns.xml) == 0)
@@ -69,6 +70,7 @@ if(isempty(pn) == false);
 end
 
 fprintf(1, '[ndf_cl_config] Nameserver configuration:\n');
+fprintf(1, '  Modality: %s\n', cfg.ns.modality);
 fprintf(1, '  Block:    %s\n', cfg.ns.block);
 fprintf(1, '  Taskset:  %s\n', cfg.ns.taskset);
 fprintf(1, '  XML:      %s\n', cfg.ns.xml);

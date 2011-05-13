@@ -23,7 +23,6 @@
 #include "CCfgXMLConfig.hpp"
 #include "CCfgTaskset.hpp"
 #include <tobiic/ICMessage.hpp>
-//#include "CCfgTypes.hpp"
 
 /*! \brief Parser for nested blocks according to the CNBI XML definitions
  *

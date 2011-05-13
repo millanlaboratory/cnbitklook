@@ -102,8 +102,10 @@ void CcClient::Disconnect(void) {
 	if(this->IsConnected() == false)
 		return;
 
-	CcThread::Stop();
-	CcThread::Join();
+	if(CcThread::IsRunning()) {
+		CcThread::Stop();
+		CcThread::Join();
+	}
 
 	this->CloseSocket();
 	this->iOnDisconnect.Execute((CcSocket*)this);

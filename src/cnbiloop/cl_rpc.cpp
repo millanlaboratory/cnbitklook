@@ -57,9 +57,12 @@ void usage(void) {
 	printf(" query NAME                        queries a NAME\n");
 	printf(" store NAME CONTENT                stores CONTENT under NAME\n");
 	printf(" retrieve NAME                     retrieves the CONTENT stored under NAME\n");
+	printf(" erase NAME                        erases the CONTENT stored under NAME\n");
+	printf(" storeconfig COMP NAME CONTENT     stores CONTENT under COMP::NAME\n");
+	printf(" retrieveconfig COMP NAME          retrieves the CONTENT stored under COMP::NAME\n");
+	printf(" eraseconfig COMP NAME             erases the CONTENT stored under COMP::NAME\n");
 	printf(" storefile NAME PATH               stores file PATH under NAME\n");
 	printf(" retrievefile NAME PATH            retrieves NAME and save it in PATH\n");
-	printf(" erase NAME                        erases the CONTENT stored under NAME\n");
 	printf(" fork                              fork a Matlab process\n");
 	printf(" launch PID COMMAND                launch a COMMAND in Matlab process PID\n");
 	printf(" isalive PID                       checks if PID is alive\n");
@@ -256,26 +259,61 @@ int main(int argc, char* argv[]) {
 		if(status == ClNamesLang::Successful)
 			cout << storage << endl;
 	
+	} else if(command.compare("erase") == 0) {
+		if(argc != 3) usage();
+		connect();
+		
+		status = ClLoop::nameserver.Erase(arg3);
+		nameserver(status);
+		return(status);
+	
+	} else if(command.compare("storeconfig") == 0) {
+		if(argc != 5) usage();
+		connect();
+
+		std::string name(arg1);
+		name.append("::");
+		name.append(arg2);
+		status = ClLoop::nameserver.Store(name, arg3);
+		nameserver(status);
+		return(status);
+
+	} else if(command.compare("retrieveconfig") == 0) {
+		if(argc != 4) usage();
+		connect();
+
+		std::string name(arg1);
+		name.append("::");
+		name.append(arg2);
+		std::string storage;
+		status = ClLoop::nameserver.Retrieve(name, &storage);
+		nameserver(status);
+		if(status == ClNamesLang::Successful)
+			cout << storage << endl;
+	
+	} else if(command.compare("eraseconfig") == 0) {
+		if(argc != 4) usage();
+		connect();
+
+		std::string name(arg1);
+		name.append("::");
+		name.append(arg2);
+		status = ClLoop::nameserver.Erase(name);
+		nameserver(status);
+		return(status);
+	
 	} else if(command.compare("storefile") == 0) {
 		if(argc != 4) usage();
 		connect();
 
 		bool status = ClLoop::nameserver.StoreFile(arg1, arg2);
-		return((int)status);
+		return(status);
 
 	} else if(command.compare("retrievefile") == 0) {
 		if(argc != 4) usage();
 		connect();
 
 		bool status = ClLoop::nameserver.RetrieveFile(arg1, arg2);
-		return((int)status);
-
-	} else if(command.compare("erase") == 0) {
-		if(argc != 3) usage();
-		connect();
-
-		status = ClLoop::nameserver.Erase(arg1);
-		nameserver(status);
 		return(status);
 
 	} else if(command.compare("fork") == 0) {

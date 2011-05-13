@@ -34,14 +34,18 @@ class ClNamesClient : public ClClient {
 		int Retrieve(const std::string& name, std::string* content);
 		int Store(const std::string& name, const std::string& content);
 		int Erase(const std::string& name);
-		std::string Retrieve(const std::string& name);
-
+		
+		bool StoreConfig(const std::string& component, 
+				const std::string& name, const std::string& content);
+		std::string RetrieveConfig(const std::string& component, 
+				const std::string& name);
+		bool EraseConfig(const std::string& component, const std::string& name);
+		
 		bool Store(const std::string& name, CcFile* file);
 		bool Retrieve(const std::string& name, CcFile* file);
 		
 		bool StoreFile(const std::string& name, const std::string& filename);
 		bool RetrieveFile(const std::string& name, const std::string& filename);
-
 	private:
 		ClNamesLang _language;
 };

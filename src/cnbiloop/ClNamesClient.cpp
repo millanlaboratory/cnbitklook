@@ -156,14 +156,6 @@ int ClNamesClient::Erase(const std::string& name) {
 	else
 		return ClNamesLang::StatusLost;
 }
-
-		
-std::string ClNamesClient::Retrieve(const std::string& name) {
-	std::string content;
-	if(this->Retrieve(name, &content) != ClNamesLang::Successful)
-		content.clear();
-	return content;
-}
 		
 bool ClNamesClient::Store(const std::string& name, CcFile* file) {
 	return(this->Store(name, file->Get()) == ClNamesLang::Successful);
@@ -194,4 +186,24 @@ bool ClNamesClient::RetrieveFile(const std::string& name,
 	return(file.Save(filename));
 }
 
+bool ClNamesClient::StoreConfig(const std::string& component, 
+		const std::string& name, const std::string& content) {
+	std::string tname = component + "::" + name;
+	return(this->Store(tname, content) == ClNamesLang::Successful);
+}
+
+std::string ClNamesClient::RetrieveConfig(const std::string& component, 
+		const std::string& name) {
+	std::string tname = component + "::" + name;
+	std::string content;
+	if(this->Retrieve(tname, &content) != ClNamesLang::Successful)
+		content.clear();
+	return content;
+}
+
+bool ClNamesClient::EraseConfig(const std::string& component, 
+		const std::string& name) {
+	std::string tname = component + "::" + name;
+	return(this->Erase(tname) == ClNamesLang::Successful);
+}
 #endif
