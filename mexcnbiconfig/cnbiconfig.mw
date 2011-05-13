@@ -15,11 +15,11 @@
 %   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-$ #include <libtobiic/ICMessage.hpp>
-$ #include <libcnbiconfig/CCfgConfig.hpp>
-$ #include <libcnbiconfig/CCfgTask.hpp>
-$ #include <libcnbiconfig/CCfgTaskset.hpp>
-$ #include <libcnbiconfig/XMLException.hpp>
+$ #include <tobiic/ICMessage.hpp>
+$ #include <cnbiconfig/CCfgConfig.hpp>
+$ #include <cnbiconfig/CCfgTask.hpp>
+$ #include <cnbiconfig/CCfgTaskset.hpp>
+$ #include <cnbiconfig/XMLException.hpp>
 $ #include <cstring>
 $ #include <iostream>
 $ #include <stdio.h>
