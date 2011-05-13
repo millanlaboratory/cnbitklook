@@ -22,7 +22,6 @@
 #include "CcPipe.hpp" 
 
 CcPipe::CcPipe(const std::string& filename) {
-	CcObject::SetName("CcPipe");
 	tp_init(&this->_pipe, filename.c_str());
 }
 

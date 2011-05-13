@@ -29,8 +29,6 @@
 CcServerMulti::CcServerMulti(bool multistream, double acceptms, double recvms, 
 		size_t bsize, unsigned maxconns) : CcServer(CcServer::AsServer, bsize,
 			maxconns) {
-	CcSocket::SetName("CcServerMulti");
-
 	this->OpenSocket();
 	this->_endpoints.clear();
 	this->_hosts.clear();

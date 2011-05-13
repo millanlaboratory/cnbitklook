@@ -21,7 +21,6 @@
 #include "CcMutex.hpp"
 
 CcMutex::CcMutex(void) {
-	CcObject::SetName("CcMutex");
 	pthread_mutex_init(&this->_mutex, NULL);
 }
 

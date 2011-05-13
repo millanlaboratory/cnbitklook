@@ -25,7 +25,7 @@
 #include <string.h>
 
 template <class T>
-CcBuffer<T>::CcBuffer(size_t size) : CcObject("CcBuffer") {
+CcBuffer<T>::CcBuffer(size_t size) {
 	this->bsize = size;
 	this->buffer = (T*)malloc(this->bsize);
 	this->Clear();

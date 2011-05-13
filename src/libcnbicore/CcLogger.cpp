@@ -35,7 +35,6 @@
 #define NOCOLOR			"\033[0m"
 
 CcLogger::CcLogger(bool syncdump, double writems) {
-	CcObject::SetName("CcLogger");
 	this->_listW = &this->_list1;
 	this->_listR = &this->_list2;
 	this->_writems = writems;

@@ -50,7 +50,6 @@ void cpcatchsigpipe(void) {
 }
 
 CcProcess::CcProcess(const std::string& cmd, bool write, bool read) {
-	CcObject::SetName("CcProcess");
 	this->_cmd.assign(cmd);
 	this->_canread = read;
 	this->_canwrite = write;

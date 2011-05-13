@@ -27,24 +27,19 @@
 #include <string.h>
 
 CcEndpoint::CcEndpoint(void) {
-	this->Init();
-	this->SetRole(CcEndpoint::RoleUndef);
 }
 
 CcEndpoint::CcEndpoint(const CcIp ip, const CcPort port) {
-	this->Init();
 	this->SetIp(ip);
 	this->SetPort(port);
 }
 
 CcEndpoint::CcEndpoint(const CcIp ip, const unsigned int port) {
-	this->Init();
 	this->SetIp(ip);
 	this->SetPortUInt(port);
 }
 		
 CcEndpoint::CcEndpoint(const CcAddress address) {
-	this->Init();
 	this->SetAddress(address);
 }
 
@@ -56,11 +51,6 @@ void CcEndpoint::Clear(void) {
 	this->_port = CcSocket::PortUnset;
 	this->_iport = CcSocket::PortUintUnset;
 	this->_address = CcSocket::AddressUnset;
-}
-
-void CcEndpoint::Init(void) {	
-	CcObject::SetName("CcEndpoint");
-	this->SetRole(CcEndpoint::RoleUndef);
 }
 
 void CcEndpoint::SetIp(const CcIp ip) {
@@ -115,14 +105,6 @@ void CcEndpoint::SetAddress(const CcAddress address) {
 
 CcAddress CcEndpoint::GetAddress(void) const {
 	return this->_address;
-}
-
-void CcEndpoint::SetRole(const CcEndpointRole role) {
-	this->_role = role;
-}
-
-CcEndpointRole CcEndpoint::GetRole(void) {
-	return this->_role;
 }
 
 void CcEndpoint::MakeAddress(const CcIp ip, const CcPort port) {

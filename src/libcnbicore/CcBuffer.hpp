@@ -31,11 +31,11 @@ class CcBuffer : public CcObject {
 	public:
 		CcBuffer(size_t size);
 		virtual ~CcBuffer(void);
-		virtual void Clear(void);
-		virtual void Write(const T* buffer, size_t size = 0);
-		virtual void Read(T* buffer, size_t size = 0);
-		virtual void Write(const CcBuffer* buffer, size_t size = 0);
-		virtual void Read(CcBuffer* buffer, size_t size = 0);
+		void Clear(void);
+		void Write(const T* buffer, size_t size = 0);
+		void Read(T* buffer, size_t size = 0);
+		void Write(const CcBuffer* buffer, size_t size = 0);
+		void Read(CcBuffer* buffer, size_t size = 0);
 	public:
 		T* buffer;
 		size_t bsize;

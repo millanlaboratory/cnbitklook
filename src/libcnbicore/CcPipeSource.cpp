@@ -23,7 +23,6 @@
 #include "CcBasic.hpp" 
 
 CcPipeSource::CcPipeSource(const std::string& filename) : CcPipe(filename) {
-	CcObject::SetName("CcPipeSink");
 }
 
 CcPipeSource::~CcPipeSource(void) {

@@ -32,17 +32,17 @@ class CcServerSingle : public CcServer {
 	public:
 		CcServerSingle(size_t bsize = CCCORE_1MB, unsigned maxconns = 1);
 		virtual ~CcServerSingle(void);
-		virtual int Recv(void); 
-		virtual int Send(const char* message);
-		virtual int Send(std::string* message);
-		virtual bool SendRecv(std::string *query, std::string *reply, 
+		int Send(const char* message);
+		int Send(std::string* message);
+		bool SendRecv(std::string *query, std::string *reply, 
 				std::string hdr, std::string trl, float waitms = -1);
 		CcAddress GetRemote(void);
-		virtual void Drop(void);
-		virtual bool IsConnected(void);
+		void Drop(void);
+		bool IsConnected(void);
 	protected:
-		virtual void Main(void);
-		virtual bool Accept(void);
+		int Recv(void); 
+		void Main(void);
+		bool Accept(void);
 
 	private:
 		tr_socket _endpoint;

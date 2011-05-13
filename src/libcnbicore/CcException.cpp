@@ -22,7 +22,6 @@
 #include "CcException.hpp"
 
 CcException::CcException(std::string info, std::string caller) {
-	CcObject::SetName("CcException");
 	this->_info = info;
 	this->_caller = caller;
 	this->CreateMessage();

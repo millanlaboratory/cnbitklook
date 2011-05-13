@@ -22,7 +22,6 @@
 #include "CcStreamer.hpp"
 
 CcStreamer::CcStreamer(void) {
-	CcObject::SetName("CcStreamer");
 }
 
 CcStreamer::~CcStreamer(void) {

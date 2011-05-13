@@ -39,7 +39,6 @@ class CcSocket : public CcObject {
 	public:
 		CcSocket(size_t bsize = 128*CCCORE_1KB, unsigned int maxconn = 1);
 		virtual ~CcSocket(void);
-		virtual int Recv(void) = 0; 
 		virtual int Send(const char* message) = 0;
 		virtual int Send(std::string* message) = 0;
 		long unsigned int GetBytesSend(void);
@@ -47,14 +46,15 @@ class CcSocket : public CcObject {
 		virtual bool IsConnected(void);
 		size_t GetBsize(void);
 	protected:
+		virtual int Recv(void) = 0; 
 		virtual void OpenSocket(void) = 0;
 		virtual void CloseSocket(void) = 0;
 		bool SetNonBlocking(bool value);
 		void AddBytesSend(const int bytes);	
 		void AddBytesRecv(const int bytes);
 	private:
-		virtual void AllocBuffer(size_t bsize, unsigned int maxconn);
-		virtual void FreeBuffer(void);
+		void AllocBuffer(size_t bsize, unsigned int maxconn);
+		void FreeBuffer(void);
 
 	public:
 		CcStreamer datastream;

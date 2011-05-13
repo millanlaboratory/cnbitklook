@@ -26,7 +26,6 @@
 
 CcClient::CcClient(size_t bsize, unsigned int maxconns) 
 	: CcSocket(bsize, maxconns) {
-	CcSocket::SetName("CcClient");
 }
 
 CcClient::~CcClient(void) {

@@ -24,8 +24,6 @@
 #include <libtransport/tr_net.h>
 #include <string>
 
-typedef int CcEndpointRole;
-
 /*! \brief TCP/UDP endpoint
  *
  * This class represents a TCP/UDP connection endpoint, and can be used both by
@@ -54,27 +52,17 @@ class CcEndpoint : public CcObject {
 		
 		virtual void SetAddress(const CcAddress address);
 		virtual CcAddress GetAddress(void) const;
-		
-		virtual void SetRole(const CcEndpointRole role);
-		virtual CcEndpointRole GetRole(void);
-		
 	private:
-		virtual void Init(void);
 		virtual void MakeAddress(const CcIp ip, const CcPort port);
 		virtual void MakeAddress(const CcIp ip, const unsigned int port);
 		virtual void MakeAddress(const tr_host *host);
 		virtual void DecomposeAddress(const CcAddress address);
 
-	public:
-		static const CcEndpointRole RoleUndef =  0;
-		static const CcEndpointRole RoleServer = 1;
-		static const CcEndpointRole RoleClient = 2;
 	private:
 		CcIp _ip;
 		CcAddress _address;
 		CcPort _port;
 		unsigned int _iport;
-		CcEndpointRole _role;
 };
 
 #endif

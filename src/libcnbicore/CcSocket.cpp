@@ -28,8 +28,7 @@ const CcPort CcSocket::PortUnset = "0";
 const CcIp CcSocket::IpUnset = "0.0.0.0";
 const CcAddress CcSocket::AddressUnset = "0.0.0.0:0";
 
-CcSocket::CcSocket(size_t bsize, unsigned int maxconn) : 
-	CcObject("CcSocket") {
+CcSocket::CcSocket(size_t bsize, unsigned int maxconn) {
 	this->_semsocket.Wait();
 	this->_socket = new tr_socket;
 	tr_init_socket(this->_socket, bsize, maxconn);

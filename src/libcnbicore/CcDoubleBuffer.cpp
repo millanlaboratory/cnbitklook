@@ -23,7 +23,6 @@
 #include <string.h>
 
 CcDoubleBuffer::CcDoubleBuffer(size_t bsize) {
-	CcObject::SetName("CcDoubleBuffer");
 	this->_bsize = bsize;
 	this->_buffer0 = new CcBuffer<>(bsize);
 	this->_buffer1 = new CcBuffer<>(bsize);

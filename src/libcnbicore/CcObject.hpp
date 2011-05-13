@@ -20,8 +20,6 @@
 #define CCOBJECT_HPP
 
 #include "CcCore.hpp"
-#include <string>
-#include <iostream>
 
 /*! \brief Root object
  *
@@ -32,26 +30,15 @@
 class CcObject {
 	friend class CcCore;
 	public:
-		CcObject(const char* name = "unset", bool verbose = false);
+		CcObject(void);
 		virtual ~CcObject(void);
-		CcObject* SetName(std::string name);
-		std::string GetName(void) const;
 		unsigned int GetInstances(void) const;
 		const void DumpInfo(void) const;
 
 	private:
-		std::string _objectName;
-		std::string _objectTimestamp;
-		std::string _objectDatetime;
 		static unsigned int _objectInstances;
 		unsigned int _objectId;
 		CcCore* _core;
-
-	public:
-		friend std::ostream &operator<<(std::ostream& output, const CcObject&);
-		friend std::ostream &operator<<(std::ostream& output, const CcObject*);
-		bool operator==(const CcObject& right);
-		bool operator!=(const CcObject& right);
 };
 
 #endif

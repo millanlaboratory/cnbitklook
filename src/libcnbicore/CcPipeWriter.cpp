@@ -22,7 +22,6 @@
 #include "CcPipeWriter.hpp" 
 
 CcPipeWriter::CcPipeWriter(size_t bsize) {
-	CcObject::SetName("CcPipeWriter");
 	CcPipeSource::CatchSIGPIPE();
 	this->_isopen.Set(false);
 	this->_pipe = NULL;

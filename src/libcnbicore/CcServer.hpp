@@ -38,7 +38,6 @@ class CcServer : public CcSocket, public CcThread {
 				unsigned int bsize = 128*CCCORE_1KB, 
 				unsigned int maxconns = 32);
 		~CcServer(void);
-		virtual int Recv(void) = 0; 
 		virtual int Send(const char* message) = 0;
 		virtual int Send(std::string* message) = 0;
 		virtual void Bind(const CcEndpoint enpoint, const unsigned int wait = 0);
@@ -46,8 +45,9 @@ class CcServer : public CcSocket, public CcThread {
 		virtual void Bind(const CcPortUInt port, const unsigned int wait = 0);
 		virtual void Bind(const tr_socket* const master);
 		virtual void Release(void);
-		virtual CcAddress GetLocal(void) ;
+		virtual CcAddress GetLocal(void);
 	protected:
+		virtual int Recv(void) = 0; 
 		virtual void Listen(void);
 		virtual void OpenSocket(void);
 		virtual void CloseSocket(void);

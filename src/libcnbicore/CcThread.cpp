@@ -23,7 +23,6 @@
 #include "CcThreadrunner.hpp"
 
 CcThread::CcThread(void) {
-	CcObject::SetName("CcThread");
 	this->_running = false;
 }
 

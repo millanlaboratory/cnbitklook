@@ -22,7 +22,6 @@
 #include "CcSemaphore.hpp"
 
 CcSemaphore::CcSemaphore(unsigned int count) {
-	CcObject::SetName("CcSemaphore");
 	sem_init(&this->_semaphore, 0, count);
 }
 

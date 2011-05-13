@@ -27,8 +27,6 @@
 
 CcServerEndpoint::CcServerEndpoint(unsigned int bsize, unsigned maxconns) :
 	CcServer(CcServer::AsEndpoint, bsize, maxconns) {
-	CcSocket::SetName("CcServerEndpoint");
-
 	this->OpenSocket();
 }
 

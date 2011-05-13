@@ -28,7 +28,6 @@
 
 CcPipeServer::CcPipeServer(void* ackbuffer, size_t ackbsize, 
 		size_t bsize, bool reopen) {
-	CcObject::SetName("CcPipeServer");
 	CcPipeSource::CatchSIGPIPE();
 	this->_reopen.Set(reopen);
 	this->_isopen.Set(false);

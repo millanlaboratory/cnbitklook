@@ -35,24 +35,25 @@ class CcClient : public CcSocket, public CcThread {
 	public: 
 		CcClient(size_t bsize = 128*CCCORE_1KB, unsigned int maxconns = 1);
 		virtual ~CcClient(void);
-		virtual void Connect(const CcEndpoint endpoint, const unsigned int wait = 0);
-		virtual void Connect(const CcAddress address, const unsigned int wait = 0);
-		virtual void Connect(const CcIp ip, const CcPortUInt port, 
+		void Connect(const CcEndpoint endpoint, const unsigned int wait = 0);
+		void Connect(const CcAddress address, const unsigned int wait = 0);
+		void Connect(const CcIp ip, const CcPortUInt port, 
 				const unsigned int wait = 0);
-		virtual void Disconnect(void);
-		virtual int Recv(void);
-		virtual int Send(const char* message);
-		virtual int Send(std::string* message);
-		virtual bool SendRecv(const char* query, std::string *reply, 
+		void Disconnect(void);
+		int Send(const char* message);
+		int Send(std::string* message);
+		bool SendRecv(const char* query, std::string *reply, 
 				std::string hdr, std::string trl, float waitms = -1);
-		virtual bool SendRecv(const std::string& query, std::string *reply, 
+		bool SendRecv(const std::string& query, std::string *reply, 
 				std::string hdr, std::string trl, float waitms = -1);
 		CcAddress GetRemote(void);
 		CcAddress GetLocal(void);
 	protected:
-		virtual void Main(void);
-		virtual void OpenSocket(void);
-		virtual void CloseSocket(void);
+		int Recv(void);
+		void Main(void);
+		void OpenSocket(void);
+		void CloseSocket(void);
+	private:
 		
 	protected:
 		CcEndpoint _hostLocal;

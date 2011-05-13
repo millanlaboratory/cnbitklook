@@ -40,27 +40,27 @@ class CcServerMulti : public CcServer {
 				unsigned maxconns = 256);
 		virtual ~CcServerMulti(void);
 		
-		virtual int Recv(void); 
-		virtual int Send(const char* message);
-		virtual int Send(const char* message, CcAddress address);
-		virtual int Send(std::string* message);
-		virtual int Send(std::string* message, CcAddress address);
-		virtual int SendNot(const char* message, CcAddress address);
-		virtual int SendNot(std::string* message, CcAddress address);
-		virtual bool SendRecv(std::string *query, std::string *reply, 
+		int Send(const char* message);
+		int Send(const char* message, CcAddress address);
+		int Send(std::string* message);
+		int Send(std::string* message, CcAddress address);
+		int SendNot(const char* message, CcAddress address);
+		int SendNot(std::string* message, CcAddress address);
+		bool SendRecv(std::string *query, std::string *reply, 
 				std::string hdr, std::string trl, float waitms = -1);
-		virtual void Drop(void);
-		virtual void DumpEndpoints(void);
+		void Drop(void);
+		void DumpEndpoints(void);
 		CcEndpointList GetRemote(void);
 	protected:
-		virtual void Main(void);
-		virtual bool Accept(CcAddress* raddress = NULL);
+		int Recv(void); 
+		void Main(void);
+		bool Accept(CcAddress* raddress = NULL);
 	private:
-		virtual int ImplRecv(CcAddress address); 
-		virtual int ImplSend(const char* message, CcAddress address);
-		virtual int ImplDrop(CcAddress address);
-		virtual bool ImplHasEndpoint(CcAddress address);
-		virtual bool ImplHasHost(CcAddress address);
+		int ImplRecv(CcAddress address); 
+		int ImplSend(const char* message, CcAddress address);
+		int ImplDrop(CcAddress address);
+		bool ImplHasEndpoint(CcAddress address);
+		bool ImplHasHost(CcAddress address);
 	public:
 		const static bool SingleStream = 0;
 		const static bool MultipleStreams = 1;
