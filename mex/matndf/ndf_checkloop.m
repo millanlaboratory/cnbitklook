@@ -14,7 +14,7 @@
 % You should have received a copy of the GNU General Public License
 % along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-function ndf_checkonline(pn, aD, aC)
+function ndf_checkloop(pn, aD, aC)
 % Include all the required toolboxes
 ndf_include();
 
@@ -31,7 +31,7 @@ try
 	%   will be set according to what is stored in the XML configuration
 	% - also, if the nameserver query fails, pn, aD and aC will be empty and
 	%   their values will be set according to the XML configuration
-	cfg = ndf_cl_getconfig(loop.cl, 'ndfcheck_online', pn, aD, aC);
+	cfg = ndf_cl_getconfig(loop.cl, 'checkloop', pn, aD, aC);
 	[pn, aD, aC] = ndf_checknames(loop.cl, cfg.ndf.pn, cfg.ndf.id, cfg.ndf.ic);
 	
 	if(isempty(pn))

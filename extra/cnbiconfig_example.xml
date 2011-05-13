@@ -122,7 +122,7 @@
 	<!-- Online Block -->
 	<online>
 		<ndfcheck description="NDF loop check">
-			<taskset ttype="mi_rhlh" ctype="ndfcheck" classifier="kmi0">
+			<taskset ttype="mi_rhlh" ctype="checkloop" classifier="kmi0">
 				<threshold>
 					<mi_hand_right>0.65</mi_hand_right>
 					<mi_hand_left>0.95</mi_hand_left>
@@ -195,13 +195,9 @@
 	<!-- Classifiers Block -->
 	<classifier>
 		<kmi0>
-			<description>Yesterday</description>
+			<description>MI_classifier</description>
 			<filename>b3_mi_20091204.mat</filename>
 		</kmi0>
-		<kmi1>
-			<description>Today</description>
-			<filename>b3_mi_20091202.mat</filename>
-		</kmi1>
 		<kerrp0>
 			<description>ErrP_classifier</description>
 			<filename>b3_errp_20091202.mat</filename>
@@ -215,18 +211,18 @@
 
 	<!-- Standard classifier type list -->
 	<classifiers>
-		<ndfcheck description="Fake NDF classifier (pipeline 0)">
+		<checkloop description="NDF classifier template (pipeline 0)">
 			<tobi>
 				<icvalue>ValueProb</icvalue>
 				<iclabel>LabelBiosig</iclabel>
 			</tobi>
 			<ndf>
-				<function>ndf_monitor</function>
+				<function>ndf_checkloop</function>
 				<pipename>/pipe0</pipename>
 				<id>/bus</id>
 				<ic>/ctrl0</ic>
 			</ndf>
-		</ndfcheck>
+		</checkloop>
 		<mi description="Standard MI classifier (pipeline 1)">
 			<tobi>
 				<icvalue>ValueProb</icvalue>
