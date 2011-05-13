@@ -15,8 +15,8 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include <libtransport/tr_net.h>
-#include <libtransport/tr_tcp.h>
+#include <transport/tr_net.h>
+#include <transport/tr_tcp.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>

@@ -18,4 +18,4 @@ clproclient2_SOURCES = clproclient2.cpp
 clnamesclient_SOURCES = clnamesclient.cpp
 clloop_SOURCES = clloop.cpp
 
-LDADD = $(top_builddir)/src/libcnbiloop/libcnbiloop.la
+LDADD = $(top_builddir)/src/cnbiloop/libcnbiloop.la

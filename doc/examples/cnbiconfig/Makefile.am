@@ -12,4 +12,4 @@ cnbitask_SOURCES = cnbitask.cpp
 xmlconfig_SOURCES = xmlconfig.cpp
 smarttype_SOURCES = smarttype.cpp 
 
-LDADD = $(top_builddir)/src/libcnbiconfig/libcnbiconfig.la
+LDADD = $(top_builddir)/src/cnbiconfig/libcnbiconfig.la

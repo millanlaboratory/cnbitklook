@@ -17,7 +17,7 @@ dist_bin_SCRIPTS = cl_rpcnotify \
 
 AM_CPPFLAGS = $(CPPFLAGS) -I$(top_srcdir)/src
 
-libcnbiloop_includedir=$(includedir)/libcnbiloop
+libcnbiloop_includedir=$(includedir)/cnbiloop
 libcnbiloop_include_HEADERS = ClMatlab.hpp \
 			  ClLanguage.hpp \
 			  ClAcqLang.hpp \
@@ -46,8 +46,8 @@ libcnbiloop_la_SOURCES = ClMatlab.cpp ClMatlab.hpp \
 
 libcnbiloop_la_LDFLAGS = $(AM_LDLAGS) -version-info $(CURRENT):$(REVISION):$(AGE) 
 libcnbiloop_la_LIBADD = $(builddir)/../cnbicore/libcnbicore.la \
-						$(builddir)/../libndf/libndf.la \
-						$(builddir)/../libcnbiconfig/libcnbiconfig.la \
+						$(builddir)/../ndf/libndf.la \
+						$(builddir)/../cnbiconfig/libcnbiconfig.la \
 						$(TOBIIC_LIBS) $(TOBIID_LIBS)
 
 LDADD = libcnbiloop.la

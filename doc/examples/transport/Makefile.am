@@ -14,4 +14,4 @@ serverchar_SOURCES = serverchar.c
 clientvoid_SOURCES = clientvoid.c
 servervoid_SOURCES = servervoid.c
 
-LDADD = $(top_builddir)/src/libtransport/libtransport.la
+LDADD = $(top_builddir)/src/transport/libtransport.la

@@ -48,4 +48,4 @@ ccdoublebuffer_SOURCES = ccdoublebuffer.cpp
 ccendpoint_SOURCES = ccendpoint.cpp
 ccfile_SOURCES = ccfile.cpp
 
-LDADD = $(top_builddir)/src/libcnbicore/libcnbicore.la
+LDADD = $(top_builddir)/src/cnbicore/libcnbicore.la

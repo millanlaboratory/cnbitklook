@@ -1,12 +1,12 @@
 EXTRA_DIST = autogen.sh
 
 ACLOCAL_AMFLAGS=-I m4
-SUBDIRS = src/libndf \
-		  src/libtransport \
-		  src/libtranspipe \
-		  src/libcnbicore \
-		  src/libcnbiacq \
-		  src/libcnbiconfig \
-		  src/libcnbiloop \
+SUBDIRS = src/ndf \
+		  src/transport \
+		  src/transpipe \
+		  src/cnbicore \
+		  src/cnbiacq \
+		  src/cnbiconfig \
+		  src/cnbiloop \
 		  doc\
 		  extra

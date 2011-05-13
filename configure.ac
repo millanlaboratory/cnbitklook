@@ -12,7 +12,7 @@ m4_define([lib_age],0)
 
 # Setup Autoconf
 AC_INIT(cnbiloop,[lib_release.lib_current.lib_age.lib_revision],michele.tavella@epfl.ch)
-AC_CONFIG_SRCDIR([src/libndf/ndf_codec.h])
+AC_CONFIG_SRCDIR([src/ndf/ndf_codec.h])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_HEADERS([config/config.h])

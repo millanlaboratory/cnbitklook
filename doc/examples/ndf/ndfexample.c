@@ -16,8 +16,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ndf_codec.h"
-#include "ndf_presets.h"
+#include <ndf/ndf_codec.h>
+#include <ndf/ndf_presets.h>
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
