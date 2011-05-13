@@ -44,7 +44,7 @@ void usage(void) {
 	printf("  -d       the device: gtec, biosemi, GDF/BDF file, EGD string\n");
 	printf("  -f       the buffering rate in Hz (16 default)\n");
 	printf("  -A       the TCP port for the acquisition server (9000 default)\n");
-	printf("  -B       the TCP port for the acquisition server (9000 default)\n");
+	printf("  -B       the TCP port for the bus server (9001 default)\n");
 	printf("  -n       the basename for the pipes (/tmp/cl.pipe.ndf. default)\n");
 	printf("  -i       interactive acquisition starting\n");
 	printf("  -p       print labels added to NDF frame\n");
