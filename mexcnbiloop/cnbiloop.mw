@@ -1,10 +1,10 @@
-%   Copyright (C) 2011 Michele Tavella <tavella.michele@gmail.com>
+%   Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
+%   Michele Tavella <michele.tavella@epfl.ch>
 %
-%   This file is part of the mexcnbiloop wrapper
-%
-%   The libndf library is free software: you can redistribute it and/or
-%   modify it under the terms of the version 3 of the GNU General Public
-%   License as published by the Free Software Foundation.
+%   This program is free software: you can redistribute it and/or modify
+%   it under the terms of the GNU General Public License as published by
+%   the Free Software Foundation, either version 3 of the License, or
+%   (at your option) any later version.
 %
 %   This program is distributed in the hope that it will be useful,
 %   but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -14,6 +14,7 @@
 %   You should have received a copy of the GNU General Public License
 %   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+
 $ #include <libcnbiloop/ClLoop.hpp>
 $ #include <libcnbicore/CcBasic.hpp>
 $ #include <libcnbicore/CcFile.hpp>
@@ -22,6 +23,9 @@ $ #include <iostream>
 $ #include <stdio.h>
 
 @function [c] = cl_new();
+% Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
+% Michele Tavella <michele.tavella@epfl.ch>
+
 	$ ClLoop* clnew(void) {
 	$ 	ClLoop* loop = ClLoop::Instance();
 	$ 	return loop;
@@ -29,9 +33,13 @@ $ #include <stdio.h>
 	# ClLoop *c = clnew();
 
 @function [c] = cl_delete(c)
+% Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
+% Michele Tavella <michele.tavella@epfl.ch>
 	# ClLoop::Release();
 
 @function [status] = cl_connect(c, nameserver)
+% Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
+% Michele Tavella <michele.tavella@epfl.ch>
 	$ bool clconnect(ClLoop* q, char* nameserver) {
 	$ 	std::string ns(nameserver);
 	$	return q->Connect(ns);
@@ -42,18 +50,24 @@ $ #include <stdio.h>
 	# bool status = clconnect(ClLoop* c, cstring nameserver[128]);
 
 @function cl_disconnect(c)
+% Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
+% Michele Tavella <michele.tavella@epfl.ch>
 	$ void cldisconnect(ClLoop* q) {
 	$	q->Disconnect();
 	$ }
 	# cldisconnect(ClLoop* c);
 
 @function [status] = cl_isconnected(c)
+% Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
+% Michele Tavella <michele.tavella@epfl.ch>
 	$ bool clisconnected(ClLoop* q) {
 	$	return q->IsConnected();
 	$ }
 	# bool status = clisconnected(ClLoop* c);
 
 @function [address] = cl_query(c, name)
+% Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
+% Michele Tavella <michele.tavella@epfl.ch>
 	$ void clquery(ClLoop* q, char* name, char* addr) {
 	$	std::string nm(name);
 	$	std::string ad = q->nameserver.Query(nm);
@@ -63,6 +77,8 @@ $ #include <stdio.h>
 	# clquery(ClLoop* c, cstring name[1024], inout cstring address[1024]);
 
 @function [status] = cl_set(c, name, address)
+% Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
+% Michele Tavella <michele.tavella@epfl.ch>
 	$ bool clset(ClLoop* q, char* name, char* addr) {
 	$	std::string nm(name), ad(addr);
 	$	return(q->nameserver.Set(nm, ad) == ClNamesLang::Successful);
@@ -70,6 +86,8 @@ $ #include <stdio.h>
 	# bool status = clset(ClLoop* c, cstring name[1024], cstring address[1024]);
 
 @function [status] = cl_unset(c, name)
+% Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
+% Michele Tavella <michele.tavella@epfl.ch>
 	$ bool clunset(ClLoop* q, char* name) {
 	$	std::string nm(name);
 	$	return(q->nameserver.Unset(nm) == ClNamesLang::Successful);
@@ -78,6 +96,8 @@ $ #include <stdio.h>
 
 
 @function [content] = cl_retrieve(c, name)
+% Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
+% Michele Tavella <michele.tavella@epfl.ch>
 	$ void clretrieve(ClLoop* q, char* name, char* content) {
 	$	std::string nm(name);
 	$	std::string cn = q->nameserver.Retrieve(nm);
@@ -87,6 +107,8 @@ $ #include <stdio.h>
 	# clretrieve(ClLoop* c, cstring name[1024], inout cstring content[10240]);
 
 @function [status] = cl_store(c, name, content)
+% Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
+% Michele Tavella <michele.tavella@epfl.ch>
 	$ bool clstore(ClLoop* q, char* name, char* content) {
 	$	std::string nm(name), cn(content);
 	$	return(q->nameserver.Store(nm, cn) == ClNamesLang::Successful);
@@ -94,6 +116,8 @@ $ #include <stdio.h>
 	# bool status = clstore(ClLoop* c, cstring name[1024], cstring content[10240]);
 
 @function [status] = cl_erase(c, name)
+% Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
+% Michele Tavella <michele.tavella@epfl.ch>
 	$ bool clerase(ClLoop* q, char* name) {
 	$	std::string nm(name);
 	$	return(q->nameserver.Erase(nm) == ClNamesLang::Successful);
@@ -101,6 +125,8 @@ $ #include <stdio.h>
 	# bool status = clerase(ClLoop* c, cstring name[1024]);
 
 @function [status] = cl_retrievefile(c, name, filename)
+% Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
+% Michele Tavella <michele.tavella@epfl.ch>
 	$ bool clretrievefile(ClLoop* q, char* name, char* filename) {
 	$	std::string nm(name), fn(filename);
 	$	return q->nameserver.RetrieveFile(nm, fn);
@@ -108,6 +134,8 @@ $ #include <stdio.h>
 	# bool status = clretrievefile(ClLoop* c, cstring name[1024], cstring filename[1024]);
 
 @function [status] = cl_storefile(c, name, filename)
+% Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
+% Michele Tavella <michele.tavella@epfl.ch>
 	$ bool clstorefile(ClLoop* q, char* name, char* filename) {
 	$	std::string nm(name), fn(filename);
 	$	return(q->nameserver.StoreFile(nm, fn));
@@ -115,6 +143,8 @@ $ #include <stdio.h>
 	# bool status = clstorefile(ClLoop* c, cstring name[1024], cstring filename[1024]);
 
 @function [status] = cl_openxdf(c, filexdf, filelog, linelog)
+% Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
+% Michele Tavella <michele.tavella@epfl.ch>
 	$ bool clopenxdf(ClLoop* q, char* filexdf, char* filelog, char* linelog) {
 	$	std::string xdf(filexdf), log(filelog), line(linelog);
 	$	return(q->acquisition.OpenXDF(xdf, log, line));
@@ -122,12 +152,16 @@ $ #include <stdio.h>
 	# bool status = clopenxdf(ClLoop* c, cstring filexdf[1024], cstring filelog[1024], cstring linelog[1024]);
 
 @function [status] = cl_closexdf(c)
+% Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
+% Michele Tavella <michele.tavella@epfl.ch>
 	$ bool clclosexdf(ClLoop* q) {
 	$	return(q->acquisition.CloseXDF());
 	$ }
 	# bool status = clclosexdf(ClLoop* c);
 
 @function [isvalid] = cl_checkname(name)
+% Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
+% Michele Tavella <michele.tavella@epfl.ch>
 	$ bool clcheckname(char* nm) {
 	$ 	ClNamesLang language;
 	$	return(language.CheckName(nm));

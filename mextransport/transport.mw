@@ -1,10 +1,10 @@
-%   Copyright (C) 2010 Michele Tavella <tavella.michele@gmail.com>
+%   Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
+%   Michele Tavella <michele.tavella@epfl.ch>
 %
-%   This file is part of the mextransport wrapper
-%
-%   The libndf library is free software: you can redistribute it and/or
-%   modify it under the terms of the version 3 of the GNU General Public
-%   License as published by the Free Software Foundation.
+%   This program is free software: you can redistribute it and/or modify
+%   it under the terms of the GNU General Public License as published by
+%   the Free Software Foundation, either version 3 of the License, or
+%   (at your option) any later version.
 %
 %   This program is distributed in the hope that it will be useful,
 %   but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -21,55 +21,88 @@ $ #include <cstring>
 $ #include <stdio.h>
 $ #include <stdlib.h>
 
+
 @function [sptr] = tr_new();
+% Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
+% Michele Tavella <michele.tavella@epfl.ch>
 	$ tr_socket* newsocket(void) { 
 	$	return (tr_socket*)malloc(sizeof(tr_socket));
 	$ }
 	# tr_socket* sptr = newsocket();
 
 @function [sptr] = tr_delete(sptr);
+% Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
+% Michele Tavella <michele.tavella@epfl.ch>
 	# free(tr_socket* sptr);
 
 @function [sptr] = tr_init_socket(sptr, bsize, mconn);
+% Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
+% Michele Tavella <michele.tavella@epfl.ch>
 	# tr_init_socket(tr_socket* sptr, int bsize, int mconn);
 
 @function [sptr] = tr_init_socket_default(sptr);
+% Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
+% Michele Tavella <michele.tavella@epfl.ch>
 	# tr_init_socket(tr_socket* sptr, int 1024, int 1);
 
 @function [sptr] = tr_tcpclient(sptr);
+% Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
+% Michele Tavella <michele.tavella@epfl.ch>
 	# tr_tcpclient(tr_socket* sptr);
 
 @function [sptr] = tr_tcpserver(sptr);
+% Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
+% Michele Tavella <michele.tavella@epfl.ch>
 	# tr_tcpserver(tr_socket* sptr);
 
 @function [sptr] = tr_tcpendpoint(sptr);
+% Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
+% Michele Tavella <michele.tavella@epfl.ch>
 	# tr_tcpendpoint(tr_socket* sptr);
 
 @function [status, sptr] = tr_open(sptr);
+% Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
+% Michele Tavella <michele.tavella@epfl.ch>
 	# int status = tr_open(tr_socket* sptr);
 
 @function [status, sptr] = tr_close(sptr);
+% Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
+% Michele Tavella <michele.tavella@epfl.ch>
 	# int status = tr_close(tr_socket* sptr);
 
 @function [sptr] = tr_free(sptr);
+% Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
+% Michele Tavella <michele.tavella@epfl.ch>
 	# tr_free(tr_socket* sptr);
 
 @function [status, sptr] = tr_connect(sptr, address, port);
+% Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
+% Michele Tavella <michele.tavella@epfl.ch>
 	# int status = tr_connect(tr_socket* sptr, cstring address, cstring port);
 
 @function [status, sptr] = tr_connected(sptr);
+% Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
+% Michele Tavella <michele.tavella@epfl.ch>
 	# int status = tr_connected(tr_socket* sptr);
 
 @function [status, sptr] = tr_check(sptr);
+% Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
+% Michele Tavella <michele.tavella@epfl.ch>
 	# int status = tr_check(tr_socket* sptr);
 
 @function [bytes, sptr] = tr_send(sptr, buffer);
+% Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
+% Michele Tavella <michele.tavella@epfl.ch>
 	# int bytes = tr_send(tr_socket* sptr, cstring buffer);
 
 @function [status, sptr] = tr_recv(sptr);
+% Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
+% Michele Tavella <michele.tavella@epfl.ch>
 	# int status = tr_recv(tr_socket* sptr);
 
 @function [buffer, sptr] = tr_getbuffer(sptr);
+% Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
+% Michele Tavella <michele.tavella@epfl.ch>
 	$ void getbuffer(tr_socket* socket, char* buffer) {
 	$ 	strcpy(buffer, (char*)socket->buffer);
 	$ }
@@ -77,18 +110,28 @@ $ #include <stdlib.h>
 	# getbuffer(tr_socket* sptr, inout cstring[1024] buffer);
 
 @function [status, sptr] = tr_bind(sptr, port);
+% Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
+% Michele Tavella <michele.tavella@epfl.ch>
 	# int status = tr_bind(tr_socket* sptr, cstring port);
 
 @function [status, sptr] = tr_listen(sptr);
+% Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
+% Michele Tavella <michele.tavella@epfl.ch>
 	# int status = tr_listen(tr_socket* sptr);
 
 @function [status, sptr] = tr_accept(sptr, eptr);
+% Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
+% Michele Tavella <michele.tavella@epfl.ch>
 	# int status = tr_accept(tr_socket* sptr, tr_socket* eptr);
 
 @function [status, sptr] = tr_set_nonblocking(sptr, value);
+% Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
+% Michele Tavella <michele.tavella@epfl.ch>
 	# int status = tr_set_nonblocking(tr_socket* sptr, int value);
 
 @function [address, port, sptr] = tr_getlocal(sptr);
+% Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
+% Michele Tavella <michele.tavella@epfl.ch>
 	$ int getlocal(tr_socket* socket, char* address) {
 	$ 	strcpy(address, socket->local.address);
 	$ 	return socket->local.port;
@@ -97,6 +140,8 @@ $ #include <stdlib.h>
 	# int port = getlocal(tr_socket* sptr, inout cstring[1024] address);
 
 @function [address, port, sptr] = tr_getremote(sptr);
+% Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
+% Michele Tavella <michele.tavella@epfl.ch>
 	$ int getremote(tr_socket* socket, char* address) {
 	$ 	strcpy(address, socket->remote.address);
 	$ 	return socket->remote.port;
