@@ -22,19 +22,15 @@ using namespace std;
 
 int main(void) {
 	CcObject *lonely = new CcObject();
-	lonely->SetName("lonely");
 	lonely->DumpInfo();
 	
 	CcObject *pool[5];
 	for(unsigned int j = 0; j < 5; j++) {
 		pool[j] = new CcObject();
-		pool[j]->SetName("pooled");
 	}
 	pool[0]->DumpInfo();
 
 	CcObject spool[5];
-	for(unsigned int j = 0; j < 5; j++) 
-		spool[j].SetName("spooled");
 	
 	spool[0].DumpInfo();
 
