@@ -17,7 +17,7 @@
 */
 
 #include <iostream>
-#include <libcnbicore/CcFile.hpp>
+#include <cnbicore/CcFile.hpp>
 using namespace std;
 
 int main(void) {

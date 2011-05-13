@@ -16,9 +16,9 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include <stdio.h>
-#include <libcnbicore/CcBasic.hpp>
-#include <libcnbicore/CcLog.hpp>
-#include <libcnbicore/CcTime.hpp>
+#include <cnbicore/CcBasic.hpp>
+#include <cnbicore/CcLog.hpp>
+#include <cnbicore/CcTime.hpp>
 
 int main(void) {
 	CcCore::OpenLogger("ciao");

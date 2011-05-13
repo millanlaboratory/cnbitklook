@@ -16,7 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <libcnbicore/CcStreamer.hpp>
+#include <cnbicore/CcStreamer.hpp>
 #include <stdio.h>
 #include <string>
 using namespace std;

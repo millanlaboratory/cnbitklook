@@ -15,10 +15,10 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include <libcnbicore/CcPipeSink.hpp>
-#include <libcnbicore/CcSemaphore.hpp>
-#include <libcnbicore/CcThread.hpp>
-#include <libcnbicore/CcBasic.hpp>
+#include <cnbicore/CcPipeSink.hpp>
+#include <cnbicore/CcSemaphore.hpp>
+#include <cnbicore/CcThread.hpp>
+#include <cnbicore/CcBasic.hpp>
 #include <iostream>
 
 class Reader : public CcThread {

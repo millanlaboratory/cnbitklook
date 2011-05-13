@@ -16,9 +16,9 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <libcnbicore/CcClient.hpp>
-#include <libcnbicore/CcCore.hpp>
-#include <libcnbicore/CcTime.hpp>
+#include <cnbicore/CcClient.hpp>
+#include <cnbicore/CcCore.hpp>
+#include <cnbicore/CcTime.hpp>
 #include <stdio.h>
 
 class EventHandler : public CcSocketProxy {

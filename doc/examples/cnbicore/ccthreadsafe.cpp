@@ -17,7 +17,7 @@
 */
 
 #include <iostream>
-#include <libcnbicore/CcThreadSafe.hpp>
+#include <cnbicore/CcThreadSafe.hpp>
 using namespace std;
 
 int main(void) {

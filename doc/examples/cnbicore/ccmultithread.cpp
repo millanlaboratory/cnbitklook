@@ -16,8 +16,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <libcnbicore/CcMutex.hpp>
-#include <libcnbicore/CcThread.hpp>
+#include <cnbicore/CcMutex.hpp>
+#include <cnbicore/CcThread.hpp>
 #include <pthread.h>
 #include <stdio.h>
 #include <string>

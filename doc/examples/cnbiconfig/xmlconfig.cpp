@@ -16,7 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <libcnbiconfig/CCfgXMLConfig.hpp>
+#include <cnbiconfig/CCfgXMLConfig.hpp>
 #include <iostream>
 
 using namespace std;

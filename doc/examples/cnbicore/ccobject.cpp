@@ -16,7 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <libcnbicore/CcObject.hpp>
+#include <cnbicore/CcObject.hpp>
 
 using namespace std;
 

@@ -15,8 +15,8 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include <libcnbiloop/ClAcqClient.hpp>
-#include <libcnbicore/CcBasic.hpp>
+#include <cnbiloop/ClAcqClient.hpp>
+#include <cnbicore/CcBasic.hpp>
 #include <iostream>
 
 using namespace std;

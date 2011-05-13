@@ -16,11 +16,11 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <libcnbicore/CcCore.hpp>
-#include <libcnbicore/CcObject.hpp>
-#include <libcnbicore/CcSocket.hpp>
-#include <libcnbicore/CcServerSingle.hpp>
-#include <libcnbicore/CcTime.hpp>
+#include <cnbicore/CcCore.hpp>
+#include <cnbicore/CcObject.hpp>
+#include <cnbicore/CcSocket.hpp>
+#include <cnbicore/CcServerSingle.hpp>
+#include <cnbicore/CcTime.hpp>
 #include <stdio.h>
 
 class EventHandler : public CcSocketProxy {

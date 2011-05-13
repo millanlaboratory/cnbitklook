@@ -16,9 +16,9 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <libcnbicore/CcBasic.hpp>
-#include <libcnbicore/CcThread.hpp>
-#include <libcnbicore/CcDoubleBuffer.hpp>
+#include <cnbicore/CcBasic.hpp>
+#include <cnbicore/CcThread.hpp>
+#include <cnbicore/CcDoubleBuffer.hpp>
 #include <string.h>
 #include <iostream>
 

@@ -16,7 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <libcnbicore/CcEndpoint.hpp>
+#include <cnbicore/CcEndpoint.hpp>
 
 using namespace std;
 

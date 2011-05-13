@@ -16,7 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <libcnbiloop/ClProLang.hpp>
+#include <cnbiloop/ClProLang.hpp>
 #include <iostream>
 
 using namespace std;

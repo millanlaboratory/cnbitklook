@@ -15,8 +15,8 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include <libcnbicore/CcPipeWriter.hpp>
-#include <libcnbicore/CcBasic.hpp>
+#include <cnbicore/CcPipeWriter.hpp>
+#include <cnbicore/CcBasic.hpp>
 #include <iostream>
 #include <string.h>
 

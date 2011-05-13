@@ -16,9 +16,9 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <libcnbiconfig/CCfgConfig.hpp>
-#include <libtobiic/ICMessage.hpp>
-#include <libtobiic/ICSerializerRapid.hpp>
+#include <cnbiconfig/CCfgConfig.hpp>
+#include <tobiic/ICMessage.hpp>
+#include <tobiic/ICSerializerRapid.hpp>
 #include <iostream>
 #include <string>
 

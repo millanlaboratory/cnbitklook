@@ -16,7 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <libcnbiconfig/CCfgConfig.hpp>
+#include <cnbiconfig/CCfgConfig.hpp>
 #include <iostream>
 #include <string>
 

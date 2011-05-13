@@ -16,9 +16,9 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <libcnbiloop/ClNamesClient.hpp>
-#include <libcnbicore/CcBasic.hpp>
-#include <libcnbicore/CcFile.hpp>
+#include <cnbiloop/ClNamesClient.hpp>
+#include <cnbicore/CcBasic.hpp>
+#include <cnbicore/CcFile.hpp>
 #include <iostream>
 
 using namespace std;

@@ -16,9 +16,9 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <libcnbicore/CcSemaphore.hpp>
-#include <libcnbicore/CcThread.hpp>
-#include <libcnbicore/CcTime.hpp>
+#include <cnbicore/CcSemaphore.hpp>
+#include <cnbicore/CcThread.hpp>
+#include <cnbicore/CcTime.hpp>
 #include <stdio.h>
 
 using namespace std;

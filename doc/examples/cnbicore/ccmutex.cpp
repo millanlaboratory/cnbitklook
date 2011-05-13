@@ -16,9 +16,9 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <libcnbicore/CcCore.hpp>
-#include <libcnbicore/CcTime.hpp>
-#include <libcnbicore/CcMutex.hpp>
+#include <cnbicore/CcCore.hpp>
+#include <cnbicore/CcTime.hpp>
+#include <cnbicore/CcMutex.hpp>
 #include <stdio.h>
 
 using namespace std;

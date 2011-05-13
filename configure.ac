@@ -34,7 +34,7 @@ AC_SUBST(LIBTOOL_DEPS)
 # Checks for libraries.
 save_LIBS="$LIBS"
 AC_SEARCH_LIBS([pthread_create], [pthread],
-        AC_SUBST([PTHREAD_LIBS], "$LIBS"), AC_MSG_ERROR([The libpthread library must be installed.]))
+        AC_SUBST([PTHREAD_LIBS], "$LIBS"), AC_MSG_ERROR([The pthread library must be installed.]))
 LIBS="$save_LIBS"
 
 # Check acquisition libs
@@ -53,13 +53,15 @@ AC_CHECK_HEADERS([rapidxml.hpp rapidxml_print.hpp], [],
 AC_LANG_POP([C++])
 
 save_LIBS="$LIBS"
-AC_SEARCH_LIBS_CLASS([ICMessage], [tobiic], [#include <libtobiic/ICMessage.hpp>],
-            AC_SUBST([TOBIIC_LIBS], "$LIBS"), AC_MSG_ERROR([The tobiic library cannot be found.]))
+AC_SEARCH_LIBS_CLASS([ICMessage], [tobiic], [#include <tobiic/ICMessage.hpp>],
+            AC_SUBST([TOBIIC_LIBS], "$LIBS"), 
+			AC_MSG_ERROR([The tobiic library cannot be found.]))
 LIBS="$save_LIBS"
 
 save_LIBS="$LIBS"
-AC_SEARCH_LIBS_CLASS([IDMessage], [tobiid], [#include <libtobiid/IDMessage.hpp>],
-            AC_SUBST([TOBIID_LIBS], "$LIBS"), AC_MSG_ERROR([The tobiid library cannot be found.]))
+AC_SEARCH_LIBS_CLASS([IDMessage], [tobiid], [#include <tobiid/IDMessage.hpp>],
+            AC_SUBST([TOBIID_LIBS], "$LIBS"), 
+			AC_MSG_ERROR([The tobiid library cannot be found.]))
 LIBS="$save_LIBS"
 
 AC_HEADER_STDBOOL
@@ -69,12 +71,28 @@ AC_SUBST([REVISION],[lib_revision])
 AC_SUBST([AGE],[lib_age])
 AC_SUBST(AM_LDFLAGS)
 
-AC_CONFIG_FILES([Makefile doc/Makefile extra/Makefile doc/doxygen.cfg
-	src/libcnbicore/Makefile doc/examples/cnbicore/Makefile src/libcnbicore/cnbicore.pc
-	src/libtransport/Makefile doc/examples/transport/Makefile src/libtransport/transport.pc
-	src/libtranspipe/Makefile doc/examples/transpipe/Makefile src/libtranspipe/transpipe.pc
-	src/libcnbiacq/Makefile src/libcnbiacq/cnbiacq.pc
-	src/libcnbiconfig/Makefile doc/examples/cnbiconfig/Makefile src/libcnbiconfig/cnbiconfig.pc
-	src/libcnbiloop/Makefile doc/examples/cnbiloop/Makefile src/libcnbiloop/cnbiloop.pc
-	src/libndf/Makefile doc/examples/ndf/Makefile src/libndf/ndf.pc])
+AC_CONFIG_FILES([Makefile\
+				 doc/Makefile\
+				 extra/Makefile\
+				 doc/doxygen.cfg\
+				 src/cnbicore/Makefile\
+				 doc/examples/cnbicore/Makefile\
+				 src/cnbicore/cnbicore.pc\
+				 src/transport/Makefile\
+				 doc/examples/transport/Makefile\
+				 src/transport/transport.pc\
+				 src/transpipe/Makefile\
+				 doc/examples/transpipe/Makefile\
+				 src/transpipe/transpipe.pc\
+				 src/cnbiacq/Makefile\
+				 src/cnbiacq/cnbiacq.pc\
+				 src/cnbiconfig/Makefile\
+				 doc/examples/cnbiconfig/Makefile\
+				 src/cnbiconfig/cnbiconfig.pc\
+				 src/cnbiloop/Makefile\
+				 doc/examples/cnbiloop/Makefile\
+				 src/cnbiloop/cnbiloop.pc\
+				 src/ndf/Makefile\
+				 doc/examples/ndf/Makefile\
+				 src/ndf/ndf.pc])
 AC_OUTPUT

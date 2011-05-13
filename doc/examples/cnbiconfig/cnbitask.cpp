@@ -16,7 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <libcnbiconfig/CCfgTask.hpp>
+#include <cnbiconfig/CCfgTask.hpp>
 
 using namespace std;
 

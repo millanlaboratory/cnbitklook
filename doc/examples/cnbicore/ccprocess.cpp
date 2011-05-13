@@ -16,8 +16,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <libcnbicore/CcBasic.hpp>
-#include <libcnbicore/CcProcess.hpp>
+#include <cnbicore/CcBasic.hpp>
+#include <cnbicore/CcProcess.hpp>
 #include <stdio.h>
 
 using namespace std;

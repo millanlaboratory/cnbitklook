@@ -16,9 +16,9 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <libcnbicore/CcPipeReader.hpp>
-#include <libcnbicore/CcPipeWriter.hpp>
-#include <libcnbicore/CcBasic.hpp>
+#include <cnbicore/CcPipeReader.hpp>
+#include <cnbicore/CcPipeWriter.hpp>
+#include <cnbicore/CcBasic.hpp>
 #include <iostream>
 #include <string.h>
 
