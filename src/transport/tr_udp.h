@@ -36,13 +36,13 @@ void tr_udpserver(tr_socket* sock);
 void tr_udpclient(tr_socket* sock);
 
 //! Receive as UDP on the internal buffer
-int tr_recvudp(tr_socket* sock);
+ssize_t tr_recvudp(tr_socket* sock);
 
 //! Receive as UDP
-int tr_recvudpb(tr_socket* sock, void* buffer, size_t bsize);
+ssize_t tr_recvudpb(tr_socket* sock, void* buffer, size_t bsize);
 
 //! Send as UDP
-int tr_sendudp(tr_socket* sock, const void* buffer, size_t bsize);
+ssize_t tr_sendudp(tr_socket* sock, const void* buffer, size_t bsize);
 
 #ifdef __cplusplus
 }

@@ -25,11 +25,11 @@ if(nargin < 5); aC = ''; end
 % - xml			the XML filename
 % - path		the working directory
 cfg = {};
-cfg.ns.modality = cl_retrieve(cl, [name '::modality']);
-cfg.ns.block    = cl_retrieve(cl, [name '::block']);
-cfg.ns.taskset  = cl_retrieve(cl, [name '::taskset']);
-cfg.ns.xml      = cl_retrieve(cl, [name '::xml']);
-cfg.ns.path     = cl_retrieve(cl, [name '::path']);
+cfg.ns.modality = cl_retrieveconfig(cl, name, 'modality');
+cfg.ns.block    = cl_retrieveconfig(cl, name, 'block');
+cfg.ns.taskset  = cl_retrieveconfig(cl, name, 'taskset');
+cfg.ns.xml      = cl_retrieveconfig(cl, name, 'xml');
+cfg.ns.path     = cl_retrieveconfig(cl, name, 'path');
 
 cfg.config = ccfg_new();
 if(ccfg_importfile(cfg.config, cfg.ns.xml) == 0)

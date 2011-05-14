@@ -151,6 +151,9 @@ void acquisition(int status) {
 
 void nameserver(int status) { 
 	switch(status) {
+		case ClNamesLang::ErrorGeneric:
+			fprintf(stderr, "ErrorGeneric\n");
+			break;
 		case ClNamesLang::StatusLost:
 			fprintf(stderr, "StatusLost\n");
 			break;
@@ -204,7 +207,6 @@ int main(int argc, char* argv[]) {
 		connect();
 	
 		status = ClLoop::acquisition.OpenXDF(arg1, arg2, arg3);
-		printf("STATUS: %d\n", status);
 		acquisition(status);
 		return(status);
 
@@ -271,10 +273,8 @@ int main(int argc, char* argv[]) {
 		if(argc != 5) usage();
 		connect();
 
-		std::string name(arg1);
-		name.append("::");
-		name.append(arg2);
-		status = ClLoop::nameserver.Store(name, arg3);
+		status = ClLoop::nameserver.StoreConfig(arg1, arg2, arg3);
+		status = status == 0 ? ClNamesLang::ErrorGeneric : ClNamesLang::Successful;
 		nameserver(status);
 		return(status);
 
@@ -282,11 +282,8 @@ int main(int argc, char* argv[]) {
 		if(argc != 4) usage();
 		connect();
 
-		std::string name(arg1);
-		name.append("::");
-		name.append(arg2);
-		std::string storage;
-		status = ClLoop::nameserver.Retrieve(name, &storage);
+		std::string storage = ClLoop::nameserver.RetrieveConfig(arg1, arg2);
+		status = storage.empty() == 1 ? ClNamesLang::ErrorGeneric : ClNamesLang::Successful;
 		nameserver(status);
 		if(status == ClNamesLang::Successful)
 			cout << storage << endl;
@@ -295,10 +292,8 @@ int main(int argc, char* argv[]) {
 		if(argc != 4) usage();
 		connect();
 
-		std::string name(arg1);
-		name.append("::");
-		name.append(arg2);
-		status = ClLoop::nameserver.Erase(name);
+		status = ClLoop::nameserver.EraseConfig(arg1, arg2);
+		status = status == 0 ? ClNamesLang::ErrorGeneric : ClNamesLang::Successful;
 		nameserver(status);
 		return(status);
 	

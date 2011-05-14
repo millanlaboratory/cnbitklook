@@ -63,6 +63,7 @@ class ClNamesLang : public ClLanguage {
 		static const int AlreadyStored= 3;
 		static const int NotAvailable = 4;
 		static const int NameFormatError = 5;
+		static const int ErrorGeneric = 6;
 };
 
 #endif

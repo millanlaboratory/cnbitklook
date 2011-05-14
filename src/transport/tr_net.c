@@ -198,7 +198,7 @@ int tr_connected(tr_socket* sock) {
 }
 
 
-int tr_recv(tr_socket* sock) {
+ssize_t tr_recv(tr_socket* sock) {
 	switch(sock->protocol) {
 		case TR_PROTO_TCP:
 			return tr_recvtcp(sock);
@@ -211,7 +211,7 @@ int tr_recv(tr_socket* sock) {
 	}
 }
 
-int tr_recvb(tr_socket* sock, void* buffer, size_t bsize) {
+ssize_t tr_recvb(tr_socket* sock, void* buffer, size_t bsize) {
 	switch(sock->protocol) {
 		case TR_PROTO_TCP:
 			return tr_recvtcpb(sock, buffer, bsize);
@@ -224,7 +224,7 @@ int tr_recvb(tr_socket* sock, void* buffer, size_t bsize) {
 	}
 }
 
-int tr_send(tr_socket* sock, const char* buffer) {
+ssize_t tr_send(tr_socket* sock, const char* buffer) {
 	switch(sock->protocol) {
 		case TR_PROTO_TCP:
 			return tr_sendtcp(sock, (void*)buffer, strlen(buffer));
@@ -236,7 +236,7 @@ int tr_send(tr_socket* sock, const char* buffer) {
 	}
 }
 
-int tr_sendb(tr_socket* sock, void* buffer, size_t bsize) {
+ssize_t tr_sendb(tr_socket* sock, void* buffer, size_t bsize) {
 	switch(sock->protocol) {
 		case TR_PROTO_TCP:
 			return tr_sendtcp(sock, buffer, bsize);

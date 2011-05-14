@@ -173,3 +173,37 @@ $ #include <stdio.h>
 	$	return(language.CheckName(nm));
 	$ }
 	# bool isvalid = clcheckname(cstring name[1024]);
+
+@function [status] = cl_storeconfig(c, component, name, content)
+% Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
+% Michele Tavella <michele.tavella@epfl.ch>
+	$ bool clstorecfg(ClLoop* q, std::string* component, std::string* name, std::string* content) {
+	$	return q->nameserver.StoreConfig(*component, *name, *content);
+	$ }
+	# std::string* tname = new std::string(cstring name);
+	# std::string* tcomponent = new std::string(cstring component);
+	# std::string* tcontent = new std::string(cstring content);
+	# bool status = clstorecfg(ClLoop* c, std::string* tcomponent, std::string* tname, std::string* tcontent);
+
+@function [content] = cl_retrieveconfig(c, component, name)
+% Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
+% Michele Tavella <michele.tavella@epfl.ch>
+	$ void clretrievecfg(ClLoop* q, std::string* component, std::string* name, char* content) {
+	$	std::string cn = q->nameserver.RetrieveConfig(*component, *name);
+	$ 	if(cn.empty() == false)
+	$		strcpy(content, cn.c_str());
+	$ }
+	content = '';
+	# std::string* tname = new std::string(cstring name);
+	# std::string* tcomponent = new std::string(cstring component);
+	# clretrievecfg(ClLoop* c, std::string* tcomponent, std::string* tname, inout cstring content[1024]);
+
+@function [status] = cl_eraseconfig(c, component, name)
+% Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
+% Michele Tavella <michele.tavella@epfl.ch>
+	$ bool clerasecfg(ClLoop* q, std::string* component, std::string* name) {
+	$	return(q->nameserver.Erase(*name) == ClNamesLang::Successful);
+	$ }
+	# std::string* tname = new std::string(cstring name);
+	# std::string* tcomponent = new std::string(cstring component);
+	# bool status = clerasecfg(ClLoop* c, std::string* tcomponent, std::string* tname);

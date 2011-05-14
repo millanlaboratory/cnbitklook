@@ -52,7 +52,7 @@ try
 	% -------------------------------------------------------------- %
 	% User initialization                                            %
 	% -------------------------------------------------------------- %
-	cfg.ns.plot = cl_retrieve(loop.cl, 'checkloop::plot');
+	cfg.ns.plot = cl_retrieveconfig(loop.cl, 'checkloop', 'plot');
 	cfg.plot = strcmp(cfg.ns.plot, 'true');
 	%cfg.plot = 1;
 	% -------------------------------------------------------------- %

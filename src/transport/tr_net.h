@@ -131,7 +131,7 @@ int tr_connected(tr_socket* sock);
  * @return -1 if the connection is not valid, the number of received bytes.
  * otherwise
  */
-int tr_recv(tr_socket* sock);
+ssize_t tr_recv(tr_socket* sock);
 
 /*! \brief Receive in external buffer
  * 
@@ -139,7 +139,7 @@ int tr_recv(tr_socket* sock);
  * @return -1 if the connection is not valid, the number of received bytes
  * otherwise
  */
-int tr_recvb(tr_socket* sock, void* buffer, size_t bsize);
+ssize_t tr_recvb(tr_socket* sock, void* buffer, size_t bsize);
 
 /*! \brief Send data
  * 
@@ -147,7 +147,7 @@ int tr_recvb(tr_socket* sock, void* buffer, size_t bsize);
  * @return -1 if the connection is not valid, the number of sent bytes
  * otherwise
  */
-int tr_send(tr_socket* sock, const char* buffer);
+ssize_t tr_send(tr_socket* sock, const char* buffer);
 
 /*! \brief Send non-char data
  *
@@ -155,7 +155,7 @@ int tr_send(tr_socket* sock, const char* buffer);
  * @return -1 if the connection is not valid, the number of sent bytes
  * otherwise
  */
-int tr_sendb(tr_socket* sock, void* buffer, size_t bsize);
+ssize_t tr_sendb(tr_socket* sock, void* buffer, size_t bsize);
 
 /*! \brief Setup the socket for async operation
  * 

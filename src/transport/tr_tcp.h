@@ -39,13 +39,13 @@ void tr_tcpendpoint(tr_socket* sock);
 void tr_tcpclient(tr_socket* sock);
 
 //! Receive as TCP on the internal buffer
-int tr_recvtcp(tr_socket* sock);
+ssize_t tr_recvtcp(tr_socket* sock);
 
 //! Receive as TCP
-int tr_recvtcpb(tr_socket* sock, void* buffer, size_t bsize);
+ssize_t tr_recvtcpb(tr_socket* sock, void* buffer, size_t bsize);
 
 //! Send as TCP
-int tr_sendtcp(tr_socket* sock, const void* message, size_t bsize);
+ssize_t tr_sendtcp(tr_socket* sock, const void* message, size_t bsize);
 
 #ifdef __cplusplus
 }

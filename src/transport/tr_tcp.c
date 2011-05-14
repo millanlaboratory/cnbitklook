@@ -34,18 +34,18 @@ void tr_tcpclient(tr_socket* sock) {
 	sock->type = TR_TYPE_CLIENT;
 }
 
-int tr_recvtcp(tr_socket* sock) {
+ssize_t tr_recvtcp(tr_socket* sock) {
 	return tr_recvtcpb(sock, sock->buffer, sock->bsize);
 }
 
-int tr_recvtcpb(tr_socket* sock, void* buffer, size_t bsize) {
+ssize_t tr_recvtcpb(tr_socket* sock, void* buffer, size_t bsize) {
 	if(sock->protocol != TR_PROTO_TCP)
 		return TR_PROTO_NOTSUPPORTED;
 
 	return recv(sock->fd, buffer, bsize, 0);
 }
 
-int tr_sendtcp(tr_socket* sock, const void* buffer, size_t bsize) {
+ssize_t tr_sendtcp(tr_socket* sock, const void* buffer, size_t bsize) {
 	if(sock->protocol != TR_PROTO_TCP)
 		return TR_PROTO_NOTSUPPORTED;
 	

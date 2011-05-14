@@ -38,6 +38,8 @@
  */
 #define CCCORE_1KB				      1024 
 #define CCCORE_1MB				   1048576
+#define CCCORE_ASIO_SEC				     0
+#define CCCORE_ASIO_USEC             50000
 #define CCASYNC_WAIT_CONNECT		 5.000
 #define CCASYNC_WAIT_ACCEPT		   250.000
 #define CCASYNC_WAIT_MACCEPT	   250.000

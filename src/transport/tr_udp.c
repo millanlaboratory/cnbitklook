@@ -30,11 +30,11 @@ void tr_udpclient(tr_socket* sock) {
 	sock->type = TR_TYPE_CLIENT;
 }
 
-int tr_recvudp(tr_socket* sock) {
+ssize_t tr_recvudp(tr_socket* sock) {
 	return tr_recvudpb(sock, sock->buffer, sock->bsize);
 }
 
-int tr_recvudpb(tr_socket* sock, void* buffer, size_t bsize) {
+ssize_t tr_recvudpb(tr_socket* sock, void* buffer, size_t bsize) {
 	if(sock->protocol != TR_PROTO_UDP)
 		return TR_PROTO_NOTSUPPORTED;
 
@@ -46,7 +46,7 @@ int tr_recvudpb(tr_socket* sock, void* buffer, size_t bsize) {
 	return status;
 }
 
-int tr_sendudp(tr_socket* sock, const void* buffer, size_t bsize) {
+ssize_t tr_sendudp(tr_socket* sock, const void* buffer, size_t bsize) {
 	if(sock->protocol != TR_PROTO_UDP)
 		return TR_PROTO_NOTSUPPORTED;
 
