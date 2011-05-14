@@ -55,14 +55,14 @@ class ClProLang : public ClLanguage {
 	public:
 		static const std::string Hdr;
 		static const std::string Trl;
-		static const int StatusLost = -3;
-		static const int NotSupported = -2;
-		static const int NotUndestood = -1;
-		static const int NoReply = 0;
-		static const int Successful = 1;
-		static const int ForkFailed = 2;
-		static const int IsDead = 3;
-		static const int NotFound = 4;
+		static const int StatusLost = -4;
+		static const int NotSupported = -3;
+		static const int NotUndestood = -2;
+		static const int NoReply = -1;
+		static const int Successful = 0;
+		static const int ForkFailed = 1;
+		static const int IsDead = 2;
+		static const int NotFound = 3;
 };
 
 #endif

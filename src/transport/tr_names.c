@@ -22,19 +22,19 @@
 #include <string.h>
 
 unsigned int tr_getaddrlen(void) { 
-	return INET_ADDRSTRLEN + 1;
+	return 2*INET_ADDRSTRLEN + 1;
 }
 
-int tr_resolve(char* hostname, char* address) {
+int tr_resolve(const char* hostname, char* address) {
 	struct hostent *host;
 	struct in_addr h_addr;
 	
 	host = gethostbyname(hostname);
-	if(host == 0)
-		return -1;
+	if(host == NULL)
+		return 1;
 
-	h_addr.s_addr = *((unsigned long *) host->h_addr_list[0]);
-	memcpy(address, inet_ntoa(h_addr), INET_ADDRSTRLEN + 1);
-	
+	h_addr.s_addr = *((unsigned long *)host->h_addr_list[0]);
+	char* cache = inet_ntoa(h_addr); 
+	strncpy(address, cache, tr_getaddrlen()-1);
 	return 0;
 }

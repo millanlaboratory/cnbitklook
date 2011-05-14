@@ -53,16 +53,16 @@ class ClNamesLang : public ClLanguage {
 	public:
 		static const std::string Hdr;
 		static const std::string Trl;
-		static const int StatusLost = -3;
-		static const int NotSupported = -2;
-		static const int NotUndestood = -1;
-		static const int NoReply = 0;
-		static const int Successful = 1;
-		static const int NotFound = 2;
-		static const int AlreadySet = 3;
-		static const int AlreadyStored= 4;
-		static const int NotAvailable = 5;
-		static const int NameFormatError = 6;
+		static const int StatusLost = -4;
+		static const int NotSupported = -3;
+		static const int NotUndestood = -2;
+		static const int NoReply = -1;
+		static const int Successful = 0;
+		static const int NotFound = 1;
+		static const int AlreadySet = 2;
+		static const int AlreadyStored= 3;
+		static const int NotAvailable = 4;
+		static const int NameFormatError = 5;
 };
 
 #endif

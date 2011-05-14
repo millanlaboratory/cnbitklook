@@ -58,10 +58,10 @@ int main(void) {
 	if(client.Connect()) {
 		client.Store("config.xml", "Blah blah blah");
 		client.Store("config.xml", "Bho bho bho");
-		std::cout << "Result: " <<  client.Retrieve("config.xml") << std::endl;
+		//std::cout << "Result: " <<  client.Retrieve("config.xml") << std::endl;
 		client.Erase("config.xml");
 		client.Erase("config.xml");
-		std::cout << "Result: " <<  client.Retrieve("config.xml") << std::endl;
+		//std::cout << "Result: " <<  client.Retrieve("config.xml") << std::endl;
 		CcTime::Sleep(2000.00f);
 	}
 

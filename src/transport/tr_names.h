@@ -39,9 +39,9 @@ unsigned int tr_getaddrlen(void);
  *
  * @param hostname The named host (i.e.: menace)
  * @param address The address (i.e.: 10.66.77.1)
- * @return 0 on success, -1 otherwise
+ * @return 0 on success, 1 otherwise
  */
-int tr_resolve(char* hostname, char* address);
+int tr_resolve(const char* hostname, char* address);
 
 #ifdef __cplusplus
 }

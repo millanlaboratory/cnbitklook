@@ -102,33 +102,27 @@ bool ClLoop::IsConnected(void) {
 }
 
 bool ClLoop::ConnectNameserver(void) {
-	int status = ClLoop::nameserver.Connect(ClLoop::_nameserver);
-	if(status != ClNamesLang::Successful) {
-		CcLogDebugS("Cannot connect to nameserver: " <<
-				ClLoop::_nameserver << ", " << status);
-		return false;
-	}
-	return true;
+	if(ClLoop::nameserver.Connect(ClLoop::_nameserver)) 
+		return true;
+
+	CcLogDebugS("Cannot connect to nameserver: " << ClLoop::_nameserver);
+	return false;
 }
 
 bool ClLoop::ConnectProcessing(void) {
-	int status = ClLoop::processing.Connect(ClLoop::_processing);
-	if(status != ClProLang::Successful) {
-		CcLogDebugS("Cannot connect to processing: " <<
-				ClLoop::_processing << ", " << status);
-		return false;
-	}
-	return true;
+	if(ClLoop::processing.Connect(ClLoop::_processing)) 
+		return true;
+
+	CcLogDebugS("Cannot connect to processing: " << ClLoop::_processing);
+	return false;
 }
 
 bool ClLoop::ConnectAcquisition(void) {
-	int status = ClLoop::acquisition.Connect(ClLoop::_acquisition);
-	if(status != ClAcqLang::Successful) {
-		CcLogDebugS("Cannot connect to acquisition: " <<
-				ClLoop::_acquisition << ", " << status);
-		return false;
-	}
-	return true;
+	if(ClLoop::acquisition.Connect(ClLoop::_acquisition)) 
+		return true;
+
+	CcLogDebugS("Cannot connect to acquisition: " << ClLoop::_acquisition);
+	return false;
 }
 
 bool ClLoop::QueryAddresses(void) {
