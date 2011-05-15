@@ -19,7 +19,7 @@
 #ifndef CCCLIENT_HPP 
 #define CCCLIENT_HPP 
 
-#include "CcSocket.hpp"
+#include <cnbicore/CcSocket.hpp>
 #include <cnbicore/CcThread.hpp>
 
 class CcClient : public CcSocket, public CcThread {

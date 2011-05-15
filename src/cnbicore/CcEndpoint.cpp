@@ -20,11 +20,16 @@
 #define CCHOST_CPP
 
 #include "CcEndpoint.hpp"
-#include "CcSocket.hpp"
 #include "CcBasic.hpp"
 #include <transport/tr_names.h>
 #include <sstream>
 #include <string.h>
+
+const CcHostname CcEndpoint::HostnameUnset = "none";
+const CcPort CcEndpoint::PortUnset = "0";
+const CcIp CcEndpoint::IpUnset = "0.0.0.0";
+const CcAddress CcEndpoint::AddressUnset = "0.0.0.0:0";
+const CcPortUInt CcEndpoint::PortUintUnset = 0;
 
 CcEndpoint::CcEndpoint(void) {
 }
@@ -47,10 +52,10 @@ CcEndpoint::~CcEndpoint(void) {
 }
 
 void CcEndpoint::Clear(void) {
-	this->_ip = CcSocket::IpUnset;
-	this->_port = CcSocket::PortUnset;
-	this->_iport = CcSocket::PortUintUnset;
-	this->_address = CcSocket::AddressUnset;
+	this->_ip = CcEndpoint::IpUnset;
+	this->_port = CcEndpoint::PortUnset;
+	this->_iport = CcEndpoint::PortUintUnset;
+	this->_address = CcEndpoint::AddressUnset;
 }
 
 void CcEndpoint::SetIp(const CcIp ip) {

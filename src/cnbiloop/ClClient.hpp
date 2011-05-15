@@ -21,6 +21,7 @@
 
 #include <cnbicore/CcBasic.hpp>
 #include <cnbicore/CcClient.hpp>
+#include <cnbicore/CcSocketProxy.hpp>
 
 class ClClient : public CcSocketProxy {
 	public:

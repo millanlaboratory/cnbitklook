@@ -57,7 +57,12 @@ class CcEndpoint : public CcObject {
 		virtual void MakeAddress(const CcIp ip, const unsigned int port);
 		virtual void MakeAddress(const tr_host *host);
 		virtual void DecomposeAddress(const CcAddress address);
-
+	public:
+		const static CcHostname HostnameUnset;
+		const static CcPort PortUnset;
+		const static CcPortUInt PortUintUnset;
+		const static CcIp IpUnset;
+		const static CcAddress AddressUnset;
 	private:
 		CcIp _ip;
 		CcAddress _address;

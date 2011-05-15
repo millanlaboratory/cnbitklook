@@ -19,7 +19,7 @@
 #ifndef CCSERVER_HPP 
 #define CCSERVER_HPP 
 
-#include "CcSocket.hpp"
+#include <cnbicore/CcSocket.hpp>
 #include <cnbicore/CcThread.hpp>
 
 class CcServer : public CcSocket, public CcThread {
