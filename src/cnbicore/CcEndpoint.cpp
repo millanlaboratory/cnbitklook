@@ -116,10 +116,14 @@ void CcEndpoint::MakeAddress(const CcIp ip, const CcPort port) {
 
 void CcEndpoint::MakeAddress(const CcIp ip, const unsigned int port) {
 	std::stringstream stream;
-	stream << ip;
-	stream << ":";
-	stream << port;
-	this->_address = stream.str();
+	if(port == 0 || ip.empty() == true) {
+		this->_address.clear();
+	} else {
+		stream << ip;
+		stream << ":";
+		stream << port;
+		this->_address = stream.str();
+	}
 }
 		
 void CcEndpoint::MakeAddress(const tr_host *host) {
