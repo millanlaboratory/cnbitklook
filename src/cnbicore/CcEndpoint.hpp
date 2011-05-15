@@ -33,7 +33,7 @@ class CcEndpoint : public CcObject {
 	public:
 		CcEndpoint(void);
 		CcEndpoint(const CcIp ip, const CcPort port);
-		CcEndpoint(const CcIp ip, const unsigned int port);
+		CcEndpoint(const CcIp ip, const CcPortUInt port);
 		CcEndpoint(const CcAddress address);
 		virtual ~CcEndpoint(void);
 
