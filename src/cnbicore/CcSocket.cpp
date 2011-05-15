@@ -7,7 +7,7 @@
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
+    his program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
@@ -20,25 +20,16 @@
 #define CCSOCKET_CPP
 
 #include "CcSocket.hpp"
-#include "CcBasic.hpp"
+#include <cnbicore/CcBasic.hpp>
+#include <stdio.h>
 #include <string.h>
 
-const CcHostname CcSocket::HostnameUnset = "none";
-const CcPort CcSocket::PortUnset = "0";
-const CcIp CcSocket::IpUnset = "0.0.0.0";
-const CcAddress CcSocket::AddressUnset = "0.0.0.0:0";
 
-CcSocket::CcSocket(size_t bsize, unsigned int maxconn) {
+CcSocket::CcSocket(size_t bsize) {
 	this->_semsocket.Wait();
 	this->_socket = new tr_socket;
-	tr_init_socket(this->_socket, bsize, maxconn);
+	tr_init_socket(this->_socket, bsize, 32);
 	this->_semsocket.Post();
-
-	this->_sembuffer.Wait();
-	this->_buffer = NULL;
-	this->_sembuffer.Post();
-	
-	this->AllocBuffer(bsize, maxconn);
 }
 
 CcSocket::~CcSocket(void) {
@@ -48,59 +39,23 @@ CcSocket::~CcSocket(void) {
 	tr_free(this->_socket);
 	delete this->_socket;
 	this->_semsocket.Post();
-
-	this->FreeBuffer();
 }
 		
-void CcSocket::AllocBuffer(size_t bsize, unsigned int maxconn) {
-	this->_sembuffer.Wait();
-	this->_maxconn = maxconn;
-	this->_bsize = bsize;
-	this->_buffer = new char[this->_bsize];
-	memset(this->_buffer, 0, this->_bsize * sizeof(const char));
-	this->_sembuffer.Post();
-}
-
-void CcSocket::FreeBuffer(void) {
-	this->_sembuffer.Wait();
-	if(this->_buffer != NULL) {
-		delete [] this->_buffer;
-		this->_buffer = NULL;
-	}
-	this->_sembuffer.Post();
-}
-
-void CcSocket::AddBytesSend(const int bytes) {
-	if(bytes <= 0) 
-		return;
-
-	this->_mtxbytes.Lock();
+void CcSocket::AddSend(const unsigned int bytes) {
 	this->_bytesSend += bytes;
-	this->_mtxbytes.Release();
 }
 
-void CcSocket::AddBytesRecv(const int bytes) {
-	if(bytes <= 0)
-		return;
-	
-	this->_mtxbytes.Lock();
+void CcSocket::AddRecv(const unsigned int bytes) {
 	this->_bytesRecv += bytes;
-	this->_mtxbytes.Release();
 }
 
-long unsigned int CcSocket::GetBytesSend(void) {
-	this->_mtxbytes.Lock();
+long unsigned int CcSocket::GetSend(void) {
 	long unsigned int bytes = this->_bytesSend;
-	this->_mtxbytes.Release();
-	
 	return bytes;
 }
 
-long unsigned int CcSocket::GetBytesRecv(void) {
-	this->_mtxbytes.Lock();
+long unsigned int CcSocket::GetRecv(void) {
 	long unsigned int bytes = this->_bytesRecv;
-	this->_mtxbytes.Release();
-	
 	return bytes;
 }
 
@@ -110,48 +65,179 @@ bool CcSocket::IsConnected(void) {
 	this->_semsocket.Post();
 	return status;
 }
+
+ssize_t CcSocket::Recv(tr_socket* peer) {
+	int status = 0;
+	status = tr_check(peer);
+	if(status <= 0) {
+		CcLogFatal("Socket is broken");
+		return status;
+	}
+
+	ssize_t bytes = tr_recv(peer); 
+	if(bytes == TR_BYTES_ERROR || bytes == TR_BYTES_NONE) {
+		return bytes;
+	}
+	this->AddRecv(bytes);
+	
+	CcStreamer* stream = CcSocket::GetStream(peer->fd);
+	stream->Append((char*)peer->buffer, bytes);
 		
-size_t CcSocket::GetBsize(void) {
-	size_t bsize = -1;
-	this->_sembuffer.Wait();
-	bsize = this->_bsize;
-	this->_sembuffer.Post();
-	return bsize;
+	return bytes;
+}
+
+ssize_t CcSocket::Send(tr_socket* peer, const void* message, size_t size) {
+	int bytes = TR_BYTES_NONE;
+
+	bytes = tr_sendb(peer, (void*)message, size);
+	if(bytes == TR_BYTES_ERROR || bytes == TR_BYTES_NONE)
+		return bytes;
+	
+	this->AddSend(bytes);
+	CcSocket::iOnSend.Execute(this);
+	return bytes;
+}
+		
+bool CcSocket::Close(void) {
+	int fd_old = 0, fd_new = 0;
+	
+	fd_old = tr_check(this->_socket);
+	if(fd_old > 0)
+		fd_new = tr_close(CcSocket::_socket);
+	if(fd_new > 0)
+		CcLogErrorS("Cannot close socket " << this->_socket->fd);
+	
+	return(fd_new == 0 && fd_old > 0);
+}
+
+CcAddress CcSocket::GetLocal(void) {
+	this->_semsocket.Wait();
+	CcEndpoint ep;
+	ep.Set(&CcSocket::_socket->local);
+	CcAddress addr = ep.GetAddress();
+	this->_semsocket.Post();
+	return addr;
+}
+
+CcAddress CcSocket::GetRemote(void) {
+	this->_semsocket.Wait();
+	CcEndpoint ep;
+	ep.Set(&CcSocket::_socket->remote);
+	CcAddress addr = ep.GetAddress();
+	this->_semsocket.Post();
+	return addr;
+}
+		
+int CcSocket::GetFID(void) {
+	this->_semsocket.Wait();
+	int fid = this->_socket->fd;
+	this->_semsocket.Post();
+	return fid;
+}
+		
+CcStreamer* CcSocket::GetStream(int fid) {
+	return this->_streams[fid];
+}
+
+bool CcSocket::AddStream(int fid) {
+	this->_streams[fid] = new CcStreamer;
+	return true;
+}
+
+bool CcSocket::RemStream(int fid) {
+	CcStreamer* stream;
+	stream = this->_streams[fid];
+	this->_streams[fid] = NULL;
+	this->_streams.erase(fid);
+	
+	if(stream != NULL)
+		delete stream;
+	return true;
+}
+
+bool CcSocket::HasStream(int fid) {
+	CcStreamerMap2It it = this->_streams.find(fid);
+	return(it != this->_streams.end());
+}
+
+tr_socket* CcSocket::GetPeer(int fid) {
+	return this->_peers[fid];
+}
+
+bool CcSocket::AddPeer(tr_socket* peer) {
+	this->_peers[peer->fd] = peer;
+	return true;
+}
+
+bool CcSocket::RemPeer(int fid) {
+	tr_socket* peer;
+	peer = this->_peers[fid];
+	this->_peers[fid] = NULL;
+	this->_peers.erase(fid);
+	
+	if(peer != NULL)
+		delete peer;
+	return true;
+}
+
+bool CcSocket::HasPeer(int fid) {
+	CcSocketMap2It it = this->_peers.find(fid);
+	return(it != this->_peers.end());
+}
+
+CcAddress CcSocket::GetAddress(int fid) {
+	CcEndpoint ep;
+	tr_socket* sock = GetPeer(fid);
+	ep.Set(&sock->remote);
+	return ep.GetAddress();
+}
+		
+tr_socket* CcSocket::GetPeer(CcAddress addr) {
+	CcEndpoint cache;
+	cache.SetAddress(addr);
+	CcIp ip = cache.GetIp();
+	CcPortUInt port = cache.GetPortUInt();
+
+	CcSocketMap2It pit;
+	tr_socket* peer = NULL;
+	for(pit = this->_peers.begin(); pit != this->_peers.end(); pit++) {
+		peer = pit->second;
+		if(peer->remote.port == port) {
+			if(strcmp(peer->remote.address, ip.c_str()) == 0)
+				return peer;
+		}
+	}
+	return NULL;
+}
+
+void CcSocket::Dump(void) {
+	CcAddress addr;
+	CcStreamerMap2It sit;
+	CcSocketMap2It pit;
+	
+	printf("[CcSocket::Dump] Internal table:\n");
+	printf("FID  Remote Address         Peer\n");
+	int fid;
+	for(sit = this->_streams.begin(); sit != this->_streams.end(); sit++) {
+		fid = sit->first;
+		addr = this->GetAddress(fid);
+		pit = this->_peers.find(fid);
+		
+		printf("%4.4d ", fid);
+
+		if(addr.empty() == false)
+			printf("%-22.22s ", addr.c_str());
+		else
+			printf("%-22.22s ", "N/A");
+		
+		if(pit != this->_peers.end())
+			printf("%p", pit->second);
+		else
+			printf("%s ", "NULL");
+
+		printf("\n");
+	}
+
 }
 
 #endif
-
-
-/*
-static void ChopMessage(const char* buffer, unsigned int rep = 2);
-static void ZeroMessage(const char* buffer, unsigned int buflen);
-static bool EmptyMessage(const char* buffer);
-*/
-
-/*
-void CcSocket::ChopMessage(const char* buffer, unsigned int rep) {
-	if(buffer = NULL) 
-		throw CcException("Buffer not allocated", __PRETTY_FUNCTION__);
-
-	int len = strlen((char*)buffer);
-	for(unsigned int j = 0; j < rep; j++)
-		if(buffer[len - j] == '\n' && j >= 0)
-			buffer[len - j] = '\0';
-}
-
-void CcSocket::ZeroMessage(const char* buffer, unsigned int buflen) {
-	if(buffer = NULL) 
-		throw CcException("Buffer not allocated", __PRETTY_FUNCTION__);
-	
-	memset(buffer, 0, buflen * sizeof(char));
-}
-
-bool CcSocket::EmptyMessage(const char* buffer) {
-	if(buffer = NULL) 
-		throw CcException("Buffer not allocated", __PRETTY_FUNCTION__);
-	
-	if(buffer[1] != '\n' && buffer[1] != '\0')
-		return false;
-	return true;
-}
-*/

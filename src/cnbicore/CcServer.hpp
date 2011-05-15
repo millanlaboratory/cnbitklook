@@ -16,56 +16,49 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CCSERVER_HPP
-#define CCSERVER_HPP
+#ifndef CCSERVER_HPP 
+#define CCSERVER_HPP 
 
-#include "CcEndpoint.hpp"
-#include "CcNetworkTypes.hpp"
 #include "CcSocket.hpp"
-#include "CcThread.hpp"
-#include "CcThreadSafe.hpp"
-#include "CcBasic.hpp"
-#include <string>
+#include <cnbicore/CcThread.hpp>
 
-typedef int CcServerRole;
-/*! \brief TCP server basic functionalities
- *
- * This class has the look and feel of a network server.
- */
 class CcServer : public CcSocket, public CcThread {
 	public:
-		CcServer(CcServerRole role = CcServer::AsServer, 
-				unsigned int bsize = 128*CCCORE_1KB, 
-				unsigned int maxconns = 32);
-		~CcServer(void);
-		virtual int Send(const char* message) = 0;
-		virtual int Send(std::string* message) = 0;
-		virtual void Bind(const CcEndpoint enpoint, const unsigned int wait = 0);
-		virtual void Bind(const CcAddress address, const unsigned int wait = 0);
-		virtual void Bind(const CcPortUInt port, const unsigned int wait = 0);
-		virtual void Bind(const tr_socket* const master);
-		virtual void Release(void);
-		virtual CcAddress GetLocal(void);
-	protected:
-		virtual int Recv(void) = 0; 
-		virtual void Listen(void);
-		virtual void OpenSocket(void);
-		virtual void CloseSocket(void);
+		CcServer(size_t bsize = CCCORE_1MB);
+		virtual ~CcServer(void);
+		bool Bind(CcPort port, int protocol = CcSocket::TCP);
+		bool Bind(CcPortUInt port, int protocol = CcSocket::TCP);
+		bool Release(void);
+		
+		ssize_t Send(const char* message);
+		ssize_t Send(const std::string& message);
+		ssize_t Send(const void* message, size_t size);
+		
+		ssize_t Send(const char* message, CcAddress addr);
+		ssize_t Send(const std::string& message, CcAddress addr);
+		ssize_t Send(const void* message, size_t size, CcAddress addr);
+		
+		ssize_t SendNot(const char* message, CcAddress addr);
+		ssize_t SendNot(const std::string& message, CcAddress addr);
+		ssize_t SendNot(const void* message, size_t size, CcAddress addr);
+	private:
+		void Main(void);
+		bool Open(int protocol);
+		bool Listen(void);
+		int Accept(void);
+		void Drop(int fid);
 
-	public: 
-		const static CcServerRole AsServer = 0;
-		const static CcServerRole AsEndpoint = 1;
-	protected:
-		CcEndpoint _hostLocal;
-		CcThreadSafe<CcServerRole> _role;
 	public:
-		CcCallback1<CcSocketProxy, CcSocket*> iOnBind;
 		CcCallback1<CcSocketProxy, CcSocket*> iOnRelease;
-		CcCallback1<CcSocketProxy, CcSocket*> iOnListen;
+		CcCallback1<CcSocketProxy, CcSocket*> iOnAccept;
+		CcCallback1<CcSocketProxy, CcSocket*> iOnDrop;
+		CcCallback2<CcSocketProxy, CcSocket*, CcAddress> iOnAcceptEndpoint;
+		CcCallback2<CcSocketProxy, CcSocket*, CcAddress> iOnDropEndpoint;
+		CcCallback2<CcSocketProxy, CcSocket*, CcAddress> iOnRecvEndpoint;
 	protected:
-		virtual void pOnBind(void) {};
-		virtual void pOnRelease(void) {};
-		virtual void pOnListen(void) {};
+		CcCallback1<CcSocketProxy, CcSocket*> iOnBind;
+		CcCallback1<CcSocketProxy, CcSocket*> iOnListen;
+		CcCallback2<CcSocketProxy, CcSocket*, CcAddress> iOnSendEndpoint;
 };
 
 #endif

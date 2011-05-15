@@ -16,218 +16,178 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CCCLIENT_CPP
-#define CCCLIENT_CPP
-		
-#include "CcClient.hpp"
-#include <transport/tr_tcp.h>
-#include <stdio.h>
-#include <string.h>
+#ifndef CCCLIENT_CPP 
+#define CCCLIENT_CPP 
 
-CcClient::CcClient(size_t bsize, unsigned int maxconns) 
-	: CcSocket(bsize, maxconns) {
+#include "CcClient.hpp" 
+#include <string.h>
+#include <sys/time.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <cnbicore/CcEndpoint.hpp>
+#include <cnbicore/CcTime.hpp>
+#include <cnbicore/CcLog.hpp>
+#include <transport/tr_net.h>
+#include <transport/tr_tcp.h>
+#include <transport/tr_udp.h>
+
+CcClient::CcClient(size_t bsize) : CcSocket(bsize) {
 }
 
 CcClient::~CcClient(void) {
 	this->Disconnect();
 }
 		
-void CcClient::OpenSocket(void) {
-	int status;
+bool CcClient::Connect(CcAddress address, int protocol) {
 	CcSocket::_semsocket.Wait();
-	tr_tcpclient(CcSocket::_socket);
-	status = tr_open(CcSocket::_socket);
-	CcSocket::_semsocket.Post();
-	
-	if(status == -1)
-		CcThrow("Can not open socket");
-}
-
-void CcClient::CloseSocket(void) {
-	int status;
-	CcSocket::_semsocket.Wait();
-	status = tr_close(CcSocket::_socket);
-	CcSocket::_semsocket.Post();
-	
-	if(status > 0)
-		CcThrow("Can not close socket");
-}
-
-void CcClient::Connect(const CcEndpoint endpoint, const unsigned int wait) { 
-	this->Connect(endpoint.GetIp(), endpoint.GetPortUInt(), wait);
-}
-
-void CcClient::Connect(const CcAddress address, const unsigned int wait) { 
-	CcEndpoint cache(address);
-	this->Connect(cache.GetIp(), cache.GetPortUInt(), wait);
-}
-
-void CcClient::Connect(const CcIp ip, const CcPortUInt port, 
-		const unsigned int wait) {
-	if(CcThread::IsRunning() == true)
-		return;
-
-	this->OpenSocket();
-	
-	unsigned int waited = 0;
-	char sport[5];
-	sprintf(sport, "%u", port);
-
-	int status;
-	while(waited <= wait) {
-		CcSocket::_semsocket.Wait();
-		status = tr_connect(CcSocket::_socket, ip.c_str(), sport);
-		tr_set_nonblocking(CcSocket::_socket, 1);
-		this->_hostLocal.Set(&(CcSocket::_socket->local));
-		this->_hostRemote.Set(&(CcSocket::_socket->remote));
-		CcSocket::_semsocket.Post();
-		
-		if(status == 0) 
-			break;
-		CcTime::Sleep(CCASYNC_WAIT_CONNECT);
-		++waited;
+	if(CcThread::IsRunning() == true) {
+		CcLogWarning("Client thread already running");
+		return true;
 	}
+		
+	CcSocket::Close();
+	if(this->Open(protocol) == false) {
+		CcLogError("Cannot open socket");
+		CcSocket::_semsocket.Post();
+		return false;
+	}
+	
+	CcEndpoint cache(address);
+	
+	int status = 0;
+	status = tr_connect(CcSocket::_socket, 
+			cache.GetIp().c_str(), cache.GetPort().c_str());
+	tr_set_nonblocking(CcSocket::_socket, 1);
+	CcSocket::AddStream(CcSocket::_socket->fd);
+	CcSocket::AddPeer(CcSocket::_socket);
+	
+	if(status != 0) {
+		CcSocket::_semsocket.Post();
+		CcLogError("Cannot connect socket");
+		return false;
+	}
+	
+	CcEndpoint local, remote;
+	local.Set(&CcSocket::_socket->local);
+	remote.Set(&CcSocket::_socket->remote);
+	CcLogDebugS("Socket " << CcSocket::_socket->fd << " connected: " << 
+			local.GetAddress() << " to " << remote.GetAddress());
+	CcSocket::_semsocket.Post();
 
-	if(status < 0)
-		CcThrow("Can not connect socket");
-
-	this->iOnConnect.Execute((CcSocket*)this);
-	this->pOnConnect();
 	CcThread::Start();
-	while(CcThread::IsRunning() == false) 
-		CcTime::Sleep(CCASYNC_WAIT_CONNECT);
+	
+	this->iOnConnect.Execute(this);
+	return true;
 }
 
-void CcClient::Disconnect(void) {
-	if(this->IsConnected() == false)
-		return;
+bool CcClient::Disconnect(void) {
+	if(this->IsConnected() == false) {
+		CcLogWarning("Socket not connected");
+		return false;
+	}
 
 	if(CcThread::IsRunning()) {
 		CcThread::Stop();
 		CcThread::Join();
 	}
-
-	this->CloseSocket();
-	this->iOnDisconnect.Execute((CcSocket*)this);
-	this->pOnDisconnect();
-}
-
-int CcClient::Send(const char* message) {
-	if(CcThread::IsRunning() == false)
-		return -1;
 	
-	int bytes = TR_BYTES_NONE;
-
 	CcSocket::_semsocket.Wait();
-	bytes = tr_send(CcSocket::_socket, (char*)message);
-	CcSocket::_semsocket.Post();
-	
-	if(bytes == TR_BYTES_ERROR || bytes == TR_BYTES_NONE)
-		return bytes;
-	
-	this->AddBytesSend(bytes);
-	this->pOnSend();
-	CcSocket::iOnSend.Execute((CcSocket*)this);
-	
-	return bytes;
-}
-
-int CcClient::Send(std::string* message) {
-	return this->Send((const char*)message->c_str());
-}
-
-bool CcClient::SendRecv(const char* query, std::string *reply,
-	std::string hdr, std::string trl, float waitms) {
-	int bytes = this->Send(query);
-	if(bytes == TR_BYTES_ERROR || bytes == TR_BYTES_NONE)
+	if(this->Close() == false) {
+		CcSocket::_semsocket.Post();
 		return false;
-	
-	CcTimeValue dtms;
-	CcTime::Tic(&dtms);
-	while(this->datastream.Has(hdr, trl, CcStreamer::Reverse) == false) {
-		if(CcTime::Toc(&dtms) > waitms && waitms >= 0)
-			return false;
-		else if(waitms == 0)
-			return false;
-		CcTime::Sleep(CCASYNC_WAIT_RECV);
 	}
-	this->datastream.Extract(reply, hdr, trl, CcStreamer::Reverse);
 
+	CcSocket::RemStream(CcSocket::_socket->fd);
+	CcSocket::_semsocket.Post();
+	this->iOnDisconnect.Execute(this);
 	return true;
 }
-		
-bool CcClient::SendRecv(const std::string& query, std::string *reply, 
-				std::string hdr, std::string trl, float waitms) {
-	return this->SendRecv(query.c_str(), reply, hdr, trl, waitms);
-}
 
-int CcClient::Recv(void) {
-	if(CcThread::IsRunning() == false)
-		return -1;
-
-	int bytes = TR_BYTES_NONE;
-	int status = 0;
-	
+ssize_t CcClient::Send(const char* message) {
 	CcSocket::_semsocket.Wait();
-	status = tr_check(CcSocket::_socket);
-	if(status <= 0) {
-		CcLogFatal("Socket is broken");
-		CcSocket::_semsocket.Post();
-		return status;
-	}
-
-	CcSocket::_sembuffer.Wait();
-	bytes = tr_recvb(CcSocket::_socket, CcSocket::_buffer, CcSocket::_bsize); 
-	if(bytes == TR_BYTES_ERROR || bytes == TR_BYTES_NONE) {
-		CcSocket::_semsocket.Post();
-		CcSocket::_sembuffer.Post();
-		return bytes;
-	}
+	ssize_t bytes = CcSocket::Send(CcSocket::_socket, (void*)message,
+			strlen(message));
 	CcSocket::_semsocket.Post();
 	
-	CcSocket::datastream.Append(CcSocket::_buffer, bytes);
-	CcSocket::_sembuffer.Post();
-
-	this->AddBytesRecv(bytes);
-	this->pOnRecv();
-	CcSocket::iOnRecv.Execute((CcSocket*)this);
-		
 	return bytes;
 }
 
+ssize_t CcClient::Send(const std::string& message) {
+	CcSocket::_semsocket.Wait();
+	ssize_t bytes = CcSocket::Send(CcSocket::_socket, (void*)message.c_str(),
+			message.size());
+	CcSocket::_semsocket.Post();
+	
+	return bytes;
+}
+		
+ssize_t CcClient::Send(const void* message, size_t size) {
+	CcSocket::_semsocket.Wait();
+	ssize_t bytes = CcSocket::Send(CcSocket::_socket, message, size);
+	CcSocket::_semsocket.Post();
 
+	return bytes;
+}
+		
 void CcClient::Main(void) {
 	if(!CcThread::IsRunning())
 		return;
+	
+	struct timeval tv;
+	fd_set readfds;
+	FD_ZERO(&readfds);
 
-	int bytes;
+	int status;
+	bool received;
 	while(CcThread::IsRunning()) {
-		bytes = this->Recv();
-		switch(bytes) {
-			case TR_BYTES_NONE:
-				CcTime::Sleep(CCASYNC_WAIT_RECV);
-				break;
-			case TR_BYTES_ERROR:
-				CcThread::Stop();
-				break;
-			default:
-				continue;
+		FD_SET(CcSocket::_socket->fd, &readfds);
+		tv.tv_sec = CCCORE_ASIO_SEC;
+		tv.tv_usec = CCCORE_ASIO_USEC;
+		
+		received = false;
+
+		status = select(CcSocket::_socket->fd + 1, &readfds, NULL, NULL, &tv);
+		if(status == -1) {
+			CcLogFatalS("Async I/O error: " << strerror(status));
+			CcThread::Stop();
+		} else if(status > 0) {
+			if(FD_ISSET(CcSocket::_socket->fd, &readfds)) {
+				CcSocket::_semsocket.Wait();
+				if(CcSocket::Recv(CcSocket::_socket) == TR_BYTES_ERROR) 
+					CcThread::Stop();
+				else 
+					received = true;
+				CcSocket::_semsocket.Post();
+			}
 		}
+		if(received) 
+			CcSocket::iOnRecv.Execute(this);
 	}
+	FD_ZERO(&readfds);
 	this->Disconnect();
 }
 
-CcAddress CcClient::GetLocal(void) {
-	CcSocket::_semsocket.Wait();
-	CcAddress id = this->_hostLocal.GetAddress();
-	CcSocket::_semsocket.Post();
-	return id;
+bool CcClient::Open(int protocol) {
+	int status = 0;
+	switch(protocol) {
+		case CcSocket::UDP:
+			tr_udpclient(CcSocket::_socket);
+			break;
+		case CcSocket::TCP:
+		default:
+			tr_tcpclient(CcSocket::_socket);
+			break;
+	}
+	status = tr_open(CcSocket::_socket);
+	
+	if(status == 0)	{
+		CcLogDebugS("Socket " << CcSocket::_socket->fd << " opened as " <<
+				(protocol == CcSocket::UDP ? "UDP" : "TCP"));
+	} else {
+		CcLogErrorS("Cannot open socket as " << 
+				(protocol == CcSocket::UDP ? "UDP" : "TCP"));
+	}
+	return(status == 0);
 }
-
-CcAddress CcClient::GetRemote(void) {
-	CcSocket::_semsocket.Wait();
-	CcAddress id = this->_hostRemote.GetAddress();
-	CcSocket::_semsocket.Post();
-	return id;
-}
+		
 #endif

@@ -31,6 +31,7 @@ libcnbicore_include_HEADERS = CcBasic.hpp \
 			  CcServerMulti.hpp \
 			  CcServerSingle.hpp \
 			  CcSocket.hpp \
+			  CcSocketProxy.hpp \
 			  CcStreamer.hpp \
 			  CcThread.hpp \
 			  CcThreadSafe.hpp \
@@ -95,6 +96,8 @@ libcnbicore_la_SOURCES = CcBasic.hpp \
 			CcServerSingle.hpp \
 			CcSocket.cpp \
 			CcSocket.hpp \
+			CcSocketProxy.cpp \
+			CcSocketProxy.hpp \
 			CcStreamer.cpp \
 			CcStreamer.hpp \
 			CcThread.cpp \

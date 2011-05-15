@@ -16,57 +16,30 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CCCLIENT_HPP
-#define CCCLIENT_HPP
+#ifndef CCCLIENT_HPP 
+#define CCCLIENT_HPP 
 
-#include "CcCallback.hpp"
-#include "CcBasic.hpp"
 #include "CcSocket.hpp"
-#include "CcEndpoint.hpp"
-#include "CcThread.hpp"
-#include "CcStreamer.hpp"
-#include <string>
+#include <cnbicore/CcThread.hpp>
 
-/*! \brief Asynchronous TCP client
- *
- * It relies  on CcSocket and more deeply on libtransport.
- */
 class CcClient : public CcSocket, public CcThread {
-	public: 
-		CcClient(size_t bsize = 128*CCCORE_1KB, unsigned int maxconns = 1);
+	public:
+		CcClient(size_t bsize = CCCORE_1MB);
 		virtual ~CcClient(void);
-		void Connect(const CcEndpoint endpoint, const unsigned int wait = 0);
-		void Connect(const CcAddress address, const unsigned int wait = 0);
-		void Connect(const CcIp ip, const CcPortUInt port, 
-				const unsigned int wait = 0);
-		void Disconnect(void);
-		int Send(const char* message);
-		int Send(std::string* message);
-		bool SendRecv(const char* query, std::string *reply, 
-				std::string hdr, std::string trl, float waitms = -1);
-		bool SendRecv(const std::string& query, std::string *reply, 
-				std::string hdr, std::string trl, float waitms = -1);
-		CcAddress GetRemote(void);
-		CcAddress GetLocal(void);
-	protected:
-		int Recv(void);
-		void Main(void);
-		void OpenSocket(void);
-		void CloseSocket(void);
+		bool Connect(CcAddress address, int protocol = CcSocket::TCP);
+		bool Disconnect(void);
+		ssize_t Send(const char* message);
+		ssize_t Send(const std::string& message);
+		ssize_t Send(const void* message, size_t size);
 	private:
-		
-	protected:
-		CcEndpoint _hostLocal;
-		CcEndpoint _hostRemote;
-	
+		void Main(void);
+		bool Open(int protocol);
+
 	public:
 		CcCallback1<CcSocketProxy, CcSocket*> iOnConnect;
 		CcCallback1<CcSocketProxy, CcSocket*> iOnDisconnect;
-	protected:
-		virtual void pOnConnect(void) {};
-		virtual void pOnDisconnect(void) {};
-		virtual void pOnRecv(void) {};
-		virtual void pOnSend(void) {};
 };
+
+
 
 #endif
