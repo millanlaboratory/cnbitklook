@@ -19,8 +19,8 @@
 #ifndef CCCLIENT_HPP 
 #define CCCLIENT_HPP 
 
-#include <cnbicore/CcSocket.hpp>
-#include <cnbicore/CcThread.hpp>
+#include "CcSocket.hpp"
+#include "CcThread.hpp"
 
 class CcClient : public CcSocket, public CcThread {
 	public:
@@ -31,6 +31,11 @@ class CcClient : public CcSocket, public CcThread {
 		ssize_t Send(const char* message);
 		ssize_t Send(const std::string& message);
 		ssize_t Send(const void* message, size_t size);
+
+		bool SendRecv(const char* query, std::string *reply, 
+				std::string hdr, std::string trl, float waitms = -1) {return 0;}
+		bool SendRecv(const std::string& query, std::string *reply, 
+				std::string hdr, std::string trl, float waitms = -1) {return 0;}
 	private:
 		void Main(void);
 		bool Open(int protocol);

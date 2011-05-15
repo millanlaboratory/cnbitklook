@@ -20,13 +20,13 @@
 #define CCSERVER_CPP 
 
 #include "CcServer.hpp" 
+#include "CcEndpoint.hpp"
+#include "CcTime.hpp"
+#include "CcLog.hpp"
 #include <string.h>
 #include <sys/time.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include <cnbicore/CcEndpoint.hpp>
-#include <cnbicore/CcTime.hpp>
-#include <cnbicore/CcLog.hpp>
 #include <transport/tr_net.h>
 #include <transport/tr_tcp.h>
 #include <transport/tr_udp.h>

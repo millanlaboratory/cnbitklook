@@ -40,11 +40,11 @@ bool ClTobiIc::Attach(const CcPort port, const std::string& name) {
 		CcLogDebug("Cannot connect to loop");
 		return false;
 	}
-	CcEndpoint endpoint("0.0.0.0", port);
 	
-	this->_server = new CcServerSingle();
+	CcEndpoint endpoint("0.0.0.0", port);
+	this->_server = new CcServer();
 	try { 
-		this->_server->Bind(endpoint);
+		this->_server->Bind(endpoint.GetPort());
 	} catch(CcException e) {
 		CcLogDebugS("Cannot bind to port " << port);
 		return false;
@@ -125,12 +125,12 @@ void ClTobiIc::HandleRecv(CcSocket* caller) {
 }
 
 void ClTobiIc::HandleAccept(CcSocket* caller) { 
-	CcServerSingle *server = (CcServerSingle*)caller;
+	CcServer *server = (CcServer*)caller;
 	CcLogDebugS("Accepted TCP endpoint: " << server->GetRemote());
 }
 		
 void ClTobiIc::HandleDrop(CcSocket* caller) { 
-	CcServerSingle *server = (CcServerSingle*)caller;
+	CcServer *server = (CcServer*)caller;
 	CcLogDebugS("Dropped TCP endpoint: " << server->GetRemote());
 	this->_hasmessage.Post();
 }

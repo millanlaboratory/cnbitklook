@@ -20,7 +20,7 @@
 #define CCSOCKET_CPP
 
 #include "CcSocket.hpp"
-#include <cnbicore/CcBasic.hpp>
+#include "CcBasic.hpp"
 #include <stdio.h>
 #include <string.h>
 

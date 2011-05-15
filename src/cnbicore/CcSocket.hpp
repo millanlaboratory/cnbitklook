@@ -19,12 +19,12 @@
 #ifndef CCSOCKET_HPP
 #define CCSOCKET_HPP
 
-#include <cnbicore/CcFlags.hpp>
-#include <cnbicore/CcCallback.hpp>
-#include <cnbicore/CcObject.hpp>
-#include <cnbicore/CcSemaphore.hpp>
-#include <cnbicore/CcStreamer.hpp>
-#include <cnbicore/CcThreadSafe.hpp>
+#include "CcFlags.hpp"
+#include "CcCallback.hpp"
+#include "CcObject.hpp"
+#include "CcSemaphore.hpp"
+#include "CcStreamer.hpp"
+#include "CcThreadSafe.hpp"
 #include <transport/tr_net.h>
 #include <map>
 
