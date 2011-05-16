@@ -104,33 +104,27 @@ bool CcClient::Disconnect(void) {
 }
 
 ssize_t CcClient::Send(const char* message) {
-	CcLogFatalS("SEND0");
 	CcSocket::_semsocket.Wait();
 	ssize_t bytes = CcSocket::Send(CcSocket::_socket, (void*)message,
 			strlen(message));
 	CcSocket::_semsocket.Post();
-	CcLogFatalS("/SEND0");
 	
 	return bytes;
 }
 
 ssize_t CcClient::Send(const std::string& message) {
-	CcLogFatalS("SEND1");
 	CcSocket::_semsocket.Wait();
 	ssize_t bytes = CcSocket::Send(CcSocket::_socket, (void*)message.c_str(),
 			message.size());
 	CcSocket::_semsocket.Post();
-	CcLogFatalS("/SEND1");
 	
 	return bytes;
 }
 		
 ssize_t CcClient::Send(const void* message, size_t size) {
-	CcLogFatalS("SEND2");
 	CcSocket::_semsocket.Wait();
 	ssize_t bytes = CcSocket::Send(CcSocket::_socket, message, size);
 	CcSocket::_semsocket.Post();
-	CcLogFatalS("/SEND2");
 
 	return bytes;
 }

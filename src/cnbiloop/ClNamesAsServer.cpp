@@ -23,7 +23,6 @@
 
 void ClNamesAsServer::HandleRecvPeer(CcSocket* caller, CcAddress addr, 
 		CcStreamer* stream) { 
-	stream->Dump();
 	CcServer* server = (CcServer*)caller;
 	std::string message;
 	if(stream->Extract(&message, ClNamesLang::Hdr, ClNamesLang::Trl) == false)

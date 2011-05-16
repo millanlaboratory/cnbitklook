@@ -27,9 +27,9 @@ class CcClientExt : public CcClient {
 		virtual ~CcClientExt(void);
 		
 		bool SendRecv(const char* query, std::string *reply, 
-				std::string hdr, std::string trl, float waitms = -1) {return 0;}
+				std::string hdr, std::string trl, float waitms = -1);
 		bool SendRecv(const std::string& query, std::string *reply, 
-				std::string hdr, std::string trl, float waitms = -1) {return 0;}
+				std::string hdr, std::string trl, float waitms = -1);
 };
 
 #endif
