@@ -21,18 +21,14 @@
 #include "ClNamesLang.hpp"
 #include <cnbicore/CcThread.hpp>
 #include <cnbicore/CcBasic.hpp>
-#include <cnbicore/CcServerMulti.hpp>
+#include <cnbicore/CcServer.hpp>
+#include <cnbicore/CcSocketProxy.hpp>
 #include <map>
 
 class ClNamesAsServer : public CcSocketProxy, protected CcThread {
 	public:
-		virtual void HandleBind(CcSocket* caller);
-		virtual void HandleRelease(CcSocket* caller);
-		virtual void HandleListen(CcSocket* caller); 
-		virtual void HandleAcceptEndpoint(CcSocket* caller, CcAddress address);
-		virtual void HandleDropEndpoint(CcSocket* caller, CcAddress address);
-		virtual void HandleRecvEndpoint(CcSocket* caller, CcAddress address);
-		virtual void Register(CcServerMulti* server);
+		virtual void HandleRecvPeer(CcSocket* caller, CcAddress addr, CcStreamer* stream);
+		virtual void Register(CcServer* server);
 		virtual void StartMonitor(double waitms = 60000.00f);
 		virtual void StopMonitor(void);
 		virtual bool IsMonitoring(void);
@@ -48,7 +44,7 @@ class ClNamesAsServer : public CcSocketProxy, protected CcThread {
 	
 	public:
 	private:
-		CcServerMulti* _master;
+		CcServer* _master;
 		ClNamesLang language;
 		std::map<std::string, CcAddress> _lookup;
 		std::map<std::string, CcAddress> _monitor;

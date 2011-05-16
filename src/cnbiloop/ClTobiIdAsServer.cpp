@@ -39,44 +39,19 @@ ClTobiIdAsServer::~ClTobiIdAsServer(void) {
 	this->_serializerD = NULL;
 }
 
-void ClTobiIdAsServer::HandleBind(CcSocket* caller) { 
-	CcServerMulti *server = (CcServerMulti*)caller;
-	CcLogDebugS("Bound TCP socket: " << server->GetLocal());
+void ClTobiIdAsServer::HandleRecvPeer(CcSocket* caller, CcAddress addr, 
+		CcStreamer* stream) { 
+	while(this->CommunicationTiD((CcServer*)caller, addr, stream));
 }
 
-void ClTobiIdAsServer::HandleRelease(CcSocket* caller) { 
-	CcServerMulti *server = (CcServerMulti*)caller;
-	CcLogDebugS("Released TCP socket: " << server->GetLocal());
-}
-
-void ClTobiIdAsServer::HandleListen(CcSocket* caller) { 
-	CcServerMulti *server = (CcServerMulti*)caller;
-	CcLogDebugS(
-			"Listening on TCP socket: " << server->GetLocal());
-}
-
-void ClTobiIdAsServer::HandleAcceptEndpoint(CcSocket* caller, CcAddress address) { 
-	CcLogDebugS("Accepted TCP endpoint: " << address);
-}
-
-void ClTobiIdAsServer::HandleDropEndpoint(CcSocket* caller, CcAddress address) { 
-	CcLogDebugS("Dropped TCP endpoint: " << address);
-}
-
-void ClTobiIdAsServer::HandleRecvEndpoint(CcSocket* caller, CcAddress address) { 
-	CcServerMulti* server = (CcServerMulti*)caller;
-
-	while(this->CommunicationTiD(server, address));
-}
-
-bool ClTobiIdAsServer::CommunicationTiD(CcServerMulti* server, CcAddress address) {
+bool ClTobiIdAsServer::CommunicationTiD(CcServer* server, CcAddress address, 
+		CcStreamer* stream) {
 	int idblock = TCBlock::BlockIdxUnset, ndfblock = TCBlock::BlockIdxUnset;
 	IDevent idevent;
 	IDFtype idfamily;
 	std::string message;
 
-	if(server->datastreams[address]->Extract(&message, 
-			"<tobiid", "/>", CcStreamer::Forward) == false)
+	if(stream->Extract(&message, "<tobiid", "/>") == false)
 		return false;
 
 	this->_serializerD->Deserialize(&message);
@@ -119,12 +94,10 @@ bool ClTobiIdAsServer::CommunicationTiD(CcServerMulti* server, CcAddress address
 	return true;
 }
 
-void ClTobiIdAsServer::Register(CcServerMulti* server) {
-	CB_CcSocket(server->iOnBind, this, HandleBind);
+void ClTobiIdAsServer::Register(CcServer* server) {
 	CB_CcSocket(server->iOnRelease, this, HandleRelease);
-	CB_CcSocket(server->iOnListen, this, HandleListen);
-	CB_CcSocket(server->iOnAcceptEndpoint, this, HandleAcceptEndpoint);
-	CB_CcSocket(server->iOnDropEndpoint, this, HandleDropEndpoint);
-	CB_CcSocket(server->iOnRecvEndpoint, this, HandleRecvEndpoint);
+	CB_CcSocket(server->iOnAcceptPeer, this, HandleAcceptPeer);
+	CB_CcSocket(server->iOnDropPeer, this, HandleDropPeer);
+	CB_CcSocket(server->iOnRecvPeer, this, HandleRecvPeer);
 }
 #endif

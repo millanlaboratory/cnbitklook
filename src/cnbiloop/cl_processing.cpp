@@ -19,7 +19,7 @@
 #include "ClProAsServer.hpp" 
 #include "ClNamesClient.hpp"
 #include <cnbicore/CcBasic.hpp>
-#include <cnbicore/CcServerMulti.hpp>
+#include <cnbicore/CcServer.hpp>
 #include <stdlib.h>
 
 void usage(void) { 
@@ -49,13 +49,13 @@ int main(int argc, char* argv[]) {
 	CcLogInfoS("Processing configured: " << optport << "/TCP");
 	
 	// Setup TCP server
-	CcServerMulti server(true, 50.00f, 5.00f, CCCORE_1MB);
+	CcServer server(CCCORE_1MB);
 	ClProAsServer handler;
 	ClNamesClient nsclient;
 
 	try { 
 		handler.Register(&server);
-		server.Bind(CcEndpoint("0.0.0.0", optport), 2);
+		server.Bind(optport);
 	} catch(CcException e) {
 		CcLogFatal("Cannot bind socket");
 		CcCore::Exit(2);

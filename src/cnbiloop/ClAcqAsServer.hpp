@@ -24,23 +24,19 @@
 #include <tobiid/IDMessage.hpp>
 #include <tobiid/IDSerializerRapid.hpp>
 #include <cnbicore/CcBasic.hpp>
-#include <cnbicore/CcServerMulti.hpp>
+#include <cnbicore/CcServer.hpp>
+#include <cnbicore/CcSocketProxy.hpp>
 
-class ClAcqAsServer  : public CcSocketProxy {
+class ClAcqAsServer : public CcSocketProxy {
 	public:
 		ClAcqAsServer(CaWriter* writer);
 		virtual ~ClAcqAsServer(void);
 
-		virtual void HandleBind(CcSocket* caller);
-		virtual void HandleRelease(CcSocket* caller);
-		virtual void HandleListen(CcSocket* caller); 
-		virtual void HandleAcceptEndpoint(CcSocket* caller, CcAddress address);
-		virtual void HandleDropEndpoint(CcSocket* caller, CcAddress address);
-		virtual void HandleRecvEndpoint(CcSocket* caller, CcAddress address);
-		void Register(CcServerMulti* server);
+		virtual void HandleRecvPeer(CcSocket* caller, CcAddress addr, CcStreamer* stream);
+		void Register(CcServer* server);
 
 	private:
-		virtual bool CommunicationCl(CcServerMulti* server, CcAddress address);
+		virtual bool CommunicationCl(CcServer* server, CcAddress address, CcStreamer* stream);
 		virtual bool LogXDF(const std::string& logfile, const std::string& xdffile, 
 				const std::string& logline); 
 	protected:

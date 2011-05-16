@@ -16,31 +16,20 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CCCLIENT_HPP 
-#define CCCLIENT_HPP 
+#ifndef CCCLIENTEXT_HPP 
+#define CCCLIENTEXT_HPP 
 
-#include "CcSocket.hpp"
-#include "CcThread.hpp"
+#include "CcClient.hpp"
 
-class CcClient : public CcSocket, public CcThread {
+class CcClientExt : public CcClient {
 	public:
-		CcClient(size_t bsize = CCCORE_1MB);
-		virtual ~CcClient(void);
-		bool Connect(CcAddress address, int protocol = CcSocket::TCP);
-		bool Disconnect(void);
-		ssize_t Send(const char* message);
-		ssize_t Send(const std::string& message);
-		ssize_t Send(const void* message, size_t size);
-
-	private:
-		void Main(void);
-		bool Open(int protocol);
-
-	public:
-		CcCallback1<CcSocketProxy, CcSocket*> iOnConnect;
-		CcCallback1<CcSocketProxy, CcSocket*> iOnDisconnect;
+		CcClientExt(size_t bsize = CCCORE_1MB);
+		virtual ~CcClientExt(void);
+		
+		bool SendRecv(const char* query, std::string *reply, 
+				std::string hdr, std::string trl, float waitms = -1) {return 0;}
+		bool SendRecv(const std::string& query, std::string *reply, 
+				std::string hdr, std::string trl, float waitms = -1) {return 0;}
 };
-
-
 
 #endif

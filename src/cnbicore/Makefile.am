@@ -5,6 +5,7 @@ libcnbicore_includedir = $(includedir)/cnbicore
 libcnbicore_include_HEADERS = CcBasic.hpp \
 			  CcCallback.hpp \
 			  CcClient.hpp \
+			  CcClientExt.hpp \
 			  CcCore.hpp \
 			  CcDeserializer.hpp \
 			  CcEndpoint.hpp \
@@ -47,6 +48,8 @@ libcnbicore_la_SOURCES = CcBasic.hpp \
 			CcCallback.hpp \
 			CcClient.cpp \
 			CcClient.hpp \
+			CcClientExt.cpp \
+			CcClientExt.hpp \
 			CcCore.cpp \
 			CcCore.hpp \
 			CcDeserializer.hpp \

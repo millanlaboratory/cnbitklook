@@ -24,7 +24,7 @@
 #include <cnbiacq/CaDevice.hpp>
 #include <cnbicore/CcBasic.hpp>
 #include <cnbicore/CcPipeServer.hpp>
-#include <cnbicore/CcServerMulti.hpp>
+#include <cnbicore/CcServer.hpp>
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
@@ -68,9 +68,9 @@ int main(int argc, char* argv[]) {
 		else if(opt == 'f')
 			optfs.assign(optarg);
 		else if(opt == 'A')
-			optepAcq.SetAddress(optarg);
+			optepAcq.SetPort(optarg);
 		else if(opt == 'B')
-			optepBus.SetAddress(optarg);
+			optepBus.SetPort(optarg);
 		else if(opt == 'n')
 			optpipename.assign(optarg);
 		else if(opt == 'i')
@@ -133,21 +133,21 @@ int main(int argc, char* argv[]) {
 	ClNamesClient nsclient;
 	int nsstatus;
 	
-	CcServerMulti serverAcq(true, 50.00f, 5.00f, CCCORE_1MB);
+	CcServer serverAcq(CCCORE_1MB);
 	ClAcqAsServer handleAcq(&writer);
 	try {
 		handleAcq.Register(&serverAcq);
-		serverAcq.Bind(optepAcq, 2);
+		serverAcq.Bind(optepAcq.GetPort());
 	} catch(CcException e) {
 		CcLogFatal("Cannot bind acquisition socket");
 		CcCore::Exit(4);
 	}
 
-	CcServerMulti serverBus(true, 2.50f, 1.00f, CCCORE_1MB);
+	CcServer serverBus(CCCORE_1MB);
 	ClTobiIdAsServer handleBus(&writer, &frame, &semframe);
 	try {
 		handleBus.Register(&serverBus);
-		serverBus.Bind(optepBus, 2);
+		serverBus.Bind(optepBus.GetPort());
 	} catch(CcException e) {
 		CcLogFatal("Cannot bind bus socket");
 		CcCore::Exit(5);

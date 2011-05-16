@@ -86,7 +86,7 @@ class CcSocket : public CcObject {
 	public:
 		const static int TCP = 0;
 		const static int UDP = 1;
-		CcCallback1<CcSocketProxy, CcSocket*> iOnRecv;
+		CcCallback2<CcSocketProxy, CcSocket*, CcStreamer*> iOnRecv;
 	protected:
 		CcCallback1<CcSocketProxy, CcSocket*> iOnSend;
 };

@@ -40,7 +40,7 @@ class ClTobiIc : public CcSocketProxy {
 		int Deserialize(ICSerializerRapid* serializer);
 		void HandleAccept(CcSocket* caller);
 		void HandleDrop(CcSocket* caller);
-		void HandleRecv(CcSocket* caller);
+		void HandleRecvPeer(CcSocket* caller, CcAddress addr, CcStreamer* stream);
 
 	public:
 		const static int Detached = -1;

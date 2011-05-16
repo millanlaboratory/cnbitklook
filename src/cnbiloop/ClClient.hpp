@@ -20,7 +20,7 @@
 #define CLCLIENT_HPP 
 
 #include <cnbicore/CcBasic.hpp>
-#include <cnbicore/CcClient.hpp>
+#include <cnbicore/CcClientExt.hpp>
 #include <cnbicore/CcSocketProxy.hpp>
 
 class ClClient : public CcSocketProxy {
@@ -37,7 +37,7 @@ class ClClient : public CcSocketProxy {
 	private:
 	protected:
 		CcSemaphore _semrecv;
-		CcClient _client;
+		CcClientExt _client;
 		double _waitms;
 };
 

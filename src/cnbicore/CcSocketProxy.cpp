@@ -43,11 +43,11 @@ void CcSocketProxy::HandleDrop(CcSocket* caller) {
 	CcLogDebugS("Socket " << caller->GetFID() << " dropped");
 }
 
-void CcSocketProxy::HandleAcceptEndpoint(CcSocket* caller, CcAddress addr) { 
+void CcSocketProxy::HandleAcceptPeer(CcSocket* caller, CcAddress addr) { 
 	CcLogDebugS("Socket " << caller->GetFID() << " accepted " << addr);
 }
 
-void CcSocketProxy::HandleDropEndpoint(CcSocket* caller, CcAddress addr) { 
+void CcSocketProxy::HandleDropPeer(CcSocket* caller, CcAddress addr) { 
 	CcLogDebugS("Socket " << caller->GetFID() << " dropped " << addr);
 }
 
@@ -55,15 +55,16 @@ void CcSocketProxy::HandleSend(CcSocket* caller) {
 	CcLogDebugS("Socket " << caller->GetFID() << " sent data");
 }
 
-void CcSocketProxy::HandleRecv(CcSocket* caller) { 
+void CcSocketProxy::HandleRecv(CcSocket* caller, CcStreamer* stream) { 
 	CcLogDebugS("Socket " << caller->GetFID() << " received data");
 }
 
-void CcSocketProxy::HandleSendEndpoint(CcSocket* caller, CcAddress addr) { 
+void CcSocketProxy::HandleSendPeer(CcSocket* caller, CcAddress addr) { 
 	CcLogDebugS("Socket " << caller->GetFID() << " sent to " << addr);
 }
 
-void CcSocketProxy::HandleRecvEndpoint(CcSocket* caller, CcAddress addr) { 
+void CcSocketProxy::HandleRecvPeer(CcSocket* caller, CcAddress addr, 
+		CcStreamer* stream) { 
 	CcLogDebugS("Socket " << caller->GetFID() << " received from " << addr);
 }
 
@@ -73,16 +74,6 @@ void CcSocketProxy::HandleAccept(CcSocket* caller, CcSocket* ep) {
 
 void CcSocketProxy::HandleDrop(CcSocket* caller, CcSocket* ep) { 
 	CcLogDebugS("Socket " << caller->GetFID() << " dropped " << ep->GetFID());
-}
-
-void CcSocketProxy::HandleSend(CcSocket* caller, CcSocket* ep, const char* msg) {
-	CcLogDebugS("Socket " << caller->GetFID() << " sent to " << ep->GetFID() <<
-			": " << msg);
-}
-
-void CcSocketProxy::HandleRecv(CcSocket* caller, CcSocket* ep, const char* msg) { 
-	CcLogDebugS("Socket " << caller->GetFID() << " received from " <<
-			ep->GetFID() << ": " << msg);
 }
 
 void CcSocketProxy::HandleConnect(CcSocket* caller) { 

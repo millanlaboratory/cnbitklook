@@ -81,7 +81,10 @@ ssize_t CcSocket::Recv(tr_socket* peer) {
 	this->AddRecv(bytes);
 	
 	CcStreamer* stream = CcSocket::GetStream(peer->fd);
-	stream->Append((char*)peer->buffer, bytes);
+	if(stream)
+		stream->Append((char*)peer->buffer, bytes);
+	else
+		CcLogWarningS("Stream not found for socket " << peer->fd);
 		
 	return bytes;
 }

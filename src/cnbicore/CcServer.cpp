@@ -201,7 +201,8 @@ void CcServer::Main(void) {
 		}
 		
 		int fida, fidr, fidd;
-		CcAddress addrd;
+		CcAddress address;
+		CcStreamer* stream = NULL;
 		for(int i = 0; i <= fdmax; i++) {
 			if(FD_ISSET(i, &readfds) <= 0)
 				continue;
@@ -218,6 +219,7 @@ void CcServer::Main(void) {
 						fdmax = fdnew;
 					FD_SET(fdnew, &masterfds);
 					fida = fdnew;
+					address = CcSocket::GetAddress(fida);
 				}
 			} else {
 				if(CcSocket::HasPeer(i) == false) {
@@ -229,27 +231,29 @@ void CcServer::Main(void) {
 				
 				peer = GetPeer(i);
 				if(CcSocket::Recv(peer) == TR_BYTES_ERROR) {
-					FD_CLR(i, &masterfds);
-					addrd = CcSocket::GetAddress(i);
-					this->Drop(i);
 					fidd = i;
+					address = CcSocket::GetAddress(fidd);
+					FD_CLR(i, &masterfds);
+					this->Drop(i);
 				} else {
 					fidr = i;
+					address = CcSocket::GetAddress(fidr);
+					stream = CcSocket::GetStream(fidr);
 				}
 			}
 			CcSocket::_semsocket.Post();
 
 			if(fida > 0) {
 				this->iOnAccept.Execute(this);
-				this->iOnAcceptEndpoint.Execute(this, CcSocket::GetAddress(fida));
+				this->iOnAcceptPeer.Execute(this, address);
 			}
 			if(fidr > 0) {
-				CcSocket::iOnRecv.Execute(this);
-				this->iOnRecvEndpoint.Execute(this, CcSocket::GetAddress(fidr));
+				CcSocket::iOnRecv.Execute(this, stream);
+				this->iOnRecvPeer.Execute(this, address, stream);
 			}
 			if(fidd > 0) {
 				this->iOnDrop.Execute(this);
-				this->iOnDropEndpoint.Execute(this, addrd);
+				this->iOnDropPeer.Execute(this, address);
 			}
 		}
 	}

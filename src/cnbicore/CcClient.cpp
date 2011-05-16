@@ -104,27 +104,33 @@ bool CcClient::Disconnect(void) {
 }
 
 ssize_t CcClient::Send(const char* message) {
+	CcLogFatalS("SEND0");
 	CcSocket::_semsocket.Wait();
 	ssize_t bytes = CcSocket::Send(CcSocket::_socket, (void*)message,
 			strlen(message));
 	CcSocket::_semsocket.Post();
+	CcLogFatalS("/SEND0");
 	
 	return bytes;
 }
 
 ssize_t CcClient::Send(const std::string& message) {
+	CcLogFatalS("SEND1");
 	CcSocket::_semsocket.Wait();
 	ssize_t bytes = CcSocket::Send(CcSocket::_socket, (void*)message.c_str(),
 			message.size());
 	CcSocket::_semsocket.Post();
+	CcLogFatalS("/SEND1");
 	
 	return bytes;
 }
 		
 ssize_t CcClient::Send(const void* message, size_t size) {
+	CcLogFatalS("SEND2");
 	CcSocket::_semsocket.Wait();
 	ssize_t bytes = CcSocket::Send(CcSocket::_socket, message, size);
 	CcSocket::_semsocket.Post();
+	CcLogFatalS("/SEND2");
 
 	return bytes;
 }
@@ -139,6 +145,7 @@ void CcClient::Main(void) {
 
 	int status;
 	bool received;
+	CcStreamer* stream = CcSocket::GetStream(CcSocket::_socket->fd);
 	while(CcThread::IsRunning()) {
 		FD_SET(CcSocket::_socket->fd, &readfds);
 		tv.tv_sec = CCCORE_ASIO_SEC;
@@ -153,15 +160,16 @@ void CcClient::Main(void) {
 		} else if(status > 0) {
 			if(FD_ISSET(CcSocket::_socket->fd, &readfds)) {
 				CcSocket::_semsocket.Wait();
-				if(CcSocket::Recv(CcSocket::_socket) == TR_BYTES_ERROR) 
+				if(CcSocket::Recv(CcSocket::_socket) == TR_BYTES_ERROR) {
 					CcThread::Stop();
-				else 
+				} else {
 					received = true;
+				}
 				CcSocket::_semsocket.Post();
 			}
 		}
 		if(received) 
-			CcSocket::iOnRecv.Execute(this);
+			CcSocket::iOnRecv.Execute(this, stream);
 	}
 	FD_ZERO(&readfds);
 	this->Disconnect();

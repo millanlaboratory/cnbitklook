@@ -52,13 +52,13 @@ class CcServer : public CcSocket, public CcThread {
 		CcCallback1<CcSocketProxy, CcSocket*> iOnRelease;
 		CcCallback1<CcSocketProxy, CcSocket*> iOnAccept;
 		CcCallback1<CcSocketProxy, CcSocket*> iOnDrop;
-		CcCallback2<CcSocketProxy, CcSocket*, CcAddress> iOnAcceptEndpoint;
-		CcCallback2<CcSocketProxy, CcSocket*, CcAddress> iOnDropEndpoint;
-		CcCallback2<CcSocketProxy, CcSocket*, CcAddress> iOnRecvEndpoint;
+		CcCallback2<CcSocketProxy, CcSocket*, CcAddress> iOnAcceptPeer;
+		CcCallback2<CcSocketProxy, CcSocket*, CcAddress> iOnDropPeer;
+		CcCallback3<CcSocketProxy, CcSocket*, CcAddress, CcStreamer*> iOnRecvPeer;
 	protected:
 		CcCallback1<CcSocketProxy, CcSocket*> iOnBind;
 		CcCallback1<CcSocketProxy, CcSocket*> iOnListen;
-		CcCallback2<CcSocketProxy, CcSocket*, CcAddress> iOnSendEndpoint;
+		CcCallback2<CcSocketProxy, CcSocket*, CcAddress> iOnSendPeer;
 };
 
 #endif

@@ -42,7 +42,7 @@ class ClTobiId : public CcSocketProxy {
 	protected:
 		void HandleConnect(CcSocket* caller);
 		void HandleDisconnect(CcSocket* caller);
-		void HandleRecv(CcSocket* caller);
+		void HandleRecv(CcSocket* caller, CcStreamer* stream);
 
 	public:
 		static const int SetOnly = 0;

@@ -58,7 +58,7 @@ bool ClTobiIc::Attach(const CcPort port, const std::string& name) {
 
 	CB_CcSocket(this->_server->iOnAccept, this, HandleAccept);
 	CB_CcSocket(this->_server->iOnDrop, this, HandleDrop);
-	CB_CcSocket(this->_server->iOnRecv, this, HandleRecv);
+	CB_CcSocket(this->_server->iOnRecvPeer, this, HandleRecvPeer);
 	
 	this->_hasmessage.Wait();
 
@@ -112,14 +112,12 @@ int ClTobiIc::Deserialize(ICSerializerRapid* serializer) {
 	return ClTobiIc::HasMessage;
 }
 
-void ClTobiIc::HandleRecv(CcSocket* caller) { 
+void ClTobiIc::HandleRecvPeer(CcSocket* caller, CcAddress addr, 
+		CcStreamer* stream) { 
 	if(this->_sembuffer.TryWait() == false) 
 		return;
 
-	bool status = false;
-	status = this->_server->datastream.Extract(&this->_buffer, "<tobiic",
-			"</tobiic>");
-	if(status)
+	if(stream->Extract(&this->_buffer, "<tobiic", "</tobiic>") == true)
 		this->_hasmessage.Post();
 	this->_sembuffer.Post();
 }

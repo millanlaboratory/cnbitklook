@@ -19,7 +19,7 @@
 #include "ClNamesAsServer.hpp" 
 #include "ClNamesClient.hpp"
 #include <cnbicore/CcBasic.hpp>
-#include <cnbicore/CcServerMulti.hpp>
+#include <cnbicore/CcServer.hpp>
 #include <stdlib.h>
 
 void usage(void) { 
@@ -49,14 +49,14 @@ int main(int argc, char* argv[]) {
 	CcLogInfoS("Nameserver configured: " << optport << "/TCP");
 	
 	// Setup TCP server
-	CcEndpoint endpoint("0.0.0.0", optport);
-	CcServerMulti server(true, 50.00f, 5.00f, CCCORE_1MB);
+	CcEndpoint endpoint("127.0.0.1", optport);
+	CcServer server(CCCORE_1MB);
 	ClNamesAsServer handler;
 	ClNamesClient nsclient;
 	handler.StartMonitor();
 	try {
 		handler.Register(&server);
-		server.Bind(endpoint, 2);
+		server.Bind(endpoint.GetPort());
 	} catch(CcException e) {
 		CcLogFatal("Cannot bind socket");
 		CcCore::Exit(2);

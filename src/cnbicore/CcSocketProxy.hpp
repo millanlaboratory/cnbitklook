@@ -30,22 +30,17 @@ class CcSocketProxy {
 		virtual void HandleAccept(CcSocket* caller);
 		virtual void HandleDrop(CcSocket* caller);
 		
-		virtual void HandleAcceptEndpoint(CcSocket* caller, CcAddress addr);
-		virtual void HandleDropEndpoint(CcSocket* caller, CcAddress addr);
+		virtual void HandleAcceptPeer(CcSocket* caller, CcAddress addr);
+		virtual void HandleDropPeer(CcSocket* caller, CcAddress addr);
 		
 		virtual void HandleSend(CcSocket* caller);
-		virtual void HandleRecv(CcSocket* caller);
+		virtual void HandleRecv(CcSocket* caller, CcStreamer* stream);
 		
-		virtual void HandleSendEndpoint(CcSocket* caller, CcAddress addr);
-		virtual void HandleRecvEndpoint(CcSocket* caller, CcAddress addr);
+		virtual void HandleSendPeer(CcSocket* caller, CcAddress addr);
+		virtual void HandleRecvPeer(CcSocket* caller, CcAddress addr, CcStreamer* stream);
 
 		virtual void HandleAccept(CcSocket* caller, CcSocket* ep);
 		virtual void HandleDrop(CcSocket* caller, CcSocket* ep);
-		
-		virtual void HandleSend(CcSocket* caller, CcSocket* ep,
-				const char* msg);
-		virtual void HandleRecv(CcSocket* caller, CcSocket* ep, 
-				const char* msg);
 		
 		virtual void HandleConnect(CcSocket* caller);
 		virtual void HandleDisconnect(CcSocket* caller);
