@@ -41,8 +41,8 @@ try
 
 	% Configuration 
 	% - Initialize, configure and setup your stuff in here
-	if(getenv('CNBITK_MATLAB'))
-		mtpath_include('$CNBITK_MATLAB/');
+	if(getenv('CNBITKMAT_ROOT'))
+		mtpath_include('$CNBITKMAT_ROOT/');
 	else
 		mtpath_include('/opt/cnbitkmat/');
 	end

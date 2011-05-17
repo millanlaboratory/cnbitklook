@@ -32,7 +32,7 @@ try
 	% - also, if the nameserver query fails, pn, aD and aC will be empty and
 	%   their values will be set according to the XML configuration
 	cfg = ndf_cl_getconfig(loop.cl, 'checkloop', pn, aD, aC);
-	[pn, aD, aC] = ndf_checknames(loop.cl, cfg.ndf.pn, cfg.ndf.id, cfg.ndf.ic);
+	[pn, aD, aC] = ndf_checknames(loop.cl, cfg.ndf.pipe, cfg.ndf.id, cfg.ndf.ic);
 	
 	if(isempty(pn))
 		%|| isempty(aD) || isempty(aC))

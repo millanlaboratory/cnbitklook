@@ -16,7 +16,7 @@
 
 clear all;
 if(mtpath_include('/opt/mextobiic') == 0)
-	mtpath_include('$CNBITK_MATLAB/mextobiic');
+	mtpath_include('$CNBITKMAT_ROOT/mextobiic');
 end
 
 config = ccfg_new();

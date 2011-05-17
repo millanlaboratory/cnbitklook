@@ -111,15 +111,15 @@ CCfgTasksetConstIt CCfgTaskset::End(void) const {
 
 void CCfgTaskset::DumpNDF(void) {
 	printf("NDF config for taskset %s\n", this->name.c_str());
-	printf(" Function:      %s\n", this->ndf.function.c_str());
-	printf(" Pipename:      %s\n", this->ndf.pipename.c_str());
-	printf(" iD:            %s\n", this->ndf.id.c_str());
-	printf(" iC:            %s\n", this->ndf.ic.c_str());
+	printf(" Exec:         %s\n", this->ndf.exec.c_str());
+	printf(" Pipename:     %s\n", this->ndf.pipe.c_str());
+	printf(" iD:           %s\n", this->ndf.id.c_str());
+	printf(" iC:           %s\n", this->ndf.ic.c_str());
 }
 
 void CCfgTaskset::DumpClassifier(void) {
 	printf("Classifier config for taskset %s\n", this->name.c_str());
-	printf(" Name:          %s\n", this->classifier.name.c_str());
-	printf(" Description:   %s\n", this->classifier.description.c_str());
-	printf(" Filename:      %s\n", this->classifier.filename.c_str());
+	printf(" Name:         %s\n", this->classifier.name.c_str());
+	printf(" Description:  %s\n", this->classifier.description.c_str());
+	printf(" Filename:     %s\n", this->classifier.filename.c_str());
 }

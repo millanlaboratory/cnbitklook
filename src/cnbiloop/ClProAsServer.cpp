@@ -108,8 +108,8 @@ void ClProAsServer::HandleRecvEndpoint(CcSocket* caller, CcAddress address) {
 				//		<< pid << " Ok");
 			} else {
 				server->Send(language.Error(ClProLang::IsDead), address);
-				char buffer[20480];
-				process->Read(buffer, 20480);
+				char buffer[CCCORE_1MB];
+				process->Read(buffer, CCCORE_1MB);
 				CcLogWarningS("IsAlive from " << address << ": " 
 						<< pid << " IsDead, " << buffer);
 			}

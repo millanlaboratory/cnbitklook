@@ -51,7 +51,7 @@ end
 % - the NDF configuration (pipes etc)
 [cfg.classifier.name, cfg.classifier.desc, cfg.classifier.file] = ...
 	ccfgtaskset_getclassifier(cfg.taskset);
-[cfg.ndf.function, cfg.ndf.pn, cfg.ndf.id, cfg.ndf.ic] = ...
+[cfg.ndf.function, cfg.ndf.pipe, cfg.ndf.id, cfg.ndf.ic] = ...
 	ccfgtaskset_getndf(cfg.taskset);
 
 
@@ -66,7 +66,7 @@ if(isempty(aD) == false);
 end
 if(isempty(pn) == false); 
 	disp('[ndf_cl_config] Overriding pipename');
-	cfg.ndf.pn = pn;
+	cfg.ndf.pipe = pn;
 end
 
 fprintf(1, '[ndf_cl_config] Nameserver configuration:\n');
@@ -76,8 +76,8 @@ fprintf(1, '  Taskset:  %s\n', cfg.ns.taskset);
 fprintf(1, '  XML:      %s\n', cfg.ns.xml);
 fprintf(1, '  Path:     %s\n', cfg.ns.path);
 fprintf(1, '[ndf_cl_config] NDF configuration:\n');
-fprintf(1, '  Function: %s\n', cfg.ndf.function);
-fprintf(1, '  Pipename: %s\n', cfg.ndf.pn);
+fprintf(1, '  Exec:     %s\n', cfg.ndf.exec);
+fprintf(1, '  Pipe:     %s\n', cfg.ndf.pipe);
 fprintf(1, '  TOBI iD:  %s\n', cfg.ndf.id);
 fprintf(1, '  TOBI iC:  %s\n', cfg.ndf.ic);
 fprintf(1, '[ndf_cl_config] Classifier configuration:\n');

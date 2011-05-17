@@ -24,9 +24,9 @@
 
 #define CLMATLAB_INCLUDE "\
 try;\
-	if(isempty(getenv('MTPATH_ROOT')));\
-		disp('MTPATH_ROOT unset, mtpath in /opt/mtpath');\
-		addpath('/opt/mtpath');\
+	if(isempty(getenv('CNBITKMAT_ROOT')));\
+		disp('CNBITKMAT_ROOT unset, mtpath must be in /opt/cnbitkmat/mtpath');\
+		addpath('/opt/cnbitkmat/mtpath');\
 	end;\
 	status0 = mtpath_include('%s');\
 	if(status0 == false);\

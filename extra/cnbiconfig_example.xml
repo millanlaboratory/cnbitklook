@@ -217,10 +217,12 @@
 				<iclabel>LabelBiosig</iclabel>
 			</tobi>
 			<ndf>
-				<function>ndf_checkloop</function>
-				<pipename>/pipe0</pipename>
+				<exec>ndf_checkloop</exec>
+				<pipe>/pipe0</pipe>
 				<id>/bus</id>
 				<ic>/ctrl0</ic>
+				<directory>/home/mtavella/</directory>
+				<include>/home/mtavella/toolbox/</include>
 			</ndf>
 		</checkloop>
 		<mi description="Standard MI classifier (pipeline 1)">
@@ -229,10 +231,12 @@
 				<iclabel>LabelBiosig</iclabel>
 			</tobi>
 			<ndf>
-				<function>ndf_mi</function>
-				<pipename>/pipe1</pipename>
+				<exec>ndf_mi</exec>
+				<pipe>/pipe1</pipe>
 				<id>/bus</id>
 				<ic>/ctrl1</ic>
+				<directory>/home/mtavella/</directory>
+				<include>/home/mtavella/toolbox/</include>
 			</ndf>
 		</mi>
 		<errp description="Standard ErrP classifier (pipeline 2)">
@@ -241,10 +245,12 @@
 				<iclabel>LabelBiosig</iclabel>
 			</tobi>
 			<ndf>
-				<function>ndf_errp</function>
-				<pipename>/pipe2</pipename>
+				<exec>ndf_errp</exec>
+				<pipe>/pipe2</pipe>
 				<id>/bus</id>
 				<ic>/ctrl2</ic>
+				<directory>/home/mtavella/</directory>
+				<include>/home/mtavella/toolbox/</include>
 			</ndf>
 		</errp>
 		<va description="Standard VA classifier (pipeline 3)">
@@ -253,10 +259,12 @@
 				<iclabel>LabelBiosig</iclabel>
 			</tobi>
 			<ndf>
-				<function>ndf_va</function>
-				<pipename>/pipe3</pipename>
+				<exec>ndf_va</exec>
+				<pipe>/pipe3</pipe>
 				<id>/bus</id>
 				<ic>/ctrl3</ic>
+				<directory>/home/mtavella/</directory>
+				<include>/home/mtavella/toolbox/</include>
 			</ndf>
 		</va>
 	</classifiers>

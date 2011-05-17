@@ -34,8 +34,8 @@ typedef struct CCfgClassifier_struct {
 } CCfgClassifier;
 
 typedef struct CCfgNDF_struct {
-	std::string function;
-	std::string pipename;
+	std::string exec;
+	std::string pipe;
 	std::string id;
 	std::string ic;
 } CCfgNDF;

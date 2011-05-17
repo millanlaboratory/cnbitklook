@@ -318,13 +318,13 @@ $ #include <stdio.h>
 	file = '';
 	# getclassifier(CCfgTaskset* tptr, inout cstring[4096] name, inout  cstring[4096] desc, inout cstring[4096] file);
 
-@function [fun, pipe, id, ic] = ccfgtaskset_getndf(tptr)
+@function [exec, pipe, id, ic] = ccfgtaskset_getndf(tptr)
 % Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
 % Michele Tavella <michele.tavella@epfl.ch>
-	$ void getndf(CCfgTaskset* tptr, char* fun, char* pipe, char* id, char* ic) {
+	$ void getndf(CCfgTaskset* tptr, char* exec, char* pipe, char* id, char* ic) {
 	$	try {
-	$ 		strcpy(fun,  tptr->ndf.function.c_str()); 
-	$ 		strcpy(pipe, tptr->ndf.pipename.c_str()); 
+	$ 		strcpy(exec,  tptr->ndf.exec .c_str()); 
+	$ 		strcpy(pipe, tptr->ndf.pipe.c_str()); 
 	$ 		strcpy(id,   tptr->ndf.id.c_str()); 
 	$ 		strcpy(ic,   tptr->ndf.ic.c_str()); 
 	$	} catch(XMLException e) {
@@ -332,11 +332,11 @@ $ #include <stdio.h>
 	$			e.Caller().c_str(), e.Info().c_str());
 	$	}
 	$ }
-	fun = '';
+	exec = '';
 	pipe = '';
 	id = '';
 	ic = '';
-	# getndf(CCfgTaskset* tptr, inout cstring[4096] fun, inout cstring[4096] pipe, inout cstring[4096] id, inout cstring[4096] ic);
+	# getndf(CCfgTaskset* tptr, inout cstring[4096] exec, inout cstring[4096] pipe, inout cstring[4096] id, inout cstring[4096] ic);
 
 @function [retval, tptr] = ccfgtaskset_hastask(tptr, what)
 % Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)

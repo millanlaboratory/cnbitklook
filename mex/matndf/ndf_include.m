@@ -16,25 +16,21 @@
 function ndf_include()
 
 try
-	if(isempty(getenv('MTPATH_ROOT')))
-		disp('[ndf_include] $MTPATH_ROOT not found, using default');
-		setenv('MTPATH_ROOT', '/opt/mtpath/');
-	end
-	if(isempty(getenv('CNBITK_MATLAB')))
-		disp('[ndf_include] $CNBITK_MATLAB not found, using default');
-		setenv('CNBITK_MATLAB', '/opt/cnbitkmat/');
+	if(isempty(getenv('CNBITKMAT_ROOT')))
+		disp('[ndf_include] $CNBITKMAT_ROOT not found, using default');
+		setenv('CNBITKMAT_ROOT', '/opt/cnbitkmat/');
 	end
 	if(isempty(getenv('EEGC3_ROOT')))
 		disp('[ndf_include] $EEGC3_ROOT not found, using default');
 		setenv('EEGC3_ROOT', '/opt/eegc3');
 	end
 
-	addpath(getenv('MTPATH_ROOT'));
+	addpath([getenv('CNBITKMAT_ROOT') '/mtpath']);
 	if(isempty(which('mtpath_include')))
 		disp('[ndf_include] mtpath not installed, killing Matlab');
 		exit;
 	end
-	mtpath_include('$CNBITK_MATLAB/');
+	mtpath_include('$CNBITKMAT_ROOT/');
 	mtpath_include('$EEGC3_ROOT/');
 	mtpath_include('$EEGC3_ROOT/modules/smr');
 catch exception

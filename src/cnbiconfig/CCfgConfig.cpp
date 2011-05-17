@@ -239,10 +239,10 @@ void CCfgConfig::ParseClassifierEx(const std::string& bl, const std::string& ts,
 	 */
 	CCfgXMLConfig::RootEx()->GoEx("classifiers")->GoEx(ctype)->SetBranch();
 
-	taskset->ndf.function =
-		CCfgXMLConfig::BranchEx()->GoEx("ndf")->QuickStringEx("function");
-	taskset->ndf.pipename =
-		CCfgXMLConfig::BranchEx()->GoEx("ndf")->QuickStringEx("pipename");
+	taskset->ndf.exec =
+		CCfgXMLConfig::BranchEx()->GoEx("ndf")->QuickStringEx("exec");
+	taskset->ndf.pipe =
+		CCfgXMLConfig::BranchEx()->GoEx("ndf")->QuickStringEx("pipe");
 	taskset->ndf.id = 
 		CCfgXMLConfig::BranchEx()->GoEx("ndf")->QuickStringEx("id");
 	taskset->ndf.ic = 
