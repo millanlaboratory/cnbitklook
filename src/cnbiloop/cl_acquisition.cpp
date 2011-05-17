@@ -239,11 +239,9 @@ int main(int argc, char* argv[]) {
 shutdown:
 	// Stop and unregister ClAcqAsServer
 	serverAcq.Release();
-	serverAcq.Join();
 	nsclient.Unset("/acquisition");
 	
 	serverBus.Release();
-	serverBus.Join();
 	nsclient.Unset("/bus");
 	
 	// Deregister pipes on nameserver
