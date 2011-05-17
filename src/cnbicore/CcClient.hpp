@@ -22,7 +22,7 @@
 #include "CcSocket.hpp"
 #include "CcThread.hpp"
 
-class CcClient : protected CcSocket, protected CcThread {
+class CcClient : public CcSocket, protected CcThread {
 	public:
 		CcClient(size_t bsize = CCCORE_1MB);
 		virtual ~CcClient(void);

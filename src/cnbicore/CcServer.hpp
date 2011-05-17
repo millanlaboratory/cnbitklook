@@ -22,7 +22,7 @@
 #include <cnbicore/CcSocket.hpp>
 #include <cnbicore/CcThread.hpp>
 
-class CcServer : protected CcSocket, protected CcThread {
+class CcServer : public CcSocket, protected CcThread {
 	public:
 		CcServer(size_t bsize = CCCORE_1MB);
 		virtual ~CcServer(void);
