@@ -1,0 +1,7 @@
+2010-05-10  Michele Tavella <michele.tavella@epfl.ch>
+
+The two most useful functions are:
+	mtpath_include.m
+	mtpath_init.m
+
+Please start reading the documention provided within these files.
