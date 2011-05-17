@@ -20,7 +20,6 @@ bool CcClientExt::SendRecv(const char* query, std::string *reply,
 	CcStreamer* stream;
 	CcTimeValue tic;
 	CcTime::Tic(&tic);
-	bool received = false;
 	while(true) {
 		CcSocket::_semsocket.Wait();
 		stream = CcSocket::GetStream(CcSocket::_socket->fd);
