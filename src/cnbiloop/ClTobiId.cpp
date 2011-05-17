@@ -51,7 +51,7 @@ bool ClTobiId::Attach(const std::string& name) {
 	CcEndpoint endpoint(address);
 	this->_client = new CcClient();
 	try {
-		this->_client->Connect(endpoint);
+		this->_client->Connect(endpoint.GetPort());
 	} catch(CcException e) {
 		CcLogDebugS("Cannot connect to " << address);
 		return false;
@@ -101,18 +101,14 @@ void ClTobiId::HandleDisconnect(CcSocket* caller) {
 	CcLogDebugS("Disconnected TCP endpoint: " << client->GetRemote());
 }
 
-void ClTobiId::HandleRecv(CcSocket* caller) {
-	//if(this->_semqueue.TryWait() == false) 
-	//	return;
+void ClTobiId::HandleRecv(CcSocket* caller, CcStreamer* stream) {
 	this->_semqueue.Wait();
 	
 	if(this->_mode == ClTobiId::SetOnly) {
-		this->_client->datastream.Clear();	
+		stream->Clear();	
 	} else {
 		std::string buffer;
-		bool status = this->_client->datastream.Extract(&buffer, "<tobiid",
-				"/>", CcStreamer::Forward);
-		if(status) 
+		if(stream->Extract(&buffer, "<tobiid", "/>") == true) 
 			this->_queue.push_back(buffer);
 	}
 	this->_semqueue.Post();
@@ -163,7 +159,7 @@ bool ClTobiId::SetMessage(IDSerializerRapid* serializer, int blockidx) {
 	serializer->message->absolute.Tic();
 	serializer->message->SetBlockIdx(blockidx);
 	serializer->Serialize(&buffer);
-	return(this->_client->Send(&buffer) == (int)buffer.size());
+	return(this->_client->Send(buffer) == (int)buffer.size());
 }
 
 #endif

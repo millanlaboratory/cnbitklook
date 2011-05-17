@@ -21,18 +21,15 @@
 
 #include "ClMatlab.hpp"
 #include "ClProLang.hpp"
-#include <cnbicore/CcServerMulti.hpp>
+#include <cnbicore/CcServer.hpp>
+#include <cnbicore/CcSocketProxy.hpp>
 #include <map>
 
 class ClProAsServer : public CcSocketProxy {
 	public:
-		virtual void HandleBind(CcSocket* caller);
-		virtual void HandleRelease(CcSocket* caller);
-		virtual void HandleListen(CcSocket* caller); 
-		virtual void HandleAcceptEndpoint(CcSocket* caller, CcAddress address);
-		virtual void HandleDropEndpoint(CcSocket* caller, CcAddress address);
-		virtual void HandleRecvEndpoint(CcSocket* caller, CcAddress address);
-		virtual void Register(CcServerMulti* server);
+		virtual void HandleRecvPeer(CcSocket* caller, CcAddress addr,
+				CcStreamer* stream);
+		virtual void Register(CcServer* server);
 	private:
 		virtual int Fork(void);
 		virtual void Remove(int pid);

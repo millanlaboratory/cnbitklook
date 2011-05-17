@@ -21,37 +21,12 @@
 
 #include "ClProAsServer.hpp" 
 
-void ClProAsServer::HandleBind(CcSocket* caller) { 
-	CcServerMulti *server = (CcServerMulti*)caller;
-	CcLogDebugS("Bound TCP socket: " << server->GetLocal());
-}
-
-void ClProAsServer::HandleRelease(CcSocket* caller) { 
-	CcServerMulti *server = (CcServerMulti*)caller;
-	CcLogDebugS("Released TCP socket: " << server->GetLocal());
-}
-
-void ClProAsServer::HandleListen(CcSocket* caller) { 
-	CcServerMulti *server = (CcServerMulti*)caller;
-	CcLogDebugS(
-			"Listening on TCP socket: " << server->GetLocal());
-}
-
-void ClProAsServer::HandleAcceptEndpoint(CcSocket* caller, CcAddress address) { 
-	CcLogDebugS("Accepted TCP endpoint: " << address);
-}
-
-void ClProAsServer::HandleDropEndpoint(CcSocket* caller, CcAddress address) { 
-	CcLogDebugS("Dropped TCP endpoint: " << address);
-}
-
-void ClProAsServer::HandleRecvEndpoint(CcSocket* caller, CcAddress address) { 
-	CcServerMulti* server = (CcServerMulti*)caller;
+void ClProAsServer::HandleRecvPeer(CcSocket* caller, CcAddress addr, 
+		CcStreamer* stream) { 
+	CcServer* server = (CcServer*)caller;
 	
 	std::string message;
-	if(server->datastreams[address]->Extract(&message, 
-				ClProLang::Hdr, ClProLang::Trl,
-				CcStreamer::Forward) == false)
+	if(stream->Extract(&message, ClProLang::Hdr, ClProLang::Trl) == false)
 		return;
 
 	int pid;
@@ -61,50 +36,47 @@ void ClProAsServer::HandleRecvEndpoint(CcSocket* caller, CcAddress address) {
 	if(this->language.IsFork(message.c_str())) {
 		pid = this->Fork();
 		if(pid > 0) {
-			server->Send(language.Ok(pid), address);
-			CcLogInfoS("Fork from " << address << ": " 
-					<< pid);
+			server->Send(language.Ok(pid), addr);
+			CcLogInfoS("Fork from " << addr << ": " << pid);
 		} else {
-			server->Send(language.Error(ClProLang::ForkFailed), address);
-			CcLogWarningS("Fork from " << address << ": " 
-					<< pid << " ForkFailed");
+			server->Send(language.Error(ClProLang::ForkFailed), addr);
+			CcLogWarningS("Fork from " << addr << ": " << pid << " ForkFailed");
 		}
 	} else if(this->language.IsLaunch(message.c_str(), &pid, &function)) {
 		ClMatlab* process = this->Get(pid);
 		if(process == NULL) {
-			server->Send(language.Error(ClProLang::NotFound), address);
-			CcLogWarningS("Launch from " << address << ": " 
+			server->Send(language.Error(ClProLang::NotFound), addr);
+			CcLogWarningS("Launch from " << addr << ": " 
 					<< pid << ", " << function << " NotFound");
 		} else {
 			function.append("\n");
 			process->Launch(function);
-			server->Send(language.Ok(pid), address);
-			CcLogInfoS("Launch from " << address << ": " 
+			server->Send(language.Ok(pid), addr);
+			CcLogInfoS("Launch from " << addr << ": " 
 					<< pid << " " << function);
 		}
 	} else if(this->language.IsTerminate(message.c_str(), &pid)) {
 		ClMatlab* process = this->Get(pid);
 		if(process == NULL) {
-			server->Send(language.Error(ClProLang::NotFound), address);
-			CcLogWarningS("Terminate from " << address << ": " 
+			server->Send(language.Error(ClProLang::NotFound), addr);
+			CcLogWarningS("Terminate from " << addr << ": " 
 					<< pid << " NotFound");
 		} else {
 			process->Terminate();
 			this->Remove(pid);
-			server->Send(language.Ok(pid), address);
-			CcLogInfoS("Terminate from " << address << ": " 
-					<< pid);
+			server->Send(language.Ok(pid), addr);
+			CcLogInfoS("Terminate from " << addr << ": " << pid);
 		}
 	} else if(this->language.IsIsAlive(message.c_str(), &pid)) {
 		ClMatlab* process = this->Get(pid);
 		if(process == NULL) {
-			server->Send(language.Error(ClProLang::NotFound), address);
-				CcLogWarningS("IsAlive from " << address << ": " 
+			server->Send(language.Error(ClProLang::NotFound), addr);
+				CcLogWarningS("IsAlive from " << addr << ": " 
 						<< pid << " NotFound");
 		} else {
 			if(process->IsAlive()) {
-				server->Send(language.Ok(pid), address);
-				//CcLogDebug(this->_stream, "IsAlive from " << address << ": " 
+				server->Send(language.Ok(pid), addr);
+				//CcLogDebug(this->_stream, "IsAlive from " << addr << ": " 
 				//		<< pid << " Ok");
 			} else {
 				server->Send(language.Error(ClProLang::IsDead), address);
@@ -117,33 +89,33 @@ void ClProAsServer::HandleRecvEndpoint(CcSocket* caller, CcAddress address) {
 	} else if(this->language.IsChangeDirectory(message.c_str(), &pid, &path0)) {
 		ClMatlab* process = this->Get(pid);
 		if(process == NULL) {
-			server->Send(language.Error(ClProLang::NotFound), address);
-			CcLogWarningS("ChangeDirectory from " << address << ": " 
+			server->Send(language.Error(ClProLang::NotFound), addr);
+			CcLogWarningS("ChangeDirectory from " << addr << ": " 
 					<< pid << ", " << path0 << " NotFound");
 		} else {
 			process->ChangeDirectory(path0);
-			server->Send(language.Ok(pid), address);
-			CcLogInfoS("ChangeDirectory from " << address << ": " 
+			server->Send(language.Ok(pid), addr);
+			CcLogInfoS("ChangeDirectory from " << addr << ": " 
 					<< pid << " " << path0);
 		}
 	} else if(this->language.IsInclude(message.c_str(), &pid, &path0, &path1)) {
 		ClMatlab* process = this->Get(pid);
 		if(process == NULL) {
-			server->Send(language.Error(ClProLang::NotFound), address);
-			CcLogWarningS("Include from " << address << ": " 
+			server->Send(language.Error(ClProLang::NotFound), addr);
+			CcLogWarningS("Include from " << addr << ": " 
 					<< pid  << path0 << ", " << path1 << " NotFound");
 		} else {
 			process->Include(path0, path1);
-			server->Send(language.Ok(pid), address);
-			CcLogInfoS("Include from " << address << ": " 
+			server->Send(language.Ok(pid), addr);
+			CcLogInfoS("Include from " << addr << ": " 
 					<< pid << " " << path0 << ", " << path1);
 		}
 	} else if(this->language.IsLaunchNDF(message.c_str(), &pid, &function,
 				&pipename, &addressD, &addressC)) {
 		ClMatlab* process = this->Get(pid);
 		if(process == NULL) {
-			server->Send(language.Error(ClProLang::NotFound), address);
-			CcLogInfoS("LaunchNDF from " << address << ": " 
+			server->Send(language.Error(ClProLang::NotFound), addr);
+			CcLogInfoS("LaunchNDF from " << addr << ": " 
 					" PID=" << pid << 
 					" M-Fun=" << function << 
 					", NDF=" << pipename << 
@@ -151,8 +123,8 @@ void ClProAsServer::HandleRecvEndpoint(CcSocket* caller, CcAddress address) {
 					", TiC=" << addressC << " NotFound");
 		} else {
 			process->LaunchNDF(function, pipename, addressD, addressC);
-			server->Send(language.Ok(pid), address);
-			CcLogInfoS("LaunchNDF from " << address << ": " 
+			server->Send(language.Ok(pid), addr);
+			CcLogInfoS("LaunchNDF from " << addr << ": " 
 					" PID=" << pid << 
 					", M-Fun=" << function << 
 					", NDF=" << pipename << 
@@ -160,19 +132,17 @@ void ClProAsServer::HandleRecvEndpoint(CcSocket* caller, CcAddress address) {
 					", TiC=" << addressC);
 		}
 	} else {
-		CcLogWarningS("Message from " << address << 
+		CcLogWarningS("Message from " << addr << 
 				" not understood: " << message); 
-		server->Send(language.Error(ClProLang::NotUndestood), address);
+		server->Send(language.Error(ClProLang::NotUndestood), addr);
 	}
 }
 
-void ClProAsServer::Register(CcServerMulti* server) {
-	CB_CcSocket(server->iOnBind, this, HandleBind);
+void ClProAsServer::Register(CcServer* server) {
 	CB_CcSocket(server->iOnRelease, this, HandleRelease);
-	CB_CcSocket(server->iOnListen, this, HandleListen);
-	CB_CcSocket(server->iOnAcceptEndpoint, this, HandleAcceptEndpoint);
-	CB_CcSocket(server->iOnDropEndpoint, this, HandleDropEndpoint);
-	CB_CcSocket(server->iOnRecvEndpoint, this, HandleRecvEndpoint);
+	CB_CcSocket(server->iOnAcceptPeer, this, HandleAcceptPeer);
+	CB_CcSocket(server->iOnDropPeer, this, HandleDropPeer);
+	CB_CcSocket(server->iOnRecvPeer, this, HandleRecvPeer);
 }
 
 int ClProAsServer::Fork(void) {

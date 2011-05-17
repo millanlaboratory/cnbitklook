@@ -21,7 +21,8 @@
 
 #include "ClLoop.hpp"
 #include <cnbicore/CcBasic.hpp>
-#include <cnbicore/CcServerSingle.hpp>
+#include <cnbicore/CcServer.hpp>
+#include <cnbicore/CcSocketProxy.hpp>
 #include <tobicore/TCException.hpp>
 #include <tobiic/ICMessage.hpp>
 #include <tobiic/ICSerializerRapid.hpp>
@@ -39,14 +40,14 @@ class ClTobiIc : public CcSocketProxy {
 		int Deserialize(ICSerializerRapid* serializer);
 		void HandleAccept(CcSocket* caller);
 		void HandleDrop(CcSocket* caller);
-		void HandleRecv(CcSocket* caller);
+		void HandleRecvPeer(CcSocket* caller, CcAddress addr, CcStreamer* stream);
 
 	public:
 		const static int Detached = -1;
 		const static int HasMessage = 1;
 		const static int NoMessage = 0;
 	protected:
-		CcServerSingle* _server;
+		CcServer* _server;
 		std::string _name;
 		std::string _buffer;
 		CcSemaphore _sembuffer;

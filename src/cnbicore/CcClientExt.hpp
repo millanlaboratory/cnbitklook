@@ -16,39 +16,20 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CLCLIENT_CPP 
-#define CLCLIENT_CPP 
+#ifndef CCCLIENTEXT_HPP 
+#define CCCLIENTEXT_HPP 
 
-#include "ClClient.hpp" 
+#include "CcClient.hpp"
 
-ClClient::ClClient(const double waitms) {
-	CB_CcSocket(this->_client.iOnDisconnect, this, HandleDisconnect);
-	this->_waitms = waitms;
-}
-
-ClClient::~ClClient(void) {
-	if(this->_client.IsConnected())
-		this->_client.Disconnect();
-}
-	
-bool ClClient::Connect(const CcAddress address) {
-	if(this->_client.IsConnected())
-		return true;
-	return this->_client.Connect(address);
-}
-
-void ClClient::Disconnect(void) {
-	this->_client.Disconnect();
-}
-
-bool ClClient::IsConnected(void) {
-	return this->_client.IsConnected();
-}
-
-void ClClient::HandleDisconnect(CcSocket* caller) { 
-	CcClient *client = (CcClient*)caller;
-	CcAddress address = client->GetLocal();
-	CcLogDebugS("Endpoint dropped: " << address);
-}
+class CcClientExt : public CcClient {
+	public:
+		CcClientExt(size_t bsize = CCCORE_1MB);
+		virtual ~CcClientExt(void);
+		
+		bool SendRecv(const char* query, std::string *reply, 
+				std::string hdr, std::string trl, float waitms = -1);
+		bool SendRecv(const std::string& query, std::string *reply, 
+				std::string hdr, std::string trl, float waitms = -1);
+};
 
 #endif

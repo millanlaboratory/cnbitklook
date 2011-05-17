@@ -31,34 +31,9 @@ ClAcqAsServer::ClAcqAsServer(CaWriter* writer) {
 ClAcqAsServer::~ClAcqAsServer(void) {
 }
 
-void ClAcqAsServer::HandleBind(CcSocket* caller) { 
-	CcServerMulti *server = (CcServerMulti*)caller;
-	CcLogDebugS("Bound TCP socket: " << server->GetLocal());
-}
-
-void ClAcqAsServer::HandleRelease(CcSocket* caller) { 
-	CcServerMulti *server = (CcServerMulti*)caller;
-	CcLogDebugS("Released TCP socket: " << server->GetLocal());
-}
-
-void ClAcqAsServer::HandleListen(CcSocket* caller) { 
-	CcServerMulti *server = (CcServerMulti*)caller;
-	CcLogDebugS(
-			"Listening on TCP socket: " << server->GetLocal());
-}
-
-void ClAcqAsServer::HandleAcceptEndpoint(CcSocket* caller, CcAddress address) { 
-	CcLogDebugS("Accepted TCP endpoint: " << address);
-}
-
-void ClAcqAsServer::HandleDropEndpoint(CcSocket* caller, CcAddress address) { 
-	CcLogDebugS("Dropped TCP endpoint: " << address);
-}
-
-void ClAcqAsServer::HandleRecvEndpoint(CcSocket* caller, CcAddress address) { 
-	CcServerMulti* server = (CcServerMulti*)caller;
-
-	while(this->CommunicationCl(server, address));
+void ClAcqAsServer::HandleRecvPeer(CcSocket* caller, CcAddress addr, 
+		CcStreamer* stream) { 
+	while(this->CommunicationCl((CcServer*)caller, addr, stream));
 }
 
 bool ClAcqAsServer::LogXDF(const std::string& logfile, 
@@ -80,13 +55,13 @@ bool ClAcqAsServer::LogXDF(const std::string& logfile,
 	return true;
 }
 		
-bool ClAcqAsServer::CommunicationCl(CcServerMulti* server, CcAddress address) {
+bool ClAcqAsServer::CommunicationCl(CcServer* server, CcAddress address,
+		CcStreamer* stream) {
 	std::string txtlabel;
 	std::string message;
 	std::string xdffile, logfile, logline;
 
-	if(server->datastreams[address]->Extract(&message, 
-				ClAcqLang::Hdr, ClAcqLang::Trl, CcStreamer::Forward) == false)
+	if(stream->Extract(&message, ClAcqLang::Hdr, ClAcqLang::Trl) == false)
 		return false;
 
 	if(language.IsOpenXDF(message.c_str(), &xdffile, &logfile, &logline)) {
@@ -137,12 +112,10 @@ bool ClAcqAsServer::CommunicationCl(CcServerMulti* server, CcAddress address) {
 	return true;
 }
 
-void ClAcqAsServer::Register(CcServerMulti* server) {
-	CB_CcSocket(server->iOnBind, this, HandleBind);
+void ClAcqAsServer::Register(CcServer* server) {
 	CB_CcSocket(server->iOnRelease, this, HandleRelease);
-	CB_CcSocket(server->iOnListen, this, HandleListen);
-	CB_CcSocket(server->iOnAcceptEndpoint, this, HandleAcceptEndpoint);
-	CB_CcSocket(server->iOnDropEndpoint, this, HandleDropEndpoint);
-	CB_CcSocket(server->iOnRecvEndpoint, this, HandleRecvEndpoint);
+	CB_CcSocket(server->iOnAcceptPeer, this, HandleAcceptPeer);
+	CB_CcSocket(server->iOnDropPeer, this, HandleDropPeer);
+	CB_CcSocket(server->iOnRecvPeer, this, HandleRecvPeer);
 }
 #endif

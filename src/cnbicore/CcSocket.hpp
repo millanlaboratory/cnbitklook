@@ -21,15 +21,20 @@
 
 #include "CcFlags.hpp"
 #include "CcCallback.hpp"
-#include "CcMutex.hpp"
 #include "CcObject.hpp"
 #include "CcSemaphore.hpp"
 #include "CcStreamer.hpp"
 #include "CcThreadSafe.hpp"
 #include <transport/tr_net.h>
+#include <map>
 
 /* Forward declaration */
 class CcSocketProxy;
+
+typedef std::map<int, CcStreamer*> CcStreamerMap2;
+typedef std::map<int, CcStreamer*>::iterator CcStreamerMap2It;
+typedef std::map<int, tr_socket*> CcSocketMap2;
+typedef std::map<int, tr_socket*>::iterator CcSocketMap2It;
 
 /*! \brief TCP socket
  * 
@@ -37,87 +42,53 @@ class CcSocketProxy;
  */
 class CcSocket : public CcObject {
 	public:
-		CcSocket(size_t bsize = 128*CCCORE_1KB, unsigned int maxconn = 1);
+		CcSocket(size_t bsize);
 		virtual ~CcSocket(void);
-		virtual int Send(const char* message) = 0;
-		virtual int Send(std::string* message) = 0;
-		long unsigned int GetBytesSend(void);
-		long unsigned int GetBytesRecv(void);
-		virtual bool IsConnected(void);
-		size_t GetBsize(void);
+		virtual CcAddress GetLocal(void);
+		virtual CcAddress GetRemote(void);
+		long unsigned int GetSend(void);
+		long unsigned int GetRecv(void);
+		int GetFID(void);
+		bool IsConnected(void);
+		void Dump(void);
 	protected:
-		virtual int Recv(void) = 0; 
-		virtual void OpenSocket(void) = 0;
-		virtual void CloseSocket(void) = 0;
-		bool SetNonBlocking(bool value);
-		void AddBytesSend(const int bytes);	
-		void AddBytesRecv(const int bytes);
-	private:
-		void AllocBuffer(size_t bsize, unsigned int maxconn);
-		void FreeBuffer(void);
+		virtual ssize_t Send(const char* message) = 0;
+		virtual ssize_t Send(const std::string& message) = 0;
+		virtual ssize_t Send(const void* message, size_t size) = 0;
+		virtual ssize_t Send(tr_socket* peer, const void* message, size_t size); 
+		virtual ssize_t Recv(tr_socket* peer); 
+		virtual bool Open(int protocol) = 0;
+		virtual bool Close(void);
+		void AddSend(const unsigned int bytes);	
+		void AddRecv(const unsigned int bytes);
+		
+		CcStreamer* GetStream(int fid);
+		bool AddStream(int fid);
+		bool RemStream(int fid);
+		bool HasStream(int fid);
+		
+		tr_socket* GetPeer(int fid);
+		bool AddPeer(tr_socket* peer);
+		bool RemPeer(int fid);
+		bool HasPeer(int fid);
+		
+		tr_socket* GetPeer(CcAddress addr);
+		CcAddress GetAddress(int fid);
 
-	public:
-		CcStreamer datastream;
 	protected:
 		tr_socket* _socket;
 		CcSemaphore _semsocket;
-		char* _buffer;
-		size_t _bsize;
-		unsigned int _maxconn;
-		CcSemaphore _sembuffer;
+		CcStreamerMap2 _streams;
+		CcSocketMap2 _peers;
 	private:
-		CcMutex _mtxbytes;
 		long unsigned int _bytesRecv;
 		long unsigned int _bytesSend;
 	public:
-		const static CcHostname HostnameUnset;
-		const static CcPort PortUnset;
-		const static CcPortUInt PortUintUnset = 0;
-		const static CcIp IpUnset;
-		const static CcAddress AddressUnset;
-		
-	public:
-		CcCallback1<CcSocketProxy, CcSocket*> iOnSend;
-		CcCallback1<CcSocketProxy, CcSocket*> iOnRecv;
+		const static int TCP = 0;
+		const static int UDP = 1;
+		CcCallback2<CcSocketProxy, CcSocket*, CcStreamer*> iOnRecv;
 	protected:
-		virtual void pOnRecv(void) {};
-		virtual void pOnSend(void) {};
+		CcCallback1<CcSocketProxy, CcSocket*> iOnSend;
 };
 
-
-/*! \brief Callback proxy for CcSocket
- */
-class CcSocketProxy {
-	public:
-		virtual void HandleBind(CcSocket* caller) { }
-		virtual void HandleRelease(CcSocket* caller) { }
-		virtual void HandleListen(CcSocket* caller) { }
-		
-		virtual void HandleAccept(CcSocket* caller) { }
-		virtual void HandleDrop(CcSocket* caller) { }
-		
-		virtual void HandleAcceptEndpoint(CcSocket* caller, CcAddress address) { }
-		virtual void HandleDropEndpoint(CcSocket* caller, CcAddress address) { }
-		
-		virtual void HandleSend(CcSocket* caller) { }
-		virtual void HandleRecv(CcSocket* caller) { }
-		
-		virtual void HandleSendEndpoint(CcSocket* caller, CcAddress address) { }
-		virtual void HandleRecvEndpoint(CcSocket* caller, CcAddress address) { }
-
-		virtual void HandleAccept(CcSocket* caller, CcSocket* endpoint) { }
-		virtual void HandleDrop(CcSocket* caller, CcSocket* endpoint) { }
-		
-		virtual void HandleSend(CcSocket* caller, CcSocket* endpoint,
-				const char* message) { }
-		virtual void HandleRecv(CcSocket* caller, CcSocket* endpoint, 
-				const char* message) { }
-		
-		virtual void HandleConnect(CcSocket* caller) { }
-		virtual void HandleDisconnect(CcSocket* caller) { }
-};
-
-#define CB_CcSocket(sender_event, receiver_ptr, method) 		\
-	sender_event.Register((CcSocketProxy*)receiver_ptr, 		\
-			&CcSocketProxy::method);
 #endif

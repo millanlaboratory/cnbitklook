@@ -5,6 +5,7 @@ libcnbicore_includedir = $(includedir)/cnbicore
 libcnbicore_include_HEADERS = CcBasic.hpp \
 			  CcCallback.hpp \
 			  CcClient.hpp \
+			  CcClientExt.hpp \
 			  CcCore.hpp \
 			  CcDeserializer.hpp \
 			  CcEndpoint.hpp \
@@ -27,10 +28,8 @@ libcnbicore_include_HEADERS = CcBasic.hpp \
 			  CcPtable.hpp \
 			  CcSemaphore.hpp \
 			  CcServer.hpp\
-			  CcServerEndpoint.hpp \
-			  CcServerMulti.hpp \
-			  CcServerSingle.hpp \
 			  CcSocket.hpp \
+			  CcSocketProxy.hpp \
 			  CcStreamer.hpp \
 			  CcThread.hpp \
 			  CcThreadSafe.hpp \
@@ -49,6 +48,8 @@ libcnbicore_la_SOURCES = CcBasic.hpp \
 			CcCallback.hpp \
 			CcClient.cpp \
 			CcClient.hpp \
+			CcClientExt.cpp \
+			CcClientExt.hpp \
 			CcCore.cpp \
 			CcCore.hpp \
 			CcDeserializer.hpp \
@@ -87,14 +88,10 @@ libcnbicore_la_SOURCES = CcBasic.hpp \
 			CcSemaphore.hpp \
 			CcServer.cpp \
 			CcServer.hpp \
-			CcServerEndpoint.cpp \
-			CcServerEndpoint.hpp \
-			CcServerMulti.cpp \
-			CcServerMulti.hpp \
-			CcServerSingle.cpp \
-			CcServerSingle.hpp \
 			CcSocket.cpp \
 			CcSocket.hpp \
+			CcSocketProxy.cpp \
+			CcSocketProxy.hpp \
 			CcStreamer.cpp \
 			CcStreamer.hpp \
 			CcThread.cpp \
