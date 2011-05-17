@@ -22,20 +22,20 @@
 #include "ClProLang.hpp" 
 #include <stdio.h>
 
-#define CLLP_FORK					"[cllp]fork[/cllp]"
-#define CLLP_LAUNCH_MATLAB_OUT		"[cllp]launch_matlab|%d|%s[/cllp]"
-#define CLLP_LAUNCH_MATLAB_IN		"[cllp]launch_matlab|%d|%[^'['][/cllp]"
-#define CLLP_TERMINATE				"[cllp]terminate|%d[/cllp]"
-#define CLLP_ISALIVE 				"[cllp]isalive|%d[/cllp]"
-#define CLLP_DIED					"[cllp]died|%d[/cllp]"
-#define CLLP_ERROR					"[cllp]error|%d[/cllp]"
-#define CLLP_OK						"[cllp]ok|%d[/cllp]"
-#define CLLP_CWD_OUT				"[cllp]cwd|%d|%s[/cllp]"
-#define CLLP_CWD_IN					"[cllp]cwd|%d|%[^'['][/cllp]"
-#define CLLP_INCLUDE_IN				"[cllp]include|%d|%s|%s[/cllp]"
-#define CLLP_INCLUDE_OUT			"[cllp]include|%d|%[^'|']|%[^'['][/cllp]"
-#define CLLP_LAUNCH_NDFMATLAB_OUT 	"[cllp]launch_ndfmatlab|%d|%s|%s|%s|%s[/cllp]"
-#define CLLP_LAUNCH_NDFMATLAB_IN  	"[cllp]launch_ndfmatlab|%d|%[^'|']|%[^'|']|%[^'|']|%[^'['][/cllp]"
+#define CLLP_FORK			"[cllp]fork[/cllp]"
+#define CLLP_EXEC_OUT		"[cllp]exec|%d|%s[/cllp]"
+#define CLLP_EXEC_IN		"[cllp]exec|%d|%[^'['][/cllp]"
+#define CLLP_TERMINATE		"[cllp]terminate|%d[/cllp]"
+#define CLLP_ISALIVE 		"[cllp]isalive|%d[/cllp]"
+#define CLLP_DIED			"[cllp]died|%d[/cllp]"
+#define CLLP_ERROR			"[cllp]error|%d[/cllp]"
+#define CLLP_OK				"[cllp]ok|%d[/cllp]"
+#define CLLP_CWD_OUT		"[cllp]cwd|%d|%s[/cllp]"
+#define CLLP_CWD_IN			"[cllp]cwd|%d|%[^'['][/cllp]"
+#define CLLP_INCLUDE_IN		"[cllp]include|%d|%s|%s[/cllp]"
+#define CLLP_INCLUDE_OUT	"[cllp]include|%d|%[^'|']|%[^'['][/cllp]"
+#define CLLP_EXEC_NDF_OUT 	"[cllp]execndf|%d|%s[/cllp]"
+#define CLLP_EXEC_NDF_IN  	"[cllp]execndf|%d|%[^'['][/cllp]"
 
 const std::string ClProLang::Hdr = "[cllp]";
 const std::string ClProLang::Trl = "[/cllp]";
@@ -46,9 +46,9 @@ char* ClProLang::Fork(void) {
 	return ClLanguage::message->buffer;
 }
 
-char* ClProLang::Launch(const int pid, const std::string& call) {
+char* ClProLang::Exec(const int pid, const std::string& call) {
 	snprintf(ClLanguage::message->buffer, ClLanguage::MessageSize(),
-			CLLP_LAUNCH_MATLAB_OUT, pid, call.c_str());
+			CLLP_EXEC_OUT, pid, call.c_str());
 	return ClLanguage::message->buffer;
 }
 
@@ -86,8 +86,8 @@ bool ClProLang::IsFork(const char* message) {
 	return (strcmp(message, CLLP_FORK) == 0);
 }
 
-	bool ClProLang::IsLaunch(const char* message, int* pid, std::string* call) {
-		if(sscanf(message, CLLP_LAUNCH_MATLAB_IN, pid, ClLanguage::_cache0->buffer) != 2)
+	bool ClProLang::IsExec(const char* message, int* pid, std::string* call) {
+		if(sscanf(message, CLLP_EXEC_IN, pid, ClLanguage::_cache0->buffer) != 2)
 			return false;
 		call->assign(ClLanguage::_cache0->buffer);
 		return true;
@@ -127,16 +127,12 @@ char* ClProLang::Include(const int pid, const std::string& path0,
 	return ClLanguage::message->buffer;
 }
 
-char* ClProLang::LaunchNDF(int pid,
-		const std::string& function, const std::string& pipename,
-		const CcAddress iD, const CcAddress iC) {
+char* ClProLang::ExecNDF(int pid,
+		const std::string& function) {
 	snprintf(ClLanguage::message->buffer, ClLanguage::MessageSize(),
-			CLLP_LAUNCH_NDFMATLAB_OUT, 
+			CLLP_EXEC_NDF_OUT, 
 			pid,
-			function.c_str(), 
-			pipename.c_str(),
-			iD.c_str(), 
-			iC.c_str());
+			function.c_str());
 	return ClLanguage::message->buffer;
 }
 
@@ -165,27 +161,18 @@ bool ClProLang::IsInclude(const char* message, int* pid,
 	path0->assign(ClLanguage::_cache0->buffer);
 	path1->assign(ClLanguage::_cache1->buffer);
 	return true;
-
 }
 
-bool ClProLang::IsLaunchNDF(const char* message, int* pid,
-		std::string* function, std::string* pipename, 
-		std::string* iD, std::string* iC) {
+bool ClProLang::IsExecNDF(const char* message, int* pid, 
+		std::string* function) {
 
-	int count = sscanf(message, CLLP_LAUNCH_NDFMATLAB_IN, 
+	int count = sscanf(message, CLLP_EXEC_NDF_IN, 
 			pid,
-			ClLanguage::_cache0->buffer,  
-			ClLanguage::_cache1->buffer,  
-			ClLanguage::_cache2->buffer,  
-			ClLanguage::_cache3->buffer);
-	if(count < 5)
+			ClLanguage::_cache0->buffer);
+	if(count < 2)
 		return false;
 
 	function->assign(ClLanguage::_cache0->buffer);
-	pipename->assign(ClLanguage::_cache1->buffer);
-	iD->assign(ClLanguage::_cache2->buffer);
-	iC->assign(ClLanguage::_cache3->buffer);
-
 	return true;
 }
 

@@ -75,7 +75,7 @@ catch e;\
 	exit;\
 end\n"
 
-#define CLMATLAB_LAUNCH	"\
+#define CLMATLAB_EXEC	"\
 try;\
 	%s;\
 catch e;\
@@ -86,10 +86,10 @@ catch e;\
 	exit;\
 end\n"
 
-#define CLMATLAB_LAUNCHNDF "\
+#define CLMATLAB_EXECNDF "\
 try;\
 	while(1);\
-		%s('%s', '%s', '%s');\
+		%s('', '', '');\
 	end;\
 catch e;\
 	disp(['Exception: ' exception.message ]);\
@@ -115,7 +115,7 @@ void ClMatlab::AddPath(const std::string& path) {
 	char buffer[2048];
 	sprintf(buffer, CLMATLAB_ADDPATH, path.c_str(), path.c_str());
 
-	CcLogDebug(std::string("Adding path: ").append(buffer));
+	CcLogDebugS("Adding path: " << buffer);
 	CcProcess::Write(buffer);
 }
 
@@ -123,33 +123,28 @@ void ClMatlab::Include(const std::string& path0, const std::string& path1) {
 	char buffer[2048];
 	sprintf(buffer, CLMATLAB_INCLUDE, path0.c_str(), path1.c_str());
 	
-	CcLogDebug(std::string("Including path: ").append(buffer));
+	CcLogDebugS("Including path: " << buffer);
 	CcProcess::Write(buffer);
 }
 		
 void ClMatlab::ChangeDirectory(const std::string& path) {
 	char buffer[2048];
 	sprintf(buffer, CLMATLAB_CWD, path.c_str(), path.c_str());
-
-	CcLogDebug(std::string("Changing directory: ").append(buffer));
+	CcLogDebugS("Changing directory: " << buffer);
 	CcProcess::Write(buffer);
 }
 
-void ClMatlab::Launch(const std::string function) {
+void ClMatlab::Exec(const std::string function) {
 	char buffer[2048];
-	sprintf(buffer, CLMATLAB_LAUNCH, function.c_str());
-	CcLogDebug(std::string("Lanching: ").append(buffer));
+	sprintf(buffer, CLMATLAB_EXEC, function.c_str());
+	CcLogDebugS("Executing: " << buffer);
 	CcProcess::Write(buffer);
 }
 
-void ClMatlab::LaunchNDF(const std::string function, const std::string& pipename, 
-		const CcAddress addressD, const CcAddress addressC) {
+void ClMatlab::ExecNDF(const std::string function) {
 	char buffer[2048];
-
-	sprintf(buffer, CLMATLAB_LAUNCHNDF, function.c_str(), pipename.c_str(),
-			addressD.c_str(), addressC.c_str());
-
-	CcLogDebug(std::string("Lanching NDF: ").append(buffer));
+	sprintf(buffer, CLMATLAB_EXECNDF, function.c_str());
+	CcLogDebugS("Executing NDF: " << buffer);
 	CcProcess::Write(buffer);
 }
 

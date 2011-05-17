@@ -42,11 +42,10 @@ int main(void) {
 		cout << "Spawned " << pid1 << endl;
 		
 		client.ChangeDirectory(pid0, "/home/mtavella/");
-		client.Launch(pid0, "a=rand(10,10);");
-		client.Launch(pid0, "save;");
-		client.Launch(pid0, "bench(1);");
-		
-		client.Launch(pid1, "antani;");
+		client.Exec(pid0, "a=rand(10,10);");
+		client.Exec(pid0, "save;");
+		client.Exec(pid0, "bench(1);");
+		client.Exec(pid1, "antani;");
 	
 		for(int i = 0; i < 4; i++) {	
 			if(client.Connect() == false)

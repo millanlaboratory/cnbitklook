@@ -62,36 +62,21 @@ int main(int argc, char* argv[]) {
 	filelog.append(timestamp);
 	filelog.append(".log");
 
-	int pid0, pid1;
+	int pid0;
 	if(ClLoop::processing.ForkAndCheck(&pid0) != ClProLang::Successful) {
 		CcLogFatal("Cannot spawn PID0");
 		CcCore::Exit(2);
 	}
-	if(ClLoop::processing.ForkAndCheck(&pid1) != ClProLang::Successful) {
-		CcLogFatal("Cannot spawn PID1");
-		CcCore::Exit(2);
-	}
 
-	ClLoop::nameserver.Erase("ndf_monitor::plot");
-	ClLoop::nameserver.Store("ndf_monitor::plot", optplot);
+	ClLoop::nameserver.EraseConfig("checkloop", "plot");
+	ClLoop::nameserver.StoreConfig("checkloop", "plot", optplot);
 
 	ClLoop::processing.ChangeDirectory(pid0, "/tmp/");
 	ClLoop::processing.IncludeNDF(pid0) ;
-	ClLoop::processing.LaunchNDF(pid0, "ndf_monitor", "/pipe0", 
-			"/acquisition", "/feedback0");
+	ClLoop::processing.ExecNDF(pid0, "ndf_monitor");
 
-	ClLoop::nameserver.Set("/feedback1", "127.0.0.1:9501");
-	ClLoop::processing.ChangeDirectory(pid1, "/tmp/");
-	ClLoop::processing.IncludeNDF(pid1) ;
-	ClLoop::processing.LaunchNDF(pid1, "ndf_monitor", "/pipe1", 
-			"/acquisition", "/feedback1");
-	
 	if(ClLoop::processing.Check(pid0) == false) {
 		CcLogFatal("PID0 is dead");
-		goto shutdown;
-	}
-	if(ClLoop::processing.Check(pid1) == false) {
-		CcLogFatal("PID1 is dead");
 		goto shutdown;
 	}
 
@@ -112,10 +97,6 @@ int main(int argc, char* argv[]) {
 			CcLogFatal("PID0 died");
 			goto shutdown;
 		}
-		if(ClLoop::processing.Check(pid1) == false) {
-			CcLogFatal("PID1 died");
-			goto shutdown;
-		}
 
 		CcTime::Sleep(1000.00f);
 	}
@@ -124,7 +105,6 @@ shutdown:
 	ClLoop::acquisition.CloseXDF();
 	ClLoop::nameserver.Erase("ndf_monitor::plot");
 	ClLoop::processing.Terminate(pid0);
-	ClLoop::processing.Terminate(pid1);
 
 	CcCore::Exit(0);
 }

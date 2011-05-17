@@ -31,11 +31,8 @@ class ClMatlab : public CcProcess {
 		void Include(const std::string& path0, const std::string& path1);
 		void ChangeDirectory(const std::string& path);
 		
-		void Launch(const std::string function);
-		void LaunchNDF(const std::string function,
-				const std::string& pipename, 
-				const CcAddress addressD,
-				const CcAddress addressC);
+		void Exec(const std::string function);
+		void ExecNDF(const std::string function);
 	protected:
 		virtual void Exec(void);
 };

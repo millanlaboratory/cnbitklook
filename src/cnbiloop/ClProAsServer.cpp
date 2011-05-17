@@ -42,17 +42,17 @@ void ClProAsServer::HandleRecvPeer(CcSocket* caller, CcAddress addr,
 			server->Send(language.Error(ClProLang::ForkFailed), addr);
 			CcLogWarningS("Fork from " << addr << ": " << pid << " ForkFailed");
 		}
-	} else if(this->language.IsLaunch(message.c_str(), &pid, &function)) {
+	} else if(this->language.IsExec(message.c_str(), &pid, &function)) {
 		ClMatlab* process = this->Get(pid);
 		if(process == NULL) {
 			server->Send(language.Error(ClProLang::NotFound), addr);
-			CcLogWarningS("Launch from " << addr << ": " 
+			CcLogWarningS("Exec from " << addr << ": " 
 					<< pid << ", " << function << " NotFound");
 		} else {
 			function.append("\n");
-			process->Launch(function);
+			process->Exec(function);
 			server->Send(language.Ok(pid), addr);
-			CcLogInfoS("Launch from " << addr << ": " 
+			CcLogInfoS("Exec from " << addr << ": " 
 					<< pid << " " << function);
 		}
 	} else if(this->language.IsTerminate(message.c_str(), &pid)) {
@@ -110,26 +110,19 @@ void ClProAsServer::HandleRecvPeer(CcSocket* caller, CcAddress addr,
 			CcLogInfoS("Include from " << addr << ": " 
 					<< pid << " " << path0 << ", " << path1);
 		}
-	} else if(this->language.IsLaunchNDF(message.c_str(), &pid, &function,
-				&pipename, &addressD, &addressC)) {
+	} else if(this->language.IsExecNDF(message.c_str(), &pid, &function)) {
 		ClMatlab* process = this->Get(pid);
 		if(process == NULL) {
 			server->Send(language.Error(ClProLang::NotFound), addr);
-			CcLogInfoS("LaunchNDF from " << addr << ": " 
+			CcLogInfoS("ExecNDF from " << addr << ": " 
 					" PID=" << pid << 
-					" M-Fun=" << function << 
-					", NDF=" << pipename << 
-					", TiD=" << addressD << 
-					", TiC=" << addressC << " NotFound");
+					" Exec=" << function << " NotFound");
 		} else {
-			process->LaunchNDF(function, pipename, addressD, addressC);
+			process->ExecNDF(function);
 			server->Send(language.Ok(pid), addr);
-			CcLogInfoS("LaunchNDF from " << addr << ": " 
+			CcLogInfoS("ExecNDF from " << addr << ": " 
 					" PID=" << pid << 
-					", M-Fun=" << function << 
-					", NDF=" << pipename << 
-					", TiD=" << addressD << 
-					", TiC=" << addressC);
+					", Exec=" << function);
 		}
 	} else {
 		CcLogWarningS("Message from " << addr << 

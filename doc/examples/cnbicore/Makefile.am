@@ -10,8 +10,7 @@ check_PROGRAMS = ccmutex \
 				 ccclient \
 				 cclogentry \
 				 cclogger \
-				 ccserversingle \
-				 ccservermulti \
+				 ccserver \
 				 ccthreadsafe \
 				 ccprocess \
 				 ccptable \
@@ -37,8 +36,7 @@ ccmutex_SOURCES = ccmutex.cpp
 ccsemaphore_SOURCES = ccsemaphore.cpp
 ccobject_SOURCES = ccobject.cpp
 ccclient_SOURCES = ccclient.cpp
-ccserversingle_SOURCES = ccserversingle.cpp
-ccservermulti_SOURCES = ccservermulti.cpp
+ccserver_SOURCES = ccserver.cpp
 ccpipesink_SOURCES = ccpipesink.cpp
 ccpipesource_SOURCES = ccpipesource.cpp
 ccpipewriter_SOURCES = ccpipewriter.cpp

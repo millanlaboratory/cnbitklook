@@ -64,12 +64,12 @@ int ClProClient::ForkAndCheck(int* rpid, double waitms) {
 	return status;
 }
 		
-int ClProClient::Launch(const int pid, const std::string& call) {
+int ClProClient::Exec(const int pid, const std::string& call) {
 	int rpid = 0;
 	int errorid = 0;
 	std::string message, reply;
 	
-	this->_language.Launch(pid, call);
+	this->_language.Exec(pid, call);
 	bool status = ClClient::_client.SendRecv(this->_language.message->buffer,
 			&reply, ClProLang::Hdr, ClProLang::Trl, ClClient::_waitms);
 
@@ -166,13 +166,12 @@ int ClProClient::Include(const int pid, const std::string& path0,
 		return ClProLang::StatusLost;
 }
 
-int ClProClient::LaunchNDF(const int pid, const std::string& function, 
-	const std::string& pipename, const CcAddress iD, const CcAddress iC) {
+int ClProClient::ExecNDF(const int pid, const std::string& function) {
 	int rpid = 0;
 	int errorid = 0;
 	std::string message, reply;
 	
-	this->_language.LaunchNDF(pid, function, pipename, iD, iC);
+	this->_language.ExecNDF(pid, function);
 	bool status = ClClient::_client.SendRecv(this->_language.message->buffer,
 			&reply, ClProLang::Hdr, ClProLang::Trl, ClClient::_waitms);
 

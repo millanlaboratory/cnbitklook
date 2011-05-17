@@ -27,19 +27,17 @@
 class ClProLang : public ClLanguage {
 	public:
 		char* Fork(void);
-		char* Launch(const int pid, const std::string& call);
+		char* Exec(const int pid, const std::string& call);
 		char* Terminate(const int pid);
 		char* IsAlive(const int pid);
 		char* Died(const int pid);
 		char* ChangeDirectory(const int pid, const std::string& path);
 		char* Include(const int pid, const std::string& path0, const std::string& path1);
-		char* LaunchNDF(const int pid, const std::string& function, 
-				const std::string& pipename, const CcAddress iD, 
-				const CcAddress iC);
+		char* ExecNDF(const int pid, const std::string& function);
 		char* Ok(const int pid);
 		char* Error(const int code);
 		bool IsFork(const char* message);
-		bool IsLaunch(const char* message, int* pid, std::string* call);
+		bool IsExec(const char* message, int* pid, std::string* call);
 		bool IsTerminate(const char* message, int* pid);
 		bool IsIsAlive(const char* message, int* pid);
 		bool IsDied(const char* message, int* pid);
@@ -48,9 +46,7 @@ class ClProLang : public ClLanguage {
 		bool IsChangeDirectory(const char* message, int* pid, std::string* path);
 		bool IsInclude(const char* message, int* pid, std::string* path0, 
 				std::string* path1);
-		bool IsLaunchNDF(const char* message, int* pid, std::string* function,
-				std::string* pipename, std::string* iD, 
-				std::string* iC);
+		bool IsExecNDF(const char* message, int* pid, std::string* function);
 
 	public:
 		static const std::string Hdr;

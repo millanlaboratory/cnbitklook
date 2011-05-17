@@ -18,6 +18,8 @@
 
 #include <cnbicore/CcClient.hpp>
 #include <cnbicore/CcCore.hpp>
+#include <cnbicore/CcEndpoint.hpp>
+#include <cnbicore/CcSocketProxy.hpp>
 #include <cnbicore/CcTime.hpp>
 #include <stdio.h>
 
@@ -37,10 +39,6 @@ class EventHandler : public CcSocketProxy {
 					client->GetLocal().c_str());
 		}
 		
-		void HandleSend(CcSocket* caller) { 
-			printf("[EventHandler] Client sent a message\n");
-		}
-		
 		void HandleRecv(CcSocket* caller) { 
 			printf("[EventHandler] Client received a message\n");
 		}
@@ -50,7 +48,6 @@ void RegisterAll(CcClient* client, EventHandler *handler) {
 	CB_CcSocket(client->iOnConnect,    handler, HandleConnect);
 	CB_CcSocket(client->iOnDisconnect, handler, HandleDisconnect);
 	CB_CcSocket(client->iOnRecv,   	   handler, HandleRecv);
-	CB_CcSocket(client->iOnSend,       handler, HandleSend);
 }
 
 int main(void) {
@@ -60,15 +57,9 @@ int main(void) {
 	EventHandler* handler = new EventHandler();
 
 	RegisterAll(client, handler);
-	
+	CcEndpoint peer("127.0.0.1", "8000");
 	while(true) {
-		try {
-			client->Connect("127.0.0.1", 8000, 5);
-		} catch(CcException e) {
-			printf("Exception: %s: %s\n", e.Caller().c_str(), e.Info().c_str());
-			CcTime::Sleep(1000);
-			continue;
-		}
+		client->Connect(peer.GetAddress());
 
 		for(int i = 0; i < 10; i++) {
 			client->Send((const char*)"Hello there!");
@@ -78,7 +69,6 @@ int main(void) {
 		CcTime::Sleep(2500);
 	}
 	
-	client->Join();
 	client->Disconnect();
 	delete client;
 

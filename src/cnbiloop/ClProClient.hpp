@@ -27,15 +27,13 @@ class ClProClient : public ClClient {
 		bool Connect(const CcAddress address = "127.0.0.1:9100");
 		int Fork(int* rpid);
 		int ForkAndCheck(int* rpid, double waitms = 5000.00f);
-		int Launch(const int pid, const std::string& call);
+		int Exec(const int pid, const std::string& call);
 		int IsAlive(const int pid);
 		int Terminate(const int pid);
 		int ChangeDirectory(const int pid, const std::string& path);
 		int Include(const int pid, const std::string& path0, 
 				const std::string& path1);
-		int LaunchNDF(const int pid, const std::string& function, 
-				const std::string& pipename, const CcAddress iD, 
-				const CcAddress iC);
+		int ExecNDF(const int pid, const std::string& function);
 		int IncludeNDF(const int pid);
 		bool Check(const int pid, double waitms = 2500.00f);
 	private:

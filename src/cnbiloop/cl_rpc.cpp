@@ -38,10 +38,11 @@ void example(void) {
 	printf(" retrievefile ndf_monitor::display /home/mtavella/display.txt\n");
 	printf(" erase ndf_monitor::display\n");
 	printf(" fork\n");
-	printf(" launch 1231 \"bench(1);\"\n");
+	printf(" exec 1231 \"bench(1);\"\n");
+	printf(" execndf 1231 \"ndf_checkloop('', '', '', '');\"\n");
 	printf(" isalive 1231\n");
 	printf(" terminate 1231\n");
-	printf(" cwd 1231 /home/mtavella/\n");
+	printf(" changedirectory 1231 /home/mtavella/\n");
 	printf(" include 1231 /home/mtavella/ /home/ptito/\n");
 }
 
@@ -64,10 +65,11 @@ void usage(void) {
 	printf(" storefile NAME PATH               stores file PATH under NAME\n");
 	printf(" retrievefile NAME PATH            retrieves NAME and save it in PATH\n");
 	printf(" fork                              fork a Matlab process\n");
-	printf(" launch PID COMMAND                launch a COMMAND in Matlab process PID\n");
+	printf(" exec PID COMMAND                  exec a COMMAND in Matlab process PID\n");
+	printf(" execndf PID FUNCTION              exec NDF function FUNCTION in Matlab process PID\n");
 	printf(" isalive PID                       checks if PID is alive\n");
 	printf(" terminate PID                     terminate PID\n");
-	printf(" cwd PID PATH                      changes working directory of PID\n");
+	printf(" changedirectory PID PATH                      changes working directory of PID\n");
 	printf(" include PID PATH1 PATH2           have PID include PATH1 and PATH2\n");
 	CcCore::Exit(1);
 }
@@ -321,14 +323,24 @@ int main(int argc, char* argv[]) {
 			cout << pid << endl;
 		return(status);
 
-	} else if(command.compare("launch") == 0) {
+	} else if(command.compare("exec") == 0) {
 		if(argc != 4) usage();
 		connect();
 		
 		int pid = -1;
 		sscanf(arg1.c_str(), "%d", &pid);
+		status = ClLoop::processing.Exec(pid, arg2);
 		processing(status);
-		status = ClLoop::processing.Launch(pid, arg2);
+		return(status);
+	
+	} else if(command.compare("execndf") == 0) {
+		if(argc != 4) usage();
+		connect();
+		
+		int pid = -1;
+		sscanf(arg1.c_str(), "%d", &pid);
+		status = ClLoop::processing.ExecNDF(pid, arg2);
+		processing(status);
 		return(status);
 
 	} else if(command.compare("isalive") == 0) {
@@ -355,7 +367,7 @@ int main(int argc, char* argv[]) {
 		processing(status);
 		return(status);
 
-	} else if(command.compare("cwd") == 0) {
+	} else if(command.compare("changedirectory") == 0) {
 		if(argc != 4) usage();
 		connect();
 

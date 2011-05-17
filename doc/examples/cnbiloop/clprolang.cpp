@@ -31,8 +31,8 @@ int main(void) {
 	cout << pro.Fork() << endl;
 	cout << pro.IsFork(pro.message->buffer) << endl;
 	
-	cout << pro.Launch(100, "bench(1);") << endl;
-	cout << pro.IsLaunch(pro.message->buffer, &pid, &call) << endl;
+	cout << pro.Exec(100, "bench(1);") << endl;
+	cout << pro.IsExec(pro.message->buffer, &pid, &call) << endl;
 
 	cout << pro.Terminate(100) << endl;
 	cout << pro.IsTerminate(pro.message->buffer, &pid) << endl;
@@ -54,17 +54,8 @@ int main(void) {
 	addressD.clear();
 	addressC.clear();
 	extra.clear();
-	cout << pro.LaunchNDF(100,
-			"ndf_monitor", 
-			"/tmp/pipe.whatever", 
-			"127.0.0.1:9000", 
-			"127.0.0.1:9500") << endl;
-	cout << pro.IsLaunchNDF(pro.message->buffer, 
-			&pid,
-			&function,
-			&pipename,
-			&addressD,
-			&addressC) << endl;
+	cout << pro.ExecNDF(100, "ndf_checkloop") << endl;
+	cout << pro.IsExecNDF(pro.message->buffer, &pid, &function) << endl;
 	cout << function << endl;
 	cout << pipename << endl;
 	cout << addressD << endl;
@@ -75,17 +66,8 @@ int main(void) {
 	addressD.clear();
 	addressC.clear();
 	extra.clear();
-	cout << pro.LaunchNDF(100,
-			"ndf_monitor", 
-			"/tmp/pipe.whatever", 
-			"127.0.0.1:9000", 
-			"127.0.0.1:9500") << endl;
-	cout << pro.IsLaunchNDF(pro.message->buffer, 
-			&pid,
-			&function,
-			&pipename,
-			&addressD,
-			&addressC) << endl;
+	cout << pro.ExecNDF(100, "ndf_checkloop") << endl;
+	cout << pro.IsExecNDF(pro.message->buffer, &pid, &function) << endl;
 	cout << function << endl;
 	cout << pipename << endl;
 	cout << addressD << endl;
