@@ -70,6 +70,9 @@ int main(void) {
 			online->description.c_str(), 
 			online->Count());
 
+	online->DumpClassifier();
+	online->DumpNDF();
+
 	/* Ok. Let's now imagine we want to configure an SMR fake feedback.
 	 * We need to know:
 	 * - How many tasks (see use of Count() above)?
