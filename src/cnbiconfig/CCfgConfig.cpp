@@ -252,9 +252,6 @@ void CCfgConfig::ParseClassifierEx(const std::string& bl, const std::string& ts,
 	taskset->ndf.include = 
 		CCfgXMLConfig::BranchEx()->GoEx("ndf")->QuickStringEx("include");
 
-	if(icmessage == NULL)
-		return;
-
 	/* Configure ICMessage icmessage
 	 * - we need to use ctype to find the right classifier type in
 	 *   cnbiconfig/classifiers
@@ -265,42 +262,45 @@ void CCfgConfig::ParseClassifierEx(const std::string& bl, const std::string& ts,
 	ltype = CCfgXMLConfig::BranchEx()->GoEx("tobi")->QuickStringEx("iclabel");
 	ftype = CCfgXMLConfig::BranchEx()->GoEx("tobi")->QuickStringEx("idfamily");
 	
-	ICClassifier* classifier = new ICClassifier(cname, cdesc);
-	if(classifier->SetValueType(vtype) == false) {
-		std::string info;
-		info += "TOBI iC value type is not valid: ";
-		info += vtype;
-		throw XMLException(info, __PRETTY_FUNCTION__);
-	}
-
-	if(classifier->SetLabelType(ltype) == false) {
-		std::string info;
-		info += "TOBI iC label type is not valid: ";
-		info += ltype;
-		throw XMLException(info, __PRETTY_FUNCTION__);
-	}
-
-	CCfgTasksetIt it = taskset->tasks.begin();
-	while(it != taskset->tasks.end()) {
-		std::string label;
-		
-		ICClass* cclass = NULL;
-		if(ltype.compare(ICClassifier::TxtLabelBiosig) == 0) {
-			cclass = new ICClass(it->second->gdf, 0.00f);
-		} else {
-			cclass = new ICClass(it->first, 0.00f);
+	if(icmessage != NULL) {
+		ICClassifier* classifier = new ICClassifier(cname, cdesc);
+		if(classifier->SetValueType(vtype) == false) {
+			std::string info;
+			info += "TOBI iC value type is not valid: ";
+			info += vtype;
+			throw XMLException(info, __PRETTY_FUNCTION__);
 		}
-		classifier->classes.Add(cclass);
-		it++;
-	}
-	icmessage->classifiers.Add(classifier);
 
+		if(classifier->SetLabelType(ltype) == false) {
+			std::string info;
+			info += "TOBI iC label type is not valid: ";
+			info += ltype;
+			throw XMLException(info, __PRETTY_FUNCTION__);
+		}
 
-	if(idmessage->SetFamilyType(ftype) == false) {
-		std::string info;
-		info += "TOBI iD family type is not valid: ";
-		info += ftype;
-		throw XMLException(info, __PRETTY_FUNCTION__);
+		CCfgTasksetIt it = taskset->tasks.begin();
+		while(it != taskset->tasks.end()) {
+			std::string label;
+
+			ICClass* cclass = NULL;
+			if(ltype.compare(ICClassifier::TxtLabelBiosig) == 0) {
+				cclass = new ICClass(it->second->gdf, 0.00f);
+			} else {
+				cclass = new ICClass(it->first, 0.00f);
+			}
+			classifier->classes.Add(cclass);
+			it++;
+		}
+		icmessage->classifiers.Add(classifier);
 	}
-	idmessage->SetDescription(cdesc);
+
+	if(idmessage != NULL) {
+		if(idmessage->SetFamilyType(ftype) == false) {
+			std::string info;
+			info += "TOBI iD family type is not valid: ";
+			info += ftype;
+			throw XMLException(info, __PRETTY_FUNCTION__);
+		}
+		idmessage->SetDescription(cdesc);
+	}
 }

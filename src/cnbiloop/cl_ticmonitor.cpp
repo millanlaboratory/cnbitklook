@@ -77,7 +77,11 @@ int main(int argc, char* argv[]) {
 			status = ic.WaitMessage(&serializer);
 		else
 			status = ic.GetMessage(&serializer);
-
+	
+		if(ClLoop::IsConnected() == false) {
+			CcLogFatal("Lost connection with loop");
+			goto shutdown;
+		}
 		if(status == ClTobiIc::Detached) {
 			CcLogFatal("iC detached");
 			goto shutdown;

@@ -54,9 +54,9 @@ int main(int argc, char* argv[]) {
 	
 	std::string timestamp, filebdf, filelog;
 	CcTime::Timestamp(&timestamp);
-	filebdf.assign("cltest_");
+	filebdf.assign("checkloop_");
 	filebdf.append(timestamp);
-	filebdf.append(".bdf");
+	filebdf.append(".gdf");
 
 	filelog.assign("cltest_");
 	filelog.append(timestamp);

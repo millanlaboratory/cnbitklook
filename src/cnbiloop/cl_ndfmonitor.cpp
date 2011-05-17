@@ -25,7 +25,7 @@
 using namespace std;
 
 void usage(void) { 
-	printf("Usage: cl_monitor [OPTION]...\n\n");
+	printf("Usage: cl_ndfmonitor [OPTION]...\n\n");
 	printf("  -p       pipe name\n");
 	printf("  -h       display this help and exit\n");
 }
@@ -48,7 +48,7 @@ int main(int argc, char* argv[]) {
 		CcCore::Exit(1);
 	}
 	
-	CcCore::OpenLogger("cl_monitor");
+	CcCore::OpenLogger("cl_ndfmonitor");
 	CcCore::CatchSIGINT();
 	CcCore::CatchSIGTERM();
 

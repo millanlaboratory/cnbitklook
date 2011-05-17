@@ -1,7 +1,7 @@
 lib_LTLIBRARIES = libcnbiloop.la
 
 bin_PROGRAMS = cl_processing \
-	cl_monitor \
+	cl_ndfmonitor \
 	cl_nameserver \
 	cl_tidmonitor \
 	cl_tidsender \
@@ -56,7 +56,7 @@ cl_acquisition_SOURCES = cl_acquisition.cpp ClAcqAsServer.cpp ClAcqAsServer.hpp 
 cl_acquisition_LDADD = libcnbiloop.la $(top_builddir)/src/cnbiacq/libcnbiacq.la
 cl_processing_SOURCES = cl_processing.cpp ClProAsServer.cpp ClProAsServer.hpp
 cl_nameserver_SOURCES = cl_nameserver.cpp ClNamesAsServer.cpp ClNamesAsServer.hpp
-cl_monitor_SOURCES = cl_monitor.cpp
+cl_ndfmonitor_SOURCES = cl_ndfmonitor.cpp
 cl_tidmonitor_SOURCES = cl_tidmonitor.cpp
 cl_tidsender_SOURCES = cl_tidsender.cpp
 cl_ticmonitor_SOURCES = cl_ticmonitor.cpp

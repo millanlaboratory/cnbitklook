@@ -68,10 +68,15 @@ int main(int argc, char* argv[]) {
 
 	CcLogInfo("Waiting for iD messages");
 	while(true) { 
+		if(ClLoop::IsConnected() == false) {
+			CcLogFatal("Lost connection with loop");
+			goto shutdown;
+		}
 		if(id.IsAttached() == false) {
 			CcLogFatal("iD detached");
 			goto shutdown;
 		}
+
 		if(CcCore::receivedSIGAny.Get())
 			goto shutdown;
 		if(id.Count() == 0) {
