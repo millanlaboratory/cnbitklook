@@ -79,10 +79,10 @@ void ClProAsServer::HandleRecvPeer(CcSocket* caller, CcAddress addr,
 				//CcLogDebug(this->_stream, "IsAlive from " << addr << ": " 
 				//		<< pid << " Ok");
 			} else {
-				server->Send(language.Error(ClProLang::IsDead), address);
+				server->Send(language.Error(ClProLang::IsDead), addr);
 				char buffer[CCCORE_1MB];
 				process->Read(buffer, CCCORE_1MB);
-				CcLogWarningS("IsAlive from " << address << ": " 
+				CcLogWarningS("IsAlive from " << addr << ": " 
 						<< pid << " IsDead, " << buffer);
 			}
 		}
