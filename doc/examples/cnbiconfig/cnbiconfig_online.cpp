@@ -18,6 +18,7 @@
 
 #include <cnbiconfig/CCfgConfig.hpp>
 #include <tobiic/ICMessage.hpp>
+#include <tobiid/IDMessage.hpp>
 #include <tobiic/ICSerializerRapid.hpp>
 #include <iostream>
 #include <string>
@@ -48,15 +49,18 @@ int main(void) {
 	 * taskset.
 	 */
 	CCfgTaskset* online = NULL;
-	ICMessage message;
+	ICMessage icM;
+	IDMessage idM;
+
 	try { 
-		online = config.OnlineEx(blockname, tasksetname, &message);
+		online = config.OnlineEx(blockname, tasksetname, &icM, &idM);
 		cout << "Taskset assembled" << endl;
 	} catch(XMLException e) {
 		cout << "Exception: " << e << endl;
 		return 1;
 	}
-	message.Dump();
+	icM.Dump();
+	idM.Dump();
 
 	/* So far so good. Each tasket has several tasks, such as
 	 * right/left mi.  The number of tasks is not fixed.

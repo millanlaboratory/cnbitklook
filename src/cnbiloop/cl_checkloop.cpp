@@ -73,7 +73,7 @@ int main(int argc, char* argv[]) {
 
 	ClLoop::processing.ChangeDirectory(pid0, "/tmp/");
 	ClLoop::processing.IncludeNDF(pid0) ;
-	ClLoop::processing.ExecNDF(pid0, "ndf_monitor");
+	ClLoop::processing.ExecNDF(pid0, "ndf_checkloop");
 
 	if(ClLoop::processing.Check(pid0) == false) {
 		CcLogFatal("PID0 is dead");

@@ -53,14 +53,14 @@ bool CCfgConfig::Validate(void) {
 }
 		
 CCfgTaskset* CCfgConfig::OnlineEx(const std::string& blockname, 
-		const std::string& taskset, ICMessage* icmessage) {
+		const std::string& taskset, ICMessage* icmessage, IDMessage* idmessage) {
 	CCfgTaskset* tasks = new CCfgTaskset(taskset);
 	try {
 		CCfgXMLConfig::RootEx()->GoEx("online")->GoEx(blockname)->SetBranch();
 		tasks->description = 
 			CCfgXMLConfig::BranchEx()->GetAttrEx("description");
 		this->ParseTasksetEx(taskset, tasks);
-		this->ParseClassifierEx(blockname, taskset, tasks, icmessage);
+		this->ParseClassifierEx(blockname, taskset, tasks, icmessage, idmessage);
 		this->ParseConfigEx("online", blockname, taskset, tasks);
 	} catch(XMLException e) {
 		delete tasks;
@@ -187,7 +187,7 @@ void CCfgConfig::ParseConfigEx(const std::string& mode, const std::string& block
 }
 		
 void CCfgConfig::ParseClassifierEx(const std::string& bl, const std::string& ts,
-		CCfgTaskset* taskset, ICMessage* icmessage) {
+		CCfgTaskset* taskset, ICMessage* icmessage, IDMessage* idmessage) {
 	CCfgXMLConfig::RootEx()->GoEx("online")->GoEx(bl)->GoEx("taskset")->SetBranch();
 	
 	/* Among the tasksets, find the one named ts 
@@ -260,21 +260,22 @@ void CCfgConfig::ParseClassifierEx(const std::string& bl, const std::string& ts,
 	 *   cnbiconfig/classifiers
 	 * - then we need to get all the IC and NDF parameters
 	 */
-	std::string vtype, ltype;
+	std::string vtype, ltype, ftype;
 	vtype = CCfgXMLConfig::BranchEx()->GoEx("tobi")->QuickStringEx("icvalue");
 	ltype = CCfgXMLConfig::BranchEx()->GoEx("tobi")->QuickStringEx("iclabel");
+	ftype = CCfgXMLConfig::BranchEx()->GoEx("tobi")->QuickStringEx("idfamily");
 	
 	ICClassifier* classifier = new ICClassifier(cname, cdesc);
 	if(classifier->SetValueType(vtype) == false) {
 		std::string info;
-		info += "ICVtype not known: ";
+		info += "TOBI iC value type is not valid: ";
 		info += vtype;
 		throw XMLException(info, __PRETTY_FUNCTION__);
 	}
 
 	if(classifier->SetLabelType(ltype) == false) {
 		std::string info;
-		info += "ICLtype not known: ";
+		info += "TOBI iC label type is not valid: ";
 		info += ltype;
 		throw XMLException(info, __PRETTY_FUNCTION__);
 	}
@@ -285,17 +286,21 @@ void CCfgConfig::ParseClassifierEx(const std::string& bl, const std::string& ts,
 		
 		ICClass* cclass = NULL;
 		if(ltype.compare(ICClassifier::TxtLabelBiosig) == 0) {
-			//char cache[16];
-			//sprintf(cache, "0x%X", it->second->gdf);
-			//label.assign(cache);
 			cclass = new ICClass(it->second->gdf, 0.00f);
 		} else {
-			//label.assign(it->first);
 			cclass = new ICClass(it->first, 0.00f);
 		}
-		//ICClass* cclass = new ICClass(label, 0.00f);
 		classifier->classes.Add(cclass);
 		it++;
 	}
 	icmessage->classifiers.Add(classifier);
+
+
+	if(idmessage->SetFamilyType(ftype) == false) {
+		std::string info;
+		info += "TOBI iD family type is not valid: ";
+		info += ftype;
+		throw XMLException(info, __PRETTY_FUNCTION__);
+	}
+	idmessage->SetDescription(cdesc);
 }

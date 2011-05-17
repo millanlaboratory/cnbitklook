@@ -32,6 +32,7 @@ class ClTobiIc : public CcSocketProxy {
 		ClTobiIc(void);
 		virtual ~ClTobiIc(void);
 		bool Attach(const CcPort port, const std::string& name);
+		bool Attach(const std::string& name);
 		bool Detach(void);
 		bool IsAttached(void);
 		int WaitMessage(ICSerializerRapid* serializer);
@@ -41,6 +42,7 @@ class ClTobiIc : public CcSocketProxy {
 		void HandleAccept(CcSocket* caller);
 		void HandleDrop(CcSocket* caller);
 		void HandleRecvPeer(CcSocket* caller, CcAddress addr, CcStreamer* stream);
+		void Attach(void);
 
 	public:
 		const static int Detached = -1;
@@ -49,6 +51,7 @@ class ClTobiIc : public CcSocketProxy {
 	protected:
 		CcServer* _server;
 		std::string _name;
+		bool _onwsname;
 		std::string _buffer;
 		CcSemaphore _sembuffer;
 		CcSemaphore _hasmessage;

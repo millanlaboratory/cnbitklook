@@ -44,6 +44,9 @@ int main(int argc, char* argv[]) {
 
 	IDMessage messageI;
 	IDSerializerRapid serializerI(&messageI);
+	
+	ClTobiId id(ClTobiId::SetGet);
+	std::string absolute, relative;
 
 #ifdef ENABLE_BOUNCE
 	IDMessage messageO;
@@ -52,53 +55,54 @@ int main(int argc, char* argv[]) {
 	messageO.SetEvent(0xFFFF);
 	IDSerializerRapid serializerO(&messageO);
 #endif
+			
+	if(ClLoop::Connect() == false) {
+		CcLogFatal("Cannot connect to loop");
+		goto shutdown;
+	}
 
-	ClTobiId id(ClTobiId::SetGet);
-	std::string absolute, relative;
+	if(id.Attach(optname) == false) {
+		CcLogWarning("Cannot attach iD");
+		goto shutdown;
+	}
+
+	CcLogInfo("Waiting for iD messages");
 	while(true) { 
-		if(id.Attach(optname) == false) {
-			if(CcCore::receivedSIGAny.Get())
-				goto shutdown;
-			id.Detach();
-			CcTime::Sleep(5000);
+		if(id.IsAttached() == false) {
+			CcLogFatal("iD detached");
+			goto shutdown;
+		}
+		if(CcCore::receivedSIGAny.Get())
+			goto shutdown;
+		if(id.Count() == 0) {
+			CcTime::Sleep(25.00f);
 			continue;
 		}
-	
-		while(id.IsAttached() == true) { 
-			if(id.Count() == 0) {
-				CcTime::Sleep(250.00f);
-				if(CcCore::receivedSIGAny.Get())
-					goto shutdown;
-				continue;
-			}
 
 #ifdef ENABLE_BOUNCE
-			if(id.SetMessage(&serializerO) == false) {
-				CcLogFatalS("Cannot set iD event: " << messageO.GetEvent());
-				goto shutdown;
-			}
-#endif
-			
-			if(CcCore::receivedSIGAny.Get())
-				goto shutdown;
-			
-			while(id.GetMessage(&serializerI) == true) {
-				messageI.absolute.Get(&absolute);
-				messageI.relative.Get(&relative);
-
-				CcLogInfoS("TiD event:" << 
-						" Family=" << messageI.GetFamily() << 
-						", Event=" << messageI.GetEvent() << 
-						", Description=" << messageI.GetDescription() <<
-						", Block=" << messageI.GetBlockIdx() <<
-						", A/R=" << absolute << 
-						"/" << relative);
-			}
+		if(id.SetMessage(&serializerO) == false) {
+			CcLogFatalS("Cannot set iD event: " << messageO.GetEvent());
+			goto shutdown;
 		}
-		id.Detach();
+#endif
+		while(id.GetMessage(&serializerI) == true) {
+			messageI.absolute.Get(&absolute);
+			messageI.relative.Get(&relative);
+
+			CcLogInfoS("TiD event:" << 
+					" Family=" << messageI.GetFamily() << 
+					", Event=" << messageI.GetEvent() << 
+					", Description=" << messageI.GetDescription() <<
+					", Block=" << messageI.GetBlockIdx() <<
+					", A/R=" << absolute << 
+					"/" << relative);
+		}
 	}
 
 shutdown:
+	id.Detach();
+	id.Detach();
+	id.Detach();
 	id.Detach();
 	CcCore::Exit(0);
 }

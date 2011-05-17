@@ -36,10 +36,10 @@ clean:
 	@rm -vf core
 
 local-install:
-	@mkdir -p ${CNBITK_MATLAB}/mex${PROJECT}/
-	@cp -vf *.mex* ${CNBITK_MATLAB}/mex${PROJECT}/
-	@cp -vf cl_*.m ${CNBITK_MATLAB}/mex${PROJECT}/
-	@cp -vf example*.m ${CNBITK_MATLAB}/mex${PROJECT}/
+	@mkdir -p ${CNBITKMAT_ROOT}/mex${PROJECT}/
+	@cp -vf *.mex* ${CNBITKMAT_ROOT}/mex${PROJECT}/
+	@cp -vf cl_*.m ${CNBITKMAT_ROOT}/mex${PROJECT}/
+	@cp -vf example*.m ${CNBITKMAT_ROOT}/mex${PROJECT}/
 
 install:
 	@mkdir -p /opt/cnbitkmat/mex${PROJECT}/

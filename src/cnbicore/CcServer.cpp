@@ -182,6 +182,7 @@ void CcServer::Main(void) {
 	if(!CcThread::IsRunning())
 		return;
 	
+	struct timeval tv;
 	fd_set masterfds, readfds;
 	FD_ZERO(&masterfds);
 	
@@ -193,8 +194,11 @@ void CcServer::Main(void) {
 
 	int status;
 	while(CcThread::IsRunning()) {
+		tv.tv_sec = CCCORE_ASIO_SEC;
+		tv.tv_usec = CCCORE_ASIO_USEC;
+
 		readfds = masterfds;
-		status = select(fdmax + 1, &readfds, NULL, NULL, NULL); 
+		status = select(fdmax + 1, &readfds, NULL, NULL, &tv); 
 		if(status == -1) {
 			CcLogFatalS("Async I/O error: " << strerror(status));
 			CcThread::Stop();
@@ -318,6 +322,10 @@ int CcServer::Accept(void) {
 	CcSocket::AddStream(fid);
 	
 	return fid;
+}
+		
+bool CcServer::IsConnected(void) {
+	return CcThread::IsRunning();
 }
 
 #endif

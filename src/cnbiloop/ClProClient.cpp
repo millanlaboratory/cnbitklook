@@ -187,7 +187,7 @@ int ClProClient::ExecNDF(const int pid, const std::string& function) {
 }
 
 int ClProClient::IncludeNDF(const int pid) {
-	return this->Include(pid, "$CNBITK_MATLAB/", "/opt/cnbitkmat/");
+	return this->Include(pid, "$CNBITKMAT_ROOT/", "/opt/cnbitkmat/");
 }
 
 bool ClProClient::Check(const int pid, double waitms) {

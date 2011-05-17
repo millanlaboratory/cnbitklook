@@ -135,20 +135,17 @@ int main(int argc, char* argv[]) {
 	
 	CcServer serverAcq(CCCORE_1MB);
 	ClAcqAsServer handleAcq(&writer);
-	try {
-		handleAcq.Register(&serverAcq);
-		serverAcq.Bind(optepAcq.GetPort());
-	} catch(CcException e) {
+	handleAcq.Register(&serverAcq);
+	if(serverAcq.Bind(optepAcq.GetPort()) == false) {
 		CcLogFatal("Cannot bind acquisition socket");
 		CcCore::Exit(4);
 	}
 
+
 	CcServer serverBus(CCCORE_1MB);
 	ClTobiIdAsServer handleBus(&writer, &frame, &semframe);
-	try {
-		handleBus.Register(&serverBus);
-		serverBus.Bind(optepBus.GetPort());
-	} catch(CcException e) {
+	handleBus.Register(&serverBus);
+	if(serverBus.Bind(optepBus.GetPort()) == false) {
 		CcLogFatal("Cannot bind bus socket");
 		CcCore::Exit(5);
 	}
@@ -171,6 +168,7 @@ int main(int argc, char* argv[]) {
 		CcCore::Exit(8);
 	}
 	
+	
 	// Register pipes on nameserver
 	for(int p = 0; p < PIPELINES; p++) { 
 		std::stringstream pipename, pipepath;
@@ -185,7 +183,7 @@ int main(int argc, char* argv[]) {
 	for(int p = 0; p < PIPELINES; p++) { 
 		std::stringstream ctlname, ctrladdr;
 		ctlname << "/ctrl" << p;
-		ctrladdr << "127.0.0.1:590" << p;
+		ctrladdr << "127.0.0.1:950" << p;
 		int nsstatus = nsclient.Set(ctlname.str(), ctrladdr.str());
 		if(nsstatus != ClNamesLang::Successful) {
 			CcLogFatal("Cannot register controllers with nameserver");

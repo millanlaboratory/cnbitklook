@@ -37,10 +37,10 @@ clean:
 	@rm -Rvf build/
 
 local-install: 
-	@mkdir -p ${CNBITK_MATLAB}/mex${PROJECT}/
-	@cp -vf *.mex* ${CNBITK_MATLAB}/mex${PROJECT}/
-	@cp -vf tr_* ${CNBITK_MATLAB}/mex${PROJECT}/
-	@cp -vf example_* ${CNBITK_MATLAB}/mex${PROJECT}/
+	@mkdir -p ${CNBITKMAT_ROOT}/mex${PROJECT}/
+	@cp -vf *.mex* ${CNBITKMAT_ROOT}/mex${PROJECT}/
+	@cp -vf tr_* ${CNBITKMAT_ROOT}/mex${PROJECT}/
+	@cp -vf example_* ${CNBITKMAT_ROOT}/mex${PROJECT}/
 
 install: 
 	@mkdir -p /opt/cnbitkmat/mex${PROJECT}/

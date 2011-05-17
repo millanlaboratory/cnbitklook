@@ -25,7 +25,7 @@ int main(void) {
 	int pid;
 	int id;
 	std::string call, path0, path1;
-	std::string pipename, function, addressD, addressC, extra;
+	std::string function;
 
 	ClProLang pro;
 	cout << pro.Fork() << endl;
@@ -50,28 +50,14 @@ int main(void) {
 	cout << pro.IsInclude(pro.message->buffer, &pid, &path0, &path1) << endl;
 	
 	function.clear();
-	pipename.clear();
-	addressD.clear();
-	addressC.clear();
-	extra.clear();
-	cout << pro.ExecNDF(100, "ndf_checkloop") << endl;
-	cout << pro.IsExecNDF(pro.message->buffer, &pid, &function) << endl;
+	cout << pro.Exec(100, "bench(1000);") << endl;
+	cout << pro.IsExec(pro.message->buffer, &pid, &function) << endl;
 	cout << function << endl;
-	cout << pipename << endl;
-	cout << addressD << endl;
-	cout << addressC << endl;
 	
 	function.clear();
-	pipename.clear();
-	addressD.clear();
-	addressC.clear();
-	extra.clear();
 	cout << pro.ExecNDF(100, "ndf_checkloop") << endl;
 	cout << pro.IsExecNDF(pro.message->buffer, &pid, &function) << endl;
 	cout << function << endl;
-	cout << pipename << endl;
-	cout << addressD << endl;
-	cout << addressC << endl;
 
 	return 0;
 }

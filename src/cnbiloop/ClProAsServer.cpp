@@ -52,8 +52,7 @@ void ClProAsServer::HandleRecvPeer(CcSocket* caller, CcAddress addr,
 			function.append("\n");
 			process->Exec(function);
 			server->Send(language.Ok(pid), addr);
-			CcLogInfoS("Exec from " << addr << ": " 
-					<< pid << " " << function);
+			CcLogInfoS("Exec from " << addr << ": " << pid << " " << function);
 		}
 	} else if(this->language.IsTerminate(message.c_str(), &pid)) {
 		ClMatlab* process = this->Get(pid);
@@ -76,8 +75,6 @@ void ClProAsServer::HandleRecvPeer(CcSocket* caller, CcAddress addr,
 		} else {
 			if(process->IsAlive()) {
 				server->Send(language.Ok(pid), addr);
-				//CcLogDebug(this->_stream, "IsAlive from " << addr << ": " 
-				//		<< pid << " Ok");
 			} else {
 				server->Send(language.Error(ClProLang::IsDead), addr);
 				char buffer[CCCORE_1MB];

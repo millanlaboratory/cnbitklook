@@ -49,7 +49,7 @@ class CcSocket : public CcObject {
 		long unsigned int GetSend(void);
 		long unsigned int GetRecv(void);
 		int GetFID(void);
-		bool IsConnected(void);
+		virtual bool IsConnected(void);
 		void Dump(void);
 	protected:
 		virtual ssize_t Send(const char* message) = 0;

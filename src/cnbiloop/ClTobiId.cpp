@@ -35,44 +35,28 @@ bool ClTobiId::Attach(const std::string& name) {
 	if(this->_client != NULL)
 		return false;
 	
+	this->_client = new CcClient;
 	this->_name.assign(name);
 
 	if(ClLoop::Connect() == false) { 
-		CcLogDebug("Cannot connect to loop");
+		CcLogError("Cannot connect to loop");
 		return false;
 	}
 
 	CcAddress address;
 	if(ClLoop::nameserver.Query(this->_name, &address) != ClNamesLang::Successful) {
-		CcLogDebugS("Query returned empty result: " << this->_name);
+		CcLogErrorS("Cannot query " << this->_name);
 		return false;
 	}
 
-	CcEndpoint endpoint(address);
-	this->_client = new CcClient();
-	try {
-		this->_client->Connect(endpoint.GetPort());
-	} catch(CcException e) {
-		CcLogDebugS("Cannot connect to " << address);
+	if(this->_client->Connect(address) == false) {
+		CcLogErrorS("Cannot connect to " << address);
 		return false;
 	}
 	
 	CB_CcSocket(this->_client->iOnConnect, this, HandleConnect);
 	CB_CcSocket(this->_client->iOnDisconnect, this, HandleDisconnect);
 	CB_CcSocket(this->_client->iOnRecv, this, HandleRecv);
-
-	/* 2011-05-12  Michele Tavella <michele.tavella@epfl.ch>
-	 * Found delay in starting iD communication. Must be inspected.
-	 * This is a temporary patch/hack.
-	 */
-	//CcTime::Sleep(5000);
-
-	//for(int i = 0; i < 50; i++) {
-	//	//CcLogFatalS("Connected: " << this->_client->IsConnected());
-	//	CcLogFatalS("Connected: " << this->_client->IsConnected() << " " <<
-	//		this->_client->Send("ciao"));
-	//	CcTime::Sleep(250);
-	//}
 
 	return true;
 }
@@ -81,7 +65,8 @@ bool ClTobiId::Detach(void) {
 	if(this->_client == NULL)
 		return true;
 
-	this->_client->Disconnect();
+	if(this->_client->IsConnected())
+		this->_client->Disconnect();
 	delete(this->_client);
 	this->_client = NULL;
 	return true;

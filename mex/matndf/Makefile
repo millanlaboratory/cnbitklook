@@ -11,10 +11,10 @@ clean:
 	rm ndf_*.mex*
 
 local-install:
-	@mkdir -p ${CNBITK_MATLAB}/matndf/
-	@cp -vf *.mex* ${CNBITK_MATLAB}/matndf/
-	@cp -vf ndf_*.m ${CNBITK_MATLAB}/matndf/
-	@cp -vf printf.m ${CNBITK_MATLAB}/matndf/
+	@mkdir -p ${CNBITKMAT_ROOT}/matndf/
+	@cp -vf *.mex* ${CNBITKMAT_ROOT}/matndf/
+	@cp -vf ndf_*.m ${CNBITKMAT_ROOT}/matndf/
+	@cp -vf printf.m ${CNBITKMAT_ROOT}/matndf/
 
 install:
 	@mkdir -p /opt/cnbitkmat/matndf/

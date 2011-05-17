@@ -1,10 +1,10 @@
 AM_CPPFLAGS = $(CPPFLAGS) -I$(top_srcdir)/src
 
 check_PROGRAMS = cnbiconfig_online \
-				  cnbiconfig_offline \
-				  cnbitask \
-				  xmlconfig \
-				  smarttype
+				 cnbiconfig_offline \
+				 cnbitask \
+				 xmlconfig \
+				 smarttype
 
 cnbiconfig_online_SOURCES = cnbiconfig_online.cpp
 cnbiconfig_offline_SOURCES = cnbiconfig_offline.cpp

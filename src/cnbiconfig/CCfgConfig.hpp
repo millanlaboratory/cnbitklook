@@ -23,6 +23,7 @@
 #include "CCfgXMLConfig.hpp"
 #include "CCfgTaskset.hpp"
 #include <tobiic/ICMessage.hpp>
+#include <tobiid/IDMessage.hpp>
 
 /*! \brief Parser for nested blocks according to the CNBI XML definitions
  *
@@ -34,7 +35,9 @@ class CCfgConfig : public CCfgXMLConfig {
 	public:
 		bool Validate(void);
 		CCfgTaskset* OnlineEx(const std::string& blockname, 
-				const std::string& taskset, ICMessage* icmessage = NULL);
+				const std::string& taskset, 
+				ICMessage* icmessage = NULL, 
+				IDMessage* idmessage = NULL);
 		CCfgTaskset* OfflineEx(const std::string& blockname,
 				const std::string& taskset);
 
@@ -45,7 +48,7 @@ class CCfgConfig : public CCfgXMLConfig {
 				const std::string& bname, const std::string& tname,
 				CCfgTaskset* taskset);
 		void ParseClassifierEx(const std::string& bl, const std::string& ts,
-				CCfgTaskset* taskset, ICMessage* icmessage);
+				CCfgTaskset* taskset, ICMessage* icmessage, IDMessage* idmessage);
 };
 
 #endif

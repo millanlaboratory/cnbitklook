@@ -23,18 +23,22 @@ void usage(void) {
 	printf("  -p       TCP port (9500 default)\n");
 	printf("  -n       TCP server name (/ctrl0 default)\n");
 	printf("  -h       display this help and exit\n");
+	printf("  -l       lock on iC stream\n");
 }
 
 int main(int argc, char* argv[]) {
 	int opt;
 	std::string optname("/ctrl0");
-	CcPort optport("9500");
+	CcPort optport("");
+	bool locking = false;
 	
-	while((opt = getopt(argc, argv, "p:n:h")) != -1) {
+	while((opt = getopt(argc, argv, "p:n:hl")) != -1) {
 		if(opt == 'p')
 			optport.assign(optarg);
 		else if(opt == 'n')
 			optname.assign(optarg);
+		else if(opt == 'l')
+			locking = true;
 		else {
 			usage();
 			CcCore::Exit(opt == 'h' ? EXIT_SUCCESS : EXIT_FAILURE);
@@ -48,68 +52,59 @@ int main(int argc, char* argv[]) {
 	ICMessage message;
 	ICSerializerRapid serializer(&message);
 
-	std::string absolute, relative;
-
 	ClTobiIc ic;
-	while(true) { 
-		// Open iC
-		if(ic.Attach(optport, optname) == false) {
-			ic.Detach();
-			if(CcCore::receivedSIGAny.Get())
-				goto shutdown;
-			CcTime::Sleep(5000);
+	std::string absolute, relative;
+	bool attached;
+	int status;
+
+	if(ClLoop::Connect() == false) {
+		CcLogFatal("Cannot connect to loop");
+		goto shutdown;
+	}
+		
+	attached = optport.empty() ? ic.Attach(optname) : ic.Attach(optport, optname);
+	if(attached == false) {
+		CcLogWarning("Cannot attach iC");
+		goto shutdown;
+	}
+
+	CcLogInfoS("Waiting for iC messages " << (locking ? "(locking)" : "(not locking)"));
+	while(true) {
+		if(CcCore::receivedSIGAny.Get())
+			goto shutdown;
+
+		if(locking == false)
+			status = ic.WaitMessage(&serializer);
+		else
+			status = ic.GetMessage(&serializer);
+
+		if(status == ClTobiIc::Detached) {
+			CcLogFatal("iC detached");
+			goto shutdown;
+		} else if(status == ClTobiIc::NoMessage) {
+			CcTime::Sleep(25.00f);
 			continue;
 		}
 
-		// Wait for the first message to arrive
-		CcLogInfo("Waiting for endpoint...");
-		while(ic.WaitMessage(&serializer) != ClTobiIc::HasMessage) {
-			if(CcCore::receivedSIGAny.Get())
-				goto shutdown;
-			CcTime::Sleep(1000.00f);
+		message.absolute.Get(&absolute);
+		message.relative.Get(&relative);
+
+		std::string classifiers;
+		int total = message.classifiers.Size();
+		ICClassifierIter it = message.classifiers.Begin();
+		while(it != message.classifiers.End()) {
+			classifiers.append((*it).first);
+			if(it++ != message.classifiers.Begin())
+				classifiers.append(",");
 		}
 
-		int status = ClTobiIc::NoMessage;
-		while(true) { 
-			status = ic.GetMessage(&serializer);
-			if(status == ClTobiIc::NoMessage) {
-				CcLogWarning("Endpoint attached, waiting for iC flow");
-				continue;
-			}
-			if(status == ClTobiIc::Detached) {
-				CcLogWarning("Endpoint detached");
-				break;
-			}
-			if(CcCore::receivedSIGAny.Get())
-				goto shutdown;
-			if(ClLoop::IsConnected() == false) {
-				CcLogWarning("Cannot connect to loop");
-				goto shutdown;
-			}
-			
-			message.absolute.Get(&absolute);
-			message.relative.Get(&relative);
-			
-			std::string classifiers;
-			int total = message.classifiers.Size();
-			ICClassifierIter it = message.classifiers.Begin();
-			while(it != message.classifiers.End()) {
-				classifiers.append((*it).first);
-				if(it++ != message.classifiers.Begin())
-					classifiers.append(",");
-			}
-
-			CcLogInfoS("TiC message: " << 
-					" Classifiers=" << classifiers <<
-					", Total=" << total <<
-					", Block " << message.GetBlockIdx() << 
-					", A/R=" << absolute << 
-					"/" << relative);
-		}
-		CcLogFatal("Connection lost");
-		ic.Detach();
+		CcLogInfoS("TiC message: " << 
+				" Classifiers=" << classifiers <<
+				", Total=" << total <<
+				", Block " << message.GetBlockIdx() << 
+				", A/R=" << absolute << 
+				"/" << relative);
 	}
-
 shutdown:
 	ic.Detach();
 	CcCore::Exit(0);

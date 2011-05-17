@@ -29,6 +29,7 @@ class CcServer : public CcSocket, protected CcThread {
 		bool Bind(CcPort port, int protocol = CcSocket::TCP);
 		bool Bind(CcPortUInt port, int protocol = CcSocket::TCP);
 		bool Release(void);
+		bool IsConnected(void);
 		
 		ssize_t Send(const char* message);
 		ssize_t Send(const std::string& message);

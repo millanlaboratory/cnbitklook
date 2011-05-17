@@ -215,6 +215,7 @@
 			<tobi>
 				<icvalue>ValueProb</icvalue>
 				<iclabel>LabelBiosig</iclabel>
+				<idfamily>FamilyBiosig</idfamily>
 			</tobi>
 			<ndf>
 				<exec>ndf_checkloop</exec>
@@ -229,6 +230,7 @@
 			<tobi>
 				<icvalue>ValueProb</icvalue>
 				<iclabel>LabelBiosig</iclabel>
+				<idfamily>FamilyUndef</idfamily>
 			</tobi>
 			<ndf>
 				<exec>ndf_mi</exec>
@@ -243,6 +245,7 @@
 			<tobi>
 				<icvalue>ValueProb</icvalue>
 				<iclabel>LabelBiosig</iclabel>
+				<idfamily>FamilyBiosig</idfamily>
 			</tobi>
 			<ndf>
 				<exec>ndf_errp</exec>
@@ -257,6 +260,7 @@
 			<tobi>
 				<icvalue>ValueProb</icvalue>
 				<iclabel>LabelBiosig</iclabel>
+				<idfamily>FamilyBiosig</idfamily>
 			</tobi>
 			<ndf>
 				<exec>ndf_va</exec>

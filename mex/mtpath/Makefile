@@ -1,10 +1,10 @@
 # 2011-01-22  Michele Tavella <michele.tavella@epfl.ch>
 
 local-install:
-	@mkdir -p ${CNBITK_MATLAB}/mtpath/
-	@cp -vf *.mex* ${CNBITK_MATLAB}/mtpath/
-	@cp -vf ndf_*.m ${CNBITK_MATLAB}/mtpath/
-	@cp -vf printf.m ${CNBITK_MATLAB}/mtpath/
+	@mkdir -p ${CNBITKMAT_ROOT}/mtpath/
+	@cp -vf *.mex* ${CNBITKMAT_ROOT}/mtpath/
+	@cp -vf ndf_*.m ${CNBITKMAT_ROOT}/mtpath/
+	@cp -vf printf.m ${CNBITKMAT_ROOT}/mtpath/
 
 install:
 	@mkdir -p /opt/cnbitkmat/mtpath/

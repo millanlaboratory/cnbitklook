@@ -81,15 +81,15 @@ bool CcClient::Connect(CcAddress address, int protocol) {
 }
 
 bool CcClient::Disconnect(void) {
-	if(this->IsConnected() == false) {
-		CcLogWarning("Socket not connected");
+	if(this->IsConnected() == false && 0) {
+		CcLogWarning("Socket not connected, bitch");
 		return false;
 	}
-
+	
 	if(CcThread::IsRunning()) {
 		CcThread::Stop();
 		CcThread::Join();
-	}
+	} 
 	
 	CcSocket::_semsocket.Wait();
 	if(this->Close() == false) {

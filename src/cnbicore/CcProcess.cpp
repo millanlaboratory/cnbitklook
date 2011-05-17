@@ -70,7 +70,7 @@ pid_t CcProcess::Popen(int* input, int* output) {
         return -1;
 
     pid = fork();
-    if (pid < 0) {
+    if(pid < 0) {
         return pid;
 	} else if(pid == 0) {
 		if(input != NULL) {

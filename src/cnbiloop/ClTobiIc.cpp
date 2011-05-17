@@ -24,52 +24,84 @@
 ClTobiIc::ClTobiIc(void) {
 	ClLoop::Instance();
 	this->_server = NULL;
+	this->_onwsname = false;
 }
 
 ClTobiIc::~ClTobiIc(void) {
 	ClLoop::Release();
+}
+
+bool ClTobiIc::Attach(const std::string& name) {
+	if(this->_server != NULL)
+		return false;
+
+	if(ClLoop::Connect() == false) { 
+		CcLogErrorS("Cannot connect to loop");
+		return false;
+	}
+	this->_name.assign(name);
+	this->_onwsname = false;
+	
+	CcAddress address;
+	int status = ClLoop::nameserver.Query(this->_name, &address);
+	if(status != ClNamesLang::Successful) {
+		CcLogErrorS("Cannot query " << name);
+		return false;
+	}
+	
+	CcEndpoint peer(address);
+	this->_server = new CcServer();
+	if(this->_server->Bind(peer.GetPort()) == false) {
+		CcLogErrorS("Cannot bind to port " << peer.GetPort());
+		return false;
+	}
+
+	this->Attach();
+	return true;
 }
 		
 bool ClTobiIc::Attach(const CcPort port, const std::string& name) {
 	if(this->_server != NULL)
 		return false;
 	
-	this->_name.assign(name);
-
 	if(ClLoop::Connect() == false) { 
-		CcLogDebug("Cannot connect to loop");
+		CcLogErrorS("Cannot connect to loop");
 		return false;
 	}
+	this->_name.assign(name);
+	this->_onwsname = true;
 	
-	CcEndpoint endpoint("0.0.0.0", port);
+	CcEndpoint peer("0.0.0.0", port);
 	this->_server = new CcServer();
-	try { 
-		this->_server->Bind(endpoint.GetPort());
-	} catch(CcException e) {
-		CcLogDebugS("Cannot bind to port " << port);
+	if(this->_server->Bind(peer.GetPort()) == false) {
+		CcLogErrorS("Cannot bind to port " << port);
 		return false;
 	}
 
-	int status = ClLoop::nameserver.Set(this->_name, endpoint.GetAddress());
+	int status = ClLoop::nameserver.Set(this->_name, peer.GetAddress());
 	if(status != ClNamesLang::Successful) {
-		CcLogDebugS("Cannot set " << name << " as " << endpoint.GetAddress());
+		CcLogErrorS("Cannot set " << name << " as " << peer.GetAddress());
 		return false;
 	}
 
+	this->Attach();
+	return true;
+}
+
+void ClTobiIc::Attach(void) {
 	CB_CcSocket(this->_server->iOnAccept, this, HandleAccept);
 	CB_CcSocket(this->_server->iOnDrop, this, HandleDrop);
 	CB_CcSocket(this->_server->iOnRecvPeer, this, HandleRecvPeer);
 	
 	this->_hasmessage.Wait();
-
-	return true;
 }
 		
 bool ClTobiIc::Detach(void) {
 	if(this->_server == NULL)
 		return true;
 
-	ClLoop::nameserver.Unset(this->_name);
+	if(this->_onwsname == true)
+		ClLoop::nameserver.Unset(this->_name);
 	this->_server->Release();
 	delete(this->_server);
 	this->_server = NULL;
@@ -117,8 +149,9 @@ void ClTobiIc::HandleRecvPeer(CcSocket* caller, CcAddress addr,
 	if(this->_sembuffer.TryWait() == false) 
 		return;
 
-	if(stream->Extract(&this->_buffer, "<tobiic", "</tobiic>") == true)
+	if(stream->Extract(&this->_buffer, "<tobiic", "</tobiic>") == true) {
 		this->_hasmessage.Post();
+	}
 	this->_sembuffer.Post();
 }
 

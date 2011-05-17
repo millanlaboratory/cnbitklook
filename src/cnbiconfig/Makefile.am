@@ -22,8 +22,7 @@ libcnbiconfig_la_SOURCES = CCfgConfig.cpp CCfgConfig.hpp \
 			   XMLException.cpp XMLException.hpp
 						   
 libcnbiconfig_la_LDFLAGS = $(AM_LDFLAGS) -version-info $(CURRENT):$(REVISION):$(AGE) 
-libcnbiconfig_la_LIBADD = $(TOBIIC_LIBS)
-
+libcnbiconfig_la_LIBADD = $(TOBIIC_LIBS) $(TOBIID_LIBS)
 
 ccfg_validate_SOURCES = ccfg_validate.cpp
 ccfg_validate_LDADD = libcnbiconfig.la
