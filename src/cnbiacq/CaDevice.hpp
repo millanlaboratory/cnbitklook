@@ -37,7 +37,7 @@ class CaDevice {
 	friend class CaWriter;
 
 	public:
-		CaDevice(int stype = EGD_FLOAT, int ttype = EGD_INT32);
+		CaDevice(void);
 		virtual ~CaDevice(void);
 		virtual bool Setup(float hz = 16.00f);
 		bool Open(const std::string& devname);
@@ -64,10 +64,7 @@ class CaDevice {
 		void* _eeg;
 		void* _exg;
 		void* _tri;
-		int _stype;
-		int _ttype;
 		size_t _frames;
-		unsigned int _presetid;
 };
 
 #endif

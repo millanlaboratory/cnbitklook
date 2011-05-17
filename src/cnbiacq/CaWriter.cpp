@@ -149,6 +149,11 @@ int CaWriter::SetupChannelGroup(int igrp) {
 	double mm[2];
 	int isint;
 	struct xdfch* ch;
+	int closesttype;
+	if(isint) 
+		closesttype = xdf_closest_type(this->_file, XDFINT32);
+	else	
+		closesttype = xdf_closest_type(this->_file, XDFFLOAT);
 
 	egd_channel_info(this->_device->_dev, 
 			this->_device->_grp[igrp].sensortype, 
@@ -163,7 +168,7 @@ int CaWriter::SetupChannelGroup(int igrp) {
 			XDF_CF_ARRINDEX, igrp,
 			XDF_CF_ARROFFSET, 0,
 			XDF_CF_ARRDIGITAL, 0,
-			XDF_CF_ARRTYPE, isint ? XDFINT32 : XDFFLOAT,
+			XDF_CF_ARRTYPE, closesttype,
 			XDF_CF_PMIN, mm[0],
 			XDF_CF_PMAX, mm[1],
 			XDF_CF_TRANSDUCTER, transducter,

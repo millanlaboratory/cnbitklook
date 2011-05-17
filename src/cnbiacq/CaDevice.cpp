@@ -25,16 +25,13 @@
 #include <stdio.h>
 #include <errno.h>
 
-CaDevice::CaDevice(int stype, int ttype) {
+CaDevice::CaDevice(void) {
 	memset(this->_grp, 0, 3*sizeof(struct grpconf));
 	memset(this->_strides, 0, 3*sizeof(size_t));
 	this->_eeg = NULL;
 	this->_exg = NULL;
 	this->_tri = NULL;
-	this->_stype = stype;
-	this->_ttype = ttype;
 	this->_frames = 0;
-	this->_presetid = NDF_PRESET_UNKNOWN;
 }
 
 CaDevice::~CaDevice(void) {
@@ -57,9 +54,9 @@ void CaDevice::InitCapabilities(void) {
 
 void CaDevice::InitBuffers(void) {
 	// Setup the strides so that we get packed data into the buffers
-	this->_strides[0] = this->_grp[0].nch * this->SizeEGD(this->_stype);
-	this->_strides[1] = this->_grp[1].nch * this->SizeEGD(this->_stype);
-	this->_strides[2] = this->SizeEGD(this->_ttype);
+	this->_strides[0] = this->_grp[0].nch * this->SizeEGD(EGD_FLOAT);
+	this->_strides[1] = this->_grp[1].nch * this->SizeEGD(EGD_FLOAT);
+	this->_strides[2] = this->SizeEGD(EGD_INT32);
 
 	// Compute sizes so not to call malloc if size == 0
 	size_t seeg = this->_strides[0]*this->_frames;
@@ -75,21 +72,21 @@ void CaDevice::InitGroups(void) {
 	this->_grp[0].sensortype = EGD_EEG;
 	this->_grp[0].index = 0;
 	this->_grp[0].iarray = 0;
-	this->_grp[0].datatype = this->_stype;
+	this->_grp[0].datatype = EGD_FLOAT;
 	this->_grp[0].arr_offset = 0;
 	this->_grp[0].nch = this->_cap.eeg_nmax;
 	
 	this->_grp[1].sensortype = EGD_SENSOR;
 	this->_grp[1].index = 0; 
 	this->_grp[1].iarray = 1; 
-	this->_grp[1].datatype = this->_stype;
+	this->_grp[1].datatype = EGD_FLOAT;
 	this->_grp[1].arr_offset = 0;
 	this->_grp[1].nch = this->_cap.sensor_nmax;
 	
 	this->_grp[2].sensortype = EGD_TRIGGER;
 	this->_grp[2].index = 0; 
 	this->_grp[2].iarray = 2;
-	this->_grp[2].datatype = this->_ttype;
+	this->_grp[2].datatype = EGD_INT32;
 	this->_grp[2].arr_offset = 0;
 	this->_grp[2].nch = 1;
 }
@@ -110,18 +107,10 @@ bool CaDevice::Setup(float hz) {
 
 bool CaDevice::Open(const std::string& devname) {
 	std::string devnamearg;
-	
-	if(devname.find(".bdf") != std::string::npos) {
+	if(devname.find(".bdf") != std::string::npos) 
 		devnamearg.assign("datafile|path|");
-		this->_presetid = NDF_PRESET_BDF;
-	} else if(devname.find(".gdf") != std::string::npos) {
+	else if(devname.find(".gdf") != std::string::npos) 
 		devnamearg.assign("datafile|path|");
-		this->_presetid = NDF_PRESET_GDF;
-	} else if(devname.find("biosemi") != std::string::npos) {
-		this->_presetid = NDF_PRESET_BIOSEMI;
-	} else if(devname.find("gtec") != std::string::npos) {
-		this->_presetid = NDF_PRESET_GTEC;
-	}
 	devnamearg.append(devname);
 
 	this->_dev = egd_open(devnamearg.c_str());
@@ -231,16 +220,16 @@ void CaDevice::WriteNDF(ndf_frame* frame, bool inc, bool tic) {
 void CaDevice::InitNDF(ndf_frame* frame) {
 	frame->types.tim 			= NDF_DOUBLETIME;
 	frame->types.lbl 			= NDF_UINT32;
-	frame->types.eeg 			= this->SizeNDF(this->_stype);
-	frame->types.exg 			= this->SizeNDF(this->_stype);
-	frame->types.tri 			= this->SizeNDF(this->_ttype);
-	frame->config.labels 		= 8;
+	frame->types.eeg 			= this->SizeNDF(EGD_FLOAT);
+	frame->types.exg 			= this->SizeNDF(EGD_FLOAT);
+	frame->types.tri 			= this->SizeNDF(EGD_INT32);
+	frame->config.labels 		= 32;
 	frame->config.eeg_channels 	= this->_cap.eeg_nmax;
 	frame->config.exg_channels 	= this->_cap.sensor_nmax;
 	frame->config.tri_channels 	= this->_cap.trigger_nmax;
 	frame->config.samples 		= CaDevice::_frames;;
 	frame->config.sf 			= this->_cap.sampling_freq;
-	frame->config.id 			= this->_presetid;
+	frame->config.id 			= 0;
 	ndf_init(frame);
 }
 
