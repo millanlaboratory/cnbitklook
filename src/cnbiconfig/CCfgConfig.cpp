@@ -247,6 +247,10 @@ void CCfgConfig::ParseClassifierEx(const std::string& bl, const std::string& ts,
 		CCfgXMLConfig::BranchEx()->GoEx("ndf")->QuickStringEx("id");
 	taskset->ndf.ic = 
 		CCfgXMLConfig::BranchEx()->GoEx("ndf")->QuickStringEx("ic");
+	taskset->ndf.directory  = 
+		CCfgXMLConfig::BranchEx()->GoEx("ndf")->QuickStringEx("directory");
+	taskset->ndf.include = 
+		CCfgXMLConfig::BranchEx()->GoEx("ndf")->QuickStringEx("include");
 
 	if(icmessage == NULL)
 		return;

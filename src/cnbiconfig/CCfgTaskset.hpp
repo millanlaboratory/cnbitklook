@@ -38,6 +38,8 @@ typedef struct CCfgNDF_struct {
 	std::string pipe;
 	std::string id;
 	std::string ic;
+	std::string directory;
+	std::string include;
 } CCfgNDF;
 
 /*! \brief The taskset is a map of CCfgTask objects sorted by the GDFEvent
