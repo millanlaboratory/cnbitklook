@@ -24,7 +24,7 @@
 #define EXAMPLE_NAME "[resolver.c]"
 
 int main(void) { 
-	char address[2*tr_getaddrlen()];
+	char address[tr_getaddrlen()];
 	
 	tr_resolve("torpor", address);
 	printf("%s IPv4 is %s\n", EXAMPLE_NAME, address);

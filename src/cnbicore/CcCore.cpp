@@ -26,6 +26,7 @@
 #include "CcPtable.hpp"
 #include "CcThreadSafe.hpp"
 #include "CcTime.hpp"
+#include <transport/tr_names.h>
 #include <stdio.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -193,6 +194,12 @@ void CcCore::CatchSIGTERM(void) {
 void CcCore::CatchSIGCHLD(void) {
 	CcLogConfig("Catching SIGCHLD");
 	(void)signal(SIGCHLD, cccore_sigchild);
+}
+		
+CcAddress CcCore::Lookup(std::string name) {
+	char address[tr_getaddrlen()];
+	tr_resolve(name.c_str(), address);
+	return CcAddress(address);
 }
 
 #endif
