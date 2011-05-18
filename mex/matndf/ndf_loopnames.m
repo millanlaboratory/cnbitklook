@@ -17,7 +17,7 @@
 % See weather loop.cfg.ndf.id and loop.cfg.ndf.ic are valid port names (i.e.
 % /PORT), otherwise die
 
-function loop  = ndf_checknames(loop)
+function loop  = ndf_loopnames(loop)
 
 if(isempty(loop.cfg.ndf.pipe) == false)
 	if(cl_checkname(loop.cfg.ndf.pipe) == true)

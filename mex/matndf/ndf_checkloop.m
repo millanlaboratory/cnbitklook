@@ -15,12 +15,15 @@
 % along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 function ndf_checkloop(pn, aD, aC)
+
+if(nargin == 0) pn = ''; aD = ''; aC = ''; end
 % Include all the required toolboxes
 ndf_include();
 
 % Prepare and enter main loop
 try 
 	% Prepare Loop structure
+	loop.exit = true;
 	loop.cl   = cl_new();
 	loop.jump = ndf_jump();
 	loop.cfg  = ccfg_new();
@@ -44,7 +47,7 @@ try
 	% - also, if the nameserver query fails, pn, aD and aC will be empty and
 	%   their values will be set according to the XML configuration
 	loop = ndf_loopconfig(loop, 'checkloop', pn, aD, aC);
-	loop = ndf_checknames(loop);
+	loop = ndf_loopnames(loop);
 
 	if(isempty(loop.cfg.ndf.pipe))
 		disp('[ndf_checkloop] NDF configuration failed, killing matlab:');
@@ -216,19 +219,22 @@ catch exception
 	disp(['[ndf_checkloop] Exception: ' exception.message ]);
 	disp(exception);
 	disp(exception.stack);
-	disp('[ndf_checkloop] Killing Matlab...');
-	kk
-	ndf_close(ndf.sink);
-	cl_delete(loop.cl);
-	ccfg_delete(loop.cfg);
-	icserializerrapid_delete(loop.sC);
-	idserializerrapid_delete(loop.sD);
-	icmessage_delete(loop.mC);
-	idmessage_delete(loop.mD);
-	tr_free(loop.nC);
-	tr_free(loop.nD);
-	
-	exit;
+	disp('[ndf_checkloop] Going down');
+	loop.exit = true;
 end
 
-disp('[ndf_checkloop] Going down');
+if(ndf.sink); ndf_close(ndf.sink); end
+if(loop.cl); cl_delete(loop.cl); end
+loop = ndf_loopdelete(loop);
+if(loop.sC); icserializerrapid_delete(loop.sC); end
+if(loop.sD); idserializerrapid_delete(loop.sD); end
+if(loop.mC); icmessage_delete(loop.mC); end
+if(loop.mD); idmessage_delete(loop.mD); end
+if(loop.nC); tr_free(loop.nC); end
+if(loop.nD); tr_free(loop.nD); end
+fclose('all');
+
+disp('[ndf_checkloop] Killing Matlab...');
+if(loop.exit == true)
+	exit;
+end
