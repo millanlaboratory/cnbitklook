@@ -117,13 +117,7 @@
 				<a href="#file_end">Scroll down</a> |
 				<a href="../">Parent directory</a> |
 				<a href="./">Current directory</a> 
-				<a name="file_begin"></a> |
-				<a href="javascript:location.reload(true)">Refresh</a> 
-				[<a href="javascript:dtrefresh(1000)">1s</a> |
-				<a href="javascript:dtrefresh(2000)">2s</a> |
-				<a href="javascript:dtrefresh(5000)">5s</a> |
-				<a href="javascript:dtrefresh(10000)">10s</a> |
-				<a href="javascript:dtrefresh(60000)">60s</a>]
+				<a name="file_begin"></a>
 			</p>
 			<!--
 			<center>
@@ -202,13 +196,7 @@
 			<p>
 			<a href="#file_begin">Scroll up</a> |
 			<a href="../">Parent directory</a> |
-			<a href="../">Current directory</a> |
-			<a href="javascript:location.reload(true)">Refresh</a> 
-			[<a href="javascript:dtrefresh(1000)">1s</a> |
-			<a href="javascript:dtrefresh(2000)">2s</a> |
-			<a href="javascript:dtrefresh(5000)">5s</a> |
-			<a href="javascript:dtrefresh(10000)">10s</a> |
-			<a href="javascript:dtrefresh(60000)">60s</a>]
+			<a href="../">Current directory</a>
 			<a name="file_end"></a> 
 			</p>
 
