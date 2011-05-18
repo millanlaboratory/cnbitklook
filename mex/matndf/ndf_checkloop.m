@@ -21,9 +21,21 @@ ndf_include();
 % Prepare and enter main loop
 try 
 	% Prepare Loop structure
-	loop.cl   = ndf_cl();
+	loop.cl   = cl_new();
 	loop.jump = ndf_jump();
+	loop.cfg  = ccfg_new();
+	loop.mC   = icmessage_new();
+	loop.mD   = idmessage_new();
+	loop.sC   = icserializerrapid_new(loop.mC);
+	loop.sD   = idserializerrapid_new(loop.mD);
+	loop.nC   = tr_new();
+	loop.nD   = tr_new();
 	
+	if(cl_connect(loop.cl) == false)
+		disp('[ndf_checkloop] Cannot connect to CNBI Loop, killing matlab');
+		exit;
+	end	
+
 	% Check the names
 	% - if in format /name, then query the nameserver for the IPs/filenames
 	% - otherwise, keep them as they are
@@ -31,30 +43,29 @@ try
 	%   will be set according to what is stored in the XML configuration
 	% - also, if the nameserver query fails, pn, aD and aC will be empty and
 	%   their values will be set according to the XML configuration
-	cfg = ndf_cl_getconfig(loop.cl, 'checkloop', pn, aD, aC);
-	[pn, aD, aC] = ndf_checknames(loop.cl, cfg.ndf.pipe, cfg.ndf.id, cfg.ndf.ic);
-	
-	if(isempty(pn))
-		%|| isempty(aD) || isempty(aC))
+	loop = ndf_loopconfig(loop, 'checkloop', pn, aD, aC);
+	loop = ndf_checknames(loop);
+
+	if(isempty(loop.cfg.ndf.pipe))
 		disp('[ndf_checkloop] NDF configuration failed, killing matlab:');
-		disp(['  Pipename:   "' pn '"']);
-		disp(['  iD address: "' aD '"']);
-		disp(['  iC address: "' aC '"']);
+		disp(['  Pipename:   "' loop.cfg.ndf.pipe '"']);
+		disp(['  iC address: "' loop.cfg.ndf.ic '"']);
+		disp(['  iD address: "' loop.cfg.ndf.id '"']);
 		exit;
 	end
-	
+
 	% Prepare TOBI structure
 	% - when retrieving the taskset from the XML configuration, we also ask 
 	%   for an iC message to be returned configured according to the taskset
 	% - later on we will also aks for an iD message, but as today this is not
 	%   implemented yet
-	tobi = ndf_tobi(aD, aC, cfg.messageC, cfg.messageD);
+	tobi = ndf_tobi(loop);
+
 	% -------------------------------------------------------------- %
 	% User initialization                                            %
 	% -------------------------------------------------------------- %
-	cfg.ns.plot = cl_retrieveconfig(loop.cl, 'checkloop', 'plot');
-	cfg.plot = strcmp(cfg.ns.plot, 'true');
-	%cfg.plot = 1;
+	user.ns.plot = cl_retrieveconfig(loop.cl, 'checkloop', 'plot');
+	user.plot = strcmp(user.ns.plot, 'true');
 	% -------------------------------------------------------------- %
 	% /User initialization                                           %
 	% -------------------------------------------------------------- %
@@ -63,13 +74,14 @@ try
 	ndf.conf  = {};
 	ndf.size  = 0;
 	ndf.frame = ndf_frame();
-	ndf.sink  = ndf_sink(pn);
+	ndf.sink  = ndf_sink(loop.cfg.ndf.pipe);
 
 	% -------------------------------------------------------------- %
 	% User TOBI configuration                                        %
 	% -------------------------------------------------------------- %
 	% Configure TiD message
 	idmessage_setevent(tobi.iD.message, 0);
+	% Dump TiC/TiD messages
 	icmessage_dumpmessage(tobi.iC.message);
 	idmessage_dumpmessage(tobi.iD.message);
 	% -------------------------------------------------------------- %
@@ -136,7 +148,7 @@ try
 		% -------------------------------------------------------------- %
 		% User main loop                                                 %
 		% -------------------------------------------------------------- %
-		if(cfg.plot == true)
+		if(user.plot == true)
 			eegc3_figure(1);
 			subplot(7, 1, 1:4)
 			imagesc(eegc3_car(eegc3_dc(buffer.eeg))');
@@ -179,11 +191,11 @@ try
 		
 		% Same as before, for TiC
 		if(ndf_tobi_connectic(tobi) == true)
-			for t = 0:ccfgtaskset_count(cfg.taskset) - 1
-				taskname = ccfgtaskset_gettaskbyid(cfg.taskset, t);
+			for t = 0:ccfgtaskset_count(loop.cfg.taskset) - 1
+				taskname = ccfgtaskset_gettaskbyid(loop.cfg.taskset, t);
 				tasklabel = num2str(ccfgtask_getgdf(taskname));
 				icmessage_setvalue(tobi.iC.message, ...
-					cfg.classifier.name, ...
+					loop.cfg.classifier.name, ...
 					tasklabel, ...
 					ndf.frame.index);
 			end
@@ -205,16 +217,18 @@ catch exception
 	disp(exception);
 	disp(exception.stack);
 	disp('[ndf_checkloop] Killing Matlab...');
-	
+	kk
 	ndf_close(ndf.sink);
-	ndf_cl_close(loop.cl);
-	ndf_cl_deleteconfig(cfg);
-	ndf_tobi_close(tobi);
+	cl_delete(loop.cl);
+	ccfg_delete(loop.cfg);
+	icserializerrapid_delete(loop.sC);
+	idserializerrapid_delete(loop.sD);
+	icmessage_delete(loop.mC);
+	idmessage_delete(loop.mD);
+	tr_free(loop.nC);
+	tr_free(loop.nD);
+	
 	exit;
 end
 
 disp('[ndf_checkloop] Going down');
-ndf_close(ndf.sink);
-ndf_cl_close(loop.cl);
-ndf_cl_deleteconfig(cfg);
-ndf_tobi_close(tobi);

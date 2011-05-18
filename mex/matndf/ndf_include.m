@@ -25,7 +25,11 @@ try
 		setenv('EEGC3_ROOT', '/opt/eegc3');
 	end
 
-	addpath([getenv('CNBITKMAT_ROOT') '/mtpath']);
+	mtpath_root = [getenv('CNBITKMAT_ROOT') '/mtpath'];
+	if(exist(mtpath_root, 'dir'))
+		addpath(mtpath_root);
+	end
+
 	if(isempty(which('mtpath_include')))
 		disp('[ndf_include] mtpath not installed, killing Matlab');
 		exit;

@@ -16,19 +16,4 @@
 function tobi = ndf_tobi_close(tobi)
 
 tr_close(tobi.iC.socket);
-tr_free(tobi.iC.socket);
-if(tobi.iC.socket)
-	tr_delete(tobi.iC.socket);
-end
-if(tobi.iC.serializer)
-	icserializerrapid_delete(tobi.iC.serializer);
-end
-
 tr_close(tobi.iD.socket);
-tr_free(tobi.iD.socket);
-if(tobi.iD.socket)
-	tr_delete(tobi.iD.socket);
-end
-if(tobi.iD.serializer)
-	idserializerrapid_delete(tobi.iD.serializer);
-end

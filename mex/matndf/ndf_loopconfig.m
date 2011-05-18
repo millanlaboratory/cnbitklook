@@ -13,7 +13,7 @@
 %
 % You should have received a copy of the GNU General Public License
 % along with this program.  If not, see <http://www.gnu.org/licenses/>.
-function cfg = ndf_cl_getconfig(cl, name, pn, aD, aC);
+function loop = ndf_loopconfig(loop, name, pn, aD, aC);
 
 if(nargin < 3); pn = ''; end
 if(nargin < 4); aD = ''; end
@@ -25,27 +25,28 @@ if(nargin < 5); aC = ''; end
 % - xml			the XML filename
 % - path		the working directory
 cfg = {};
-cfg.ns.modality = cl_retrieveconfig(cl, name, 'modality');
-cfg.ns.block    = cl_retrieveconfig(cl, name, 'block');
-cfg.ns.taskset  = cl_retrieveconfig(cl, name, 'taskset');
-cfg.ns.xml      = cl_retrieveconfig(cl, name, 'xml');
-cfg.ns.path     = cl_retrieveconfig(cl, name, 'path');
+cfg.ns.modality = cl_retrieveconfig(loop.cl, name, 'modality');
+cfg.ns.block    = cl_retrieveconfig(loop.cl, name, 'block');
+cfg.ns.taskset  = cl_retrieveconfig(loop.cl, name, 'taskset');
+cfg.ns.xml      = cl_retrieveconfig(loop.cl, name, 'xml');
+cfg.ns.path     = cl_retrieveconfig(loop.cl, name, 'path');
 
 cfg.config = ccfg_new();
 if(ccfg_importfile(cfg.config, cfg.ns.xml) == 0)
-	disp('[ndf_cl_config] Cannot load XML file, killing matlab');
-	exit;
+	disp('[ndf_loopconfig] Cannot load XML file');
+	cfg.config = ccfg_delete(cfg.config);
+	return;
 end
 
 % Use ccfg_* to load the XML and retrieve the taskset. 
-cfg.messageC = icmessage_new();
-cfg.messageD = idmessage_new();
 cfg.taskset = ccfg_online(cfg.config, cfg.ns.block, cfg.ns.taskset, ...
-	cfg.messageC, cfg.messageD);
+	loop.mC, loop.mD);
 if(cfg.taskset == 0)	
-	disp('[ndf_cl_config] Cannot retrieve taskset, killing matlab');
-	exit;
+	disp('[ndf_loopconfig] Cannot retrieve taskset');
+	cfg.config = ccfg_delete(cfg.config);
+	return;
 end
+
 
 % The taskset contains informations about:
 % - the classifier
@@ -85,3 +86,5 @@ fprintf(1, '[ndf_cl_config] Classifier configuration:\n');
 fprintf(1, '  Name      %s\n', cfg.classifier.name);
 fprintf(1, '  Desc.:    %s\n', cfg.classifier.desc);
 fprintf(1, '  Filename: %s\n', cfg.classifier.file);
+
+loop.cfg = cfg;

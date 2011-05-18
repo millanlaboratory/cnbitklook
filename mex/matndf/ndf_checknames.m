@@ -13,14 +13,16 @@
 %
 % You should have received a copy of the GNU General Public License
 % along with this program.  If not, see <http://www.gnu.org/licenses/>.
-function [pipename, addressD, addressC] = ndf_checknames(cl, pipename, addressD, addressC)
+%
+% See weather loop.cfg.ndf.id and loop.cfg.ndf.ic are valid port names (i.e.
+% /PORT), otherwise die
 
-% See weather addressD and addressC are valid port names (i.e. /PORT),
-% otherwise die
-if(isempty(pipename) == false)
-	if(cl_checkname(pipename) == true)
-		pipename = cl_query(cl, pipename);
-		if(isempty(pipename))
+function loop  = ndf_checknames(loop)
+
+if(isempty(loop.cfg.ndf.pipe) == false)
+	if(cl_checkname(loop.cfg.ndf.pipe) == true)
+		loop.cfg.ndf.pipe = cl_query(loop.cl, loop.cfg.ndf.pipe);
+		if(isempty(loop.cfg.ndf.pipe))
 			disp(['[ndf_checknames] Warning: pipename not found!']);
 		end
 	else
@@ -30,10 +32,10 @@ else
 	disp('[ndf_checknames] Pipename is empty, XML configuration required');
 end
 
-if(isempty(addressD) == false)
-	if(cl_checkname(addressD) == true)
-		addressD = cl_query(cl, addressD);
-		if(isempty(addressD))
+if(isempty(loop.cfg.ndf.id) == false)
+	if(cl_checkname(loop.cfg.ndf.id) == true)
+		loop.cfg.ndf.id = cl_query(loop.cl, loop.cfg.ndf.id);
+		if(isempty(loop.cfg.ndf.id))
 			disp(['[ndf_checknames] Warning: iD address not found!']);
 		end
 	else
@@ -43,10 +45,10 @@ else
 	disp('[ndf_checknames] iD address is empty, XML configuration required');
 end
 
-if(isempty(addressC) == false)
-	if(cl_checkname(addressC) == true)
-		addressC = cl_query(cl, addressC);
-		if(isempty(addressC))
+if(isempty(loop.cfg.ndf.ic) == false)
+	if(cl_checkname(loop.cfg.ndf.ic) == true)
+		loop.cfg.ndf.ic = cl_query(loop.cl, loop.cfg.ndf.ic);
+		if(isempty(loop.cfg.ndf.ic))
 			disp(['[ndf_checknames] Warning: iC address not found!']);
 		end
 	else
