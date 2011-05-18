@@ -23,7 +23,8 @@
 #include "CcBasic.hpp"
 #include <stdio.h>
 #include <string.h>
-
+#include <transport/tr_names.h>
+#include <transport/tr_types.h>
 
 CcSocket::CcSocket(size_t bsize) {
 	this->_semsocket.Wait();
@@ -241,6 +242,12 @@ void CcSocket::Dump(void) {
 		printf("\n");
 	}
 
+}
+
+CcAddress CcSocket::Lookup(std::string name) {
+	char address[tr_getaddrlen()];
+	tr_resolve(name.c_str(), address);
+	return CcAddress(address);
 }
 
 #endif

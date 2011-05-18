@@ -54,7 +54,6 @@ class CcCore {
 		static std::string GetDirectoryHome(void);
 		static std::string GetUsername(void);
 		static std::string GetModulename(void);
-		static CcAddress Lookup(std::string name);
 		static void CatchSIGINT(void);
 		static void CatchSIGQUIT(void);
 		static void CatchSIGTERM(void);

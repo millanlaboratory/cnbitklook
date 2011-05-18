@@ -51,6 +51,7 @@ class CcSocket : public CcObject {
 		int GetFID(void);
 		virtual bool IsConnected(void);
 		void Dump(void);
+		static CcAddress Lookup(std::string name);
 	protected:
 		virtual ssize_t Send(const char* message) = 0;
 		virtual ssize_t Send(const std::string& message) = 0;
