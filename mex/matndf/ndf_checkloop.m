@@ -205,15 +205,16 @@ catch exception
 	disp(exception);
 	disp(exception.stack);
 	disp('[ndf_checkloop] Killing Matlab...');
-	%ndf_close(ndf.sink);
-	%ndf_tobi_close(tobi);
-	%cl_disconnect(loop.cl);
-	%cl_delete(loop.cl);
+	
+	ndf_close(ndf.sink);
+	ndf_cl_close(loop.cl);
+	ndf_cl_deleteconfig(cfg);
+	ndf_tobi_close(tobi);
 	exit;
 end
 
 disp('[ndf_checkloop] Going down');
 ndf_close(ndf.sink);
+ndf_cl_close(loop.cl);
+ndf_cl_deleteconfig(cfg);
 ndf_tobi_close(tobi);
-cl_disconnect(loop.cl);
-cl_delete(loop.cl);

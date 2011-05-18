@@ -70,6 +70,7 @@ $ #include <stdio.h>
 % Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
 % Michele Tavella <michele.tavella@epfl.ch>
 	# delete(CCfgConfig* cptr);
+	cptr = 0;
 
 @function [status] = ccfg_validate(cptr)
 % Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
@@ -251,6 +252,7 @@ $ #include <stdio.h>
 % Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
 % Michele Tavella <michele.tavella@epfl.ch>
 	# delete(CCfgTaskset* tptr);
+	tptr = 0;
 
 @function [kptr, tptr] = ccfgtaskset_gettask(tptr, what)
 % Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)

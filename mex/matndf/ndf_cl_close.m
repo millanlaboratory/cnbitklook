@@ -13,7 +13,9 @@
 %
 % You should have received a copy of the GNU General Public License
 % along with this program.  If not, see <http://www.gnu.org/licenses/>.
-function ndf_cl_close(cl)
+function cl = ndf_cl_close(cl)
 
-cl_disconnect(cl);
-cl_delete(cl);
+if(cl)
+	cl_disconnect(cl);
+	cl_delete(cl);
+end

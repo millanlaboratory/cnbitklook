@@ -36,6 +36,7 @@ $ #include <stdio.h>
 % Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
 % Michele Tavella <michele.tavella@epfl.ch>
 	# ClLoop::Release();
+	sptr = 0;
 
 @function [status] = cl_connect(c, nameserver)
 % Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)

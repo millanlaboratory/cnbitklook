@@ -34,6 +34,7 @@ $ #include <stdlib.h>
 % Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
 % Michele Tavella <michele.tavella@epfl.ch>
 	# free(tr_socket* sptr);
+	sptr = 0;
 
 @function [sptr] = tr_init_socket(sptr, bsize, mconn);
 % Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)

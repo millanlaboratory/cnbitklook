@@ -15,26 +15,13 @@
 % along with this program.  If not, see <http://www.gnu.org/licenses/>.
 function tobi = ndf_tobi(addressD, addressC, messageC, messageD)
 
-if(nargin < 3)
-	messageC = 0;
-end
-if(nargin < 4)
-	messageD = 0;
-end
-
 tobi = {};
 
 % Configure TCP endpoints for TiD 
 tobi.iD.socket  	= [];
 tobi.iD.address 	= '127.0.0.1:9000';
 tobi.iD.ipport  	= {'127.0.0.1', '9000'};
-if(messageD == 0)
-	disp('[ndf_tobi] Creating new TOBI iD message');
-	tobi.iD.message = idmessage_new();
-else
-	disp('[ndf_tobi] Using existing TOBI iD message');
-	tobi.iD.message = messageD;
-end
+tobi.iD.message     = messageD;
 tobi.iD.serializer 	= idserializerrapid_new(tobi.iD.message);
 tobi.iD.buffer 		= '';
 tobi.iD.cache 		= '';
@@ -46,13 +33,7 @@ tobi.iD.queue 		= {};
 tobi.iC.socket  	= [];
 tobi.iC.address 	= '127.0.0.1:9500';
 tobi.iC.ipport  	= {'127.0.0.1', '9500'};
-if(messageC == 0)
-	disp('[ndf_tobi] Creating new TOBI iC message');
-	tobi.iC.messag 	= icmessage_new();
-else
-	disp('[ndf_tobi] Using existing TOBI iC message');
-	tobi.iC.message	= messageC;
-end
+tobi.iC.message	    = messageC;
 tobi.iC.serializer  = icserializerrapid_new(tobi.iC.message);
 tobi.iC.cache 		= '';
 tobi.iC.hdr 		= '<tobiic';

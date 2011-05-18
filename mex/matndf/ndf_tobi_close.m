@@ -13,16 +13,22 @@
 %
 % You should have received a copy of the GNU General Public License
 % along with this program.  If not, see <http://www.gnu.org/licenses/>.
-function ndf_tobi_close(tobi)
+function tobi = ndf_tobi_close(tobi)
 
 tr_close(tobi.iC.socket);
 tr_free(tobi.iC.socket);
-tr_delete(tobi.iC.socket);
-icmessage_delete(tobi.iC.message);
-icserializerrapid_delete(tobi.iC.serializer);
+if(tobi.iC.socket)
+	tr_delete(tobi.iC.socket);
+end
+if(tobi.iC.serializer)
+	icserializerrapid_delete(tobi.iC.serializer);
+end
 
 tr_close(tobi.iD.socket);
 tr_free(tobi.iD.socket);
-tr_delete(tobi.iD.socket);
-idmessage_delete(tobi.iD.message);
-idserializerrapid_delete(tobi.iD.serializer);
+if(tobi.iD.socket)
+	tr_delete(tobi.iD.socket);
+end
+if(tobi.iD.serializer)
+	idserializerrapid_delete(tobi.iD.serializer);
+end
