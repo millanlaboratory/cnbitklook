@@ -17,10 +17,14 @@
 clear all;
 if(mtpath_include('/opt/mextobiic') == 0)
 	mtpath_include('$CNBITKMAT_ROOT/mextobiic');
+	mtpath_include('$CNBITKMAT_ROOT/mextobiid');
 end
 
 config = ccfg_new();
-ccfg_importfile(config, '../extra/cnbiconfig_example.xml');
+if(ccfg_importfile(config, '../../extra/cnbiconfig_example.xml') == 0)
+	disp('Error: cannot import file');
+	exit(0);
+end
 
 ccfg_root(config);
 ccfg_setbranch(config);
@@ -41,20 +45,22 @@ ccfg_root(config);
 fprintf(1, 'Shared control: %d\n', ...
 	ccfg_quickbool(config, 'options/robotino/sharedcontrol'));
 
+md = idmessage_new();
 mOnlineMI = icmessage_new();
 mOnlineErrP = icmessage_new();
 sOnlineMI = icserializerrapid_new(mOnlineMI);
 sOnlineErrP = icserializerrapid_new(mOnlineErrP);
 
-[tOnlineMI, config] = ccfg_onlinem(config, 'smr', 'mi_rhlh', ...
-	mOnlineMI);
+[tOnlineMI] = ccfg_online(config, 'mi', 'mi_rhlh', mOnlineMI, md);
+icmessage_dumpmessage(mOnlineMI);
+idmessage_dumpmessage(md);
 if(tOnlineMI == 0)
-	fprintf(1, 'Not found\n');
+	fprintf(1, 'Taskset not found\n');
 	return;
 end
 
-[tOnlineErrP, config] = ccfg_onlinem(config, 'smrerrp', 'errp', ...
-	mOnlineErrP);
+[tOnlineErrP] = ccfg_online(config, 'smrerrp', 'errp', ...
+	mOnlineErrP, 0);
 if(tOnlineMI == 0)
 	fprintf(1, 'Not found\n');
 	return;
@@ -97,10 +103,8 @@ fprintf(1, 'ICMessage for ErrP: %s\n', messageErrP);
 	
 mOnlineAll = icmessage_new();
 sOnlineAll = icserializerrapid_new(mOnlineAll);
-[tOnlineMI2, config] = ccfg_onlinem(config, 'smr', 'mi_rhlh', ...
-	mOnlineAll);
-[tOnlineErrP, config] = ccfg_onlinem(config, 'smrerrp', 'errp', ...
-	mOnlineAll);
+[tOnlineMI2] = ccfg_online(config, 'smr', 'mi_rhlh', mOnlineAll);
+[tOnlineErrP] = ccfg_online(config, 'smrerrp', 'errp', mOnlineAll);
 messageAll = icmessage_serialize(sOnlineAll);
 fprintf(1, 'ICMessage for MI+ErrP: %s\n', messageAll);
 

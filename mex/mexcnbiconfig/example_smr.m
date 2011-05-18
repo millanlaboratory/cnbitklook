@@ -20,13 +20,13 @@ if(mtpath_include('/opt/mextobiic') == 0)
 end
 
 config = ccfg_new();
-ccfg_importfile(config, '../extra/cnbiconfig_example.xml');
+ccfg_importfile(config, '../../extra/cnbiconfig_example.xml');
 
 % Allocate ICMessage and ICSerializerRapid wrappers
 ic.message = icmessage_new();
 ic.serializer = icserializerrapid_new(ic.message);
 
-taskset = ccfg_onlinem(config, 'mi', 'mi_rhlh', ic.message);
+taskset = ccfg_online(config, 'mi', 'mi_rhlh', ic.message);
 
 if(taskset == 0)
 	disp('Error: taskset not found');
@@ -44,7 +44,7 @@ tasks = {};
 labels = {};
 for i = 1:tasktot
 	tasks{i} = ccfgtaskset_gettaskbyid(taskset, i-1);
-	labels{i} = ccfgtask_getname(tasks{i});
+	labels{i} = num2str(ccfgtask_getgdf(tasks{i}));
 end
 
 % Simulate online loop, in which we map a cprobs vector to ICMessage

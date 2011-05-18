@@ -36,7 +36,7 @@ try
 	
 	if(isempty(pn))
 		%|| isempty(aD) || isempty(aC))
-		disp('[ndf_monitor] NDF configuration failed, killing matlab:');
+		disp('[ndf_checkloop] NDF configuration failed, killing matlab:');
 		disp(['  Pipename:   "' pn '"']);
 		disp(['  iD address: "' aD '"']);
 		disp(['  iC address: "' aC '"']);
@@ -48,7 +48,7 @@ try
 	%   for an iC message to be returned configured according to the taskset
 	% - later on we will also aks for an iD message, but as today this is not
 	%   implemented yet
-	tobi = ndf_tobi(aD, aC, cfg.messageC);
+	tobi = ndf_tobi(aD, aC, cfg.messageC, cfg.messageD);
 	% -------------------------------------------------------------- %
 	% User initialization                                            %
 	% -------------------------------------------------------------- %
@@ -69,9 +69,9 @@ try
 	% User TOBI configuration                                        %
 	% -------------------------------------------------------------- %
 	% Configure TiD message
-	idmessage_setdescription(tobi.iD.message, 'ndf_monitor');
-	idmessage_setfamilytype(tobi.iD.message, idmessage_familytype('biosig'));
 	idmessage_setevent(tobi.iD.message, 0);
+	icmessage_dumpmessage(tobi.iC.message);
+	idmessage_dumpmessage(tobi.iD.message);
 	% -------------------------------------------------------------- %
 	% /User TOBI configuration                                       %
 	% -------------------------------------------------------------- %
@@ -79,7 +79,7 @@ try
 	% Pipe opening and NDF configurationf
 	% - Here the pipe is opened
 	% - ... and the NDF ACK frame is received
-	disp('[ndf_monitor] Receiving ACK...');
+	disp('[ndf_checkloop] Receiving ACK...');
 	[ndf.conf, ndf.size] = ndf_ack(ndf.sink);
 	
 	% -------------------------------------------------------------- %
@@ -93,7 +93,7 @@ try
 	% NDF ACK check
 	% - The NDF id describes the acquisition module running
 	% - Bind your modules to a particular configuration (if needed)
-	disp(['[ndf_monitor] NDF type id: ' num2str(ndf.conf.id)]);
+	disp(['[ndf_checkloop] NDF type id: ' num2str(ndf.conf.id)]);
 
 	% Ring-buffers
 	% - By default they contain the last 2 seconds of data
@@ -102,7 +102,7 @@ try
 	%   also configure buffer.tim in this way:
 	%   buffer.tim = ndf_ringbuffer(ndf.conf.sf/ndf.conf.samples, 10);
 	%
-	disp('[ndf_monitor] Creating ring-buffers');
+	disp('[ndf_checkloop] Creating ring-buffers');
 	buffer.eeg = ndf_ringbuffer(ndf.conf.sf, ndf.conf.eeg_channels, 2.00);
 	buffer.exg = ndf_ringbuffer(ndf.conf.sf, ndf.conf.exg_channels, 2.00);
 	buffer.tri = ndf_ringbuffer(ndf.conf.sf, ndf.conf.tri_channels, 2.00);
@@ -111,7 +111,7 @@ try
 	% - Each NDF frame carries an index number
 	% - ndf_jump*.m are methods to verify whether your script is
 	%   running too slow
-	disp('[ndf_monitor] Receiving NDF frames...');
+	disp('[ndf_checkloop] Receiving NDF frames...');
 	loop.jump.tic = ndf_tic();
 	while(true) 
 		% Read NDF frame from pipe
@@ -121,7 +121,7 @@ try
 
 		% Acquisition is down, exit
 		if(ndf.size == 0)
-			disp('[ndf_monitor] Broken pipe');
+			disp('[ndf_checkloop] Broken pipe');
 			break;
 		end
 		
@@ -196,15 +196,15 @@ try
 		% Check if module is running slow
 		loop.jump = ndf_jump_update(loop.jump, ndf.frame.index);
 		if(loop.jump.isjumping)
-			disp('[ndf_monitor] Error: running slow');
+			disp('[ndf_checkloop] Error: running slow');
 			break;
 		end
 	end
 catch exception
-	disp(['[ndf_monitor] Exception: ' exception.message ]);
+	disp(['[ndf_checkloop] Exception: ' exception.message ]);
 	disp(exception);
 	disp(exception.stack);
-	disp('[ndf_monitor] Killing Matlab...');
+	disp('[ndf_checkloop] Killing Matlab...');
 	%ndf_close(ndf.sink);
 	%ndf_tobi_close(tobi);
 	%cl_disconnect(loop.cl);
@@ -212,7 +212,7 @@ catch exception
 	exit;
 end
 
-disp('[ndf_monitor] Going down');
+disp('[ndf_checkloop] Going down');
 ndf_close(ndf.sink);
 ndf_tobi_close(tobi);
 cl_disconnect(loop.cl);

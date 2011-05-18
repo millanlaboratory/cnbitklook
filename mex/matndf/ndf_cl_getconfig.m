@@ -39,8 +39,9 @@ end
 
 % Use ccfg_* to load the XML and retrieve the taskset. 
 cfg.messageC = icmessage_new();
-cfg.taskset = ...
-	ccfg_onlinem(cfg.config, cfg.ns.block, cfg.ns.taskset, cfg.messageC);
+cfg.messageD = idmessage_new();
+cfg.taskset = ccfg_online(cfg.config, cfg.ns.block, cfg.ns.taskset, ...
+	cfg.messageC, cfg.messageD);
 if(cfg.taskset == 0)	
 	disp('[ndf_cl_config] Cannot retrieve taskset, killing matlab');
 	exit;

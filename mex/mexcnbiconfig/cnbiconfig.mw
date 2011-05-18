@@ -16,6 +16,7 @@
 
 
 $ #include <tobiic/ICMessage.hpp>
+$ #include <tobiid/IDMessage.hpp>
 $ #include <cnbiconfig/CCfgConfig.hpp>
 $ #include <cnbiconfig/CCfgTask.hpp>
 $ #include <cnbiconfig/CCfgTaskset.hpp>
@@ -70,15 +71,15 @@ $ #include <stdio.h>
 % Michele Tavella <michele.tavella@epfl.ch>
 	# delete(CCfgConfig* cptr);
 
-@function [retval, cptr] = ccfg_validate(cptr)
+@function [status] = ccfg_validate(cptr)
 % Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
 % Michele Tavella <michele.tavella@epfl.ch>
 	$ bool validate(CCfgConfig* cptr) {
 	$ 	return cptr->Validate();
 	$ }
-	# bool retval = validate(CCfgConfig* cptr);
+	# bool status = validate(CCfgConfig* cptr);
 
-@function [retval, cptr] = ccfg_offline(cptr, blockname, taskset)
+@function [retval] = ccfg_offline(cptr, blockname, taskset)
 % Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
 % Michele Tavella <michele.tavella@epfl.ch>
 	$ CCfgTaskset* offline(CCfgConfig* cptr, std::string* blockname, std::string* taskset) {
@@ -94,28 +95,14 @@ $ #include <stdio.h>
 	# std::string* staskset = new std::string(cstring taskset);
 	# CCfgTaskset* retval = offline(CCfgConfig* cptr, std::string* sblockname, std::string* staskset);
 
-@function [t, cptr] = ccfg_online(cptr, blockname, taskset)
+@function [t] = ccfg_online(cptr, blockname, taskset, messagec, messaged)
 % Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
 % Michele Tavella <michele.tavella@epfl.ch>
-	$ CCfgTaskset* online(CCfgConfig* cptr, std::string* blockname, std::string* taskset) {
+	if(nargin < 5); messaged = 0; end
+	if(nargin < 4); messagec = 0; end
+	$ CCfgTaskset* online(CCfgConfig* cptr, std::string* blockname, std::string* taskset, ICMessage* mc, IDMessage* md) {
 	$	try {
-	$ 		return cptr->OnlineEx(*blockname, *taskset);
-	$	} catch(XMLException e) {
-	$		printf("[ccfg_online] Exception in libcnbiconfig: %s, %s\n",
-	$			e.Caller().c_str(), e.Info().c_str());
-	$		return NULL;
-	$	}
-	$ }
-	# std::string* sblockname = new std::string(cstring blockname);
-	# std::string* staskset = new std::string(cstring taskset);
-	# CCfgTaskset* t = online(CCfgConfig* cptr, std::string* sblockname, std::string* staskset);
-
-@function [t, cptr] = ccfg_onlinem(cptr, blockname, taskset, message)
-% Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
-% Michele Tavella <michele.tavella@epfl.ch>
-	$ CCfgTaskset* onlinem(CCfgConfig* cptr, std::string* blockname, std::string* taskset, ICMessage* message) {
-	$	try {
-	$ 		return cptr->OnlineEx(*blockname, *taskset, message);
+	$ 		return cptr->OnlineEx(*blockname, *taskset, mc, md);
 	$	} catch(XMLException e) {
 	$		printf("[ccfg_onlinem] Exception in libcnbiconfig: %s, %s\n",
 	$			e.Caller().c_str(), e.Info().c_str());
@@ -124,63 +111,71 @@ $ #include <stdio.h>
 	$ }
 	# std::string* sblockname = new std::string(cstring blockname);
 	# std::string* staskset = new std::string(cstring taskset);
-	# CCfgTaskset* t = onlinem(CCfgConfig* cptr, std::string* sblockname,  std::string* staskset, ICMessage* message);
+	# CCfgTaskset* t = online(CCfgConfig* cptr, std::string* sblockname, std::string* staskset, ICMessage* messagec, IDMessage* messaged);
 
-@function [cptr] = ccfg_root(cptr)
+@function [status] = ccfg_root(cptr)
 % Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
 % Michele Tavella <michele.tavella@epfl.ch>
-	$ void root(CCfgConfig* cptr) {
+	$ bool root(CCfgConfig* cptr) {
 	$	try {
 	$ 		cptr->RootEx();
 	$	} catch(XMLException e) {
 	$		printf("[ccfg_root] Exception in libcnbiconfig: %s, %s\n",
 	$			e.Caller().c_str(), e.Info().c_str());
+	$		return 0;
 	$	}
+	$	return 1;
 	$ }
-	# root(CCfgConfig* cptr);
+	# bool status = root(CCfgConfig* cptr);
 
-@function [cptr] = ccfg_branch(cptr)
+@function [status] = ccfg_branch(cptr)
 % Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
 % Michele Tavella <michele.tavella@epfl.ch>
-	$ void branch(CCfgConfig* cptr) {
+	$ bool branch(CCfgConfig* cptr) {
 	$	try {
 	$ 		cptr->BranchEx();
 	$	} catch(XMLException e) {
 	$		printf("[ccfg_branch] Exception in libcnbiconfig: %s, %s\n",
 	$			e.Caller().c_str(), e.Info().c_str());
+	$		return 0;
 	$	}
+	$	return 1;
 	$ }
-	# branch(CCfgConfig* cptr);
+	# bool status = branch(CCfgConfig* cptr);
 
-@function [cptr] = ccfg_setbranch(cptr)
+@function [status] = ccfg_setbranch(cptr)
 % Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
 % Michele Tavella <michele.tavella@epfl.ch>
-	$ void setbranch(CCfgConfig* cptr) {
+	$ bool setbranch(CCfgConfig* cptr) {
 	$	try {
 	$ 		cptr->SetBranch();
 	$	} catch(XMLException e) {
 	$		printf("[ccfg_setbranch] Exception in libcnbiconfig: %s, %s\n",
 	$			e.Caller().c_str(), e.Info().c_str());
+	$		return 0;
 	$	}
+	$	return 1;
 	$ }
-	# setbranch(CCfgConfig* cptr);
+	# bool status = setbranch(CCfgConfig* cptr);
 
-@function [retval, cptr] = ccfg_quickstring(cptr, path)
+@function [retval, status] = ccfg_quickstring(cptr, path)
 % Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
 % Michele Tavella <michele.tavella@epfl.ch>
-	$ void quickstring(CCfgConfig* cptr, std::string* path, char* buffer) {
+	$ bool quickstring(CCfgConfig* cptr, std::string* path, char* buffer) {
 	$	try {
 	$ 		std::string result = cptr->QuickStringEx(*path);
 	$ 		strcpy(buffer, result.c_str());
 	$	} catch(XMLException e) {
 	$		printf("[ccfg_quickstring] Exception in libcnbiconfig: %s, %s\n",
 	$			e.Caller().c_str(), e.Info().c_str());
+	$		return 0;
 	$	}
+	$	return 1;
 	$ }
 	$
 	retval = '';
 	# std::string* spath = new std::string(cstring path);
-	# quickstring(CCfgConfig* cptr, std::string* spath, inout cstring[4096] retval);
+	# bool status = quickstring(CCfgConfig* cptr, std::string* spath, inout cstring[4096] retval);
 
 @function [retval, cptr] = ccfg_quickbool(cptr, path)
 % Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
@@ -215,7 +210,7 @@ $ #include <stdio.h>
 @function [retval, cptr] = ccfg_quickint(cptr, path)
 % Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
 % Michele Tavella <michele.tavella@epfl.ch>
-	$ int quickint(CCfgConfig* cptr, std::string* path) {
+	$ bool quickint(CCfgConfig* cptr, std::string* path) {
 	$	try {
 	$ 		return cptr->QuickIntEx(*path);
 	$	} catch(XMLException e) {
@@ -225,7 +220,7 @@ $ #include <stdio.h>
 	$	}
 	$ }
 	# std::string* spath = new std::string(cstring path);
-	# int retval = quickint(CCfgConfig* cptr, std::string* spath);
+	# bool retval = quickint(CCfgConfig* cptr, std::string* spath);
 
 @function [retval, cptr] = ccfg_quickgdf(cptr, path)
 % Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)

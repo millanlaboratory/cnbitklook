@@ -15,4 +15,4 @@
 %   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 disp('[make.m] Mexing previously wrapped libtobiic');
-mex cnbiconfig.cc c:\minGW\lib\libcnbiconfig.a c:\minGW\lib\libtobiic.a
+mex cnbiconfig.cc c:\minGW\lib\libcnbiconfig.a c:\minGW\lib\libtobiic.a c:\minGW\lib\libtobiid.a

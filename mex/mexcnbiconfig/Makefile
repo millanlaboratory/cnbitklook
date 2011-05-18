@@ -6,7 +6,7 @@
 # Which library are we linking against?
 PROJECT=cnbiconfig
 LIBNAME=lib$(PROJECT)
-LDSTUFF=-l$(PROJECT) -ltobiic -lcnbiconfig 
+LDSTUFF=-l$(PROJECT) -ltobiic -ltobiid -lcnbiconfig 
 SOURCE_MW=$(PROJECT).mw
 SOURCE_CC=$(PROJECT).cc
 
