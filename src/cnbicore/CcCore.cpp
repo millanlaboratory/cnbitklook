@@ -80,7 +80,7 @@ CcCore::CcCore(void) {
 }
 
 CcCore::~CcCore(void) {
-	CcCore::logger.Close();
+	CcCore::CloseLogger();
 }
 
 CcCore* CcCore::Instance(void) {
@@ -101,28 +101,19 @@ void CcCore::Release(void) {
 }
 		
 void CcCore::Exit(int retcode) {
-	CcLogConfigS("Objects still referencing: " << CcCore::_refCount);
-
-	CcCore::Destroy();
-	CcCore::logger.Close();
+	CcCore::Status();
+	CcCore::CloseLogger();
 	exit(retcode);
 }
 
 void CcCore::Destroy(void) {
-	if(unlink(CcCore::_linkname.c_str()) == 0) {
-		CcLogConfigS("Log file hard link removed: " <<  CcCore::_linkname);
-	} else  {
-		CcLogErrorS("Cannot remove log file hard link: " << strerror(errno));
-	}
 	if(CcCore::_instance == NULL) 
 		return;
 	delete CcCore::_instance;
 }
 		
 void CcCore::Status(void) {
-	if(CcCore::_refCount > 0)
-		printf("[CcCore::Unload] CcObjects still referenced: %d\n",
-				CcCore::Refcount());
+	CcLogConfigS("Objects still referencing: " << CcCore::_refCount);
 }
 		
 void CcCore::OpenLogger(std::string modulename, CcTermType termtype,
@@ -151,7 +142,13 @@ void CcCore::OpenLogger(std::string modulename, CcTermType termtype,
 }
 		
 void CcCore::CloseLogger(void) {
-	CcCore::logger.Close();
+	if(unlink(CcCore::_linkname.c_str()) == 0) {
+		CcLogConfigS("Log file hard link removed: " <<  CcCore::_linkname);
+	} else  {
+		CcLogErrorS("Cannot remove log file hard link: " << strerror(errno));
+	}
+	if(CcCore::logger.IsOpen())
+		CcCore::logger.Close();
 }
 
 std::string CcCore::GetDirectoryTmp(void) {
