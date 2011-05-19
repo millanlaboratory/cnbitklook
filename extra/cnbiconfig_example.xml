@@ -107,7 +107,7 @@
 			<threshold>0.85</threshold>
 			<viscosity>0.05</viscosity>
 		</mi>
-		<errp description="Offline ErrPs (6x240" protocol="mi_offline">
+		<errp description="Offline ErrPs (6x240)" protocol="mi_offline">
 			<taskset ttype="errp">
 				<trials>
 					<errp_detected>0</errp_detected>
