@@ -23,6 +23,7 @@
 #include "ClAcqClient.hpp"
 #include "ClNamesClient.hpp"
 #include <cnbicore/CcBasic.hpp>
+#include <cnbicore/CcThreadSafe.hpp>
 #include <cnbiconfig/CCfgConfig.hpp>
 
 class ClLoop {
@@ -56,6 +57,7 @@ class ClLoop {
 	private:
 		static ClLoop* _instance;
 		static unsigned int _refCount;
+		static CcThreadSafe<bool> _logextra;
 };
 
 #endif
