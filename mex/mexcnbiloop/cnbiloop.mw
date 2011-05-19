@@ -45,7 +45,7 @@ $ #include <stdio.h>
 	$	return q->Connect(*nameserver);
 	$ }
 	if(nargin < 2)
-		nameserver = '127.0.0.1:8000';
+		nameserver = '127.0.0.1:8123';
 	end
 	# std::string* tnameserver = new std::string(cstring nameserver);
 	# bool status = clconnect(ClLoop* c, std::string* tnameserver);
