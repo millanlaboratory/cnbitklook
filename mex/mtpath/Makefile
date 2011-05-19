@@ -2,12 +2,8 @@
 
 local-install:
 	@mkdir -p ${CNBITKMAT_ROOT}/mtpath/
-	@cp -vf *.mex* ${CNBITKMAT_ROOT}/mtpath/
-	@cp -vf ndf_*.m ${CNBITKMAT_ROOT}/mtpath/
-	@cp -vf printf.m ${CNBITKMAT_ROOT}/mtpath/
+	@cp -vf *.m ${CNBITKMAT_ROOT}/mtpath/
 
 install:
 	@mkdir -p /opt/cnbitkmat/mtpath/
-	@cp -vf *.mex* /opt/cnbitkmat/mtpath/
-	@cp -vf ndf_*.m /opt/cnbitkmat/mtpath/
-	@cp -vf printf.m /opt/cnbitkmat/mtpath/
+	@cp -vf *.m /opt/cnbitkmat/mtpath/
