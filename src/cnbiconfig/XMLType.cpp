@@ -78,7 +78,16 @@ XMLTypeData XMLType::Guess(std::string buffer) {
 
 XMLTypeData XMLType::Guess(const char* buffer) {
 	if(this->_verbose)
-		printf("[XMLType::Guess] Buffer: %s\n", buffer);
+		printf("[XMLType::Guess] Buffer: \"%s\"\n", buffer);
+
+
+	if(strlen(buffer) == 0) {
+		if(this->_verbose) 
+			printf("  Buffer is empty: String\n"); 
+		this->_type = XMLType::TypeString;
+		this->_vstring.clear();
+		return this->_type;
+	}
 
 	char temp[1024];
 	int isi = sscanf(buffer, "%d", &this->_vint);
