@@ -24,7 +24,7 @@
 CCfgTaskset::CCfgTaskset(const std::string& name) {
 	this->name.assign(name);
 	this->description.assign("unknown");
-	//this->classifier.assign("unknown");
+	this->description.assign("");
 }
 
 CCfgTask* CCfgTaskset::AddTask(CCfgTask* task) {
@@ -109,8 +109,16 @@ CCfgTasksetConstIt CCfgTaskset::End(void) const {
 	return it;
 }
 
+void CCfgTaskset::Dump(void) {
+	printf("Taskset configuration:\n");
+	printf(" Name:        %s\n", this->name.c_str());
+	printf(" Description: %s\n", this->description.c_str());
+	printf(" Protocol:    %s\n", this->protocol.c_str());
+
+}
+
 void CCfgTaskset::DumpNDF(void) {
-	printf("NDF config for taskset %s\n", this->name.c_str());
+	printf("NDF configuration for taskset %s:\n", this->name.c_str());
 	printf(" Exec:        %s\n", this->ndf.exec.c_str());
 	printf(" Pipe:        %s\n", this->ndf.pipe.c_str());
 	printf(" iC:          %s\n", this->ndf.ic.c_str());
@@ -120,7 +128,7 @@ void CCfgTaskset::DumpNDF(void) {
 }
 
 void CCfgTaskset::DumpClassifier(void) {
-	printf("Classifier config for taskset %s\n", this->name.c_str());
+	printf("Classifier configuration for taskset %s:\n", this->name.c_str());
 	printf(" Name:        %s\n", this->classifier.name.c_str());
 	printf(" Description: %s\n", this->classifier.description.c_str());
 	printf(" Filename:    %s\n", this->classifier.filename.c_str());

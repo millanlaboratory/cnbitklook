@@ -80,7 +80,6 @@ XMLTypeData XMLType::Guess(const char* buffer) {
 	if(this->_verbose)
 		printf("[XMLType::Guess] Buffer: \"%s\"\n", buffer);
 
-
 	if(strlen(buffer) == 0) {
 		if(this->_verbose) 
 			printf("  Buffer is empty: String\n"); 

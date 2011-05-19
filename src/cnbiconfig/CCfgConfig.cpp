@@ -59,6 +59,8 @@ CCfgTaskset* CCfgConfig::OnlineEx(const std::string& blockname,
 		CCfgXMLConfig::RootEx()->GoEx("online")->GoEx(blockname)->SetBranch();
 		tasks->description = 
 			CCfgXMLConfig::BranchEx()->GetAttrEx("description");
+		tasks->protocol = 
+			CCfgXMLConfig::BranchEx()->GetAttrEx("protocol");
 		this->ParseTasksetEx(taskset, tasks);
 		this->ParseClassifierEx(blockname, taskset, tasks, icmessage, idmessage);
 		this->ParseConfigEx("online", blockname, taskset, tasks);
@@ -70,15 +72,17 @@ CCfgTaskset* CCfgConfig::OnlineEx(const std::string& blockname,
 	return tasks;
 }
 
-CCfgTaskset* CCfgConfig::OfflineEx(const std::string& offline,
+CCfgTaskset* CCfgConfig::OfflineEx(const std::string& blockname,
 		const std::string& taskset) {
 	CCfgTaskset* tasks = new CCfgTaskset(taskset);
 	try {
-		CCfgXMLConfig::RootEx()->GoEx("offline")->GoEx(offline)->SetBranch();
+		CCfgXMLConfig::RootEx()->GoEx("offline")->GoEx(blockname)->SetBranch();
 		tasks->description = 
 			CCfgXMLConfig::BranchEx()->GetAttrEx("description");
+		tasks->protocol = 
+			CCfgXMLConfig::BranchEx()->GetAttrEx("protocol");
 		this->ParseTasksetEx(taskset, tasks);
-		this->ParseConfigEx("offline", offline, taskset, tasks);
+		this->ParseConfigEx("offline", blockname, taskset, tasks);
 	} catch(XMLException e) {
 		delete tasks;
 		throw e;
@@ -99,9 +103,8 @@ void CCfgConfig::ParseTasksetEx(const std::string& name, CCfgTaskset* taskset) {
 		if(node == NULL)
 			break;
 
-		std::string classKey, classId, classTrials;
+		std::string classKey, classId;;
 		// TODO: try/catch
-		classTrials.assign(node->value());
 		classKey.assign(node->first_attribute("key")->value());
 		classId.assign(node->first_attribute("id")->value());
 
@@ -110,7 +113,6 @@ void CCfgConfig::ParseTasksetEx(const std::string& name, CCfgTaskset* taskset) {
 		task->name = classKey;
 		converter.Guess(classId);
 		task->id = (unsigned int)converter.Int();
-		converter.Guess(classTrials);
 		task->trials = (unsigned int)converter.Int();
 
 		// Fill up missing informations
