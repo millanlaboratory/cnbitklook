@@ -85,5 +85,7 @@ class CcCore {
 		static CcCore* _instance;
 		static unsigned int _refCount;
 		static std::string _modulename;
+		static std::string _filename;
+		static std::string _linkname;
 };
 #endif

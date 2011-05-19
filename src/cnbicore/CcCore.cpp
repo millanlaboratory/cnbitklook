@@ -26,17 +26,21 @@
 #include "CcPtable.hpp"
 #include "CcThreadSafe.hpp"
 #include "CcTime.hpp"
-#include <stdio.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <stdlib.h>
-#include <unistd.h>
+#include <errno.h>
 #include <errno.h>
 #include <signal.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
 
 /* Initialization */
 CcCore* CcCore::_instance = NULL;
 unsigned int CcCore::_refCount = 0;
+std::string CcCore::_filename = "unset";
+std::string CcCore::_linkname = "unset";
 
 /* Declarations */
 std::string CcCore::_modulename("unknown");
@@ -46,6 +50,7 @@ CcThreadSafe<bool> CcCore::receivedSIGINT(false);
 CcThreadSafe<bool> CcCore::receivedSIGQUIT(false);
 CcThreadSafe<bool> CcCore::receivedSIGTERM(false);
 CcThreadSafe<bool> CcCore::receivedSIGCHLD(false);
+
 
 void cccore_sigint(int sig) {
 	CcLogFatal("Catched SIGINT");
@@ -72,24 +77,10 @@ void cccore_sigchild(int sig) {
 }
 
 CcCore::CcCore(void) {
-	/*
-	printf("\033[1;31m%s\033[0m %s\n", 
-			"[CcCore::CcCore]", 
-			"Core functionalities loaded");
-	printf(" User: %s\n", CcCore::GetUsername().c_str()); 
-	printf(" Home: %s\n", CcCore::GetDirectoryHome().c_str()); 
-	printf(" Tmp:  %s\n", CcCore::GetDirectoryTmp().c_str()); 
-	printf(" Cwd:  %s\n", CcCore::GetDirectoryCwd().c_str()); 
-	*/
 }
 
 CcCore::~CcCore(void) {
 	CcCore::logger.Close();
-	/*
-	printf("\033[1;31m%s\033[0m %s\n", 
-			"[CcCore::~CcCore]", 
-			"Core functionalities unloaded");
-	 */
 }
 
 CcCore* CcCore::Instance(void) {
@@ -104,16 +95,25 @@ unsigned int CcCore::Refcount(void) {
 }
 
 void CcCore::Release(void) {
-	if(--CcCore::_refCount < 1) 
+	if(--CcCore::_refCount < 1) {
 		CcCore::Destroy();
+	}
 }
 		
 void CcCore::Exit(int retcode) {
+	CcLogConfigS("Objects still referencing: " << CcCore::_refCount);
+
+	CcCore::Destroy();
 	CcCore::logger.Close();
 	exit(retcode);
 }
 
 void CcCore::Destroy(void) {
+	if(unlink(CcCore::_linkname.c_str()) == 0) {
+		CcLogConfigS("Log file hard link removed: " <<  CcCore::_linkname);
+	} else  {
+		CcLogErrorS("Cannot remove log file hard link: " << strerror(errno));
+	}
 	if(CcCore::_instance == NULL) 
 		return;
 	delete CcCore::_instance;
@@ -137,14 +137,17 @@ void CcCore::OpenLogger(std::string modulename, CcTermType termtype,
 
 	CcCore::_modulename.assign(modulename);
 
-	std::string filename;
-	filename.append(directory);
-	filename.append(timestamp);
-	filename.append("_");
-	filename.append(CcCore::_modulename);
-	filename.append(".xml");
-	CcCore::logger.Open(filename, CcCore::_modulename, termtype, level);
-	CcLogConfig(std::string("Log file: ").append(filename));
+	CcCore::_filename = directory + timestamp + "_" + 
+		CcCore::_modulename + ".xml";
+	CcCore::_linkname = directory + CcCore::_modulename + ".xml";
+
+	CcCore::logger.Open(CcCore::_filename, CcCore::_modulename, termtype, level);
+	CcLogConfigS("Log file: " << CcCore::_filename);
+	if(link( CcCore::_filename.c_str(),  CcCore::_linkname.c_str()) == 0) {
+		CcLogConfigS("Log file hard linked as: " <<  CcCore::_linkname);
+	} else  {
+		CcLogErrorS("Cannot create log file hard link: " << strerror(errno));
+	}
 }
 		
 void CcCore::CloseLogger(void) {
@@ -194,5 +197,5 @@ void CcCore::CatchSIGCHLD(void) {
 	CcLogConfig("Catching SIGCHLD");
 	(void)signal(SIGCHLD, cccore_sigchild);
 }
-		
+	
 #endif

@@ -57,7 +57,6 @@ class ClLoop {
 	private:
 		static ClLoop* _instance;
 		static unsigned int _refCount;
-		static CcThreadSafe<bool> _logextra;
 };
 
 #endif
