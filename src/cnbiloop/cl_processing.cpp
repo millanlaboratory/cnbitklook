@@ -25,7 +25,7 @@
 void usage(void) { 
 	printf("Usage: cl_processing [OPTION]...\n\n");
 	printf("  -p       TCP port (8124 default)\n");
-	printf("  -h       display this help and CcCore::Exit(\n");
+	printf("  -h       display this help and exit\n");
 }
 
 int main(int argc, char* argv[]) {
