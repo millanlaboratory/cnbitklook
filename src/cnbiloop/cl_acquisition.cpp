@@ -43,8 +43,8 @@ void usage(void) {
 	printf("Usage: cl_acquisition [OPTION]...\n\n");
 	printf("  -d       the device: gtec, biosemi, GDF/BDF file, EGD string\n");
 	printf("  -f       the buffering rate in Hz (16 default)\n");
-	printf("  -A       the TCP port for the acquisition server (9000 default)\n");
-	printf("  -B       the TCP port for the bus server (9001 default)\n");
+	printf("  -A       the TCP port for the acquisition server (8125 default)\n");
+	printf("  -B       the TCP port for the bus server (8126 default)\n");
 	printf("  -n       the basename for the pipes (/tmp/cl.pipe.ndf. default)\n");
 	printf("  -i       interactive acquisition starting\n");
 	printf("  -p       print labels added to NDF frame\n");
@@ -57,7 +57,7 @@ int main(int argc, char* argv[]) {
 	int opt;
 	std::string optdevice("");
 	std::string optfs("16");
-	CcEndpoint optepAcq("0.0.0.0:9000"), optepBus("0.0.0.0:9001");
+	CcEndpoint optepAcq("0.0.0.0:8125"), optepBus("0.0.0.0:8126");
 	std::string optpipename("/tmp/cl.pipe.ndf.");
 	bool optinteractive = false, optprintndf = false, optprintbuffers = false,
 		 optwarnlate = false;

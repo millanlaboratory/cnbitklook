@@ -24,14 +24,14 @@
 
 void usage(void) { 
 	printf("Usage: cl_nameserver [OPTION]...\n\n");
-	printf("  -p       TCP port (8000 default)\n");
+	printf("  -p       TCP port (8123 default)\n");
 	printf("  -h       display this help and exit\n");
 }
 
 int main(int argc, char* argv[]) {
 	int opt;
 	std::string optopt;
-	CcPort optport("8000");
+	CcPort optport("8123");
 	
 	while((opt = getopt(argc, argv, "p:h")) != -1) {
 		if(opt == 'p')

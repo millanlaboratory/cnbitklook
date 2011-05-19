@@ -31,7 +31,8 @@ class ClLoop {
 		static void Release(void);
 		static unsigned int Refcount(void);
 
-		static bool Connect(CcAddress nameserver = "127.0.0.1:8000");
+		static bool Connect(void);
+		static bool Connect(CcAddress nameserver);
 		static bool Connect(CCfgConfig* configuration);
 		static void Disconnect(void);
 		static bool IsConnected(void);

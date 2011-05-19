@@ -24,14 +24,14 @@
 
 void usage(void) { 
 	printf("Usage: cl_processing [OPTION]...\n\n");
-	printf("  -p       TCP port (9100 default)\n");
+	printf("  -p       TCP port (8124 default)\n");
 	printf("  -h       display this help and CcCore::Exit(\n");
 }
 
 int main(int argc, char* argv[]) {
 	int opt;
 	std::string optopt;
-	CcPort optport("9100");
+	CcPort optport("8124");
 
 	while((opt = getopt(argc, argv, "p:h")) != -1) {
 		if(opt == 'p')

@@ -25,7 +25,7 @@
 
 class ClNamesClient : public ClClient {
 	public:
-		bool Connect(const CcAddress address = "127.0.0.1:8000");
+		bool Connect(const CcAddress address = "127.0.0.1:8123");
 		int Query(const std::string& name, CcAddress* address);
 		int Set(const std::string& name, CcAddress address);
 		int Unset(const std::string& name);

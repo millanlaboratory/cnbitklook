@@ -20,6 +20,8 @@
 #define CLLOOP_CPP 
 
 #include "ClLoop.hpp" 
+#include <cnbicore/CcSocket.hpp>
+
 /* Initialization */
 ClLoop* ClLoop::_instance = NULL;
 unsigned int ClLoop::_refCount = 0;
@@ -60,11 +62,25 @@ void ClLoop::Destroy(void) {
 		return;
 	delete ClLoop::_instance;
 }
+
+bool ClLoop::Connect(void) {
+	char* envptr = getenv("CNBITK_LOOP_ADDRESS");
+	
+	CcAddress nameserver;
+	if(envptr != NULL) {
+		std::string envvar(envptr);
+		CcLogConfigS("$CNBITK_LOOP_ADDRESS defined as " << envvar);
+		nameserver = CcSocket::Lookup(envvar) + ":8123";
+	} else {
+		CcLogConfig("$CNBITK_LOOP_ADDRESS not defined, assuming localhost");
+		nameserver = "127.0.0.1:8123";
+	}
+	
+	return ClLoop::Connect(nameserver);
+}
 		
 bool ClLoop::Connect(CcAddress nameserver) {
-	//ClLoop::Instance();
 	ClLoop::_nameserver = nameserver;
-	
 	if(ClLoop::ConnectNameserver() == false)
 		return false;
 	if(ClLoop::QueryAddresses() == false)
@@ -73,7 +89,6 @@ bool ClLoop::Connect(CcAddress nameserver) {
 		return false;
 	if(ClLoop::ConnectAcquisition() == false)
 		return false;
-
 	return true;
 }
 		
@@ -102,6 +117,7 @@ bool ClLoop::IsConnected(void) {
 }
 
 bool ClLoop::ConnectNameserver(void) {
+	CcLogConfigS("CnbiTk loop nameserver: " << ClLoop::_nameserver);
 	if(ClLoop::nameserver.Connect(ClLoop::_nameserver)) 
 		return true;
 
@@ -110,6 +126,7 @@ bool ClLoop::ConnectNameserver(void) {
 }
 
 bool ClLoop::ConnectProcessing(void) {
+	CcLogConfigS("CnbiTk loop processing: " << ClLoop::_processing);
 	if(ClLoop::processing.Connect(ClLoop::_processing)) 
 		return true;
 
@@ -118,6 +135,7 @@ bool ClLoop::ConnectProcessing(void) {
 }
 
 bool ClLoop::ConnectAcquisition(void) {
+	CcLogConfigS("CnbiTk loop acquisition: " << ClLoop::_acquisition);
 	if(ClLoop::acquisition.Connect(ClLoop::_acquisition)) 
 		return true;
 
