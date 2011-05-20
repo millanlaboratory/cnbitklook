@@ -118,6 +118,7 @@ int tr_bind(tr_socket* sock, const char* port) {
 		}
 
 		bndret = bind(sock->fd, sock->info->ai_addr, sock->info->ai_addrlen); 
+		fcntl(sock->fd, F_SETFD, fcntl(sock->fd, F_GETFD)|FD_CLOEXEC);
 		if(bndret == -1) {
 			close(sock->fd);
 			continue;
@@ -148,6 +149,7 @@ int tr_accept(tr_socket* sock, tr_socket* endpoint) {
 	unsigned int addrlen = sizeof(endpoint->address);
 	endpoint->fd = accept(sock->fd, (struct sockaddr*)&sock->address_endpoint,
 			&addrlen);
+	fcntl(endpoint->fd, F_SETFD, fcntl(endpoint->fd, F_GETFD)|FD_CLOEXEC);
 	endpoint->type = TR_TYPE_ENDPOINT;
 
 	// Fill local and remote host structures
@@ -171,6 +173,7 @@ int tr_connect(tr_socket* sock, const char* host, const char* port) {
 				sock->info->ai_protocol);
 		if (sock->fd == -1) 
 			continue;
+		fcntl(sock->fd, F_SETFD, fcntl(sock->fd, F_GETFD)|FD_CLOEXEC);
 
 		if(sock->protocol == TR_PROTO_TCP) {
 			conopt = connect(sock->fd, 
