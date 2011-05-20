@@ -51,12 +51,17 @@ bool ClTobiIc::Attach(const std::string& name) {
 	
 	CcEndpoint peer(address);
 	this->_server = new CcServer();
+	CB_CcSocket(this->_server->iOnAccept, this, HandleAccept);
+	CB_CcSocket(this->_server->iOnDrop, this, HandleDrop);
+	CB_CcSocket(this->_server->iOnRecvPeer, this, HandleRecvPeer);
+	
 	if(this->_server->Bind(peer.GetPort()) == false) {
 		CcLogErrorS("Cannot bind to port " << peer.GetPort());
 		return false;
 	}
 
-	this->Attach();
+	this->_hasmessage.Wait();
+	this->iOnAttach.Execute();
 	return true;
 }
 		
@@ -73,6 +78,10 @@ bool ClTobiIc::Attach(const CcPort port, const std::string& name) {
 	
 	CcEndpoint peer("0.0.0.0", port);
 	this->_server = new CcServer();
+	CB_CcSocket(this->_server->iOnAccept, this, HandleAccept);
+	CB_CcSocket(this->_server->iOnDrop, this, HandleDrop);
+	CB_CcSocket(this->_server->iOnRecvPeer, this, HandleRecvPeer);
+
 	if(this->_server->Bind(peer.GetPort()) == false) {
 		CcLogErrorS("Cannot bind to port " << port);
 		return false;
@@ -84,18 +93,11 @@ bool ClTobiIc::Attach(const CcPort port, const std::string& name) {
 		return false;
 	}
 
-	this->Attach();
+	this->_hasmessage.Wait();
+	this->iOnAttach.Execute();
 	return true;
 }
 
-void ClTobiIc::Attach(void) {
-	CB_CcSocket(this->_server->iOnAccept, this, HandleAccept);
-	CB_CcSocket(this->_server->iOnDrop, this, HandleDrop);
-	CB_CcSocket(this->_server->iOnRecvPeer, this, HandleRecvPeer);
-	
-	this->_hasmessage.Wait();
-}
-		
 bool ClTobiIc::Detach(void) {
 	if(this->_server == NULL)
 		return true;
@@ -106,7 +108,8 @@ bool ClTobiIc::Detach(void) {
 	delete(this->_server);
 	this->_server = NULL;
 	this->_hasmessage.Post();
-
+	
+	this->iOnDetach.Execute();
 	return true;
 }
 
@@ -153,17 +156,20 @@ void ClTobiIc::HandleRecvPeer(CcSocket* caller, CcAddress addr,
 		this->_hasmessage.Post();
 	}
 	this->_sembuffer.Post();
+	this->iOnHasMessage.Execute();
 }
 
 void ClTobiIc::HandleAccept(CcSocket* caller) { 
 	CcServer *server = (CcServer*)caller;
 	CcLogDebugS("Accepted TCP endpoint: " << server->GetRemote());
+	this->iOnAccept.Execute();
 }
 		
 void ClTobiIc::HandleDrop(CcSocket* caller) { 
 	CcServer *server = (CcServer*)caller;
 	CcLogDebugS("Dropped TCP endpoint: " << server->GetRemote());
 	this->_hasmessage.Post();
+	this->iOnDrop.Execute();
 }
 
 #endif

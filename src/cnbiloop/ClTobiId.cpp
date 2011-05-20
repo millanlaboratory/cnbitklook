@@ -35,8 +35,12 @@ bool ClTobiId::Attach(const std::string& name) {
 	if(this->_client != NULL)
 		return false;
 	
-	this->_client = new CcClient;
 	this->_name.assign(name);
+	
+	this->_client = new CcClient;
+	CB_CcSocket(this->_client->iOnConnect, this, HandleConnect);
+	CB_CcSocket(this->_client->iOnDisconnect, this, HandleDisconnect);
+	CB_CcSocket(this->_client->iOnRecv, this, HandleRecv);
 
 	if(ClLoop::Connect() == false) { 
 		CcLogError("Cannot connect to loop");
@@ -54,9 +58,6 @@ bool ClTobiId::Attach(const std::string& name) {
 		return false;
 	}
 	
-	CB_CcSocket(this->_client->iOnConnect, this, HandleConnect);
-	CB_CcSocket(this->_client->iOnDisconnect, this, HandleDisconnect);
-	CB_CcSocket(this->_client->iOnRecv, this, HandleRecv);
 
 	return true;
 }
@@ -79,11 +80,13 @@ bool ClTobiId::IsAttached(void) {
 void ClTobiId::HandleConnect(CcSocket* caller) {
 	CcClient* client = (CcClient*)caller;
 	CcLogDebugS("Connected TCP endpoint: " << client->GetRemote());
+	this->iOnAttach.Execute();
 }
 
 void ClTobiId::HandleDisconnect(CcSocket* caller) {
 	CcClient* client = (CcClient*)caller;
 	CcLogDebugS("Disconnected TCP endpoint: " << client->GetRemote());
+	this->iOnDetach.Execute();
 }
 
 void ClTobiId::HandleRecv(CcSocket* caller, CcStreamer* stream) {
@@ -93,8 +96,11 @@ void ClTobiId::HandleRecv(CcSocket* caller, CcStreamer* stream) {
 		stream->Clear();	
 	} else {
 		std::string buffer;
-		if(stream->Extract(&buffer, "<tobiid", "/>") == true) 
+		if(stream->Extract(&buffer, "<tobiid", "/>") == true) {
 			this->_queue.push_back(buffer);
+			this->_semqueue.Post();
+			this->iOnHasMessage.Execute();
+		}
 	}
 	this->_semqueue.Post();
 }

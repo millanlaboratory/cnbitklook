@@ -21,6 +21,8 @@
 
 #include "ClLoop.hpp"
 #include <cnbicore/CcBasic.hpp>
+#include <cnbicore/CcCallback.hpp>
+#include <cnbicore/CcProxy.hpp>
 #include <cnbicore/CcServer.hpp>
 #include <cnbicore/CcSocketProxy.hpp>
 #include <tobicore/TCException.hpp>
@@ -42,12 +44,17 @@ class ClTobiIc : public CcSocketProxy {
 		void HandleAccept(CcSocket* caller);
 		void HandleDrop(CcSocket* caller);
 		void HandleRecvPeer(CcSocket* caller, CcAddress addr, CcStreamer* stream);
-		void Attach(void);
 
 	public:
 		const static int Detached = -1;
 		const static int HasMessage = 1;
 		const static int NoMessage = 0;
+		CcCallback0<CcProxy> iOnAttach;
+		CcCallback0<CcProxy> iOnDetach;
+		CcCallback0<CcProxy> iOnHasMessage;
+		CcCallback0<CcProxy> iOnAccept;
+		CcCallback0<CcProxy> iOnDrop;
+
 	protected:
 		CcServer* _server;
 		std::string _name;

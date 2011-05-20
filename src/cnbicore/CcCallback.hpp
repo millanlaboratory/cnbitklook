@@ -159,9 +159,8 @@ class CcCallback3 {
 		Method _method;
 };
 
-
-#define CBRegister(sender_event, receiver_type, receiver_ptr) 	\
-	sender_event.Register((receiver_type*)receiver_ptr, 		\
-			&receiver_type::Handle);
+#define CcRegister(sender_event, receiver_type, receiver_ptr, method)	\
+	sender_event.Register((receiver_type*)receiver_ptr, 				\
+			&receiver_type::method);
 
 #endif

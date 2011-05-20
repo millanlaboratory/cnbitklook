@@ -22,6 +22,8 @@
 #include "ClLoop.hpp"
 #include <cnbicore/CcBasic.hpp>
 #include <cnbicore/CcClient.hpp>
+#include <cnbicore/CcCallback.hpp>
+#include <cnbicore/CcProxy.hpp>
 #include <tobicore/TCException.hpp>
 #include <tobiid/IDMessage.hpp>
 #include <tobiid/IDSerializerRapid.hpp>
@@ -48,6 +50,10 @@ class ClTobiId : public CcSocketProxy {
 		static const int SetOnly = 0;
 		static const int GetOnly = 1;
 		static const int SetGet = 2;
+		CcCallback0<CcProxy> iOnAttach;
+		CcCallback0<CcProxy> iOnDetach;
+		CcCallback0<CcProxy> iOnHasMessage;
+
 	protected:
 		CcClient* _client;
 		std::string _name;

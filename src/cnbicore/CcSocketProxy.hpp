@@ -46,7 +46,6 @@ class CcSocketProxy {
 		virtual void HandleDisconnect(CcSocket* caller);
 };
 
-
 #define CB_CcSocket(sender_event, receiver_ptr, method) 		\
 	sender_event.Register((CcSocketProxy*)receiver_ptr, 		\
 			&CcSocketProxy::method);

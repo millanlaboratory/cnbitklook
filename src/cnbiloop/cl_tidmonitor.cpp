@@ -48,6 +48,13 @@ int main(int argc, char* argv[]) {
 	ClTobiId id(ClTobiId::SetGet);
 	std::string absolute, relative;
 
+	/* Dear user, Tobi iD is a async device. 
+	 * So, you can poll it, checking if a message was received, or you 
+	 * can register the callback on a CcProxy handler, like this:
+	CcProxy handler;
+	CcRegister(id.iOnHasMessage, CcProxy, &handler, Handle);
+	 */
+
 #ifdef ENABLE_BOUNCE
 	IDMessage messageO;
 	messageO.SetDescription("cl_tidmonitor");
@@ -105,9 +112,6 @@ int main(int argc, char* argv[]) {
 	}
 
 shutdown:
-	id.Detach();
-	id.Detach();
-	id.Detach();
 	id.Detach();
 	CcCore::Exit(0);
 }
