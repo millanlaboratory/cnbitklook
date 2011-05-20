@@ -83,7 +83,6 @@ void usage(void) {
 int main(int argc, char* argv[]) {
 	int opt, modality = MODALITY_NOTHING, what = WHAT_NOTHING, module = MODULE_NOTHING;
 	std::string xml, block, taskset;
-	printf("%d\n", argc);
 	if(argc < 2) {
 		usage();
 		CcCore::Exit(0);
