@@ -52,7 +52,7 @@ bool classifier_start(CCfgConfig* config, const std::string& block,
 	ClLoop::processing.IncludeNDF(pid);
 	if(ts->ndf.include.empty() == false)
 		ClLoop::processing.Include(pid, ts->ndf.include);
-	ClLoop::processing.ExecNDF(pid, ts->ndf.exec);
+	ClLoop::processing.Exec(pid, ts->ndf.exec);
 
 	return(ClLoop::processing.IsAlive(pid) == ClProLang::Successful);
 }

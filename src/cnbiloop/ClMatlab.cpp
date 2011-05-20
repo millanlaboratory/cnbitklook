@@ -105,19 +105,6 @@ catch e;\
 	exit;\
 end\n"
 
-#define CLMATLAB_EXECNDF "\
-try;\
-	while(1);\
-		%s('', '', '');\
-	end;\
-catch e;\
-	disp(['Exception: ' exception.message ]);\
-	disp(exception);\
-	disp(exception.stack);\
-	disp('Killing Matlab...');\
-	exit;\
-end\n"
-
 ClMatlab::ClMatlab(const std::string& cmd, bool write, bool read) : 
 	CcProcess(cmd, write, read) {
 }
@@ -165,13 +152,6 @@ void ClMatlab::Exec(const std::string function) {
 	char buffer[2048];
 	sprintf(buffer, CLMATLAB_EXEC, function.c_str());
 	CcLogDebugS("Executing: " << buffer);
-	CcProcess::Write(buffer);
-}
-
-void ClMatlab::ExecNDF(const std::string function) {
-	char buffer[2048];
-	sprintf(buffer, CLMATLAB_EXECNDF, function.c_str());
-	CcLogDebugS("Executing NDF: " << buffer);
 	CcProcess::Write(buffer);
 }
 

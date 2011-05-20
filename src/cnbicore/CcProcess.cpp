@@ -88,6 +88,11 @@ pid_t CcProcess::Popen(int* input, int* output) {
         exit(1);
     }
 
+	std::string directory = CcCore::GetDirectoryTmp();
+	if(chdir(directory.c_str()) < 0) {
+		CcLogErrorS("Child cannot chdir in: " << directory.c_str());
+    }
+
     if (input == NULL)
         close(p_stdin[CcProcess::ProcessWrite]);
     else

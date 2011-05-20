@@ -39,11 +39,11 @@ void example(void) {
 	printf(" erase ndf_monitor::display\n");
 	printf(" fork\n");
 	printf(" exec 1231 \"bench(1);\"\n");
-	printf(" execndf 1231 \"ndf_checkloop('', '', '', '');\"\n");
 	printf(" isalive 1231\n");
 	printf(" terminate 1231\n");
-	printf(" changedirectory 1231 /home/mtavella/\n");
+	printf(" directory 1231 /home/mtavella/\n");
 	printf(" include 1231 /home/mtavella/ /home/ptito/\n");
+	printf(" sinclude 1231 /home/mtavella/ /home/ptito/\n");
 }
 
 void usage(void) { 
@@ -66,11 +66,11 @@ void usage(void) {
 	printf(" retrievefile NAME PATH            retrieves NAME and save it in PATH\n");
 	printf(" fork                              fork a Matlab process\n");
 	printf(" exec PID COMMAND                  exec a COMMAND in Matlab process PID\n");
-	printf(" execndf PID FUNCTION              exec NDF function FUNCTION in Matlab process PID\n");
 	printf(" isalive PID                       checks if PID is alive\n");
 	printf(" terminate PID                     terminate PID\n");
-	printf(" changedirectory PID PATH                      changes working directory of PID\n");
-	printf(" include PID PATH1 PATH2           have PID include PATH1 and PATH2\n");
+	printf(" directory PID PATH                changes working directory of PID\n");
+	printf(" include PID PATH                  include PATH\n");
+	printf(" sinclude PID PATH1 PATH2          include PATH1 or PATH2\n");
 	CcCore::Exit(0);
 }
 
@@ -335,16 +335,6 @@ int main(int argc, char* argv[]) {
 		processing(status);
 		CcCore::Exit(status);
 	
-	} else if(command.compare("execndf") == 0) {
-		if(argc != 4) usage();
-		connect();
-		
-		int pid = -1;
-		sscanf(arg1.c_str(), "%d", &pid);
-		status = ClLoop::processing.ExecNDF(pid, arg2);
-		processing(status);
-		CcCore::Exit(status);
-
 	} else if(command.compare("isalive") == 0) {
 		if(argc != 3) usage();
 		connect();
@@ -369,7 +359,7 @@ int main(int argc, char* argv[]) {
 		processing(status);
 		CcCore::Exit(status);
 
-	} else if(command.compare("changedirectory") == 0) {
+	} else if(command.compare("directory") == 0) {
 		if(argc != 4) usage();
 		connect();
 
@@ -380,6 +370,16 @@ int main(int argc, char* argv[]) {
 		CcCore::Exit(status);
 	
 	} else if(command.compare("include") == 0) {
+		if(argc != 4) usage();
+		connect();
+		
+		int pid = -1;
+		sscanf(arg1.c_str(), "%d", &pid);
+		status = ClLoop::processing.Include(pid, arg1);
+		processing(status);
+		CcCore::Exit(status);
+	
+	} else if(command.compare("include2") == 0) {
 		if(argc != 5) usage();
 		connect();
 		
@@ -388,6 +388,7 @@ int main(int argc, char* argv[]) {
 		status = ClLoop::processing.Include(pid, arg1, arg2);
 		processing(status);
 		CcCore::Exit(status);
+
 	} else {
 		usage();
 	}

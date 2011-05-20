@@ -187,26 +187,6 @@ int ClProClient::Include(const int pid, const std::string& path0,
 		return ClProLang::StatusLost;
 }
 
-int ClProClient::ExecNDF(const int pid, const std::string& function) {
-	int rpid = 0;
-	int errorid = 0;
-	std::string message, reply;
-	
-	this->_language.ExecNDF(pid, function);
-	bool status = ClClient::_client.SendRecv(this->_language.message->buffer,
-			&reply, ClProLang::Hdr, ClProLang::Trl, ClClient::_waitms);
-
-	if(status == false)
-		return ClProLang::NoReply;
-
-	if(this->_language.IsOk(reply.c_str(), &rpid))
-		return ClProLang::Successful;
-	else if(this->_language.IsError(reply.c_str(), &errorid))
-		return errorid;
-	else
-		return ClProLang::StatusLost;
-}
-
 int ClProClient::IncludeNDF(const int pid) {
 	return this->Include(pid, "$CNBITKMAT_ROOT/", "/opt/cnbitkmat/");
 }

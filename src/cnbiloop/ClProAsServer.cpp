@@ -119,20 +119,6 @@ void ClProAsServer::HandleRecvPeer(CcSocket* caller, CcAddress addr,
 			CcLogInfoS("Include from " << addr << ":" 
 					" PID=" << pid << " " << path0 << ", " << path1);
 		}
-	} else if(this->language.IsExecNDF(message.c_str(), &pid, &function)) {
-		ClMatlab* process = this->Get(pid);
-		if(process == NULL) {
-			server->Send(language.Error(ClProLang::NotFound), addr);
-			CcLogInfoS("ExecNDF from " << addr << ":" 
-					" PID=" << pid << 
-					" Exec=" << function << " NotFound");
-		} else {
-			process->ExecNDF(function);
-			server->Send(language.Ok(pid), addr);
-			CcLogInfoS("ExecNDF from " << addr << ":" 
-					" PID=" << pid << 
-					", Exec=" << function);
-		}
 	} else {
 		CcLogWarningS("Message from " << addr << 
 				" not understood: " << message); 
