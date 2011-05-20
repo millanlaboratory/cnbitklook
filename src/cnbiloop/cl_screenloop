@@ -2,37 +2,37 @@
 # 2011-04-15  Michele Tavella <michele.tavella@epfl.ch>
 
 if [ "z$1" == "z" ]; then
-	echo "[cl_screenloop] DEVICE";
+	echo "[cl_screenloop] Error: cl_acquisition arguments needed";
 	exit 1;
 fi
+
+echo "[cl_screenloop] Options: $@";
 
 if [ ! -f $HOME/.screenrc-cnbitk ]; then
 	echo "bind 's' screen -t Shell bash" \
 		>> $HOME/.screenrc-cnbitk
 	echo "hardstatus alwayslastline" \
 		>> $HOME/.screenrc-cnbitk
-	echo "hardstatus string '%{kw}%-w%{RW} %n %t %{kw}%+w %='" \
+	echo "hardstatus string '%{rw}%-w%{wk} %n %t %{rw}%+w %='" \
 		>> $HOME/.screenrc-cnbitk
 	echo "caption always "\
 		>> $HOME/.screenrc-cnbitk
-	echo "caption string '%{wk} CnbiTk ScreenLoop %= %h  %l  %Y.%m.%d  %c%a %{wk}'" \
+	echo "caption string '%{wr} CnbiTk ScreenLoop %= %h  %l  %Y.%m.%d  %c%a %{wr}'" \
 		>> $HOME/.screenrc-cnbitk
 	echo "shelltitle '$ |idle'" >> $HOME/.screenrc-cnbitk
 fi
 
 CHECK=`screen -ls | grep cnbitk | awk '{print $1}'`;
-
 if [ "z$CHECK" == "z" ]; then
 	echo "[cl_screenloop] Check passed";
-	cl_rpcnotify "CnbiTk ScreenLoop" "Connecting to $1"
+	cl_rpcnotify "CnbiTk ScreenLoop" "Acquisition: $@"
 else
 	echo "[cl_screenloop] Error: a cnbitk screen is already attached: $CHECK";
 	cl_rpcnotify "CnbiTk ScreenLoop" "GNU Screen already attached: $CHECK";
 	exit 2;
 fi
 
-ACQUISITION="cl_acquisition -d $1";
-
+ACQUISITION="cl_acquisition  $@";
 echo "[cl_screenloop] Starting screen session"
 screen -c $HOME/.screenrc-cnbitk -d -m -S cnbitk 
 CHECK=`screen -ls | grep cnbitk | awk '{print $1}'`;
