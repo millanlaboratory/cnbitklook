@@ -223,7 +223,6 @@ catch exception
 	disp(['[ndf_checkloop] Exception: ' exception.message ]);
 	disp(exception);
 	disp(exception.stack);
-	kk
 	disp('[ndf_checkloop] Going down');
 	loop.exit = true;
 end
