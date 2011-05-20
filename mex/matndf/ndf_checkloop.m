@@ -47,8 +47,12 @@ try
 	% - also, if the nameserver query fails, pn, aD and aC will be empty and
 	%   their values will be set according to the XML configuration
 	loop = ndf_loopconfig(loop, 'checkloop', pn, aD, aC);
+	if(loop.cfg.config == 0)
+		disp('[ndf_checkloop] Cannot retrieve loop configuration, killing matlab');
+		exit;
+	end
 	loop = ndf_loopnames(loop);
-
+	
 	if(isempty(loop.cfg.ndf.pipe))
 		disp('[ndf_checkloop] NDF configuration failed, killing matlab:');
 		disp(['  Pipename:   "' loop.cfg.ndf.pipe '"']);
@@ -219,20 +223,28 @@ catch exception
 	disp(['[ndf_checkloop] Exception: ' exception.message ]);
 	disp(exception);
 	disp(exception.stack);
+	kk
 	disp('[ndf_checkloop] Going down');
 	loop.exit = true;
 end
 
-if(ndf.sink); ndf_close(ndf.sink); end
-if(loop.cl); cl_delete(loop.cl); end
-loop = ndf_loopdelete(loop);
-if(loop.sC); icserializerrapid_delete(loop.sC); end
-if(loop.sD); idserializerrapid_delete(loop.sD); end
-if(loop.mC); icmessage_delete(loop.mC); end
-if(loop.mD); idmessage_delete(loop.mD); end
-if(loop.nC); tr_free(loop.nC); end
-if(loop.nD); tr_free(loop.nD); end
-fclose('all');
+try 
+	if(ndf.sink); ndf_close(ndf.sink); end
+	if(loop.cl); cl_delete(loop.cl); end
+	loop = ndf_loopdelete(loop);
+	if(loop.sC); icserializerrapid_delete(loop.sC); end
+	if(loop.sD); idserializerrapid_delete(loop.sD); end
+	if(loop.mC); icmessage_delete(loop.mC); end
+	if(loop.mD); idmessage_delete(loop.mD); end
+	if(loop.nC); tr_free(loop.nC); end
+	if(loop.nD); tr_free(loop.nD); end
+	fclose('all');
+catch exception
+	disp(['[ndf_checkloop] Exception: ' exception.message ]);
+	disp(exception);
+	disp(exception.stack);
+	loop.exit = true;
+end
 
 disp('[ndf_checkloop] Killing Matlab...');
 if(loop.exit == true)

@@ -8,6 +8,7 @@ bin_PROGRAMS = cl_processing \
 	cl_ticmonitor \
 	cl_checkloop \
 	cl_rpc \
+	cl_init \
 	cl_acquisition 
 
 dist_bin_SCRIPTS = cl_rpcnotify \
@@ -62,3 +63,4 @@ cl_tidsender_SOURCES = cl_tidsender.cpp
 cl_ticmonitor_SOURCES = cl_ticmonitor.cpp
 cl_checkloop_SOURCES = cl_checkloop.cpp
 cl_rpc_SOURCES = cl_rpc.cpp
+cl_init_SOURCES = cl_init.cpp

@@ -87,37 +87,49 @@ void ClProAsServer::HandleRecvPeer(CcSocket* caller, CcAddress addr,
 		ClMatlab* process = this->Get(pid);
 		if(process == NULL) {
 			server->Send(language.Error(ClProLang::NotFound), addr);
-			CcLogWarningS("ChangeDirectory from " << addr << ": " 
-					<< pid << ", " << path0 << " NotFound");
+			CcLogWarningS("ChangeDirectory from " << addr << ":" 
+					" PID=" << pid << ", " << path0 << " NotFound");
 		} else {
 			process->ChangeDirectory(path0);
 			server->Send(language.Ok(pid), addr);
-			CcLogInfoS("ChangeDirectory from " << addr << ": " 
-					<< pid << " " << path0);
+			CcLogInfoS("ChangeDirectory from " << addr << ":" 
+					" PID=" << pid << " " << path0);
+		}
+	} else if(this->language.IsInclude(message.c_str(), &pid, &path0)) {
+		ClMatlab* process = this->Get(pid);
+		if(process == NULL) {
+			server->Send(language.Error(ClProLang::NotFound), addr);
+			CcLogWarningS("Include from " << addr << ":" 
+					" PID=" << pid  << path0 << " NotFound");
+		} else {
+			process->Include(path0);
+			server->Send(language.Ok(pid), addr);
+			CcLogInfoS("Include from " << addr << ": " 
+					" PID=" << pid << " " << path0);
 		}
 	} else if(this->language.IsInclude(message.c_str(), &pid, &path0, &path1)) {
 		ClMatlab* process = this->Get(pid);
 		if(process == NULL) {
 			server->Send(language.Error(ClProLang::NotFound), addr);
-			CcLogWarningS("Include from " << addr << ": " 
-					<< pid  << path0 << ", " << path1 << " NotFound");
+			CcLogWarningS("Include from " << addr << ":" 
+					" PID=" << pid  << path0 << ", " << path1 << " NotFound");
 		} else {
 			process->Include(path0, path1);
 			server->Send(language.Ok(pid), addr);
-			CcLogInfoS("Include from " << addr << ": " 
-					<< pid << " " << path0 << ", " << path1);
+			CcLogInfoS("Include from " << addr << ":" 
+					" PID=" << pid << " " << path0 << ", " << path1);
 		}
 	} else if(this->language.IsExecNDF(message.c_str(), &pid, &function)) {
 		ClMatlab* process = this->Get(pid);
 		if(process == NULL) {
 			server->Send(language.Error(ClProLang::NotFound), addr);
-			CcLogInfoS("ExecNDF from " << addr << ": " 
+			CcLogInfoS("ExecNDF from " << addr << ":" 
 					" PID=" << pid << 
 					" Exec=" << function << " NotFound");
 		} else {
 			process->ExecNDF(function);
 			server->Send(language.Ok(pid), addr);
-			CcLogInfoS("ExecNDF from " << addr << ": " 
+			CcLogInfoS("ExecNDF from " << addr << ":" 
 					" PID=" << pid << 
 					", Exec=" << function);
 		}

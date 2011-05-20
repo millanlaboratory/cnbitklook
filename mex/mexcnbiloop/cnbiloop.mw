@@ -42,10 +42,13 @@ $ #include <stdio.h>
 % Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
 % Michele Tavella <michele.tavella@epfl.ch>
 	$ bool clconnect(ClLoop* q, std::string* nameserver) {
-	$	return q->Connect(*nameserver);
+	$   if(nameserver->empty() == true)
+	$		return q->Connect();
+	$	else
+	$		return q->Connect(*nameserver);
 	$ }
 	if(nargin < 2)
-		nameserver = '127.0.0.1:8000';
+		nameserver = '';
 	end
 	# std::string* tnameserver = new std::string(cstring nameserver);
 	# bool status = clconnect(ClLoop* c, std::string* tnameserver);

@@ -21,17 +21,22 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#define WHAT_ONLINE 	1
-#define WHAT_OFFLINE 	2
+#define MODALITY_NOTHING	0
+#define MODALITY_ONLINE 	1
+#define MODALITY_OFFLINE 	2
+
 #define MODE_CONFIG 	1
 #define MODE_FRIENDLY 	2
 #define MODE_BOTH		3
+
+#define GET_NOTHING		0
 #define GET_BLOCKS 		1
-#define GET_TASKS  		2
+#define GET_TASKSETS	2
 #define GET_CLASSIFIER	3
-#define GET_FILENAME	4	
+#define GET_XDFBNAME	4	
 #define GET_LOGLINE		5
 #define GET_LOGFILENAME	6
+#define GET_PROTOCOL	7
 
 using namespace std;
 
@@ -66,12 +71,12 @@ void get_datestamp(std::string* timestamp) {
 	timestamp->assign(temp);
 }
 
-bool get_blocks(CCfgConfig* config, const std::string& what, int mode) {
+bool get_blocks(CCfgConfig* config, const std::string& modality, int mode) {
 	XMLNode node;
 	std::string name, desc;
 	
 	try {
-		node = config->RootEx()->GoEx(what)->Child();
+		node = config->RootEx()->GoEx(modality)->Child();
 		while(node != NULL) {
 			name = node->name();
 			desc = node->first_attribute("description")->value();
@@ -95,14 +100,29 @@ bool get_blocks(CCfgConfig* config, const std::string& what, int mode) {
 	return 1;
 }
 
-bool get_tasksets(CCfgConfig* config, const std::string& what, 
+bool get_protocol(CCfgConfig* config, const std::string& modality, 
+		const std::string& block, const std::string& taskset) {
+	std::string protocol;
+	
+	try {
+		protocol = config->RootEx()->GoEx(modality)->GoEx(block)->GetAttrEx("protocol");
+	} catch(XMLException e) { 
+		fprintf(stderr, "Error: %s\n", e.Info().c_str());
+		return 0;
+	}
+	
+	printf("%s\n", protocol.c_str());
+	return 1;
+}
+
+bool get_tasksets(CCfgConfig* config, const std::string& modality, 
 		const std::string& block, int mode) {
 	XMLNode node;
 	XMLAttr key;
 	std::string name, desc;
 	
 	try {
-		node = config->RootEx()->GoEx(what)->GoEx(block)->
+		node = config->RootEx()->GoEx(modality)->GoEx(block)->
 			GoEx("taskset")->Leaf();
 		while(node != NULL) {
 			key = node->first_attribute("ttype");
@@ -133,11 +153,11 @@ bool get_tasksets(CCfgConfig* config, const std::string& what,
 	return 1;
 }
 
-bool get_classifier(CCfgConfig* config, const std::string& what, 
+bool get_classifier(CCfgConfig* config, const std::string& modality, 
 		const std::string& block, const std::string& taskset, int mode) {
 	CCfgTaskset* ts = NULL;
 	try {
-		if(what.find("online") != std::string::npos) {
+		if(modality.find("online") != std::string::npos) {
 			ts = config->OnlineEx(block, taskset);
 		} else {
 			fprintf(stderr, "Error: cannot get classifier when modality is offline\n");
@@ -163,7 +183,7 @@ bool get_classifier(CCfgConfig* config, const std::string& what,
 	return true;
 }
 
-bool get_filename(CCfgConfig* config, const std::string& what, 
+bool get_filename(CCfgConfig* config, const std::string& modality, 
 		const std::string& block, const std::string& taskset) {
 	
 	std::string subjectid = 
@@ -173,12 +193,12 @@ bool get_filename(CCfgConfig* config, const std::string& what,
 
 	printf("%s.%s.%s.%s.%s\n",
 			subjectid.c_str(), daystamp.c_str(),
-			what.c_str(), block.c_str(), taskset.c_str());
+			modality.c_str(), block.c_str(), taskset.c_str());
 
 	return true;
 }
 
-bool get_logline(CCfgConfig* config, const std::string& what, 
+bool get_logline(CCfgConfig* config, const std::string& modality, 
 		const std::string& block, const std::string& taskset) {
 	std::string subjectid = 
 		config->RootEx()->QuickStringEx("subject/id");
@@ -190,7 +210,7 @@ bool get_logline(CCfgConfig* config, const std::string& what,
 
 	printf("\"Experimenter=%s Subject=%s Daystamp=%s Modality=%s Block=%s Taskset=%s\"\n",
 			experimenter.c_str(), subjectid.c_str(), daystamp.c_str(), 
-			what.c_str(), block.c_str(), taskset.c_str());
+			modality.c_str(), block.c_str(), taskset.c_str());
 
 	return true;
 }
@@ -210,55 +230,90 @@ bool get_logfilename(CCfgConfig* config) {
 void usage(void) { 
 	printf("Usage: ccfg_cli [OPTION]...\n\n");
 	printf("  -x FILE     XML file\n");
+	printf("  -F          set offline modality (equivalent to: '-M offline')\n");
+	printf("  -N          set online modality (equivalent to: '-M online')\n");
+	printf("  -M MODALITY set modality 'online' or 'offline'\n");
+	printf("  -B BLOCK    set block\n");
+	printf("  -T TASKSET  set taskset\n");
 	printf("  -b          get available blocks (default)\n");
 	printf("  -t BLOCK    get available tasksets for block BLOCK\n");
 	printf("  -c          get the classifier for BLOCK/TASKSET\n");
-	printf("  -F          get the basename for an XDF file\n");
-	printf("  -L          get the filename for the XDF file log\n");
+	printf("  -a          get the basename for an XDF file\n");
+	printf("  -o          get the xml for the XDF file log\n");
 	printf("  -l          get the logline for an XDF file\n");
-	printf("  -n          online modality (default)\n");
-	printf("  -f          offline modality\n");
-	printf("  -m MODALITY 'online' (default) or 'offline'\n");
+	printf("  -p          get the protocol executable name\n");
 	printf("  -u          enable user-friendly output\n");
-	printf("  -U          user-friendly output only\n");
-	printf("  -B BLOCK    set block\n");
-	printf("  -T TASKSET  set taskset\n");
-	printf("  -h          display this help and exit\n");
+	printf("  -U          enable user-friendly output only\n");
+	printf("  -h          display this help and exit\n\n");
+	printf("Typical usage:\n");
+	printf("  ccfg_cli -x example.xml -Fbu\n");
+	printf("    Get all the available offline modalities\n\n");
+	printf("  ccfg_cli -x example.xml -Nbu\n");
+	printf("    Get all the available online modalities\n\n");
+	printf("  ccfg_cli -x example.xml -Nu -t errp\n");
+	printf("    Get all the available online tasksets for the 'errp' block\n\n");
+	printf("  ccfg_cli -x example.xml -Nu -t errp -T errp\n");
+	printf("    Get all the available online tasksets for the 'errp' block and\n");
+	printf("    the 'errp' taskset in the online modality\n\n");
+	printf("  ccfg_cli -x example.xml -Nu -t errp -T errp -a\n");
+	printf("    Get the XDF basename for the 'errp' block and\n");
+	printf("    the 'errp' taskset in the online modality\n\n");
+	printf("  ccfg_cli -x example.xml -Nu -t errp -T errp -o\n");
+	printf("    Get the XDF log xml for the 'errp' block and\n");
+	printf("    the 'errp' taskset in the online modality\n\n");
+	printf("  ccfg_cli -x example.xml -Nu -t errp -T errp -l\n");
+	printf("    Get the XDF log line for the 'errp' block and\n");
+	printf("    the 'errp' taskset in the online modality\n\n");
+	printf("  ccfg_cli -x example.xml -Nu -B errp -p\n");
+	printf("    Get the protocol executable for the 'errp' block and\n");
+	printf("    the 'errp' taskset in the online modality\n\n");
+	printf("Keep in mind that:\n");
+	printf("  1. You can play around with -u and -U. In this way you can print\n");
+	printf("     both the XML keys and the XML descriptions (i.e. 'errp' and\n");
+	printf("     'Error Potentials').\n");
+	printf("  2. Certain commands do not support the -u and -U option. When not\n");
+	printf("     supported, -u and -U will have no effect.\n");
+	printf("  3. I have to work a bit on my PhD apart from coding your loops.\n");
+	printf("     So, if you feel lost with all these options, stop complaining\n");
+	printf("     and start coding. If you cannot code, bake me an apple cake\n");
+	printf("     and I will do it for you.\n\n");
 }
 
 int main(int argc, char *argv[]) {
 	int opt;	
-	std::string filename, what("online"), block, taskset;
-	int mode = MODE_CONFIG, get = GET_BLOCKS;
+	std::string xml, modality, block, taskset;
+	int mode = MODE_CONFIG, get = GET_NOTHING;
 
 	if(argc == 1) {
 		usage();
 		return 0;
 	}
 
-	while((opt = getopt(argc, argv, "T:B:m:x:t:bnfuUhcFLl")) != -1) {
+	while((opt = getopt(argc, argv, "T:B:M:x:t:bFNpuUhcaol")) != -1) {
 		if(opt == 'x')
-			filename.assign(optarg);
+			xml.assign(optarg);
 		else if(opt == 'b')
 			get = GET_BLOCKS;
 		else if(opt == 't') {
-			get = GET_TASKS;
+			get = GET_TASKSETS;
 			block.assign(optarg);
 		}
-		else if(opt == 'F') 
-			get = GET_FILENAME;
-		else if(opt == 'L') 
+		else if(opt == 'a') 
+			get = GET_XDFBNAME;
+		else if(opt == 'o') 
 			get = GET_LOGFILENAME;
 		else if(opt == 'l') 
 			get = GET_LOGLINE;
 		else if(opt == 'c') 
 			get = GET_CLASSIFIER;
-		else if(opt == 'n')
-			what.assign("online");
-		else if(opt == 'f')
-			what.assign("offline");
-		else if(opt == 'm')
-			what.assign(optarg);
+		else if(opt == 'p') 
+			get = GET_PROTOCOL;
+		else if(opt == 'N')
+			modality.assign("online");
+		else if(opt == 'F')
+			modality.assign("offline");
+		else if(opt == 'M')
+			modality.assign(optarg);
 		else if(opt == 'u')
 			mode = MODE_BOTH;
 		else if(opt == 'B')
@@ -272,29 +327,48 @@ int main(int argc, char *argv[]) {
 			return(opt == 'h') ? EXIT_SUCCESS : EXIT_FAILURE;
 		}
 	}
+	
+	bool die = false;
+	if(xml.empty()) {
+		fprintf(stderr, "Error: XML configuration required\n");
+		die = true;
+	}
+	if(modality.empty()) {
+		fprintf(stderr, "Error: modality unknown (online, offline)\n");
+		die = true;
+	}
+	if(get == GET_NOTHING) {
+		fprintf(stderr, "Error: define something to get (i.e. block, tasksets...)\n");
+		die = true;
+	}
+
+	if(die == true)
+		return 1;
 
 	CCfgConfig* config;
 	try {
 		config = new CCfgConfig();
-		config->ImportFileEx(filename);
+		config->ImportFileEx(xml);
 	} catch(XMLException e) {
 		fprintf(stderr, "Error: %s\n", e.Info().c_str());
-		return -1;
+		return 2;
 	}
 	
 	switch(get) {
 		case GET_BLOCKS:
-			return get_blocks(config, what, mode);
-		case GET_TASKS:
-			return get_tasksets(config, what, block, mode);
+			return get_blocks(config, modality, mode);
+		case GET_TASKSETS:
+			return get_tasksets(config, modality, block, mode);
+		case GET_PROTOCOL:
+			return get_protocol(config, modality, block, taskset);
 		case GET_CLASSIFIER:
-			return get_classifier(config, what, block, taskset, mode);
-		case GET_FILENAME:
-			return get_filename(config, what, block, taskset);
+			return get_classifier(config, modality, block, taskset, mode);
+		case GET_XDFBNAME:
+			return get_filename(config, modality, block, taskset);
 		case GET_LOGFILENAME:
 			return get_logfilename(config);
 		case GET_LOGLINE:
-			return get_logline(config, what, block, taskset);
+			return get_logline(config, modality, block, taskset);
 		default:
 			return 666;
 	}

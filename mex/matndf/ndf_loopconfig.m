@@ -24,26 +24,26 @@ if(nargin < 5); aC = ''; end
 % - taskset		the XML taskset (i.e. mi_rhlh)
 % - xml			the XML filename
 % - path		the working directory
-cfg = {};
-cfg.ns.modality = cl_retrieveconfig(loop.cl, name, 'modality');
-cfg.ns.block    = cl_retrieveconfig(loop.cl, name, 'block');
-cfg.ns.taskset  = cl_retrieveconfig(loop.cl, name, 'taskset');
-cfg.ns.xml      = cl_retrieveconfig(loop.cl, name, 'xml');
-cfg.ns.path     = cl_retrieveconfig(loop.cl, name, 'path');
+loop.cfg = {};
+loop.cfg.ns.modality = cl_retrieveconfig(loop.cl, name, 'modality');
+loop.cfg.ns.block    = cl_retrieveconfig(loop.cl, name, 'block');
+loop.cfg.ns.taskset  = cl_retrieveconfig(loop.cl, name, 'taskset');
+loop.cfg.ns.xml      = cl_retrieveconfig(loop.cl, name, 'xml');
+loop.cfg.ns.path     = cl_retrieveconfig(loop.cl, name, 'path');
 
-cfg.config = ccfg_new();
-if(ccfg_importfile(cfg.config, cfg.ns.xml) == 0)
+loop.cfg.config = ccfg_new();
+if(ccfg_importfile(loop.cfg.config, loop.cfg.ns.xml) == 0)
 	disp('[ndf_loopconfig] Cannot load XML file');
-	cfg.config = ccfg_delete(cfg.config);
+	loop.cfg.config = ccfg_delete(loop.cfg.config);
 	return;
 end
 
 % Use ccfg_* to load the XML and retrieve the taskset. 
-cfg.taskset = ccfg_online(cfg.config, cfg.ns.block, cfg.ns.taskset, ...
+loop.cfg.taskset = ccfg_online(loop.cfg.config, loop.cfg.ns.block, loop.cfg.ns.taskset, ...
 	loop.mC, loop.mD);
-if(cfg.taskset == 0)	
+if(loop.cfg.taskset == 0)	
 	disp('[ndf_loopconfig] Cannot retrieve taskset');
-	cfg.config = ccfg_delete(cfg.config);
+	loop.cfg.config = ccfg_delete(loop.cfg.config);
 	return;
 end
 
@@ -51,40 +51,38 @@ end
 % The taskset contains informations about:
 % - the classifier
 % - the NDF configuration (pipes etc)
-[cfg.classifier.name, cfg.classifier.desc, cfg.classifier.file] = ...
-	ccfgtaskset_getclassifier(cfg.taskset);
-[cfg.ndf.exec, cfg.ndf.pipe, cfg.ndf.id, cfg.ndf.ic] = ...
-	ccfgtaskset_getndf(cfg.taskset);
+[loop.cfg.classifier.name, loop.cfg.classifier.desc, loop.cfg.classifier.file] = ...
+	ccfgtaskset_getclassifier(loop.cfg.taskset);
+[loop.cfg.ndf.exec, loop.cfg.ndf.pipe, loop.cfg.ndf.id, loop.cfg.ndf.ic] = ...
+	ccfgtaskset_getndf(loop.cfg.taskset);
 
 
 % Override NDF option from XML if needed
 if(isempty(aC) == false); 
 	disp('[ndf_cl_config] Overriding iC address');
-	cfg.ndf.ic = aC;
+	loop.cfg.ndf.ic = aC;
 end
 if(isempty(aD) == false); 
 	disp('[ndf_cl_config] Overriding iD address');
-	cfg.ndf.id = aD;
+	loop.cfg.ndf.id = aD;
 end
 if(isempty(pn) == false); 
 	disp('[ndf_cl_config] Overriding pipename');
-	cfg.ndf.pipe = pn;
+	loop.cfg.ndf.pipe = pn;
 end
 
 fprintf(1, '[ndf_cl_config] Nameserver configuration:\n');
-fprintf(1, '  Modality: %s\n', cfg.ns.modality);
-fprintf(1, '  Block:    %s\n', cfg.ns.block);
-fprintf(1, '  Taskset:  %s\n', cfg.ns.taskset);
-fprintf(1, '  XML:      %s\n', cfg.ns.xml);
-fprintf(1, '  Path:     %s\n', cfg.ns.path);
+fprintf(1, '  Modality: %s\n', loop.cfg.ns.modality);
+fprintf(1, '  Block:    %s\n', loop.cfg.ns.block);
+fprintf(1, '  Taskset:  %s\n', loop.cfg.ns.taskset);
+fprintf(1, '  XML:      %s\n', loop.cfg.ns.xml);
+fprintf(1, '  Path:     %s\n', loop.cfg.ns.path);
 fprintf(1, '[ndf_cl_config] NDF configuration:\n');
-fprintf(1, '  Exec:     %s\n', cfg.ndf.exec);
-fprintf(1, '  Pipe:     %s\n', cfg.ndf.pipe);
-fprintf(1, '  TOBI iD:  %s\n', cfg.ndf.id);
-fprintf(1, '  TOBI iC:  %s\n', cfg.ndf.ic);
+fprintf(1, '  Exec:     %s\n', loop.cfg.ndf.exec);
+fprintf(1, '  Pipe:     %s\n', loop.cfg.ndf.pipe);
+fprintf(1, '  TOBI iD:  %s\n', loop.cfg.ndf.id);
+fprintf(1, '  TOBI iC:  %s\n', loop.cfg.ndf.ic);
 fprintf(1, '[ndf_cl_config] Classifier configuration:\n');
-fprintf(1, '  Name      %s\n', cfg.classifier.name);
-fprintf(1, '  Desc.:    %s\n', cfg.classifier.desc);
-fprintf(1, '  Filename: %s\n', cfg.classifier.file);
-
-loop.cfg = cfg;
+fprintf(1, '  Name      %s\n', loop.cfg.classifier.name);
+fprintf(1, '  Desc.:    %s\n', loop.cfg.classifier.desc);
+fprintf(1, '  Filename: %s\n', loop.cfg.classifier.file);

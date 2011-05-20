@@ -28,6 +28,7 @@ class ClMatlab : public CcProcess {
 				bool write = true, bool read = true);
 		virtual ~ClMatlab(void);
 		void AddPath(const std::string& path);
+		void Include(const std::string& path);
 		void Include(const std::string& path0, const std::string& path1);
 		void ChangeDirectory(const std::string& path);
 		

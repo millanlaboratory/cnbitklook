@@ -70,6 +70,7 @@ int main(void) {
 			online->description.c_str(), 
 			online->Count());
 
+	online->Dump();
 	online->DumpClassifier();
 	online->DumpNDF();
 

@@ -145,6 +145,27 @@ int ClProClient::ChangeDirectory(const int pid, const std::string& path) {
 		return ClProLang::StatusLost;
 }
 
+int ClProClient::Include(const int pid, const std::string& path) { 
+	int rpid = 0;
+	int errorid = 0;
+	std::string message, reply;
+	
+	this->_language.Include(pid, path);
+	bool status = ClClient::_client.SendRecv(this->_language.message->buffer,
+			&reply, ClProLang::Hdr, ClProLang::Trl, ClClient::_waitms);
+
+	if(status == false)
+		return ClProLang::NoReply;
+
+	if(this->_language.IsOk(reply.c_str(), &rpid))
+		return ClProLang::Successful;
+	else if(this->_language.IsError(reply.c_str(), &errorid))
+		return errorid;
+	else
+		return ClProLang::StatusLost;
+}
+
+
 int ClProClient::Include(const int pid, const std::string& path0, 
 	const std::string& path1) {
 	int rpid = 0;

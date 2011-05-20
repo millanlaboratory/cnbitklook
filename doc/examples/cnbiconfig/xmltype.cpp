@@ -23,6 +23,8 @@
 int main(void) {
 	XMLType type(true);
 
+	type.Guess("");
+
 	type.Guess("0xFFFF");
 	type.Guess("tana");
 	type.Guess("1");

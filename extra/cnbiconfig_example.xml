@@ -69,7 +69,7 @@
 	
 	<!-- Offline Blocks -->
 	<offline>
-		<mi description="Offline MI"> <!-- This is a Block -->
+		<mi description="Offline MI" protocol="mi_offline"> <!-- This is a Block -->
 			<taskset ttype="mi_rhlh"> <!-- This is a Taskset -->
 				<trials>
 					<mi_hand_left>15</mi_hand_left>
@@ -107,7 +107,7 @@
 			<threshold>0.85</threshold>
 			<viscosity>0.05</viscosity>
 		</mi>
-		<errp description="Offline ErrPs (6 bars, 240 trials)">
+		<errp description="Offline ErrPs (6x240)" protocol="mi_offline">
 			<taskset ttype="errp">
 				<trials>
 					<errp_detected>0</errp_detected>
@@ -121,7 +121,7 @@
 	
 	<!-- Online Block -->
 	<online>
-		<checkloop description="NDF loop check">
+		<checkloop description="NDF loop check" protocol="">
 			<taskset ttype="mi_rhlh" ctype="checkloop" classifier="kmi0">
 				<threshold>
 					<mi_hand_right>0.65</mi_hand_right>
@@ -134,7 +134,7 @@
 			</taskset>
 			<integration>0.96</integration>
 		</checkloop>
-		<mi description="Online MI">
+		<mi description="Online MI" protocol="mi_online">
 			<taskset ttype="mi_rhlh" ctype="mi" classifier="kmi0">
 				<threshold>
 					<mi_hand_right>0.65</mi_hand_right>
@@ -147,7 +147,7 @@
 			</taskset>
 			<integration>0.96</integration>
 		</mi>
-		<errp description="Online ErrPs (6 bars, 240 trials)">
+		<errp description="Online ErrPs (6x240)" protocol="errp_online">
 			<taskset ttype="errp" ctype="mi" classifier="kerrp0">
 				<trials>
 					<errp_detected>0</errp_detected>
@@ -157,7 +157,7 @@
 			<squares>6</squares>
 			<trials>240</trials>
 		</errp>
-		<va description="Visual Attention">
+		<va description="Visual Attention" protocol="va_online">
 			<taskset ttype="va_rl" ctype="va" classifier="kva0">
 				<integration>
 					<va_right>0.85</va_right>
@@ -166,7 +166,7 @@
 				<speed>100</speed>
 			</taskset>
 		</va>
-		<mierrp  description="Online MI+ErrPs">
+		<mierrp  description="Online MI+ErrPs" protocol="mierrp_online">
 			<taskset ttype="mi_rhlh" ctype="mi" classifier="kmi0">
 				<threshold>
 					<mi_hand_left>0.85</mi_hand_left>
@@ -223,7 +223,7 @@
 				<id>/bus</id>
 				<ic>/ctrl0</ic>
 				<directory>/home/mtavella/</directory>
-				<include>/home/mtavella/toolbox/</include>
+				<include></include>
 			</ndf>
 		</checkloop>
 		<mi description="Standard MI classifier (pipeline 1)">

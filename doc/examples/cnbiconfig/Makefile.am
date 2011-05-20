@@ -4,12 +4,12 @@ check_PROGRAMS = cnbiconfig_online \
 				 cnbiconfig_offline \
 				 cnbitask \
 				 xmlconfig \
-				 smarttype
+				 xmltype
 
 cnbiconfig_online_SOURCES = cnbiconfig_online.cpp
 cnbiconfig_offline_SOURCES = cnbiconfig_offline.cpp
 cnbitask_SOURCES = cnbitask.cpp
 xmlconfig_SOURCES = xmlconfig.cpp
-smarttype_SOURCES = smarttype.cpp 
+xmltype_SOURCES = xmltype.cpp 
 
 LDADD = $(top_builddir)/src/cnbiconfig/libcnbiconfig.la

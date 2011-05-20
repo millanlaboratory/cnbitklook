@@ -32,8 +32,10 @@
 #define CLLP_OK				"[cllp]ok|%d[/cllp]"
 #define CLLP_CWD_OUT		"[cllp]cwd|%d|%s[/cllp]"
 #define CLLP_CWD_IN			"[cllp]cwd|%d|%[^'['][/cllp]"
-#define CLLP_INCLUDE_IN		"[cllp]include|%d|%s|%s[/cllp]"
-#define CLLP_INCLUDE_OUT	"[cllp]include|%d|%[^'|']|%[^'['][/cllp]"
+#define CLLP_INCLUDE1_IN	"[cllp]include1|%d|%s[/cllp]"
+#define CLLP_INCLUDE1_OUT	"[cllp]include1|%d|%[^'['][/cllp]"
+#define CLLP_INCLUDE2_IN	"[cllp]include2|%d|%s|%s[/cllp]"
+#define CLLP_INCLUDE2_OUT	"[cllp]include2|%d|%[^'|']|%[^'['][/cllp]"
 #define CLLP_EXEC_NDF_OUT 	"[cllp]execndf|%d|%s[/cllp]"
 #define CLLP_EXEC_NDF_IN  	"[cllp]execndf|%d|%[^'['][/cllp]"
 
@@ -119,10 +121,17 @@ char* ClProLang::ChangeDirectory(const int pid, const std::string& path) {
 	return ClLanguage::message->buffer;
 }
 
+char* ClProLang::Include(const int pid, const std::string& path){
+	snprintf(ClLanguage::message->buffer, ClLanguage::MessageSize(),
+			CLLP_INCLUDE1_IN, 
+			pid, path.c_str());
+	return ClLanguage::message->buffer;
+}
+
 char* ClProLang::Include(const int pid, const std::string& path0, 
 		const std::string& path1){
 	snprintf(ClLanguage::message->buffer, ClLanguage::MessageSize(),
-			CLLP_INCLUDE_IN, 
+			CLLP_INCLUDE2_IN, 
 			pid, path0.c_str(), path1.c_str());
 	return ClLanguage::message->buffer;
 }
@@ -148,10 +157,21 @@ bool ClProLang::IsChangeDirectory(const char* message,
 	return true;
 }
 
+bool ClProLang::IsInclude(const char* message, int* pid, std::string* path) {
+	int count = sscanf(message, CLLP_INCLUDE1_OUT, 
+			pid, 
+			ClLanguage::_cache0->buffer);
+	if(count < 2)
+		return false;
+
+	path->assign(ClLanguage::_cache0->buffer);
+	return true;
+}
+
 bool ClProLang::IsInclude(const char* message, int* pid, 
 		std::string* path0, std::string* path1) {
 
-	int count = sscanf(message, CLLP_INCLUDE_OUT, 
+	int count = sscanf(message, CLLP_INCLUDE2_OUT, 
 			pid, 
 			ClLanguage::_cache0->buffer,  
 			ClLanguage::_cache1->buffer);

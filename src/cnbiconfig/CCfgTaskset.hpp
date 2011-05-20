@@ -57,6 +57,7 @@ class CCfgTaskset {
 		bool HasTask(std::string name);
 		unsigned int Count(void);
 		void Clear(void);
+		void Dump(void);
 		void DumpClassifier(void);
 		void DumpNDF(void);
 
@@ -69,6 +70,7 @@ class CCfgTaskset {
 		CCfgTasksetMap tasks;
 		std::string name;
 		std::string description;
+		std::string protocol;
 		
 		CCfgClassifier classifier;
 		CCfgNDF ndf;
