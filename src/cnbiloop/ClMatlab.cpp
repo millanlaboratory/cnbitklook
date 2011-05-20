@@ -22,7 +22,26 @@
 #include <cnbicore/CcBasic.hpp>
 #include "ClMatlab.hpp" 
 
-#define CLMATLAB_INCLUDE "\
+#define CLMATLAB_INCLUDE1 "\
+try;\
+	if(isempty(getenv('CNBITKMAT_ROOT')));\
+		disp('CNBITKMAT_ROOT unset, mtpath must be in /opt/cnbitkmat/mtpath');\
+		addpath('/opt/cnbitkmat/mtpath');\
+	end;\
+	status0 = mtpath_include('%s');\
+	if(status0 == false);\
+		disp('Error: include failed');\
+		exit;\
+	end;\
+catch e;\
+	disp(['Exception: ' exception.message ]);\
+	disp(exception);\
+	disp(exception.stack);\
+	disp('Killing Matlab...');\
+	exit;\
+end;\n"
+
+#define CLMATLAB_INCLUDE2 "\
 try;\
 	if(isempty(getenv('CNBITKMAT_ROOT')));\
 		disp('CNBITKMAT_ROOT unset, mtpath must be in /opt/cnbitkmat/mtpath');\
@@ -33,7 +52,7 @@ try;\
 		status1 = mtpath_include('%s');\
 	end;\
 	if(status0 == false && status1 == false);\
-		disp('Cannot include at all');\
+		disp('Error: includes failed');\
 		exit;\
 	end;\
 catch e;\
@@ -119,9 +138,17 @@ void ClMatlab::AddPath(const std::string& path) {
 	CcProcess::Write(buffer);
 }
 
+void ClMatlab::Include(const std::string& path) {
+	char buffer[2048];
+	sprintf(buffer, CLMATLAB_INCLUDE1, path.c_str());
+	
+	CcLogDebugS("Including path: " << buffer);
+	CcProcess::Write(buffer);
+}
+
 void ClMatlab::Include(const std::string& path0, const std::string& path1) {
 	char buffer[2048];
-	sprintf(buffer, CLMATLAB_INCLUDE, path0.c_str(), path1.c_str());
+	sprintf(buffer, CLMATLAB_INCLUDE2, path0.c_str(), path1.c_str());
 	
 	CcLogDebugS("Including path: " << buffer);
 	CcProcess::Write(buffer);

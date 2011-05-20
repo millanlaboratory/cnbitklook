@@ -31,6 +31,7 @@ class ClProClient : public ClClient {
 		int IsAlive(const int pid);
 		int Terminate(const int pid);
 		int ChangeDirectory(const int pid, const std::string& path);
+		int Include(const int pid, const std::string& path);
 		int Include(const int pid, const std::string& path0, 
 				const std::string& path1);
 		int ExecNDF(const int pid, const std::string& function);

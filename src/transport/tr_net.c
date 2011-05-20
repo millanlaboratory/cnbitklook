@@ -129,8 +129,6 @@ int tr_bind(tr_socket* sock, const char* port) {
 	// Fill local host structure
 	tr_gethost_local(sock, &(sock->local));
 
-	//tr_getmaxbsize(sock);
-
 	return bndret;
 }
 

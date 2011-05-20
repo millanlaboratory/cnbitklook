@@ -32,6 +32,7 @@ class ClProLang : public ClLanguage {
 		char* IsAlive(const int pid);
 		char* Died(const int pid);
 		char* ChangeDirectory(const int pid, const std::string& path);
+		char* Include(const int pid, const std::string& path);
 		char* Include(const int pid, const std::string& path0, const std::string& path1);
 		char* ExecNDF(const int pid, const std::string& function);
 		char* Ok(const int pid);
@@ -44,6 +45,7 @@ class ClProLang : public ClLanguage {
 		bool IsOk(const char* message, int* pid);
 		bool IsError(const char* message, int* code);
 		bool IsChangeDirectory(const char* message, int* pid, std::string* path);
+		bool IsInclude(const char* message, int* pid, std::string* path0);
 		bool IsInclude(const char* message, int* pid, std::string* path0, 
 				std::string* path1);
 		bool IsExecNDF(const char* message, int* pid, std::string* function);

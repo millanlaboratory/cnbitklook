@@ -223,7 +223,7 @@
 				<id>/bus</id>
 				<ic>/ctrl0</ic>
 				<directory>/home/mtavella/</directory>
-				<include>/home/mtavella/toolbox/</include>
+				<include></include>
 			</ndf>
 		</checkloop>
 		<mi description="Standard MI classifier (pipeline 1)">

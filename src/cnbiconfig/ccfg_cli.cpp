@@ -239,7 +239,7 @@ void usage(void) {
 	printf("  -t BLOCK    get available tasksets for block BLOCK\n");
 	printf("  -c          get the classifier for BLOCK/TASKSET\n");
 	printf("  -a          get the basename for an XDF file\n");
-	printf("  -o          get the filename for the XDF file log\n");
+	printf("  -o          get the xml for the XDF file log\n");
 	printf("  -l          get the logline for an XDF file\n");
 	printf("  -p          get the protocol executable name\n");
 	printf("  -u          enable user-friendly output\n");
@@ -259,7 +259,7 @@ void usage(void) {
 	printf("    Get the XDF basename for the 'errp' block and\n");
 	printf("    the 'errp' taskset in the online modality\n\n");
 	printf("  ccfg_cli -x example.xml -Nu -t errp -T errp -o\n");
-	printf("    Get the XDF log filename for the 'errp' block and\n");
+	printf("    Get the XDF log xml for the 'errp' block and\n");
 	printf("    the 'errp' taskset in the online modality\n\n");
 	printf("  ccfg_cli -x example.xml -Nu -t errp -T errp -l\n");
 	printf("    Get the XDF log line for the 'errp' block and\n");
@@ -281,7 +281,7 @@ void usage(void) {
 
 int main(int argc, char *argv[]) {
 	int opt;	
-	std::string filename, modality, block, taskset;
+	std::string xml, modality, block, taskset;
 	int mode = MODE_CONFIG, get = GET_NOTHING;
 
 	if(argc == 1) {
@@ -291,7 +291,7 @@ int main(int argc, char *argv[]) {
 
 	while((opt = getopt(argc, argv, "T:B:M:x:t:bFNpuUhcaol")) != -1) {
 		if(opt == 'x')
-			filename.assign(optarg);
+			xml.assign(optarg);
 		else if(opt == 'b')
 			get = GET_BLOCKS;
 		else if(opt == 't') {
@@ -329,6 +329,10 @@ int main(int argc, char *argv[]) {
 	}
 	
 	bool die = false;
+	if(xml.empty()) {
+		fprintf(stderr, "Error: XML configuration required\n");
+		die = true;
+	}
 	if(modality.empty()) {
 		fprintf(stderr, "Error: modality unknown (online, offline)\n");
 		die = true;
@@ -338,14 +342,13 @@ int main(int argc, char *argv[]) {
 		die = true;
 	}
 
-	if(die == true) {
+	if(die == true)
 		return 1;
-	}
 
 	CCfgConfig* config;
 	try {
 		config = new CCfgConfig();
-		config->ImportFileEx(filename);
+		config->ImportFileEx(xml);
 	} catch(XMLException e) {
 		fprintf(stderr, "Error: %s\n", e.Info().c_str());
 		return 2;

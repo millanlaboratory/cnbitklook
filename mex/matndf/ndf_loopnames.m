@@ -18,7 +18,7 @@
 % /PORT), otherwise die
 
 function loop  = ndf_loopnames(loop)
-
+kk
 if(isempty(loop.cfg.ndf.pipe) == false)
 	if(cl_checkname(loop.cfg.ndf.pipe) == true)
 		loop.cfg.ndf.pipe = cl_query(loop.cl, loop.cfg.ndf.pipe);
