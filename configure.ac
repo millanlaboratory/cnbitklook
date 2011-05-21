@@ -3,7 +3,8 @@ m4_define([lib_current],2)
 m4_define([lib_revision],0)
 m4_define([lib_age],0)
 
-AC_INIT(cnbiloop,[lib_release.lib_current.lib_age.lib_revision],michele.tavella@epfl.ch)
+AC_INIT(cnbiloop,[lib_release.lib_current.lib_age.lib_revision],
+		michele.tavella@epfl.ch)
 AC_CONFIG_SRCDIR([src/ndf/ndf_codec.h])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_MACRO_DIR([m4])
@@ -55,6 +56,7 @@ LIBS="$save_LIBS"
 
 AC_HEADER_STDBOOL
 
+AC_SUBST([RELEASE],[lib_release])
 AC_SUBST([CURRENT],[lib_current])
 AC_SUBST([REVISION],[lib_revision])
 AC_SUBST([AGE],[lib_age])
@@ -84,4 +86,5 @@ AC_CONFIG_FILES([Makefile\
 				 src/ndf/Makefile\
 				 doc/examples/ndf/Makefile\
 				 src/ndf/ndf.pc])
+
 AC_OUTPUT
