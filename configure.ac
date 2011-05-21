@@ -10,34 +10,29 @@ m4_define([lib_current],2)
 m4_define([lib_revision],0)
 m4_define([lib_age],0)
 
-# Setup Autoconf
 AC_INIT(cnbiloop,[lib_release.lib_current.lib_age.lib_revision],michele.tavella@epfl.ch)
 AC_CONFIG_SRCDIR([src/ndf/ndf_codec.h])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_HEADERS([config/config.h])
 
-# Setup automake
 AM_INIT_AUTOMAKE([no-dist-gzip dist-bzip2 color-tests subdir-objects])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 
 AC_CANONICAL_HOST
 AC_CANONICAL_BUILD
 
-# Checks for programs.
 AC_PROG_LIBTOOL
 AC_PROG_CXX
 
 LT_INIT([win32-dll disable-static])
 AC_SUBST(LIBTOOL_DEPS)
 
-# Checks for libraries.
 save_LIBS="$LIBS"
 AC_SEARCH_LIBS([pthread_create], [pthread],
         AC_SUBST([PTHREAD_LIBS], "$LIBS"), AC_MSG_ERROR([The pthread library must be installed.]))
 LIBS="$save_LIBS"
 
-# Check acquisition libs
 save_LIBS="$LIBS"
 AC_SEARCH_LIBS([xdf_open], [xdffileio], [],
         AC_MSG_ERROR([The xdffileio library must be installed.]))
