@@ -48,7 +48,7 @@ bool classifier_start(CCfgConfig* config, const std::string& block,
 		return 0;
 	}
 	
-	ClLoop::processing.ChangeDirectory(pid, ts->ndf.directory);
+	ClLoop::processing.Directory(pid, ts->ndf.directory);
 	ClLoop::processing.IncludeNDF(pid);
 	if(ts->ndf.include.empty() == false)
 		ClLoop::processing.Include(pid, ts->ndf.include);

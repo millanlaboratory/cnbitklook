@@ -365,7 +365,7 @@ int main(int argc, char* argv[]) {
 
 		int pid = -1;
 		sscanf(arg1.c_str(), "%d", &pid);
-		status = ClLoop::processing.ChangeDirectory(pid, arg2);
+		status = ClLoop::processing.Directory(pid, arg2);
 		processing(status);
 		CcCore::Exit(status);
 	

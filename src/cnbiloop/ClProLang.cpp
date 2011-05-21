@@ -113,7 +113,7 @@ bool ClProLang::IsError(const char* message, int* code) {
 	return(sscanf(message, CLLP_ERROR, code) == 1);
 }
 
-char* ClProLang::ChangeDirectory(const int pid, const std::string& path) {
+char* ClProLang::Directory(const int pid, const std::string& path) {
 	snprintf(ClLanguage::message->buffer, ClLanguage::MessageSize(),
 			CLLP_CWD_OUT, pid, path.c_str());
 	return ClLanguage::message->buffer;
@@ -134,7 +134,7 @@ char* ClProLang::Include(const int pid, const std::string& path0,
 	return ClLanguage::message->buffer;
 }
 
-bool ClProLang::IsChangeDirectory(const char* message, 
+bool ClProLang::IsDirectory(const char* message, 
 		int* pid, std::string* path) {
 	int count = sscanf(message, CLLP_CWD_IN, 
 			pid, 

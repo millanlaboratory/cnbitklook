@@ -141,7 +141,7 @@ void ClMatlab::Include(const std::string& path0, const std::string& path1) {
 	CcProcess::Write(buffer);
 }
 		
-void ClMatlab::ChangeDirectory(const std::string& path) {
+void ClMatlab::Directory(const std::string& path) {
 	char buffer[2048];
 	sprintf(buffer, CLMATLAB_CWD, path.c_str(), path.c_str());
 	CcLogDebugS("Changing directory: " << buffer);

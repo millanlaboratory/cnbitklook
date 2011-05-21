@@ -43,8 +43,8 @@ int main(void) {
 	cout << pro.Ok(100) << endl;
 	cout << pro.IsOk(pro.message->buffer, &pid) << endl;
 	
-	cout << pro.ChangeDirectory(100, "/home/mtavella") << endl;
-	cout << pro.IsChangeDirectory(pro.message->buffer, &pid, &path0) << endl;
+	cout << pro.Directory(100, "/home/mtavella") << endl;
+	cout << pro.IsDirectory(pro.message->buffer, &pid, &path0) << endl;
 	
 	cout << pro.Include(100, "/home/mtavella", "/tmp/mtavella") << endl;
 	cout << pro.IsInclude(pro.message->buffer, &pid, &path0, &path1) << endl;

@@ -83,16 +83,16 @@ void ClProAsServer::HandleRecvPeer(CcSocket* caller, CcAddress addr,
 						<< pid << " IsDead, " << buffer);
 			}
 		}
-	} else if(this->language.IsChangeDirectory(message.c_str(), &pid, &path0)) {
+	} else if(this->language.IsDirectory(message.c_str(), &pid, &path0)) {
 		ClMatlab* process = this->Get(pid);
 		if(process == NULL) {
 			server->Send(language.Error(ClProLang::NotFound), addr);
-			CcLogWarningS("ChangeDirectory from " << addr << ":" 
+			CcLogWarningS("Directory from " << addr << ":" 
 					" PID=" << pid << ", " << path0 << " NotFound");
 		} else {
-			process->ChangeDirectory(path0);
+			process->Directory(path0);
 			server->Send(language.Ok(pid), addr);
-			CcLogInfoS("ChangeDirectory from " << addr << ":" 
+			CcLogInfoS("Directory from " << addr << ":" 
 					" PID=" << pid << " " << path0);
 		}
 	} else if(this->language.IsInclude(message.c_str(), &pid, &path0)) {

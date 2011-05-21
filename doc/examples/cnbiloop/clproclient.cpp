@@ -41,7 +41,7 @@ int main(void) {
 		cout << "Spawned " << pid0 << endl;
 		cout << "Spawned " << pid1 << endl;
 		
-		client.ChangeDirectory(pid0, "/home/mtavella/");
+		client.Directory(pid0, "/home/mtavella/");
 		client.Exec(pid0, "a=rand(10,10);");
 		client.Exec(pid0, "save;");
 		client.Exec(pid0, "bench(1);");

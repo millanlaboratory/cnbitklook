@@ -31,7 +31,7 @@ class ClProLang : public ClLanguage {
 		char* Terminate(const int pid);
 		char* IsAlive(const int pid);
 		char* Died(const int pid);
-		char* ChangeDirectory(const int pid, const std::string& path);
+		char* Directory(const int pid, const std::string& path);
 		char* Include(const int pid, const std::string& path);
 		char* Include(const int pid, const std::string& path0, const std::string& path1);
 		char* Ok(const int pid);
@@ -43,7 +43,7 @@ class ClProLang : public ClLanguage {
 		bool IsDied(const char* message, int* pid);
 		bool IsOk(const char* message, int* pid);
 		bool IsError(const char* message, int* code);
-		bool IsChangeDirectory(const char* message, int* pid, std::string* path);
+		bool IsDirectory(const char* message, int* pid, std::string* path);
 		bool IsInclude(const char* message, int* pid, std::string* path0);
 		bool IsInclude(const char* message, int* pid, std::string* path0, 
 				std::string* path1);

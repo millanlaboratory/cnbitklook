@@ -125,12 +125,12 @@ int ClProClient::Terminate(const int pid) {
 		return ClProLang::StatusLost;
 }
 
-int ClProClient::ChangeDirectory(const int pid, const std::string& path) {
+int ClProClient::Directory(const int pid, const std::string& path) {
 	int rpid = 0;
 	int errorid = 0;
 	std::string message, reply;
 	
-	this->_language.ChangeDirectory(pid, path);
+	this->_language.Directory(pid, path);
 	bool status = ClClient::_client.SendRecv(this->_language.message->buffer,
 			&reply, ClProLang::Hdr, ClProLang::Trl, ClClient::_waitms);
 

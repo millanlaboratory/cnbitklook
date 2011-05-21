@@ -39,10 +39,10 @@ int main(void) {
 	cout << "Spawned " << pid0 << endl;
 	cout << "Spawned " << pid1 << endl;
 
-	client.ChangeDirectory(pid0, "/tmp/");
+	client.Directory(pid0, "/tmp/");
 	client.Exec(pid0, "ndf_monitor");
 	
-	client.ChangeDirectory(pid1, "/tmp/");
+	client.Directory(pid1, "/tmp/");
 	client.Exec(pid1, "ndf_monitor");
 
 	while(client.Connect()) {

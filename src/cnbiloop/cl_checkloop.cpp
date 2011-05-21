@@ -71,7 +71,7 @@ int main(int argc, char* argv[]) {
 	ClLoop::nameserver.EraseConfig("checkloop", "plot");
 	ClLoop::nameserver.StoreConfig("checkloop", "plot", optplot);
 
-	ClLoop::processing.ChangeDirectory(pid0, "/tmp/");
+	ClLoop::processing.Directory(pid0, "/tmp/");
 	ClLoop::processing.IncludeNDF(pid0) ;
 	ClLoop::processing.Exec(pid0, "ndf_checkloop");
 
