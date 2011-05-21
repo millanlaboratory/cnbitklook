@@ -40,10 +40,10 @@ int main(void) {
 	cout << "Spawned " << pid1 << endl;
 
 	client.ChangeDirectory(pid0, "/tmp/");
-	client.ExecNDF(pid0, "ndf_monitor");
+	client.Exec(pid0, "ndf_monitor");
 	
 	client.ChangeDirectory(pid1, "/tmp/");
-	client.ExecNDF(pid1, "ndf_monitor");
+	client.Exec(pid1, "ndf_monitor");
 
 	while(client.Connect()) {
 		if(client.IsAlive(pid0) != ClProLang::Successful)
