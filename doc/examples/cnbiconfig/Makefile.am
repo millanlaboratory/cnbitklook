@@ -1,15 +1,15 @@
 AM_CPPFLAGS = $(CPPFLAGS) -I$(top_srcdir)/src
 
-check_PROGRAMS = cnbiconfig_online \
-				 cnbiconfig_offline \
-				 cnbitask \
-				 xmlconfig \
+check_PROGRAMS = ccfgconfig_online \
+				 ccfgconfig_offline \
+				 ccfgtask \
+				 ccfgxmlconfig \
 				 xmltype
 
-cnbiconfig_online_SOURCES = cnbiconfig_online.cpp
-cnbiconfig_offline_SOURCES = cnbiconfig_offline.cpp
-cnbitask_SOURCES = cnbitask.cpp
-xmlconfig_SOURCES = xmlconfig.cpp
+ccfgconfig_online_SOURCES =  ccfgconfig_online.cpp
+ccfgconfig_offline_SOURCES = ccfgconfig_offline.cpp
+ccfgtask_SOURCES = ccfgtask.cpp
+ccfgxmlconfig_SOURCES = ccfgxmlconfig.cpp
 xmltype_SOURCES = xmltype.cpp 
 
 LDADD = $(top_builddir)/src/cnbiconfig/libcnbiconfig.la
