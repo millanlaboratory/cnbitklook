@@ -30,7 +30,8 @@ AC_SUBST(LIBTOOL_DEPS)
 
 save_LIBS="$LIBS"
 AC_SEARCH_LIBS([pthread_create], [pthread],
-        AC_SUBST([PTHREAD_LIBS], "$LIBS"), AC_MSG_ERROR([The pthread library must be installed.]))
+        AC_SUBST([PTHREAD_LIBS], "$LIBS"), 
+		AC_MSG_ERROR([The pthread library must be installed.]))
 LIBS="$save_LIBS"
 
 save_LIBS="$LIBS"
