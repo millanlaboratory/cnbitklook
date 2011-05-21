@@ -1,8 +1,8 @@
 AM_CPPFLAGS = $(CPPFLAGS) -I$(top_srcdir)/src
 
-check_PROGRAMS = tp_namedsender tp_namedreceiver
+check_PROGRAMS = tpsender tpreceiver
 
-tp_namedsender_SOURCES = tp_namedsender.c
-tp_namedreceiver_SOURCES = tp_namedreceiver.c
+tpsender_SOURCES = tpsender.c
+tpreceiver_SOURCES = tpreceiver.c
 
 LDADD = $(top_builddir)/src/transpipe/libtranspipe.la

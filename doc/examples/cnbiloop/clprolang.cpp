@@ -55,8 +55,8 @@ int main(void) {
 	cout << function << endl;
 	
 	function.clear();
-	cout << pro.ExecNDF(100, "ndf_checkloop") << endl;
-	cout << pro.IsExecNDF(pro.message->buffer, &pid, &function) << endl;
+	cout << pro.Exec(100, "ndf_checkloop") << endl;
+	cout << pro.IsExec(pro.message->buffer, &pid, &function) << endl;
 	cout << function << endl;
 
 	return 0;

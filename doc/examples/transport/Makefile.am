@@ -1,17 +1,17 @@
 AM_CPPFLAGS = $(CPPFLAGS) -I$(top_srcdir)/src
 
-check_PROGRAMS = resolver \
-				  clientchar \
-				  serverchar \
-				  clientvoid \
-				  servervoid \
-				  multi 
+check_PROGRAMS = trresolver \
+				 trclientchar \
+				 trserverchar \
+				 trclientvoid \
+				 trservervoid \
+				 trmulti 
 
-multi_SOURCES = multi.c
-resolver_SOURCES = resolver.c
-clientchar_SOURCES = clientchar.c
-serverchar_SOURCES = serverchar.c
-clientvoid_SOURCES = clientvoid.c
-servervoid_SOURCES = servervoid.c
+trmulti_SOURCES = trmulti.c
+trresolver_SOURCES = trresolver.c
+trclientchar_SOURCES = trclientchar.c
+trserverchar_SOURCES = trserverchar.c
+trclientvoid_SOURCES = trclientvoid.c
+trservervoid_SOURCES = trservervoid.c
 
 LDADD = $(top_builddir)/src/transport/libtransport.la
