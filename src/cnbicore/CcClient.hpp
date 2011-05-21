@@ -22,6 +22,10 @@
 #include "CcSocket.hpp"
 #include "CcThread.hpp"
 
+/*! \brief TCP/UDP client
+ *
+ * CcClient is a threaded asynchronous TCP/UDP client.
+ */
 class CcClient : public CcSocket, protected CcThread {
 	public:
 		CcClient(size_t bsize = CCCORE_1MB);

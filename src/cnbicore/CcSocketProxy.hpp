@@ -21,6 +21,8 @@
 
 #include "CcSocket.hpp"
 
+/*! \brief Callback proxy for the CcSocket class
+ */
 class CcSocketProxy {
 	public:
 		virtual void HandleBind(CcSocket* caller);

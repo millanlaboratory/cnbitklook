@@ -32,7 +32,8 @@ class CcPipeWriterProxy;
 
 /*! \brief Threaded pipe source that supports ACK
  *
- * Used to send point-to-point data configuring the enpoint
+ * Used to send point-to-point data. It can send a user-defined acknoledgment
+ * message as soon as the connection is initiated. 
  */
 class CcPipeWriter : public CcThread {
 	public:
@@ -69,6 +70,8 @@ class CcPipeWriter : public CcThread {
 		size_t _ackbsize;
 };
 
+/*! \brief Callback proxy for the CcPipeWriter class
+ */
 class CcPipeWriterProxy {
 	public:
 		virtual void HandleOpen(CcPipeWriter* caller) { }

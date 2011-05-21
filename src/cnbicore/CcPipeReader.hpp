@@ -32,7 +32,7 @@ class CcPipeReaderProxy;
 
 /*! \brief Asynchronous pipe reader
  *
- * Used to receive point-to-point data
+ * Used to receive point-to-point data.
  */
 class CcPipeReader : public CcThread {
 	public:
@@ -60,6 +60,8 @@ class CcPipeReader : public CcThread {
 		CcBuffer<>* _rbuff;
 };
 
+/*! \brief Callback proxy for the CcPipeReader class
+ */
 class CcPipeReaderProxy {
 	public:
 		virtual void HandleOpen(CcPipeReader* caller) { }

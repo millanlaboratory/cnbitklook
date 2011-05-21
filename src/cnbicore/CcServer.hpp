@@ -22,6 +22,10 @@
 #include <cnbicore/CcSocket.hpp>
 #include <cnbicore/CcThread.hpp>
 
+/*! \brief TCP/UDP multiplexing server
+ *
+ * CcServer is a multiplexing TCP/UDP server.
+ */
 class CcServer : public CcSocket, protected CcThread {
 	public:
 		CcServer(size_t bsize = CCCORE_1MB);

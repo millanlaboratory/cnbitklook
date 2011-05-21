@@ -25,6 +25,8 @@
 /*! \brief File wrapper
  *
  * This class simplifies file access by simplifying the read/write operations.
+ * It is not intended for the advanced user nor it can read binary files. It can
+ * simply read and write ASCII files.
  */
 class CcFile : public CcObject {
 	public:

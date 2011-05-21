@@ -21,6 +21,11 @@
 
 #include "CcClient.hpp"
 
+/*! \brief TCP/UDP client with extended functionalities
+ * 
+ * CcClientExt exposes some extra functionalities to implement query/reply
+ * mecanisms. It is particularly useful to develop communications protocols.
+ */
 class CcClientExt : public CcClient {
 	public:
 		CcClientExt(size_t bsize = CCCORE_1MB);

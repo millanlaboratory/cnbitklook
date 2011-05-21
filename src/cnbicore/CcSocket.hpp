@@ -36,9 +36,11 @@ typedef std::map<int, CcStreamer*>::iterator CcStreamerMap2It;
 typedef std::map<int, tr_socket*> CcSocketMap2;
 typedef std::map<int, tr_socket*>::iterator CcSocketMap2It;
 
-/*! \brief TCP socket
+/*! \brief TCP/UDP socket
  * 
- * Implements the basic socket functionalities.
+ * Implements the basic socket functionalities. Objects like CcServer and
+ * CcClient heavily rely on this class. It implements all the methods to send
+ * and receive ASCII and binary data.
  */
 class CcSocket : public CcObject {
 	public:

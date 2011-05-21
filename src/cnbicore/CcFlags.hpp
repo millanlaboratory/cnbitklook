@@ -19,23 +19,6 @@
 #ifndef CCFLAGS_HPP
 #define CCFLAGS_HPP
 
-/* 09-09-28  Michele Tavella <michele.tavella@epfl.ch>
- * 
- * By enabling this flag, after calling each i_* CallBack*, 
- * a virtual function called p* is executed.
- *
- * This option does not affect the way the things work, but 
- * it is possible to custumize things a little more deeply, 
- * switching from "uses a" to "is a".
- *
- * If unsure, do not define it! You will save you CPU a couple 
- * microseconds.
- */
-//#define CCENABLE_PLACEHOLDERS
-
-/* 09-09-29  Michele Tavella <michele.tavella@epfl.ch>
- * Non-blocking sockets
- */
 #define CCCORE_1KB				      1024 
 #define CCCORE_1MB				   1048576
 #define CCCORE_ASIO_SEC				     0
@@ -46,7 +29,7 @@
 #define CCASYNC_WAIT_MRECV			 5.000
 #define CCASYNC_WAIT_RECV			 5.000
 
-/*! \mainpage libcnbicore
+/*! \mainpage CnbiTK cnbiloop
  *
  * \section sec_intro Introduction
  * libcnbicore implements the low-level functionalities of the CNBIToolkit
