@@ -5,6 +5,8 @@ mexcc = $(interface).cc
 mexmw = $(interface).mw
 mexld = -l$(interface) -lcnbicore
 
+all: mex
+
 cc:
 	mwrap -mex $(interface) -c $(mexcc) -mb $(mexmw) 
 
