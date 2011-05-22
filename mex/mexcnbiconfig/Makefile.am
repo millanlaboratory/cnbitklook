@@ -8,7 +8,7 @@ mexld = -l$(interface) -ltobiic -ltobiid -lcnbiconfig
 cc:
 	mwrap -mex $(interface) -c $(mexcc) -mb $(mexmw) 
 
-mex: $(cc)
+mex: cc
 	mex -largeArrayDims $(mexld) $(mexcc)
 
 clean-local:
