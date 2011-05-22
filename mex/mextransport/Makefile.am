@@ -7,7 +7,7 @@ mexld = -l$(interface)
 
 all: mex
 
-cc:
+cc: $(mexmw)
 	echo $(includedir)
 	mwrap -mex $(interface) -c $(mexcc) -mb $(mexmw) 
 

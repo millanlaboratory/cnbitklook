@@ -7,7 +7,7 @@ mexld = -l$(interface) -ltobiic -ltobiid -lcnbiconfig
 
 all: mex
 
-cc:
+cc: $(mexmw)
 	mwrap -mex $(interface) -c $(mexcc) -mb $(mexmw) 
 
 mex: cc
