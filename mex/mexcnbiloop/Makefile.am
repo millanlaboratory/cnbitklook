@@ -1,9 +1,9 @@
-EXTRA_DIST = cnbiconfig.mw.in
+EXTRA_DIST = cnbiloop.mw.in
 
-interface = cnbiconfig
+interface = cnbiloop
 mexcc = $(interface).cc
 mexmw = $(interface).mw
-mexld = -l$(interface) -ltobiic -ltobiid -lcnbiconfig
+mexld = -l$(interface) -lcnbicore
 
 cc:
 	mwrap -mex $(interface) -c $(mexcc) -mb $(mexmw) 

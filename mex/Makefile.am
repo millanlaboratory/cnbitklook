@@ -1,0 +1,3 @@
+SUBDIRS = mexcnbiconfig \
+		  mexcnbiloop \
+		  mextransport

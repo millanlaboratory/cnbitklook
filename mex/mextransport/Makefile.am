@@ -1,9 +1,9 @@
-EXTRA_DIST = cnbiconfig.mw.in
+EXTRA_DIST = transport.mw.in
 
-interface = cnbiconfig
+interface = transport
 mexcc = $(interface).cc
 mexmw = $(interface).mw
-mexld = -l$(interface) -ltobiic -ltobiid -lcnbiconfig
+mexld = -l$(interface) 
 
 cc:
 	mwrap -mex $(interface) -c $(mexcc) -mb $(mexmw) 
