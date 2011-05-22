@@ -4,6 +4,7 @@ interface = transport
 mexcc = $(interface).cc
 mexmw = $(interface).mw
 mexld = -l$(interface) 
+mexpath = ${prefix}/opt/cnbitkmat/mex$(interface)/
 
 all: mex
 
@@ -14,6 +15,14 @@ mex: cc
 	mex -largeArrayDims $(mexld) $(mexcc)
 
 clean-local:
-	rm -rf *.m
 	rm -rf $(mexcc)
+	rm -rf *.m
 	rm -rf *.mex*
+
+install-data-local:
+	mkdir -p ${mexpath}
+	cp *.m ${mexpath}
+	cp *.mex* ${mexpath}
+
+uninstall-local:
+	rm -rf ${mexpath}
