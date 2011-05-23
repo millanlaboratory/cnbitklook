@@ -5,8 +5,6 @@ matfiles = ${top_srcdir}/mex/$(toolbox)/*.m
 ticc = $(top_srcdir)/mex/$(interface)/ndf_tic.c
 tocc = $(top_srcdir)/mex/$(interface)/ndf_toc.c
 
-all: mex
-
 mex: mextic mextoc
 
 mextic: $(ticc)
@@ -15,7 +13,7 @@ mextic: $(ticc)
 mextoc: $(tocc)
 	mex $(tocc)
 
-install-data-local:
+install-data-local: mex
 	mkdir -p ${matpath}
 	cp $(matfiles) ${matpath}
 	cp *.mex* ${matpath}
