@@ -44,7 +44,7 @@ int main(void) {
 	
 	printf("%s Entering send loop\n", EXAMPLE_NAME);
 	for(i = 0; i < 5; i++) {
-		printf("%s Sending: %d\n", EXAMPLE_NAME, 
+		printf("%s Sending: %lu\n", EXAMPLE_NAME, 
 				tr_send(&socket, "Can you read me?"));
 		sleep(1);
 	}

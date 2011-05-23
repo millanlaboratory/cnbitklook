@@ -75,7 +75,7 @@ int main(int argc, char * const argv[]) {
 			printf("%s Server dropped the connection [recv]\n", EXAMPLE_NAME);
 			break;
 		}
-		printf("%s Received: %s\n", EXAMPLE_NAME, socket.buffer);
+		printf("%s Received: %s\n", EXAMPLE_NAME, (char*)socket.buffer);
 		
 		sleep(0.40);
 	}
