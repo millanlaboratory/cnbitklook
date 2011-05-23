@@ -9,5 +9,4 @@ SUBDIRS = src/ndf \
 		  src/cnbiconfig \
 		  src/cnbiloop \
 		  mex/\
-		  doc\
 		  extra
