@@ -10,5 +10,4 @@ SUBDIRS = src/ndf \
 		  src/cnbiloop \
 		  doc \
 		  mex \
-		  mex/matndf \
 		  extra
