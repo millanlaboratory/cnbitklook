@@ -87,11 +87,11 @@ AC_CONFIG_FILES([Makefile\
 				 doc/examples/ndf/Makefile\
 				 src/ndf/ndf.pc\
 				 mex/Makefile\
+				 mex/cnbitkmat/Makefile\
+				 mex/mtpath/Makefile\
+				 mex/matndf/Makefile\
 				 mex/mexcnbiconfig/Makefile\
-				 mex/mexcnbiconfig/cnbiconfig.mw\
 				 mex/mexcnbiloop/Makefile\
-				 mex/mexcnbiloop/cnbiloop.mw\
-				 mex/mextransport/Makefile\
-				 mex/mextransport/transport.mw])
+				 mex/mextransport/Makefile])
 
 AC_OUTPUT

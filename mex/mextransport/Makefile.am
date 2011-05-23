@@ -1,8 +1,6 @@
-EXTRA_DIST = transport.mw.in
-
 interface = transport
 mexcc = $(interface).cc
-mexmw = $(interface).mw
+mexmw = $(top_srcdir)/mex/mex$(interface)/$(interface).mw
 mexld = -l$(interface) 
 mexpath = ${prefix}/opt/cnbitkmat/mex$(interface)/
 

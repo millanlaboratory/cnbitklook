@@ -1,8 +1,6 @@
-EXTRA_DIST = cnbiconfig.mw.in
-
 interface = cnbiconfig
 mexcc = $(interface).cc
-mexmw = $(interface).mw
+mexmw = $(top_srcdir)/mex/mex$(interface)/$(interface).mw
 mexld = -l$(interface) -ltobiic -ltobiid -lcnbiconfig
 mexpath = ${prefix}/opt/cnbitkmat/mex$(interface)/
 

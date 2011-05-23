@@ -1,8 +1,6 @@
-EXTRA_DIST = cnbiloop.mw.in
-
 interface = cnbiloop
 mexcc = $(interface).cc
-mexmw = $(interface).mw
+mexmw = $(top_srcdir)/mex/mex$(interface)/$(interface).mw
 mexld = -l$(interface) -lcnbicore
 mexpath = ${prefix}/opt/cnbitkmat/mex$(interface)/
 
