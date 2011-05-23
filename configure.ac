@@ -54,6 +54,10 @@ AC_SEARCH_LIBS_CLASS([IDMessage], [tobiid], [#include <tobiid/IDMessage.hpp>],
 			AC_MSG_ERROR([The tobiid library cannot be found.]))
 LIBS="$save_LIBS"
 
+AC_CHECK_PROG([DOXYGEN], [doxygen], [doxygen], [true])
+AC_CHECK_PROG([MWRAP], [mwrap], [mwrap], [true])
+AC_CHECK_PROG([MEX], [mex], [mex], [true])
+
 AC_HEADER_STDBOOL
 
 AC_SUBST([RELEASE],[lib_release])
