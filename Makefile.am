@@ -8,5 +8,5 @@ SUBDIRS = src/ndf \
 		  src/cnbiacq \
 		  src/cnbiconfig \
 		  src/cnbiloop \
-		  mex/\
+		  mex \
 		  extra

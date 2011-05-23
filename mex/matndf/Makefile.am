@@ -7,13 +7,13 @@ tocc = $(top_srcdir)/mex/$(interface)/ndf_toc.c
 
 all: mex
 
+mex: mextic mextoc
+
 mextic: $(ticc)
 	mex $(ticc)
 
 mextoc: $(tocc)
 	mex $(tocc)
-
-mex: mextic mextoc
 
 install-data-local:
 	mkdir -p ${matpath}
