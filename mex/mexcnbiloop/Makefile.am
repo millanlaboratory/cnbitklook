@@ -4,8 +4,6 @@ mexmw = $(top_srcdir)/mex/mex$(interface)/$(interface).mw
 mexld = -l$(interface) -lcnbicore
 mexpath = ${prefix}/opt/cnbitkmat/mex$(interface)/
 
-all: mex
-
 cc: $(mexmw)
 	mwrap -mex $(interface) -c $(mexcc) -mb $(mexmw) 
 
@@ -17,7 +15,7 @@ clean-local:
 	rm -rf *.m
 	rm -rf *.mex*
 
-install-data-local:
+install-data-local: mex
 	mkdir -p ${mexpath}
 	cp *.m ${mexpath}
 	cp *.mex* ${mexpath}
