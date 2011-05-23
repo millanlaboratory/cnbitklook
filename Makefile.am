@@ -9,11 +9,5 @@ SUBDIRS = src/ndf \
 		  src/cnbiconfig \
 		  src/cnbiloop \
 		  mex/\
-		  mex/cnbitkmat\
-		  mex/mtpath\
-		  mex/matndf\
-		  mex/mexcnbiconfig\
-		  mex/mexcnbiloop\
-		  mex/mextransport\
 		  doc\
 		  extra
