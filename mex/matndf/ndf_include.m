@@ -18,7 +18,7 @@ function ndf_include()
 try
 	if(isempty(getenv('CNBITKMAT_ROOT')))
 		disp('[ndf_include] $CNBITKMAT_ROOT not found, using default');
-		setenv('CNBITKMAT_ROOT', '/opt/cnbitkmat/');
+		setenv('CNBITKMAT_ROOT', '/usr/local/share/cnbiloop/cnbitkmat/');
 	end
 	if(isempty(getenv('EEGC3_ROOT')))
 		disp('[ndf_include] $EEGC3_ROOT not found, using default');

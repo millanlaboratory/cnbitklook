@@ -188,7 +188,8 @@ int ClProClient::Include(const int pid, const std::string& path0,
 }
 
 int ClProClient::IncludeNDF(const int pid) {
-	return this->Include(pid, "$CNBITKMAT_ROOT/", "/opt/cnbitkmat/");
+	return this->Include(pid, "$CNBITKMAT_ROOT/", 
+			"/usr/local/share/cnbiloop/cnbitkmat/");
 }
 
 bool ClProClient::Check(const int pid, double waitms) {
