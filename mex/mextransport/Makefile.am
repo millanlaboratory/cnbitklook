@@ -2,7 +2,7 @@ interface = transport
 mexcc = $(interface).cc
 mexmw = $(top_srcdir)/mex/mex$(interface)/$(interface).mw
 mexld = -l$(interface) 
-mexpath = ${prefix}/opt/cnbitkmat/mex$(interface)/
+mexpath = ${pkgdatadir}/cnbitkmat/mex$(interface)/
 
 cc: $(mexmw)
 	mwrap -mex $(interface) -c $(mexcc) -mb $(mexmw) 

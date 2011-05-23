@@ -1,5 +1,5 @@
 toolbox = mtpath
-matpath = ${prefix}/opt/$(toolbox)/
+matpath = ${pkgdatadir}/cnbitkmat/$(toolbox)/
 matfiles = ${top_srcdir}/mex/$(toolbox)/*.m
 
 install-data-local:
