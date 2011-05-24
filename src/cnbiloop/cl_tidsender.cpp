@@ -1,6 +1,7 @@
 /*
     Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
     Michele Tavella <michele.tavella@epfl.ch>
+    Inaki Iturrate <inaki.iturrate@epfl.ch>
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,11 +19,11 @@
 
 #include "ClTobiId.hpp"
 #include <iostream>
-#include <stdio.h>
 
 void usage(void) { 
 	printf("Usage: cl_tidsender [OPTION]...\n\n");
 	printf("  -n       iD bus name (/bus default)\n");
+	printf("  -u       User-given events\n");	
 	printf("  -e       GDF event (default 666)\n");
 	printf("  -d       delay (in ms) for automatic mode (default disabled)\n");
 	printf("  -h       display this help and exit\n");
@@ -33,15 +34,19 @@ int main(int argc, char* argv[]) {
 	int opt;
 	std::string optname("/bus");
 	unsigned int event = 666;
+	bool interactive = false;
+	
 	float ms = 0.00f;
 	
-	while((opt = getopt(argc, argv, "n:d:e:h")) != -1) {
+	while((opt = getopt(argc, argv, "n:d:e:h:u")) != -1) {
 		if(opt == 'n') {
 			optname.assign(optarg);
 		} else if(opt == 'e') {
 			sscanf(optarg, "%u", &event); 
 		} else if(opt == 'd') {
 			sscanf(optarg, "%f", &ms); 
+		} else if(opt == 'u') {
+			interactive = true; 			
 		} else {
 			usage();
 			CcCore::Exit(opt == 'h' ? EXIT_SUCCESS : EXIT_FAILURE);
@@ -73,15 +78,26 @@ int main(int argc, char* argv[]) {
 		CcTime::Sleep(1000.00f);
 
 		if(ms == 0) {
-			printf("\n\nPress 'enter' to send GDF=%u, 'q' to quit:\n", event);
+			if(interactive == true) {
+				printf("\n\nWrite the GDF integer event to send, any other character to quit:\n");
+			} else {
+				printf("\n\nPress 'enter' to send GDF=%u, 'q' to quit:\n", event);
+			}
 			while(id.IsAttached() == true) { 
 				printf(">> ");
-				switch(getchar()) {
-					case 'q':
+				if(interactive == true) {
+					if(!(std::cin >> event)) 
 						goto shutdown;
-						break;
-					default:
-						break;
+					 else 
+						messageI.SetEvent(event);						
+				} else {
+					switch(getchar()) {
+						case 'q':
+							goto shutdown;
+							break;
+						default:
+							break;
+					}
 				}
 				id.SetMessage(&serializerI);
 			}
