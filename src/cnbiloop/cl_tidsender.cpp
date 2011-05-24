@@ -23,7 +23,7 @@
 void usage(void) { 
 	printf("Usage: cl_tidsender [OPTION]...\n\n");
 	printf("  -n       iD bus name (/bus default)\n");
-	printf("  -u       User-given events\n");	
+	printf("  -u       Interactive events\n");	
 	printf("  -e       GDF event (default 666)\n");
 	printf("  -d       delay (in ms) for automatic mode (default disabled)\n");
 	printf("  -h       display this help and exit\n");
@@ -79,7 +79,7 @@ int main(int argc, char* argv[]) {
 
 		if(ms == 0) {
 			if(interactive == true) {
-				printf("\n\nWrite the GDF integer event to send, any other character to quit:\n");
+				printf("\n\nWrite the GDF integer event to send, 'q' to quit:\n");
 			} else {
 				printf("\n\nPress 'enter' to send GDF=%u, 'q' to quit:\n", event);
 			}
