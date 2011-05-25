@@ -70,6 +70,14 @@ bool ClAcqAsServer::CommunicationCl(CcServer* server, CcAddress address,
 			CcLogWarningS("Open XDF from " << address << ": " 
 					<< xdffile << " XDFAlreadyOpen");
 		} else {
+			std::string cnbitkdata = CcCore::GetEnvCnbiTkData();
+			if(cnbitkdata.empty() == false) {
+				CcLogConfigS("CNBITK_DATA points to: " << cnbitkdata);
+				cnbitkdata.append("/");
+				cnbitkdata.append(xdffile);
+				xdffile.assign(cnbitkdata);
+			}
+
 			if(this->_writer->Open(xdffile) == false) {
 				server->Send(language.Error(ClAcqLang::XDFOpenFailed), address);
 				CcLogErrorS("Open XDF from " << address << ": " 

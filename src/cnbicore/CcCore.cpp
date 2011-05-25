@@ -198,7 +198,7 @@ void CcCore::CatchSIGCHLD(void) {
 std::string CcCore::GetEnvCnbiTkData(void) {
 	char* env = getenv("CNBITK_DATA");
 	std::string value;
-	if(env == NULL)
+	if(env != NULL)
 		value.assign((const char*)env);
 	return value;
 }
@@ -206,7 +206,7 @@ std::string CcCore::GetEnvCnbiTkData(void) {
 std::string CcCore::GetEnvCnbiTkMat(void) {
 	char* env = getenv("CNBITKMAT_ROOT");
 	std::string value;
-	if(env == NULL)
+	if(env != NULL)
 		value.assign((const char*)env);
 	return value;
 }
@@ -214,7 +214,7 @@ std::string CcCore::GetEnvCnbiTkMat(void) {
 std::string CcCore::GetEnvTobiCoreMat(void) {
 	char* env = getenv("TOBICOREMAT_ROOT");
 	std::string value;
-	if(env == NULL)
+	if(env != NULL)
 		value.assign((const char*)env);
 	return value;
 }
