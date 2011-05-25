@@ -5,7 +5,7 @@ SUBDIRS = examples/cnbiconfig \
 		  examples/ndf \
 		  examples/transpipe \
 		  examples/transport
-
+	
 html: html/index.html
 
 html/index.html:
@@ -24,5 +24,3 @@ uninstall-local:
 
 clean-local:
 	rm -rf html
-
-
