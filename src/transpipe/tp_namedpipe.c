@@ -51,6 +51,7 @@ int tp_remove(const tp_npipe* pipe) {
 // Retuns <= 0 on error
 int tp_openread(tp_npipe* pipe) {
 	pipe->fid = open(pipe->filename, O_RDONLY);
+	fcntl(pipe->fd, F_SETFD, fcntl(pipe->fd, F_GETFD)|FD_CLOEXEC);
 	return pipe->fid;
 }
 

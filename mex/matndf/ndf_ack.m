@@ -39,10 +39,18 @@ config.samples 		= config.buffer(4);
 config.eeg_channels = config.buffer(5);
 config.exg_channels = config.buffer(6);
 config.tri_channels = config.buffer(7);
-config.eeg_type 	= types{config.buffer(9)};
-config.exg_type 	= types{config.buffer(10)};
-config.tri_type 	= types{config.buffer(11)};
-config.lbl_type 	= types{config.buffer(12)};
+try 
+	config.eeg_type 	= types{config.buffer(9)};
+	config.exg_type 	= types{config.buffer(10)};
+	config.tri_type 	= types{config.buffer(11)};
+	config.lbl_type 	= types{config.buffer(12)};
+catch execption
+	disp('[ndf_ack] Fatal: NDF ACK corrupted.');
+	disp('          Probably two processes are reading from the same pipe.');
+	disp('          What happened is so bad that I will die on the spot.');
+	disp('[ndf_ack] Killing matlab');
+	exit;
+end
 
 % Check if timestamp is sent as a struct timeval
 if(config.buffer(8) == 11)
