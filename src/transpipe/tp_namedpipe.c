@@ -19,6 +19,7 @@
 #ifndef TPNAMEDPIPE_C
 #define TPNAMEDPIPE_C
 
+#define _GNU_SOURCE
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
@@ -51,7 +52,7 @@ int tp_remove(const tp_npipe* pipe) {
 // Retuns <= 0 on error
 int tp_openread(tp_npipe* pipe) {
 	pipe->fid = open(pipe->filename, O_RDONLY);
-	fcntl(pipe->fd, F_SETFD, fcntl(pipe->fd, F_GETFD)|FD_CLOEXEC);
+	fcntl(pipe->fid, F_SETFD, fcntl(pipe->fid, F_GETFD)|FD_CLOEXEC);
 	return pipe->fid;
 }
 
@@ -96,6 +97,14 @@ int tp_receivedsigpipe(void) {
 int tp_exist(const tp_npipe* pipe) {
 	struct stat st;
 	return stat(pipe->filename, &st);
+}
+
+int tp_setsize(const tp_npipe* pipe, const size_t size) {
+	return fcntl(pipe->fid, F_SETPIPE_SZ, (long)size);
+}
+
+size_t tp_getsize(const tp_npipe* pipe) {
+	return fcntl(pipe->fid, F_SETPIPE_SZ);
 }
 
 #endif

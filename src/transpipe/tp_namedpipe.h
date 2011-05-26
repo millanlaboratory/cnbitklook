@@ -50,6 +50,8 @@ size_t tp_read(const tp_npipe* pipe, void* buffer, const size_t bsize);
 void tp_catchsigpipe(void);
 int tp_receivedsigpipe(void);
 int tp_exist(const tp_npipe* pipe);
+int tp_setsize(const tp_npipe* pipe, const size_t size);
+size_t tp_getsize(const tp_npipe* pipe);
 
 #ifdef __cplusplus
 }
