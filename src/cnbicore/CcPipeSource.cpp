@@ -54,6 +54,16 @@ void CcPipeSource::Open(void) {
 	this->_sempipe.Post();
 }
 
+void CcPipeSource::Open(size_t size) {
+	this->Open();
+	if(size) {
+		this->_sempipe.Wait();
+		int a = tp_setsize(&this->_pipe, size);
+		CcLogFatalS(">>>>>>>>>>>>> " << a);
+		this->_sempipe.Post();
+	}
+}
+
 void CcPipeSource::Close(void) {
 	CcLogConfig(std::string("Closing: ").append(this->_pipe.filename));
 	this->_sempipe.Wait();
@@ -111,5 +121,6 @@ void CcPipeSource::Clean(void) {
 	tp_remove(&this->_pipe);
 	this->_sempipe.Post();
 }
+		
 
 #endif

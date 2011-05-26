@@ -31,6 +31,7 @@ class CcPipeSource : public CcPipe {
 		CcPipeSource(const std::string& filename);
 		virtual ~CcPipeSource(void);
 		virtual void Open(void);
+		virtual void Open(const size_t size);
 		virtual void Close(void);
 		virtual size_t Write(const void* buffer, const size_t bsize);
 		virtual bool Write(const void* buffer, const size_t bsize, 
