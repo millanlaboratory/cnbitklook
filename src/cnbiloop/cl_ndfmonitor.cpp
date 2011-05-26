@@ -70,13 +70,18 @@ int main(int argc, char* argv[]) {
 	unsigned long frametot;
 	double loop = true;
 	while(loop == true) {
+		if(CcCore::receivedSIGINT.Get()) 
+			break;
+		if(CcCore::receivedSIGTERM.Get()) 
+			break;
+		
 		frametot = 0;
 		ndf_frame frame;
 		ndf_ack ack;
 
 		// Setup pipe reader 
 		CcPipe reader;
-		if(reader.Open(pipename) == false) {
+		if(reader.Open(pipename, CcPipe::Reader) == true) {
 			CcTime::Tic(&tvOpen);
 		} else {
 			CcLogFatal("Cannot open pipe");
@@ -87,18 +92,18 @@ int main(int argc, char* argv[]) {
 		size_t rsize = 0;
 		ssize_t asize = 0;
 		asize = reader.TryRead(&ack.buffer, NDF_ACK_SIZET);
-		if(asize > 0) {
-			CcLogFatal("Source is down");
+		if(asize <= 0) {
+			CcLogFatal("Pipe is broken");
 			CcCore::Exit(1);
 		}
 		ack.bsize = asize;
 
 		if(ack.bsize != NDF_ACK_SIZET) {
-			CcLogFatal("ACK not received correctly");
+			CcLogFatal("Acknoledgement not received correctly");
 			CcCore::Exit(2);
 		}
 
-		CcLogInfo("ACK received, initializing NDF frame");
+		CcLogInfo("Acknoledgement received, initializing NDF frame");
 		ndf_initack(&frame, &ack);
 		msIdeal = 1000.00f/((double)frame.config.sf/frame.config.samples);
 
@@ -115,7 +120,7 @@ int main(int argc, char* argv[]) {
 
 			if(frame.data.bsize != rsize) {
 				printf("\n");
-				CcLogWarning("Broken pipe");
+				CcLogWarning("Pipe is broken");
 				break;
 			}
 			

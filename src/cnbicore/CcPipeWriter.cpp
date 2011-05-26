@@ -69,7 +69,7 @@ void CcPipeWriter::Close(void) {
 }
 		
 void CcPipeWriter::Main(void) {
-	if(this->_pipe->Open(this->_filename) == false) {
+	if(this->_pipe->Open(this->_filename, CcPipe::Writer) == false) {
 		this->_isopen.Set(false);
 		this->Stop();
 		return;
