@@ -84,13 +84,15 @@ int main(int argc, char* argv[]) {
 			continue;
 		}
 
-		bool connected = false;
 		size_t rsize = 0;
-		connected = reader.Read(&ack.buffer, NDF_ACK_SIZET, &(ack.bsize));
-		if(connected == false) {
+		ssize_t asize = 0;
+		asize = reader.TryRead(&ack.buffer, NDF_ACK_SIZET);
+		if(asize > 0) {
 			CcLogFatal("Source is down");
 			CcCore::Exit(1);
 		}
+		ack.bsize = asize;
+
 		if(ack.bsize != NDF_ACK_SIZET) {
 			CcLogFatal("ACK not received correctly");
 			CcCore::Exit(2);
@@ -105,7 +107,7 @@ int main(int argc, char* argv[]) {
 		while(loop) { 
 			fflush(stdout);
 			CcTime::Tic(&tvRead);
-			connected = reader.Read(frame.data.buffer, frame.data.bsize, &rsize);
+			rsize = reader.TryRead(frame.data.buffer, frame.data.bsize);
 			msLoop = CcTime::Toc(&tvLoop);
 			msOpen = CcTime::Toc(&tvOpen);
 			msRead = CcTime::Toc(&tvRead);
