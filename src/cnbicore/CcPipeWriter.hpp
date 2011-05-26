@@ -19,9 +19,9 @@
 #ifndef CCPIPEWRITER_HPP 
 #define CCPIPEWRITER_HPP 
 
+#include "CcPipe.hpp"
 #include "CcBasic.hpp"
 #include "CcDoubleBuffer.hpp"
-#include "CcPipeSource.hpp"
 #include "CcSemaphore.hpp"
 #include "CcThread.hpp"
 #include "CcThreadSafe.hpp"
@@ -40,14 +40,13 @@ class CcPipeWriter : public CcThread {
 		CcPipeWriter(size_t bsize = 0);
 		virtual ~CcPipeWriter(void);
 		virtual void Open(const std::string& filename);
-		virtual void Open(void);
 		virtual void Close(void);
 		virtual bool IsBroken(void);
 		virtual bool IsOpen(void);
 		virtual size_t Write(const void* buffer, const size_t bsize);
 		virtual size_t Write(const char* buffer);
 		virtual size_t Write(std::string& buffer);
-		virtual void BWrite(const void* buffer);
+		virtual bool BufferedWrite(const void* buffer);
 		virtual std::string GetFilename(void);
 		virtual void Acknoledge(const void* buffer, const size_t bsize);
 	private:
@@ -61,7 +60,7 @@ class CcPipeWriter : public CcThread {
 		CcCallback1<CcPipeWriterProxy, CcPipeWriter*> iOnWrite;
 	private:
 	protected:
-		CcPipeSource* _pipe;
+		CcPipe* _pipe;
 		CcThreadSafe<> _isopen;
 		std::string _filename;
 		CcThreadSafe<> _bufferedmode;

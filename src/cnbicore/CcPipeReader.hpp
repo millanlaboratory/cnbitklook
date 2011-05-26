@@ -21,7 +21,7 @@
 
 #include "CcBasic.hpp"
 #include "CcBuffer.hpp"
-#include "CcPipeSink.hpp"
+#include "CcPipe.hpp"
 #include "CcSemaphore.hpp"
 #include "CcStreamer.hpp"
 #include "CcThread.hpp"
@@ -54,7 +54,7 @@ class CcPipeReader : public CcThread {
 		CcCallback1<CcPipeReaderProxy, CcPipeReader*> iOnRead;
 	private:
 	protected:
-		CcPipeSink* _pipe;
+		CcPipe* _pipe;
 		CcThreadSafe<> _isopen;
 		std::string _filename;
 		CcBuffer<>* _rbuff;

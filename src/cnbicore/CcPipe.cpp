@@ -21,25 +21,124 @@
 
 #include "CcPipe.hpp" 
 
-CcPipe::CcPipe(const std::string& filename) {
-	tp_init(&this->_pipe, filename.c_str());
+CcPipe::CcPipe(void) {
+	this->_mode = CcPipe::Unset;
 }
 
 CcPipe::~CcPipe(void) {
-	Clean();
-}
-		
-void CcPipe::Clean(void) {
-	this->_sempipe.Wait();
-	tp_close(&this->_pipe);
-	this->_sempipe.Post();
-}
-		
-std::string CcPipe::GetFilename(void) {
-	this->_sempipe.Wait();
-	std::string filename(this->_pipe.filename);
-	this->_sempipe.Post();
-	return filename;
+	this->Close();
 }
 
+bool CcPipe::Open(const std::string& filename, int mode) {
+	this->_sempipe.Wait();
+	tp_init(&this->_pipe, filename.c_str());
+	bool status;
+	switch(mode) {
+		case CcPipe::Reader:
+			status = this->OpenRead();
+			break;
+		case CcPipe::Writer:
+			status = this->OpenWrite();
+			break;
+		default:
+		case CcPipe::Unset:
+			status = false;
+			break;
+	}
+	this->_sempipe.Post();
+	return(status);
+}
+
+bool CcPipe::OpenRead(void) {
+	int status = tp_openread(&this->_pipe);
+	this->_mode = CcPipe::Reader;
+	return status;
+}
+
+bool CcPipe::OpenWrite(void) {
+	if(tp_exist(&this->_pipe) != 0) {
+		CcLogDebugS("Creating writer: " << this->_pipe.filename);
+
+		if(tp_create(&this->_pipe) < 0) {
+			CcLogErrorS("Cannot create writer: " << this->_pipe.filename);
+			return false;
+		}
+	}
+	
+	CcLogDebugS("Waiting for reader to attach: " << this->_pipe.filename);
+	if(tp_openwrite(&this->_pipe) <= 0) {
+		CcLogErrorS("Cannot open writer: " << this->_pipe.filename);
+		return false;
+	}
+	
+	CcLogInfoS("Reader attached to writer: " << this->_pipe.filename);
+	this->_mode = CcPipe::Writer;
+	return true;
+}
+
+bool CcPipe::Close(void) {
+	this->_sempipe.Wait();
+	if(tp_exist(&this->_pipe) != 0) {
+		CcLogWarningS("Pipe does not exist: " << this->_pipe.filename);
+		this->_sempipe.Post();
+	}
+
+	if(tp_close(&this->_pipe) > -1) {
+		CcLogDebugS("Pipe closed: " << this->_pipe.filename);
+		if(this->_mode == CcPipe::Writer) {
+			if(tp_remove(&this->_pipe) < 0)
+				CcLogErrorS("Cannot remove writer: " << this->_pipe.filename);
+			CcLogDebugS("Removed writer: " << this->_pipe.filename);
+		}
+		this->_sempipe.Post();
+		return true;
+	}
+
+	CcLogErrorS("Cannot close pipe: " << this->_pipe.filename);
+	this->_sempipe.Post();
+	return false;
+}
+		
+ssize_t CcPipe::Write(const void* buffer, const size_t bsize) {
+	size_t size;
+	this->_sempipe.Wait();
+	size = tp_write(&this->_pipe, buffer, bsize);
+	this->_sempipe.Post();
+	return size;
+}
+
+ssize_t CcPipe::TryWrite(const void* buffer, const size_t bsize) {
+	if(this->_sempipe.TryWait() == false)
+		return -1;
+	
+	size_t size = tp_write(&this->_pipe, buffer, bsize);
+	this->_sempipe.Post();
+	return size;
+}
+
+ssize_t CcPipe::Read(void* buffer, const size_t bsize) {
+	size_t size;
+	this->_sempipe.Wait();
+	size = tp_read(&this->_pipe, buffer, bsize);
+	this->_sempipe.Post();
+	return size;
+}
+
+ssize_t CcPipe::TryRead(void* buffer, const size_t bsize) {
+	if(this->_sempipe.TryWait() == false)
+		return -1;
+	
+	size_t size = tp_read(&this->_pipe, buffer, bsize);
+	this->_sempipe.Post();
+	return size;
+}
+
+void CcPipe::CatchSIGPIPE(void) {
+	tp_catchsigpipe();
+}
+
+bool CcPipe::IsBroken(void) {
+	return(tp_receivedsigpipe() == 1);
+}
+		
 #endif

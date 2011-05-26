@@ -22,12 +22,12 @@
 #include "CcPipeWriter.hpp" 
 
 CcPipeWriter::CcPipeWriter(size_t bsize) {
-	CcPipeSource::CatchSIGPIPE();
+	CcPipe::CatchSIGPIPE();
 	this->_isopen.Set(false);
 	this->_pipe = NULL;
 	this->_ackbsize = 0;
 	this->_ackbuffer = NULL;
-	if(bsize) {
+	if(bsize > 0) {
 		this->_wbuff = new CcDoubleBuffer(bsize);
 		this->_bufferedmode.Set(true);
 	} else {
@@ -50,17 +50,11 @@ void CcPipeWriter::Open(const std::string& filename) {
 		return;
 
 	this->_filename.assign(filename);
-	this->_pipe = new CcPipeSource(filename);
+	this->_pipe = new CcPipe();
 	CcThread::Start();
-	this->iOnOpen.Execute((CcPipeWriter*)this);
+	this->iOnOpen.Execute(this);
 }
 		
-void CcPipeWriter::Open(void) { 
-	if(this->_filename.empty() == true)
-		CcThrow("Filename not set yet");
-	this->Open(this->_filename);
-}
-
 void CcPipeWriter::Close(void) {
 	if(CcThread::IsRunning() == false)
 		return;
@@ -71,28 +65,21 @@ void CcPipeWriter::Close(void) {
 	if(this->_pipe != NULL)
 		delete this->_pipe;
 	this->_pipe = NULL;
-	this->iOnClose.Execute((CcPipeWriter*)this);
+	this->iOnClose.Execute(this);
 }
 		
 void CcPipeWriter::Main(void) {
-	CcLogDebug("Starting thread");
-	
-	this->_isopen.Set(false);
-	try { 
-		this->_pipe->Open(); 
-	} catch(CcException e) { 
+	if(this->_pipe->Open(this->_filename) == false) {
+		this->_isopen.Set(false);
 		this->Stop();
 		return;
 	}
 	this->_isopen.Set(true);
-
-	std::string message;
-	message.append("Attached: ");
-	message.append(this->_pipe->GetFilename());
-	CcLogConfig(message);
+	CcLogDebugS("Writer attached: " << this->_filename);
 
 	if(this->_ackbuffer != NULL) {
-		CcLogInfo("Sending ACK");
+		CcLogInfoS("Writing acknoledgment packet: " << this->_filename << 
+				", " << this->_ackbsize << " bytes");
 		this->Write(this->_ackbuffer, this->_ackbsize);
 	}
 
@@ -104,13 +91,11 @@ void CcPipeWriter::Main(void) {
 		}
 	} 
 	
-	if(this->_bufferedmode.Get() == false) {
-		while(CcThread::IsRunning()) {
+	if(this->_bufferedmode.Get() == false)
+		while(CcThread::IsRunning())
 			CcTime::Sleep(5.00f);
-		}
-	}
-	CcLogDebug("Stopping thread");
-	try { this->_pipe->Close(); } catch(CcException e) { }
+
+	this->_pipe->Close();
 	this->_isopen.Set(false);
 }
 
@@ -125,14 +110,11 @@ bool CcPipeWriter::IsBroken(void) {
 size_t CcPipeWriter::Write(const void* buffer, const size_t bsize) {
 	size_t result = this->_pipe->Write(buffer, bsize);
 	if(result == TP_BROKENS) {
-		std::string message;
-		message.append("Broken: ");
-		message.append(this->_pipe->GetFilename());
-		CcLogWarning(message);
+		CcLogWarningS("Pipe is broken");
 		CcThread::Stop();
-		this->iOnBroken.Execute((CcPipeWriter*)this);
+		this->iOnBroken.Execute(this);
 	} else 
-		this->iOnWrite.Execute((CcPipeWriter*)this);
+		this->iOnWrite.Execute(this);
 	return result;
 }
 		
@@ -144,15 +126,17 @@ size_t CcPipeWriter::Write(std::string& buffer) {
 	return this->Write(buffer.c_str(), (const size_t)buffer.size());
 }
 		
-void CcPipeWriter::BWrite(const void* buffer) {
-	if(this->_bufferedmode.Get() == false)
-		CcThrow("CcPipeWriter is not configured for buffered writing");
-
+bool CcPipeWriter::BufferedWrite(const void* buffer) {
+	if(this->_bufferedmode.Get() == false) {
+		CcLogError("Writer not configured for buffered writing");
+		return false;
+	}
 	this->_wbuff->Write(buffer);
+	return true;
 }
 
 std::string CcPipeWriter::GetFilename(void) {
-	return this->_pipe->GetFilename();
+	return this->_filename;
 }
 		
 void CcPipeWriter::Acknoledge(const void* buffer, const size_t bsize) {

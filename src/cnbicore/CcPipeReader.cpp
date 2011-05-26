@@ -38,7 +38,7 @@ void CcPipeReader::Open(const std::string& filename) {
 	if(this->_isopen.Get())
 		return;
 	this->_filename.assign(filename);
-	this->_pipe = new CcPipeSink(filename);
+	this->_pipe = new CcPipe();
 	this->Start();
 	this->iOnOpen.Execute((CcPipeReader*)this);
 }
@@ -58,16 +58,14 @@ void CcPipeReader::Close(void) {
 }
 
 void CcPipeReader::Main(void) {
-	CcLogDebug("Starting thread");
-	
-	this->_isopen.Set(false);
-	try { this->_pipe->Open(); } catch(CcException e) { this->Stop(); }
+	if(this->_pipe->Open(this->_filename) == false) {
+		this->_isopen.Set(false);
+		this->Stop();
+		return;
+	}
 	this->_isopen.Set(true);
 	
-	std::string message;
-	message.append("Attached: ");
-	message.append(this->_pipe->GetFilename());
-	CcLogConfig(message);
+	CcLogConfigS("Attached: " << this->_filename);
 	
 	size_t rsize;
 	while(CcThread::IsRunning()) {
@@ -83,8 +81,7 @@ void CcPipeReader::Main(void) {
 		this->iOnRead.Execute((CcPipeReader*)this);
 	}
 	
-	CcLogDebug("Stopping thread");
-	try { this->_pipe->Close(); } catch(CcException e) { }
+	this->_pipe->Close();
 	this->_isopen.Set(false);
 }
 

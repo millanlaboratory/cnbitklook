@@ -19,7 +19,7 @@
 #ifndef CCPIPE_HPP 
 #define CCPIPE_HPP 
 
-#include "CcObject.hpp"
+#include "CcBasic.hpp"
 #include "CcSemaphore.hpp"
 #include <transpipe/tp_namedpipe.h>
 #include <string>
@@ -30,15 +30,26 @@
  */
 class CcPipe : public CcObject {
 	public:
-		CcPipe(const std::string& filename);
-		virtual ~CcPipe(void);
-		virtual void Open(void) = 0;
-		virtual void Close(void) = 0;
-		virtual std::string GetFilename(void);
+		CcPipe(void);
+		~CcPipe(void);
+		bool Open(const std::string& filename, int mode = CcPipe::Reader);
+		bool Close(void);
+		ssize_t Write(const void* buffer, const size_t bsize);
+		ssize_t TryWrite(const void* buffer, const size_t bsize);
+		ssize_t Read(void* buffer, const size_t bsize);
+		ssize_t TryRead(void* buffer, const size_t bsize);
+		static void CatchSIGPIPE(void);
+		bool IsBroken(void);
 	private:
-		virtual void Clean(void);
-		
+		bool OpenRead(void);
+		bool OpenWrite(void);
+
+	public:
+		static const int Unset = -1;
+		static const int Reader = 0;
+		static const int Writer = 1;
 	protected:
+		int _mode;
 		tp_npipe _pipe;
 		CcSemaphore _sempipe;
 };

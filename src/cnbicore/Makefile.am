@@ -2,6 +2,7 @@ AM_CPPFLAGS = $(CPPFLAGS) -I$(top_srcdir)/src
 lib_LTLIBRARIES = libcnbicore.la
 
 libcnbicore_includedir = $(includedir)/cnbicore
+#							  CcPipeServer.hpp
 
 libcnbicore_include_HEADERS = CcBasic.hpp \
 							  CcCallback.hpp \
@@ -19,9 +20,6 @@ libcnbicore_include_HEADERS = CcBasic.hpp \
 							  CcNetworkTypes.hpp \
 							  CcObject.hpp \
 							  CcPipe.hpp \
-							  CcPipeServer.hpp\
-							  CcPipeSink.hpp \
-							  CcPipeSource.hpp \
 							  CcPipeWriter.hpp \
 							  CcPipeReader.hpp \
 							  CcProcess.hpp \
@@ -43,9 +41,9 @@ libcnbicore_include_HEADERS = CcBasic.hpp \
 							  CcFile.cpp \
 							  CcFile.hpp
 
+#						 CcPipeServer.cpp 
+#						 CcPipeServer.hpp 
 libcnbicore_la_SOURCES = CcBasic.hpp \
-						 CcPipeServer.cpp \
-						 CcPipeServer.hpp \
 						 CcCallback.hpp \
 						 CcClient.cpp \
 						 CcClient.hpp \
@@ -73,10 +71,6 @@ libcnbicore_la_SOURCES = CcBasic.hpp \
 						 CcPipe.hpp \
 						 CcPipeReader.cpp \
 						 CcPipeReader.hpp \
-						 CcPipeSink.cpp \
-						 CcPipeSink.hpp \
-						 CcPipeSource.cpp \
-						 CcPipeSource.hpp \
 						 CcPipeWriter.cpp \
 						 CcPipeWriter.hpp \
 						 CcProcess.cpp \
