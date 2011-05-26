@@ -177,11 +177,10 @@ try
 			set(gca, 'YTickLabel', {});
 			
 			subplot(10, 1, 8:10)
-			%imagesc(buffer.tim');
 			plot(buffer.tim);
 			ylabel('tim');
 			set(gca, 'XTickLabel', {});
-			%set(gca, 'YTickLabel', {});
+			xlabel(sprintf('Max delay %.2f ms', max(abs(buffer.tim))));
 			axis tight;
 			drawnow;
 		end
