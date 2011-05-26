@@ -34,7 +34,7 @@ class CcPipeServer : public CcObject {
 		virtual ~CcPipeServer();
 		virtual void Open(const std::string& filename, unsigned int total);
 		virtual void Close(void);
-		virtual void Write(const void* buffer, size_t bsize = 0);
+		virtual bool Write(const void* buffer, size_t bsize = 0);
 	private:
 	protected:
 

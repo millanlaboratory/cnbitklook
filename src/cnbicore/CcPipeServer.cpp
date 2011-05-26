@@ -27,7 +27,7 @@
 #include <iostream>
 
 CcPipeServer::CcPipeServer(void* ackbuffer, size_t ackbsize, size_t bsize) {
-	CcPipeSource::CatchSIGPIPE();
+	CcPipe::CatchSIGPIPE();
 	this->_isopen.Set(false);
 
 	if(ackbuffer != NULL && ackbsize != 0) {
@@ -69,51 +69,46 @@ void CcPipeServer::Close(void) {
 		return;
 	this->_isopen.Set(false);
 	
-	CcPipeWriter* w;
 	std::vector<CcPipeWriter*>::iterator it;
 	
 	for(it = this->_pipes.begin(); it != this->_pipes.end(); it++) {
-		w = (*it);
-		
-		if(w->IsBroken() == true) {
-			w->Close();
-			delete w;
-			w = NULL;
+		CcPipeWriter* writer = (*it);
+		if(writer->IsBroken() == true) {
+			writer->Close();
+			delete writer;
 			continue;
-		} else if(w->IsOpen() == true) {
-			w->Close();	
-			delete w;
-			w = NULL;
+		} else if(writer->IsOpen() == true) {
+			writer->Close();	
+			delete writer;
 			continue;
 		} else { 
-			std::string message;
-			message.append("Stuck: ");
-			message.append(w->GetFilename());
-			CcLogWarning(message);
+			CcLogWarningS("Writer is stuck: " << writer->GetFilename());
 		}
 	}
 }
 		
-void CcPipeServer::Write(const void* buffer, size_t bsize) {
-	CcPipeWriter* w;
+bool CcPipeServer::Write(const void* buffer, size_t bsize) {
 	std::vector<CcPipeWriter*>::iterator it;
 
 	if(this->_isopen.Get() == false) 
-		CcThrow("Cannot write if closing or not opened");
+		return false;
 
 	for(it = this->_pipes.begin(); it != this->_pipes.end(); it++) {
-		w = (*it);
-		if(w->IsBroken() == true) {
-			w->Open();
+		CcPipeWriter* writer = (*it);
+		if(writer->IsBroken() == true) {
+			writer->Open(writer->GetFilename());
 			continue;
 		}
-		if(w->IsOpen() == false)
+
+		if(writer->IsOpen() == false) 
 			continue;
+		
 		if(this->_bsize == 0) 
-			w->Write(buffer, bsize);
+			writer->Write(buffer, bsize);
 		else
-			w->BWrite(buffer);
+			writer->BufferedWrite(buffer);
 	}
+	return true;
 }
 
 #endif

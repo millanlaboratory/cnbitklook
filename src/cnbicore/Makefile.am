@@ -2,7 +2,6 @@ AM_CPPFLAGS = $(CPPFLAGS) -I$(top_srcdir)/src
 lib_LTLIBRARIES = libcnbicore.la
 
 libcnbicore_includedir = $(includedir)/cnbicore
-#							  CcPipeServer.hpp
 
 libcnbicore_include_HEADERS = CcBasic.hpp \
 							  CcCallback.hpp \
@@ -39,10 +38,10 @@ libcnbicore_include_HEADERS = CcBasic.hpp \
 							  CcBuffer.cpp \
 							  CcBuffer.hpp \
 							  CcFile.cpp \
-							  CcFile.hpp
+							  CcFile.hpp \
+							  CcPipeServer.hpp
 
-#						 CcPipeServer.cpp 
-#						 CcPipeServer.hpp 
+
 libcnbicore_la_SOURCES = CcBasic.hpp \
 						 CcCallback.hpp \
 						 CcClient.cpp \
@@ -101,7 +100,9 @@ libcnbicore_la_SOURCES = CcBasic.hpp \
 						 CcBuffer.cpp \
 						 CcBuffer.hpp \
 						 CcFile.cpp \
-						 CcFile.hpp
+						 CcFile.hpp \
+						 CcPipeServer.cpp \
+						 CcPipeServer.hpp 
 
 libcnbicore_la_LDFLAGS = $(AM_LDFLAGS) -version-info $(CURRENT):$(REVISION):$(AGE)
 

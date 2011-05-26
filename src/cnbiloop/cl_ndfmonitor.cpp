@@ -19,7 +19,7 @@
 #include "ClLoop.hpp"
 #include <ndf/ndf_codec.h>
 #include <cnbicore/CcBasic.hpp>
-#include <cnbicore/CcPipeSink.hpp>
+#include <cnbicore/CcPipe.hpp>
 #include <iostream>
 
 using namespace std;
@@ -75,11 +75,10 @@ int main(int argc, char* argv[]) {
 		ndf_ack ack;
 
 		// Setup pipe reader 
-		CcPipeSink reader(pipename);
-		try {
-			reader.Open(-1);
+		CcPipe reader;
+		if(reader.Open(pipename) == false) {
 			CcTime::Tic(&tvOpen);
-		} catch(CcException e) {
+		} else {
 			CcLogFatal("Cannot open pipe");
 			CcTime::Sleep(2500.00);
 			continue;
