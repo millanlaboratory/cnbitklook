@@ -66,7 +66,6 @@ libcnbicore_la_SOURCES = CcBasic.hpp \
 						 CcLogger.hpp \
 						 CcMutex.cpp \
 						 CcMutex.hpp \
-						 CcNetworkTypes.cpp \
 						 CcNetworkTypes.hpp \
 						 CcObject.cpp \
 						 CcObject.hpp \

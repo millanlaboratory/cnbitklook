@@ -21,12 +21,8 @@
 
 #include <transport/tr_types.h>
 #include <map>
-#include <vector>
 #include <string>
-#include <utility>
 
-// Forward definition
-class CcEndpoint;
 class CcStreamer;
 
 typedef std::string CcIp;
@@ -34,23 +30,13 @@ typedef std::string CcPort;
 typedef unsigned int CcPortUInt;
 typedef std::string CcAddress;
 typedef std::string CcHostname;
-typedef std::string CcPlugname;
 
-typedef std::map<CcAddress, CcEndpoint*> CcEndpointMap;
-typedef std::map<CcAddress, tr_socket*> CcSocketMap;
-typedef std::vector<CcAddress> CcEndpointList;
-typedef std::map<CcAddress, CcStreamer*> CcStreamerMap;
+typedef std::map<int, CcStreamer*> CcStreamerMap;
+typedef std::map<int, CcStreamer*>::iterator CcStreamerMapIt;
+typedef std::map<int, CcStreamer*>::const_iterator CcStreamerMapCIt;
 
-typedef CcEndpointMap::iterator CcEndpointMapIt;
-typedef CcSocketMap::iterator CcSocketMapIt;
-typedef CcEndpointMap::const_iterator CcEndpointMapCIt;
-typedef CcSocketMap::const_iterator CcSocketMapCIt;
-typedef CcEndpointList::iterator CcEndpointListIt;
-typedef CcEndpointList::const_iterator CcEndpointListCIt;
-typedef CcStreamerMap::iterator CcStreamerMapIt;
-typedef CcSocketMap::iterator CcSocketMapIt;
-
-
-std::string CcAddress2string(const CcAddress address);
+typedef std::map<int, tr_socket*> CcSocketMap;
+typedef std::map<int, tr_socket*>::iterator CcSocketMapIt;
+typedef std::map<int, tr_socket*>::const_iterator CcSocketMapCIt;
 
 #endif

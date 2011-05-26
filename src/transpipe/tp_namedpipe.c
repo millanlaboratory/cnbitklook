@@ -100,11 +100,13 @@ int tp_exist(const tp_npipe* pipe) {
 }
 
 int tp_setsize(const tp_npipe* pipe, const size_t size) {
-	return fcntl(pipe->fid, F_SETPIPE_SZ, (long)size);
+	//return fcntl(pipe->fid, F_SETPIPE_SZ, (long)size);
+	return 0;
 }
 
 size_t tp_getsize(const tp_npipe* pipe) {
-	return fcntl(pipe->fid, F_SETPIPE_SZ);
+	//return fcntl(pipe->fid, F_SETPIPE_SZ);
+	return 0;
 }
 
 #endif

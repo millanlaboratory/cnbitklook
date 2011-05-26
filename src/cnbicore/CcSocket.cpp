@@ -160,7 +160,7 @@ bool CcSocket::RemStream(int fid) {
 }
 
 bool CcSocket::HasStream(int fid) {
-	CcStreamerMap2It it = this->_streams.find(fid);
+	CcStreamerMapIt it = this->_streams.find(fid);
 	return(it != this->_streams.end());
 }
 
@@ -185,7 +185,7 @@ bool CcSocket::RemPeer(int fid) {
 }
 
 bool CcSocket::HasPeer(int fid) {
-	CcSocketMap2It it = this->_peers.find(fid);
+	CcSocketMapIt it = this->_peers.find(fid);
 	return(it != this->_peers.end());
 }
 
@@ -202,7 +202,7 @@ tr_socket* CcSocket::GetPeer(CcAddress addr) {
 	CcIp ip = cache.GetIp();
 	CcPortUInt port = cache.GetPortUInt();
 
-	CcSocketMap2It pit;
+	CcSocketMapIt pit;
 	tr_socket* peer = NULL;
 	for(pit = this->_peers.begin(); pit != this->_peers.end(); pit++) {
 		peer = pit->second;
@@ -216,8 +216,8 @@ tr_socket* CcSocket::GetPeer(CcAddress addr) {
 
 void CcSocket::Dump(void) {
 	CcAddress addr;
-	CcStreamerMap2It sit;
-	CcSocketMap2It pit;
+	CcStreamerMapIt sit;
+	CcSocketMapIt pit;
 	
 	printf("[CcSocket::Dump] Internal table:\n");
 	printf("FID  Remote Address         Peer\n");

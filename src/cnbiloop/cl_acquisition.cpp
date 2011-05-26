@@ -126,7 +126,7 @@ int main(int argc, char* argv[]) {
 	// Setup CcPipeServer
 	CcPipeServer* pipes;
 	pipes = new CcPipeServer(frame.ack.buffer, frame.ack.bsize,
-			frame.data.bsize, frame.data.bsize);
+			frame.data.bsize);
 	pipes->Open(optpipename, PIPELINES);
 
 	// Initialize nameserver client

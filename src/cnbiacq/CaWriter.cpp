@@ -147,13 +147,8 @@ int CaWriter::Write(int nswrite) {
 int CaWriter::SetupChannelGroup(int igrp) {
 	char label[32], transducter[128], unit[16];
 	double mm[2];
-	int isint;
+	int isint = 0;
 	struct xdfch* ch;
-	int closesttype;
-	if(isint) 
-		closesttype = xdf_closest_type(this->_file, XDFINT32);
-	else	
-		closesttype = xdf_closest_type(this->_file, XDFFLOAT);
 
 	egd_channel_info(this->_device->_dev, 
 			this->_device->_grp[igrp].sensortype, 
@@ -163,12 +158,15 @@ int CaWriter::SetupChannelGroup(int igrp) {
 			EGD_MM_D, mm,
 			EGD_ISINT, &isint,
 			EGD_EOL);
+	
+	isint = (this->_device->_grp[igrp].sensortype == EGD_TRIGGER);
 
 	xdf_set_conf(this->_file, 
 			XDF_CF_ARRINDEX, igrp,
 			XDF_CF_ARROFFSET, 0,
 			XDF_CF_ARRDIGITAL, 0,
-			XDF_CF_ARRTYPE, closesttype,
+			XDF_CF_ARRTYPE, isint ? XDFINT32 : XDFFLOAT,
+			XDF_CF_STOTYPE, xdf_closest_type(this->_file, XDFFLOAT),
 			XDF_CF_PMIN, mm[0],
 			XDF_CF_PMAX, mm[1],
 			XDF_CF_TRANSDUCTER, transducter,

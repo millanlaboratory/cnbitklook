@@ -117,7 +117,7 @@ ssize_t CcServer::Send(const std::string& message) {
 
 ssize_t CcServer::Send(const void* message, size_t size) {
 	CcSocket::_semsocket.Wait();
-	CcSocketMap2It pit;
+	CcSocketMapIt pit;
 	ssize_t sendtot = 0;
 	for(pit = this->_peers.begin(); pit != this->_peers.end(); pit++) {
 		sendtot += CcSocket::Send(pit->second, message, size);
@@ -160,7 +160,7 @@ ssize_t CcServer::SendNot(const std::string& message, CcAddress addr) {
 
 ssize_t CcServer::SendNot(const void* message, size_t size, CcAddress addr) {
 	CcSocket::_semsocket.Wait();
-	CcSocketMap2It pit;
+	CcSocketMapIt pit;
 	tr_socket* peer = GetPeer(addr);
 	if(peer == NULL) {
 		CcLogErrorS("No peer found for: " << addr);

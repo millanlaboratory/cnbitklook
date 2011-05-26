@@ -19,8 +19,9 @@
 #ifndef CCSOCKET_HPP
 #define CCSOCKET_HPP
 
-#include "CcFlags.hpp"
 #include "CcCallback.hpp"
+#include "CcFlags.hpp"
+#include "CcNetworkTypes.hpp"
 #include "CcObject.hpp"
 #include "CcSemaphore.hpp"
 #include "CcStreamer.hpp"
@@ -31,10 +32,6 @@
 /* Forward declaration */
 class CcSocketProxy;
 
-typedef std::map<int, CcStreamer*> CcStreamerMap2;
-typedef std::map<int, CcStreamer*>::iterator CcStreamerMap2It;
-typedef std::map<int, tr_socket*> CcSocketMap2;
-typedef std::map<int, tr_socket*>::iterator CcSocketMap2It;
 
 /*! \brief TCP/UDP socket
  * 
@@ -81,8 +78,8 @@ class CcSocket : public CcObject {
 	protected:
 		tr_socket* _socket;
 		CcSemaphore _semsocket;
-		CcStreamerMap2 _streams;
-		CcSocketMap2 _peers;
+		CcStreamerMap _streams;
+		CcSocketMap _peers;
 	private:
 		long unsigned int _bytesRecv;
 		long unsigned int _bytesSend;
