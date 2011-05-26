@@ -63,7 +63,6 @@ class CcPipeWriter : public CcThread {
 		CcPipe* _pipe;
 		CcThreadSafe<> _isopen;
 		std::string _filename;
-		CcThreadSafe<> _bufferedmode;
 		CcDoubleBuffer* _wbuff;
 		void* _ackbuffer;
 		size_t _ackbsize;

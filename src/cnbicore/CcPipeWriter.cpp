@@ -29,10 +29,8 @@ CcPipeWriter::CcPipeWriter(size_t bsize) {
 	this->_ackbuffer = NULL;
 	if(bsize > 0) {
 		this->_wbuff = new CcDoubleBuffer(bsize);
-		this->_bufferedmode.Set(true);
 	} else {
 		this->_wbuff = NULL;
-		this->_bufferedmode.Set(false);
 	}
 }
 
@@ -83,7 +81,7 @@ void CcPipeWriter::Main(void) {
 		this->Write(this->_ackbuffer, this->_ackbsize);
 	}
 
-	if(this->_bufferedmode.Get() == true) {
+	if(this->_wbuff != NULL) {
 		CcBuffer<>* cache = new CcBuffer<>(this->_wbuff->Bsize());
 		while(CcThread::IsRunning()) {
 			this->_wbuff->Read(cache->buffer);
@@ -91,7 +89,7 @@ void CcPipeWriter::Main(void) {
 		}
 	} 
 	
-	if(this->_bufferedmode.Get() == false)
+	if(this->_wbuff == NULL)
 		while(CcThread::IsRunning())
 			CcTime::Sleep(5.00f);
 
@@ -127,7 +125,7 @@ size_t CcPipeWriter::Write(std::string& buffer) {
 }
 		
 bool CcPipeWriter::BufferedWrite(const void* buffer) {
-	if(this->_bufferedmode.Get() == false) {
+	if(this->_wbuff == NULL) {
 		CcLogError("Writer not configured for buffered writing");
 		return false;
 	}

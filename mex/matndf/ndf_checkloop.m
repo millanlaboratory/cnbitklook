@@ -149,10 +149,10 @@ try
 		% - If you want to keep track of the timestamps for debugging, 
 		%   update buffer.tim in this way:
 		%	buffer.tim = ndf_add2buffer(buffer.tim, ndf_toc(ndf.frame.timestamp));
+		buffer.tim = ndf_add2buffer(buffer.tim, ndf_toc(ndf.frame.timestamp));
 		buffer.eeg = ndf_add2buffer(buffer.eeg, ndf.frame.eeg);
 		buffer.exg = ndf_add2buffer(buffer.exg, ndf.frame.exg);
 		buffer.tri = ndf_add2buffer(buffer.tri, ndf.frame.tri);
-		buffer.tim = ndf_add2buffer(buffer.tim, ndf_toc(ndf.frame.timestamp));
 
 		% -------------------------------------------------------------- %
 		% User main loop                                                 %
