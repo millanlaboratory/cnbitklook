@@ -37,7 +37,7 @@ class CcPipe : public CcObject {
 		virtual std::string GetFilename(void);
 	private:
 		virtual void Clean(void);
-	
+		
 	protected:
 		tp_npipe _pipe;
 		CcSemaphore _sempipe;

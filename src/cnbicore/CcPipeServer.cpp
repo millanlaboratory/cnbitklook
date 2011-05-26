@@ -27,7 +27,7 @@
 #include <iostream>
 
 CcPipeServer::CcPipeServer(void* ackbuffer, size_t ackbsize, 
-		size_t bsize, bool reopen) {
+		size_t bsize, size_t psize, bool reopen) {
 	CcPipeSource::CatchSIGPIPE();
 	this->_reopen.Set(reopen);
 	this->_isopen.Set(false);
@@ -41,6 +41,7 @@ CcPipeServer::CcPipeServer(void* ackbuffer, size_t ackbsize,
 		this->_ackbsize = 0;
 	}
 	this->_bsize = bsize;
+	this->_psize = psize;
 }
 
 CcPipeServer::~CcPipeServer(void) {
@@ -61,7 +62,7 @@ void CcPipeServer::Open(const std::string& filename, unsigned int total) {
 		CcPipeWriter* w = new CcPipeWriter(this->_bsize);
 		this->_pipes.push_back(w);
 		this->_pipes.at(i)->Acknoledge(this->_ackbuffer, this->_ackbsize);
-		this->_pipes.at(i)->Open(pipename);
+		this->_pipes.at(i)->Open(pipename, this->_psize);
 	}
 	this->_isopen.Set(true);
 }

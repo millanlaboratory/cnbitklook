@@ -30,7 +30,7 @@
 class CcPipeServer : public CcObject {
 	public:
 		CcPipeServer(void* ackbuffer = NULL, size_t ackbsize = 0,
-				size_t bsize = 0, bool reopen = true);
+				size_t bsize = 0, size_t psize = 0, bool reopen = true);
 		virtual ~CcPipeServer();
 		virtual void Open(const std::string& filename, unsigned int total);
 		virtual void Close(void);
@@ -47,6 +47,7 @@ class CcPipeServer : public CcObject {
 		void* _ackbuffer;
 		size_t _ackbsize;
 		size_t _bsize;
+		size_t _psize;
 };
 
 #endif

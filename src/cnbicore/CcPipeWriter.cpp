@@ -25,6 +25,7 @@ CcPipeWriter::CcPipeWriter(size_t bsize) {
 	CcPipeSource::CatchSIGPIPE();
 	this->_isopen.Set(false);
 	this->_pipe = NULL;
+	this->_pipesize = 0;
 	this->_ackbsize = 0;
 	this->_ackbuffer = NULL;
 	if(bsize) {
@@ -45,10 +46,11 @@ CcPipeWriter::~CcPipeWriter(void) {
 		delete this->_wbuff;
 }
 
-void CcPipeWriter::Open(const std::string& filename) {
+void CcPipeWriter::Open(const std::string& filename, const size_t size) {
 	if(this->_isopen.Get())
 		return;
 
+	this->_pipesize = size;
 	this->_filename.assign(filename);
 	this->_pipe = new CcPipeSource(filename);
 	CcThread::Start();
@@ -78,7 +80,12 @@ void CcPipeWriter::Main(void) {
 	CcLogDebug("Starting thread");
 	
 	this->_isopen.Set(false);
-	try { this->_pipe->Open(); } catch(CcException e) { this->Stop(); }
+	try { 
+		this->_pipe->Open(this->_pipesize); 
+	} catch(CcException e) { 
+		this->Stop();
+		return;
+	}
 	this->_isopen.Set(true);
 
 	std::string message;

@@ -56,12 +56,13 @@ void CcPipeSource::Open(void) {
 
 void CcPipeSource::Open(size_t size) {
 	this->Open();
-	if(size) {
+	if(size > 0) {
 		this->_sempipe.Wait();
-		int a = tp_setsize(&this->_pipe, size);
-		CcLogFatalS(">>>>>>>>>>>>> " << a);
+		int rsize = tp_setsize(&this->_pipe, size);
+		CcLogConfigS("Setting " << this->_pipe.filename << 
+				" size to: " << size << "/" << rsize);
 		this->_sempipe.Post();
-	}
+	} 
 }
 
 void CcPipeSource::Close(void) {

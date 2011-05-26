@@ -39,7 +39,7 @@ class CcPipeWriter : public CcThread {
 	public:
 		CcPipeWriter(size_t bsize = 0);
 		virtual ~CcPipeWriter(void);
-		virtual void Open(const std::string& filename);
+		virtual void Open(const std::string& filename, const size_t size = 0);
 		virtual void Open(void);
 		virtual void Close(void);
 		virtual bool IsBroken(void);
@@ -68,6 +68,7 @@ class CcPipeWriter : public CcThread {
 		CcDoubleBuffer* _wbuff;
 		void* _ackbuffer;
 		size_t _ackbsize;
+		size_t _pipesize;
 };
 
 /*! \brief Callback proxy for the CcPipeWriter class
