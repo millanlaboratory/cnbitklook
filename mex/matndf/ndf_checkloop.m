@@ -125,7 +125,8 @@ try
 	buffer.eeg = ndf_ringbuffer(ndf.conf.sf, ndf.conf.eeg_channels, 2.00);
 	buffer.exg = ndf_ringbuffer(ndf.conf.sf, ndf.conf.exg_channels, 2.00);
 	buffer.tri = ndf_ringbuffer(ndf.conf.sf, ndf.conf.tri_channels, 2.00);
-
+	buffer.tim = ndf_ringbuffer(ndf.conf.sf/ndf.conf.samples, ndf.conf.tim_channels, 5.00);
+	
 	% Initialize ndf_jump structure
 	% - Each NDF frame carries an index number
 	% - ndf_jump*.m are methods to verify whether your script is
@@ -151,28 +152,37 @@ try
 		buffer.eeg = ndf_add2buffer(buffer.eeg, ndf.frame.eeg);
 		buffer.exg = ndf_add2buffer(buffer.exg, ndf.frame.exg);
 		buffer.tri = ndf_add2buffer(buffer.tri, ndf.frame.tri);
+		buffer.tim = ndf_add2buffer(buffer.tim, ndf_toc(ndf.frame.timestamp));
 
 		% -------------------------------------------------------------- %
 		% User main loop                                                 %
 		% -------------------------------------------------------------- %
 		if(user.plot == true)
 			eegc3_figure(1);
-			subplot(7, 1, 1:4)
+			subplot(10, 1, 1:4)
 			imagesc(eegc3_car(eegc3_dc(buffer.eeg))');
 			title(sprintf('Frame=%6.6d, Dl=%7.2f (ms)', ndf.frame.index, loop.jump.toc));
 			set(gca, 'XTickLabel', {});
 			ylabel('eeg');
 			
-			subplot(7, 1, 5:6)
+			subplot(10, 1, 5:6)
 			imagesc(eegc3_car(eegc3_dc(buffer.exg))');
 			set(gca, 'XTickLabel', {});
 			ylabel('exg');
 			
-			subplot(7, 1, 7)
+			subplot(10, 1, 7)
 			imagesc(buffer.tri');
 			ylabel('tri');
 			set(gca, 'XTickLabel', {});
 			set(gca, 'YTickLabel', {});
+			
+			subplot(10, 1, 8:10)
+			%imagesc(buffer.tim');
+			plot(buffer.tim);
+			ylabel('tim');
+			set(gca, 'XTickLabel', {});
+			%set(gca, 'YTickLabel', {});
+			axis tight;
 			drawnow;
 		end
 

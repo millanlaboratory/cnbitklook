@@ -23,6 +23,7 @@ config.samples 		= 0;
 config.eeg_channels = 0;
 config.exg_channels = 0;
 config.tri_channels = 0;
+config.tim_channels = 1; % Provided for consistency
 config.tim_type 	= 'unset';
 config.eeg_type 	= 'unset';
 config.exg_type 	= 'unset';
