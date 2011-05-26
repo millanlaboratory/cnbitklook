@@ -42,5 +42,4 @@ std::string CcPipe::GetFilename(void) {
 	return filename;
 }
 
-
 #endif
