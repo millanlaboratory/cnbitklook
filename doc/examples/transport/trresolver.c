@@ -16,28 +16,21 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <cnbicore/CcPipe.hpp>
-#include <cnbicore/CcCore.hpp>
-#include <cnbicore/CcTime.hpp>
+#include <transport/tr_names.h>
+#include <transport/tr_types.h>
 #include <stdio.h>
+#include <unistd.h>
 
-int main(void) {
-	CcCore::OpenLogger("ccpipeaswriter", CcCore::TerminalColors, CcCore::LevelDebug);
-	
-	CcPipe::CatchSIGPIPE();
-	
-	CcPipe reader;
-	reader.Open("my.pipe", CcPipe::Reader);
-	
-	int data;
-	ssize_t size;
-	while(true) {
-		size = reader.Read(&data, sizeof(int));
-		if(size == 0)
-			break;
-		printf("Read %lu bytes: %d\n", size, data);
-	}
-	reader.Close();
+#define EXAMPLE_NAME "[resolver.c]"
 
-	CcCore::Exit(0);
+int main(void) { 
+	char address[tr_getaddrlen()];
+	
+	tr_resolve("torpor", address);
+	printf("%s IPv4 is %s\n", EXAMPLE_NAME, address);
+	
+	tr_resolve("www.google.com", address);
+	printf("%s IPv4 is %s\n", EXAMPLE_NAME, address);
+	
+	return 0;
 }

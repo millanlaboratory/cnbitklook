@@ -15,29 +15,42 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
-#include <cnbicore/CcPipe.hpp>
-#include <cnbicore/CcCore.hpp>
-#include <cnbicore/CcTime.hpp>
+#include <transpipe/tp_namedpipe.h>
 #include <stdio.h>
+#include <string.h>
+#include <unistd.h>
 
 int main(void) {
-	CcCore::OpenLogger("ccpipeaswriter", CcCore::TerminalColors, CcCore::LevelDebug);
-	
-	CcPipe::CatchSIGPIPE();
-	
-	CcPipe reader;
-	reader.Open("my.pipe", CcPipe::Reader);
-	
-	int data;
-	ssize_t size;
-	while(true) {
-		size = reader.Read(&data, sizeof(int));
-		if(size == 0)
-			break;
-		printf("Read %lu bytes: %d\n", size, data);
-	}
-	reader.Close();
+	int i = 0;
+	float vector[4]; 
+	size_t bsize = 4*sizeof(float);
+	size_t wsize = 0;
 
-	CcCore::Exit(0);
+	tp_npipe pipe;
+	tp_init(&pipe, "/tmp/tpnpipe0");
+
+	if(tp_openread(&pipe) <= 0) {
+		printf("Cannot open pipe for reading\n");
+		exit(1);
+	}
+	
+	while(1) {
+		wsize = tp_read(&pipe, (char*)vector, bsize);
+		if(wsize <= 0) {
+			printf("Cannot read pipe\n");
+			break;
+		}
+		printf("Read from pipe: ");
+		for(i = 0; i < 4; i++) 
+			printf("%f ", vector[i]);
+		printf("\n");
+	}
+
+	if(tp_close(&pipe) < 0) {
+		printf("Cannot close pipe\n");
+		exit(1);
+	}
+	
+	printf("Going down\n");
+	return 1;
 }
