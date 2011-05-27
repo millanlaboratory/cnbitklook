@@ -2,19 +2,19 @@
 # 2011-05-27  Michele Tavella <michele.tavella@epfl.ch>
 
 if [ "z$1" == "z" ]; then
-	echo "Usage: cp_keeprunning COMMAND [OPTION ...]";
+	echo "Usage: cp_keepalive COMMAND [OPTION ...]";
 	exit 1;
 fi
 
-echo "[cp_keeprunning] Running '$@'";
-cl_rpcnotify "CnbiTk cp_keeprunning" "Nursing $1"
+echo "[cp_keepalive] Running '$@'";
+cl_rpcnotify "CnbiTk cp_keepalive" "Nursing $1"
 while true; do
 	reset
 	$@;
 	stty echo
 	echo ""
-	cl_rpcnotify "CnbiTk cp_keeprunning" "Process $1 exited"
-	echo "[cp_keeprunning] Terminated at `date`";
-	echo "[cp_keeprunning] Press Enter to run '$@' again";
+	cl_rpcnotify "CnbiTk cp_keepalive" "Process $1 exited"
+	echo "[cp_keepalive] Terminated at `date`";
+	echo "[cp_keepalive] Press Enter to run '$@' again";
 	read
 done
