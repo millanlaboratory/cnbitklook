@@ -15,7 +15,9 @@ bin_PROGRAMS = cl_processing \
 dist_bin_SCRIPTS = cl_rpcnotify \
 				   cl_grpc \
 				   cl_screenloop \
-				   cl_attachloop
+				   cl_attachloop \
+				   cl_keepalive \
+				   cl_termloop
 
 libcnbiloop_includedir=$(includedir)/cnbiloop
 

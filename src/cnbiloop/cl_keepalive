@@ -1,0 +1,13 @@
+#!/bin/bash
+# 2011-05-27  Michele Tavella <michele.tavella@epfl.ch>
+
+echo "[cp_keeprunning] Running '$@'";
+while true; do
+	reset
+	$@;
+	stty echo
+	echo ""
+	echo "[cp_keeprunning] Terminated at `date`";
+	echo "[cp_keeprunning] Press Enter to run '$@' again";
+	read
+done

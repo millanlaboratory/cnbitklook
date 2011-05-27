@@ -1,0 +1,9 @@
+#!/bin/bash
+# 2011-05-27  Michele Tavella <michele.tavella@epfl.ch>
+ARGS=`echo $@`
+echo $ARGS
+
+gnome-terminal \
+--tab -e "./cp_keepalive cl_nameserver" --title "CnbiTk Nameserver" \
+--tab -e "./cp_keepalive cl_processing" --title "CnbiTk Processing" \
+--tab -e "./cp_keepalive cl_acquisition $ARGS" --title "CnbiTk Processing"
