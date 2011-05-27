@@ -14,14 +14,14 @@ check_PROGRAMS = ccmutex \
 				 ccthreadsafe \
 				 ccprocess \
 				 ccptable \
-				 ccpipesink \
-				 ccpipesource \
 				 ccpipewriter \
 				 ccpipereader \
 				 ccpipeserver \
 				 ccdoublebuffer \
 				 ccendpoint \
-				 ccfile
+				 ccfile \
+				 ccpipeasreader \
+				 ccpipeaswriter
 
 ccptable_SOURCES = ccptable.cpp
 ccprocess_SOURCES = ccprocess.cpp
@@ -37,8 +37,8 @@ ccsemaphore_SOURCES = ccsemaphore.cpp
 ccobject_SOURCES = ccobject.cpp
 ccclient_SOURCES = ccclient.cpp
 ccserver_SOURCES = ccserver.cpp
-ccpipesink_SOURCES = ccpipesink.cpp
-ccpipesource_SOURCES = ccpipesource.cpp
+ccpipeasreader_SOURCES = ccpipeasreader.cpp
+ccpipeaswriter_SOURCES = ccpipeaswriter.cpp
 ccpipewriter_SOURCES = ccpipewriter.cpp
 ccpipereader_SOURCES = ccpipereader.cpp
 ccpipeserver_SOURCES = ccpipeserver.cpp
