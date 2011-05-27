@@ -25,10 +25,10 @@ fi
 CHECK=`screen -ls | grep cnbitk | awk '{print $1}'`;
 if [ "z$CHECK" == "z" ]; then
 	echo "[cl_screenloop] Check passed";
-	cl_rpcnotify "CnbiTk ScreenLoop" "Acquisition: $@"
+	cl_rpcnotify "CnbiTk cl_screenloop" "Acquisition: $@"
 else
 	echo "[cl_screenloop] Error: a cnbitk screen is already attached: $CHECK";
-	cl_rpcnotify "CnbiTk ScreenLoop" "GNU Screen already attached: $CHECK";
+	cl_rpcnotify "CnbiTk cl_screenloop" "GNU Screen already attached: $CHECK";
 	exit 2;
 fi
 
@@ -51,6 +51,6 @@ echo "[cl_screenloop] Attaching cl_tidmonitor to $CHECK"
 screen -S $CHECK -dr -X screen "cl_tidmonitor"
 
 CHECK=`screen -ls | grep cnbitk | awk '{print $1}'`;
-cl_rpcnotify "CnbiTk ScreenLoop" "GNU Screen attached: $CHECK";
+cl_rpcnotify "CnbiTk cl_screenloop" "GNU Screen attached: $CHECK";
 
 exit 0;

@@ -17,7 +17,8 @@ dist_bin_SCRIPTS = cl_rpcnotify \
 				   cl_screenloop \
 				   cl_attachloop \
 				   cl_keepalive \
-				   cl_termloop
+				   cl_termloop \
+				   cl_killloop
 
 libcnbiloop_includedir=$(includedir)/cnbiloop
 
