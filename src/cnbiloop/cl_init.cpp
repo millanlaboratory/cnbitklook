@@ -20,6 +20,9 @@
 #define WHAT_START			1
 #define WHAT_STOP			2
 #define WHAT_MONITOR		3
+#define WHAT_LOAD			4
+#define WHAT_UNLOAD			5
+#define WHAT_DUMP			6
 
 #define MODALITY_NOTHING	0
 #define MODALITY_ONLINE		1
@@ -28,9 +31,75 @@
 #define MODULE_NOTHING		0
 #define MODULE_CLASSIFIER	1
 #define MODULE_PROTOCOL		2
+#define MODULE_LOOP			3
 
 #include "ClLoop.hpp"
 #include <cnbicore/CcBasic.hpp>
+
+bool dump_configuration(CCfgConfig* config, const int modality,
+		const std::string& block, const std::string& taskset) {
+	CCfgTaskset* ts = NULL;
+	try {
+		if(modality == MODALITY_ONLINE) {
+			ts = config->OnlineEx(block, taskset);
+		} else {
+			ts = config->OnlineEx(block, taskset);
+		}
+	} catch(XMLException e) { 
+		fprintf(stderr, "Error: %s\n", e.Info().c_str());
+		return 0;
+	}
+
+	ts->Dump();
+	ts->DumpNDF();
+	ts->DumpClassifier();
+
+	return 1;
+}
+
+bool unload_configuration(const std::string& block) {
+	int status[5];
+	status[0] = ClLoop::nameserver.EraseConfig(block, "block");
+	status[1] = ClLoop::nameserver.EraseConfig(block, "taskset");
+	status[2] = ClLoop::nameserver.EraseConfig(block, "xml");
+	status[3] = ClLoop::nameserver.EraseConfig(block, "path");
+	status[4] = ClLoop::nameserver.EraseConfig(block, "modality");
+	
+	for(int i = 0; i < 5; i++)
+		if(status[i] != ClNamesLang::Successful)
+			return false;
+	return true;
+}
+
+bool load_configuration(CCfgConfig* config, std::string file, const int modality,
+		const std::string& block, const std::string& taskset) {
+	CCfgTaskset* ts = NULL;
+	try {
+		if(modality == MODALITY_ONLINE) {
+			ts = config->OnlineEx(block, taskset);
+		} else {
+			ts = config->OnlineEx(block, taskset);
+		}
+	} catch(XMLException e) { 
+		fprintf(stderr, "Error: %s\n", e.Info().c_str());
+		return 0;
+	}
+
+	std::string component = block;
+	
+	int status[5];
+	status[0] = ClLoop::nameserver.StoreConfig(component, "modality", 
+			modality == MODALITY_ONLINE ?  "online" : "offline");
+	status[1] = ClLoop::nameserver.StoreConfig(component, "block", block);
+	status[2] = ClLoop::nameserver.StoreConfig(component, "taskset", block);
+	status[3] = ClLoop::nameserver.StoreConfig(component, "xml", file);
+	status[4] = ClLoop::nameserver.StoreConfig(component, "path", "ciao2");
+
+	for(int i = 0; i < 5; i++)
+		if(status[i] != ClNamesLang::Successful)
+			return false;
+	return true;
+}
 
 bool classifier_start(CCfgConfig* config, const std::string& block, 
 		const std::string& taskset) {
@@ -64,7 +133,7 @@ bool classifier_monitor(CCfgConfig* config, const std::string& block,
 
 void usage(void) { 
 	printf("Usage: cl_init [OPTION]...\n\n");
-	printf("  -x FILE     XML file\n");
+	printf("  -x FILE     XML file (absolute path when using -l)\n");
 	printf("  -F          set offline modality\n");
 	printf("  -N          set online modality\n");
 	printf("  -B BLOCK    set block\n");
@@ -72,12 +141,23 @@ void usage(void) {
 	printf("  -s          start\n");
 	printf("  -t          stop\n");
 	printf("  -m          monitor\n");
+	printf("  -l          load loop configuration\n");
+	printf("  -d          dump loop configuration\n");
+	printf("  -u          unload loop configuration\n");
 	printf("  -c          classifier (can only be started or monitored, sets -N)\n\n");
 	printf("Typical usage:\n");
 	printf("  cl_init -x example.xml -sc -N -B mi -T mi_rhlh\n");
 	printf("    Start the classifier for block 'mi' and taskset 'mi_rhlh'\n");
 	printf("  cl_init -x example.xml -mc -N -B mi -T mi_rhlh\n");
 	printf("    Monitor the classifier for block 'mi' and taskset 'mi_rhlh'\n");
+	printf("  cl_init -x example.xml -mc -N -B mi -T mi_rhlh\n");
+	printf("    Monitor the classifier for block 'mi' and taskset 'mi_rhlh'\n");
+	printf("  cl_init -x /full/path/to/example.xml -d -N -B mi -T mi_rhlh\n");
+	printf("    Dump online loop configuration for block 'mi' and taskset 'mi_rhlh'\n");
+	printf("  cl_init -x /full/path/to/example.xml -l -F -B mi -T mi_rhlh\n");
+	printf("    Load offline loop configuration for block 'mi' and taskset 'mi_rhlh'\n");
+	printf("  cl_init -u -B mi\n");
+	printf("    Unload loop configuration for block 'mi'\n");
 }
 
 int main(int argc, char* argv[]) {
@@ -90,7 +170,7 @@ int main(int argc, char* argv[]) {
 
 	CcCore::OpenLogger("cl_init", CcCore::TerminalDisabled);
 	
-	while((opt = getopt(argc, argv, "x:M:B:T:FNstmc")) != -1) {
+	while((opt = getopt(argc, argv, "x:M:B:T:FNsutlumdc")) != -1) {
 		if(opt == 'x')
 			xml.assign(optarg);
 		else if(opt == 'F')
@@ -107,6 +187,21 @@ int main(int argc, char* argv[]) {
 			what = WHAT_STOP;
 		else if(opt == 'm')
 			what = WHAT_MONITOR;
+		else if(opt == 'l') {
+			what = WHAT_LOAD;
+			module = MODULE_LOOP;
+		}
+		else if(opt == 'u') {
+			what = WHAT_UNLOAD;
+			module = MODULE_LOOP;
+			modality = MODALITY_ONLINE;
+			xml = "none";
+			taskset = "none";
+		}
+		else if(opt == 'd') {
+			what = WHAT_DUMP;
+			module = MODULE_LOOP;
+		}
 		else if(opt == 'c') {
 			module = MODULE_CLASSIFIER;
 			modality = MODALITY_ONLINE;
@@ -148,12 +243,14 @@ int main(int argc, char* argv[]) {
 		CcCore::Exit(1);;
 	
 	CCfgConfig* config = NULL;
-	try {
-		config = new CCfgConfig();
-		config->ImportFileEx(xml);
-	} catch(XMLException e) {
-		fprintf(stderr, "Error: %s\n", e.Info().c_str());
-		CcCore::Exit(2);;
+	if(what != WHAT_UNLOAD) {
+		try {
+			config = new CCfgConfig();
+			config->ImportFileEx(xml);
+		} catch(XMLException e) {
+			fprintf(stderr, "Error: %s\n", e.Info().c_str());
+			CcCore::Exit(2);;
+		}
 	}
 
 	if(ClLoop::Connect() == false) {
@@ -168,7 +265,18 @@ int main(int argc, char* argv[]) {
 		else if(what == WHAT_MONITOR)
 			status = classifier_monitor(config, block, taskset);
 		else {
-			fprintf(stderr, "Error: classifier cannot be stopped\n");
+			fprintf(stderr, "Error: not implemented\n");
+			status = false;
+		}
+	} else if (module == MODULE_LOOP) {
+		if(what == WHAT_LOAD)
+			status = load_configuration(config, xml, modality, block, taskset);
+		else if(what == WHAT_UNLOAD)
+			status = unload_configuration(block);
+		else if(what == WHAT_DUMP)
+			status = dump_configuration(config, modality, block, taskset);
+		else {
+			fprintf(stderr, "Error: not implemented\n");
 			status = false;
 		}
 	}
