@@ -102,12 +102,11 @@ int main(int argc, char* argv[]) {
 				classifiers.append(",");
 		}
 
-		CcLogInfoS("TiC message: " << 
-				" Classifiers=" << classifiers <<
+		CcLogInfoS("Classifiers=" << classifiers <<
 				", Total=" << total <<
-				", Block " << message.GetBlockIdx() << 
-				", A/R=" << absolute << 
-				"/" << relative);
+				", Block=" << message.GetBlockIdx() << 
+				", A=" << absolute << 
+				", R=" << relative);
 	}
 shutdown:
 	ic.Detach();
