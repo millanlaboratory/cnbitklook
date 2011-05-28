@@ -34,6 +34,9 @@ class ClMatlab : public CcProcess {
 		void Exec(const std::string function);
 	protected:
 		virtual void Exec(void);
+
+	private:
+		std::string _logfile;
 };
 
 #endif
