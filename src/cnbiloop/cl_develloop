@@ -1,0 +1,15 @@
+#!/bin/bash
+# 2011-05-27  Michele Tavella <michele.tavella@epfl.ch>
+# 2011-05-17  Inaki Iturrate <inaki.iturrate@epfl.ch>
+
+if [ "z$1" == "z" ]; then
+	echo "[cl_develloop] Error: cl_acquisition arguments needed";
+	exit 1;
+fi
+
+gnome-terminal \
+---tab -e "bash -c 'cl_keeprunning cl_nameserver'" --title "CnbiTk Nameserver (devel, keeprunning)" \
+---tab -e "bash -c 'sleep 2; cl_keeprunning cl_processing'" --title "CnbiTk Processing (devel, keeprunning)" \
+---tab -e "bash -c 'sleep 4; cl_keeprunning cl_acquisition $*'" --title "CnbiTk Acquisition (devel, keeprunning)" \
+---tab -e "bash -c 'sleep 6; cl_keepalive cl_ndfmonitor -p /pipe15'" --title "CnbiTk NDF Monitor (devel, keepalive)" \
+---tab -e "bash -c 'sleep 6; cl_keepalive cl_tidmonitor'" --title "CnbiTk TiD Monitor (devel, keepalive)"
