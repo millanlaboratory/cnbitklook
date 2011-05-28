@@ -1,0 +1,11 @@
+#!/bin/bash
+# 2011-05-27  Michele Tavella <michele.tavella@epfl.ch>
+if [ "z$1" == "z" ]; then
+	echo "[cl_runloop] Error: cl_acquisition arguments needed";
+	exit 1;
+fi
+
+gnome-terminal \
+---tab -e "cp_keepalive cl_nameserver" --title "CnbiTk Nameserver" \
+---tab -e "cp_keepalive cl_processing" --title "CnbiTk Processing" \
+---tab -e "cp_keepalive cl_acquisition $*" --title "CnbiTk Processing"
