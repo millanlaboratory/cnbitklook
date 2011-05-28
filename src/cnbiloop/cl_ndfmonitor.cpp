@@ -68,77 +68,71 @@ int main(int argc, char* argv[]) {
 	CcTimeValue tvOpen, tvRead, tvLoop;
 	double msOpen, msRead, msNDF, msLoop, msIdeal;
 	unsigned long frametot;
-	double loop = true;
-	while(loop == true) {
-		if(CcCore::receivedSIGINT.Get()) 
-			break;
-		if(CcCore::receivedSIGTERM.Get()) 
-			break;
-		
-		frametot = 0;
-		ndf_frame frame;
-		ndf_ack ack;
+	
+	size_t rsize = 0;
+	ssize_t asize = 0;
 
-		// Setup pipe reader 
-		CcPipe reader;
-		if(reader.Open(pipename, CcPipe::Reader) == true) {
-			CcTime::Tic(&tvOpen);
-		} else {
-			CcLogFatal("Cannot open pipe");
-			CcTime::Sleep(2500.00);
-			continue;
-		}
+	frametot = 0;
+	ndf_frame frame;
+	ndf_ack ack;
 
-		size_t rsize = 0;
-		ssize_t asize = 0;
-		asize = reader.TryRead(&ack.buffer, NDF_ACK_SIZET);
-		if(asize <= 0) {
-			CcLogFatal("Pipe is broken");
-			CcCore::Exit(1);
-		}
-		ack.bsize = asize;
-
-		if(ack.bsize != NDF_ACK_SIZET) {
-			CcLogFatal("Acknoledgement not received correctly");
-			CcCore::Exit(2);
-		}
-
-		CcLogInfo("Acknoledgement received, initializing NDF frame");
-		ndf_initack(&frame, &ack);
-		msIdeal = 1000.00f/((double)frame.config.sf/frame.config.samples);
-
-		CcLogInfo("Receiving...");
-		CcTime::Tic(&tvLoop);
-		while(loop) { 
-			fflush(stdout);
-			CcTime::Tic(&tvRead);
-			rsize = reader.TryRead(frame.data.buffer, frame.data.bsize);
-			msLoop = CcTime::Toc(&tvLoop);
-			msOpen = CcTime::Toc(&tvOpen);
-			msRead = CcTime::Toc(&tvRead);
-			msNDF  = ndf_doubletimetoc(&frame);
-
-			if(frame.data.bsize != rsize) {
-				printf("\n");
-				CcLogWarning("Pipe is broken");
-				break;
-			}
-			
-			if(frametot++ > 2) {
-				printf("Uptime=%.2fmin, Frame=%8.8lu, ", 
-						msOpen/1000/60, ndf_get_fidx(&frame));
-				printf("iDt=%5.2fms, Dt=%5.2fms, Dr=%5.2fms, Dl=%5.2fms, ", 
-						msIdeal, msNDF, msRead, msLoop);
-				printf("Dt-iDt=%5.2fms            \r", 
-						msNDF - msIdeal);
-			}
-			CcTime::Tic(&tvLoop);
-
-			if(CcCore::receivedSIGAny.Get())
-				loop = false;
-		}
-		reader.Close();
-		ndf_free(&frame);
+	// Setup pipe reader 
+	CcPipe reader;
+	if(reader.Open(pipename, CcPipe::Reader) == true) {
+		CcTime::Tic(&tvOpen);
+	} else {
+		CcLogFatal("Cannot open pipe");
+		goto shutdown;
 	}
+
+	asize = reader.TryRead(&ack.buffer, NDF_ACK_SIZET);
+	if(asize <= 0) {
+		CcLogFatal("Pipe is broken");
+		CcCore::Exit(1);
+	}
+	ack.bsize = asize;
+
+	if(ack.bsize != NDF_ACK_SIZET) {
+		CcLogFatal("Acknoledgement not received correctly");
+		CcCore::Exit(2);
+	}
+
+	CcLogInfo("Acknoledgement received, initializing NDF frame");
+	ndf_initack(&frame, &ack);
+	msIdeal = 1000.00f/((double)frame.config.sf/frame.config.samples);
+
+	CcLogInfo("Receiving...");
+	CcTime::Tic(&tvLoop);
+	while(true) { 
+		fflush(stdout);
+		CcTime::Tic(&tvRead);
+		rsize = reader.TryRead(frame.data.buffer, frame.data.bsize);
+		msLoop = CcTime::Toc(&tvLoop);
+		msOpen = CcTime::Toc(&tvOpen);
+		msRead = CcTime::Toc(&tvRead);
+		msNDF  = ndf_doubletimetoc(&frame);
+
+		if(frame.data.bsize != rsize) {
+			printf("\n");
+			CcLogWarning("Pipe is broken");
+			goto shutdown;
+		}
+
+		if(frametot++ > 2) {
+			printf("Uptime=%.2fmin, Frame=%8.8lu, ", 
+					msOpen/1000/60, ndf_get_fidx(&frame));
+			printf("iDt=%5.2fms, Dt=%5.2fms, Dr=%5.2fms, Dl=%5.2fms, ", 
+					msIdeal, msNDF, msRead, msLoop);
+			printf("Dt-iDt=%5.2fms            \r", 
+					msNDF - msIdeal);
+		}
+		CcTime::Tic(&tvLoop);
+
+		if(CcCore::receivedSIGAny.Get())
+			goto shutdown;
+	}
+shutdown:
+	reader.Close();
+	ndf_free(&frame);
 	CcCore::Exit(0);
 }

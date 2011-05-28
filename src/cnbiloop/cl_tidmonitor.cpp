@@ -101,13 +101,12 @@ int main(int argc, char* argv[]) {
 			messageI.absolute.Get(&absolute);
 			messageI.relative.Get(&relative);
 
-			CcLogInfoS("TiD event:" << 
-					" Family=" << messageI.GetFamily() << 
-					", Event=" << messageI.GetEvent() << 
+			CcLogInfoS("Block=" << messageI.GetBlockIdx() <<
 					", Description=" << messageI.GetDescription() <<
-					", Block=" << messageI.GetBlockIdx() <<
-					", A/R=" << absolute << 
-					"/" << relative);
+					", Family=" << messageI.GetFamily() << 
+					", Event=" << messageI.GetEvent());
+			//		", A/R=" << absolute << 
+			//		"/" << relative);
 		}
 	}
 

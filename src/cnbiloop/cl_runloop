@@ -6,7 +6,6 @@ if [ "z$1" == "z" ]; then
 	echo "[cl_runloop] Error: cl_acquisition arguments needed";
 	exit 1;
 fi
-echo $*
 
 gnome-terminal \
 ---tab -e "bash -c 'cl_keepalive cl_nameserver'" --title "CnbiTk Nameserver" \

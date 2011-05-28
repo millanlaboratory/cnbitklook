@@ -221,6 +221,7 @@ void CaWriter::Tic(TCBlock* block) {
 		
 bool CaWriter::AddEvent(int event, double duration) {
 	this->_semlock.Wait();
+	bool isopen = (this->_file != NULL);
 	double onset = this->_relative.Toc()/1000.00f;
 	int type = xdf_add_evttype(this->_file, event, "");
 	if(type != -1) {
@@ -229,9 +230,10 @@ bool CaWriter::AddEvent(int event, double duration) {
 			return true;
 		} 
 	}
-
-	CcLogErrorS("Cannot add event " << event << ": " << strerror(errno));
 	this->_semlock.Post();
+	if(isopen == true) {
+		CcLogErrorS("Cannot add event " << event << ": " << strerror(errno));
+	}
 	return false;
 }
 

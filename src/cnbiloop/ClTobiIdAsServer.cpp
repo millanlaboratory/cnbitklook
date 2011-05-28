@@ -83,11 +83,22 @@ bool ClTobiIdAsServer::CommunicationTiD(CcServer* server, CcAddress address,
 		this->_serializerD->Serialize(&message);
 		server->SendNot(message.c_str(), address);
 		
-		CcLogInfoS("TiD event from " << address << " distributed: " <<
-					this->_messageD.GetDescription() << "::" <<
-					idevent << "@" <<
-					idblock << "/" << ndfblock << 
-					" (" << this->_writer->TocOpen()/1000 << "s)");
+		double onset = this->_writer->TocOpen();
+		if(onset <= 0)
+			onset = 0;
+		CcLogInfoS("TiD event: " << this->_messageD.GetDescription() <<
+				", Event=" <<
+				idevent << 
+				", Block=" << ndfblock << 
+				", Onset=" << onset/1000 << "s");
+		/*
+		CcLogDebugS("TiD event: " << this->_messageD.GetDescription() <<
+				"/" << address <<
+				": " <<
+				idevent << "@" <<
+				idblock << "/" << ndfblock << 
+				" (" << this->_writer->TocOpen()/1000 << "s)");
+		 */
 	} else {
 		CcLogError("TiD event is not valid and will not be distributed");
 	}
