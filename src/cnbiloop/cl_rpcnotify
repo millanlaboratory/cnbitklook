@@ -16,9 +16,8 @@ def main(argv=None):
          argv = sys.argv
 
     n = pynotify.Notification(sys.argv[1], sys.argv[2])
-    n.set_urgency(pynotify.URGENCY_CRITICAL)
-    n.set_timeout(2500)
-    
+    n.set_urgency(pynotify.URGENCY_NORMAL)
+    n.set_timeout(1000)
 
     if not n.show():
         print "Failed to send notification"
