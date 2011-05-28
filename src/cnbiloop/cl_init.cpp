@@ -167,7 +167,11 @@ void usage(void) {
 	printf("  cl_init -x /full/path/to/example.xml -l -F -B mi -T mi_rhlh\n");
 	printf("    Load offline loop configuration for block 'mi' and taskset 'mi_rhlh'\n");
 	printf("  cl_init -u -B mi\n");
-	printf("    Unload loop configuration for block 'mi'\n");
+	printf("    Unload loop configuration for block 'mi'\n\n");
+	printf("  cl_init -x /home/mtavella/Desktop/example.xml -lF -B checkloop -T dummy\n");
+	printf("  cl_init -x /home/mtavella/Desktop/example.xml -scN -B checkloop -T dummy\n");
+	printf("  cl_init -x /home/mtavella/Desktop/example.xml -u -B checkloop\n");
+	printf("    Load checkloop configuration, start ndf_checkloop and unload configuration.\n");
 }
 
 int main(int argc, char* argv[]) {

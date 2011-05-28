@@ -122,17 +122,12 @@
 	<!-- Online Block -->
 	<online>
 		<checkloop description="NDF loop check" protocol="">
-			<taskset ttype="mi_rhlh" ctype="checkloop" classifier="kmi0">
-				<threshold>
-					<mi_hand_right>0.65</mi_hand_right>
-					<mi_hand_left>0.95</mi_hand_left>
-				</threshold>
+			<taskset ttype="dummy" ctype="checkloop" classifier="kmi0">
 				<trials>
-					<mi_hand_right>150</mi_hand_right>
-					<mi_hand_left>250</mi_hand_left>
+					<dummy_k0>10</dummy_k0>
+					<dummy_k1>10</dummy_k1>
 				</trials>
 			</taskset>
-			<integration>0.96</integration>
 		</checkloop>
 		<mi description="Online MI" protocol="mi_online">
 			<taskset ttype="mi_rhlh" ctype="mi" classifier="kmi0">
@@ -315,6 +310,10 @@
 			<class id="0" key="va_left"/>
 			<class id="1" key="va_right"/>
 		</va_rl> 
+		<dummy description="Dummy Taskset">
+			<class id="0" key="dummy_k0"/>
+			<class id="1" key="dummy_k1"/>
+		</dummy> 
 	</tasksets>
 	
 	<!-- Standard Task List -->
@@ -379,6 +378,16 @@
 			<gdfevent>0x0000</gdfevent>
 			<hwtrigger>1</hwtrigger>
 		</va_left>
+		<dummy_k0>
+			<description>Dummy_Class0</description>
+			<gdfevent>0x0000</gdfevent>
+			<hwtrigger>1</hwtrigger>
+		</dummy_k0>
+		<dummy_k1>
+			<description>Dummy_Class1</description>
+			<gdfevent>0x0000</gdfevent>
+			<hwtrigger>1</hwtrigger>
+		</dummy_k1>
 	</tasks>
 	
 	<!-- Standard Events List -->
