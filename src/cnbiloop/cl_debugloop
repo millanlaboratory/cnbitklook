@@ -13,4 +13,5 @@ gnome-terminal \
 ---tab -e "bash -c 'sleep 4; cl_keeprunning cl_acquisition $*'" --title "CnbiTk Acquisition (debug, keeprunning)" \
 ---tab -e "bash -c 'sleep 6; cl_keepalive cl_ndfmonitor -p /pipe15'" --title "CnbiTk NDF Monitor (debug, keepalive)" \
 ---tab -e "bash -c 'sleep 6; cl_keepalive cl_tidmonitor'" --title "CnbiTk TiD Monitor (debug, keepalive)" \
----tab -e "bash -c 'sleep 6; cl_keepalive lc_eventcheck -p /pipe16'" --title "CnbiTk Event Check (debug, keepalive)"
+---tab -e "bash -c 'sleep 6; cl_keepalive lc_eventcheck -p /pipe16'" --title "CnbiTk Event Check (debug, keepalive)" \
+---tab -e "bash -c 'sleep 6; cl_keepalive cl_tidsender -u'" --title "CnbiTk TiD Sender (debug, keepalive)"
