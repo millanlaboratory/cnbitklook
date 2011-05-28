@@ -27,6 +27,7 @@ tobi.iD.cache 		= '';
 tobi.iD.hdr 		= '<tobiid';
 tobi.iD.trl 		= '/>';
 tobi.iD.queue 		= {};
+tobi.iD.messages    = 0;
 	
 % Configure TCP endpoints for TiC
 tobi.iC.socket  	= [];

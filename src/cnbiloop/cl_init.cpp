@@ -87,13 +87,23 @@ bool load_configuration(CCfgConfig* config, std::string file, const int modality
 
 	std::string component = block;
 	
+	std::string path;
+	size_t pos = file.rfind("/");
+	if(pos == std::string::npos) {
+		fprintf(stderr, "Error: XML path (%s) not absolute or something wrong\n",
+				file.c_str());
+		return 0;
+	} else {
+		path = file.substr(0, pos+1);
+	}
+
 	int status[5];
 	status[0] = ClLoop::nameserver.StoreConfig(component, "modality", 
 			modality == MODALITY_ONLINE ?  "online" : "offline");
 	status[1] = ClLoop::nameserver.StoreConfig(component, "block", block);
-	status[2] = ClLoop::nameserver.StoreConfig(component, "taskset", block);
+	status[2] = ClLoop::nameserver.StoreConfig(component, "taskset", ts->name);
 	status[3] = ClLoop::nameserver.StoreConfig(component, "xml", file);
-	status[4] = ClLoop::nameserver.StoreConfig(component, "path", "ciao2");
+	status[4] = ClLoop::nameserver.StoreConfig(component, "path", "unknown");
 
 	for(int i = 0; i < 5; i++)
 		if(status[i] != ClNamesLang::Successful)

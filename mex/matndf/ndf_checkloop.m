@@ -196,11 +196,11 @@ try
 				idmessage_setevent(tobi.iD.message, ndf.frame.index);
 				ndf_tobi_sendd(tobi, ndf.frame.index);
 			end
-
-			if(ndf_tobi_receiveid(tobi) > 0)
+			tobi = ndf_tobi_receiveid(tobi);
+			if(tobi.iD.messages > 0)
 				for iq = 1:length(tobi.iD.queue)
 					idmessage_deserialize(tobi.iD.serializer, tobi.iD.queue{iq});
-					idmessage_dump(tobi.iD.message);
+					idmessage_dumpmessage(tobi.iD.message);
 				end
 			end
 		end

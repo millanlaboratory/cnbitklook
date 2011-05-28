@@ -13,10 +13,10 @@
 %
 % You should have received a copy of the GNU General Public License
 % along with this program.  If not, see <http://www.gnu.org/licenses/>.
-function messages = ndf_tobi_receiveid(tobi)
+function tobi = ndf_tobi_receiveid(tobi)
 
 % Receive from iD
-if(tr_recv(tobi.iD.socket))
+if(tr_recv(tobi.iD.socket) > 0)
 	tobi.iD.buffer = [tobi.iD.buffer, tr_getbuffer(tobi.iD.socket)];
 end
 
@@ -24,5 +24,4 @@ end
 tobi.iD.queue = {};
 [tobi.iD.queue, tobi.iD.buffer] = ...
 	ndf_streamerq(tobi.iD.buffer, tobi.iD.hdr, tobi.iD.trl);
-
-messages = length(tobi.iD.queue);
+tobi.iD.messages = length(tobi.iD.queue);
