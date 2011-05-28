@@ -1,11 +1,14 @@
 #!/bin/bash
 # 2011-05-27  Michele Tavella <michele.tavella@epfl.ch>
+# 2011-05-17  Inaki Iturrate <inaki.iturrate@epfl.ch>
+
 if [ "z$1" == "z" ]; then
 	echo "[cl_runloop] Error: cl_acquisition arguments needed";
 	exit 1;
 fi
+echo $*
 
 gnome-terminal \
----tab -e "cp_keepalive cl_nameserver" --title "CnbiTk Nameserver" \
----tab -e "cp_keepalive cl_processing" --title "CnbiTk Processing" \
----tab -e "cp_keepalive cl_acquisition $*" --title "CnbiTk Processing"
+---tab -e "bash -c 'cl_keepalive cl_nameserver'" --title "CnbiTk Nameserver" \
+---tab -e "bash -c 'sleep 1; cl_keepalive cl_processing'" --title "CnbiTk Processing" \
+---tab -e "bash -c 'sleep 2; cl_keepalive cl_acquisition $*'" --title "CnbiTk Acquisition"
