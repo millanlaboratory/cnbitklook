@@ -7,13 +7,11 @@ if [ "z$1" == "z" ]; then
 fi
 
 echo "[cp_keeprunning] Running '$@'";
-cl_rpcnotify "CnbiTk cp_keeprunning" "Nursing $1"
 while true; do
 	reset
 	$@;
 	stty echo
 	echo ""
-	cl_rpcnotify "CnbiTk cp_keepalive" "Process $1 exited"
 	echo "[cp_keeprunning] Terminated at `date`";
 	sleep 5;
 done

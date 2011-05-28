@@ -7,6 +7,8 @@ if [ "z$1" == "z" ]; then
 	exit 1;
 fi
 
+cl_rpcnotify "CnbiTk cl_debugloop" "Starting: $*"
+
 gnome-terminal \
 ---tab -e "bash -c 'cl_keeprunning cl_nameserver'" --title "CnbiTk Nameserver (debug, keeprunning)" \
 ---tab -e "bash -c 'sleep 2; cl_keeprunning cl_processing'" --title "CnbiTk Processing (debug, keeprunning)" \
@@ -15,3 +17,5 @@ gnome-terminal \
 ---tab -e "bash -c 'sleep 6; cl_keepalive cl_tidmonitor'" --title "CnbiTk TiD Monitor (debug, keepalive)" \
 ---tab -e "bash -c 'sleep 6; cl_keepalive lc_eventcheck -p /pipe16'" --title "CnbiTk Event Check (debug, keepalive)" \
 ---tab -e "bash -c 'sleep 6; cl_keepalive cl_tidsender -u'" --title "CnbiTk TiD Sender (debug, keepalive)"
+
+cl_rpcnotify "CnbiTk cl_debugloop" "Stopped"
