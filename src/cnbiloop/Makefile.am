@@ -22,7 +22,8 @@ dist_bin_SCRIPTS = cl_rpcnotify \
 				   cl_killloop \
 				   cl_runloop \
 				   cl_debugloop \
-				   cl_develloop
+				   cl_develloop \
+				   cl_killmatlab
 
 libcnbiloop_includedir=$(includedir)/cnbiloop
 

@@ -25,6 +25,17 @@
 #include <unistd.h>
 #include <stdio.h>
 
+int tr_flags(tr_socket* sock) {
+	int opts = fcntl(sock->fd, F_GETFL);
+	if(opts < 0)
+		return 1;
+		//perror("fcntl(F_GETFL)");
+	opts = (opts | O_CLOEXEC);
+	if(fcntl(sock->fd, F_SETFL, opts) < 0)
+		return 0;
+		//perror("fcntl(F_SETFL)");
+}
+
 void tr_init_host(tr_host* host) {
 	memset(host->address, 0, INET_ADDRSTRLEN + 1);
 	host->port = 0;
@@ -118,7 +129,7 @@ int tr_bind(tr_socket* sock, const char* port) {
 		}
 
 		bndret = bind(sock->fd, sock->info->ai_addr, sock->info->ai_addrlen); 
-		fcntl(sock->fd, F_SETFD, fcntl(sock->fd, F_GETFD)|FD_CLOEXEC);
+		tr_flags(sock);
 		if(bndret == -1) {
 			close(sock->fd);
 			continue;
@@ -147,7 +158,7 @@ int tr_accept(tr_socket* sock, tr_socket* endpoint) {
 	unsigned int addrlen = sizeof(endpoint->address);
 	endpoint->fd = accept(sock->fd, (struct sockaddr*)&sock->address_endpoint,
 			&addrlen);
-	fcntl(endpoint->fd, F_SETFD, fcntl(endpoint->fd, F_GETFD)|FD_CLOEXEC);
+	tr_flags(endpoint);
 	endpoint->type = TR_TYPE_ENDPOINT;
 
 	// Fill local and remote host structures
@@ -171,7 +182,7 @@ int tr_connect(tr_socket* sock, const char* host, const char* port) {
 				sock->info->ai_protocol);
 		if (sock->fd == -1) 
 			continue;
-		fcntl(sock->fd, F_SETFD, fcntl(sock->fd, F_GETFD)|FD_CLOEXEC);
+		tr_flags(sock);
 
 		if(sock->protocol == TR_PROTO_TCP) {
 			conopt = connect(sock->fd, 

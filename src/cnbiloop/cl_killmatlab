@@ -1,0 +1,5 @@
+#!/bin/bash
+# 2011-05-28  Michele Tavella <michele.tavella@epfl.ch>
+for i in `pidof MATLAB`; do 
+	cl_rpc terminate $i; 
+done
