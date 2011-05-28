@@ -123,6 +123,10 @@
 	<online>
 		<checkloop description="NDF loop check" protocol="">
 			<taskset ttype="dummy" ctype="checkloop" classifier="kmi0">
+				<threshold>
+					<dummy_k0>0.10</dummy_k0>
+					<dummy_k1>0.10</dummy_k1>
+				</threshold>
 				<trials>
 					<dummy_k0>10</dummy_k0>
 					<dummy_k1>10</dummy_k1>
@@ -380,12 +384,12 @@
 		</va_left>
 		<dummy_k0>
 			<description>Dummy_Class0</description>
-			<gdfevent>0x0000</gdfevent>
+			<gdfevent>0x9000</gdfevent>
 			<hwtrigger>1</hwtrigger>
 		</dummy_k0>
 		<dummy_k1>
 			<description>Dummy_Class1</description>
-			<gdfevent>0x0000</gdfevent>
+			<gdfevent>0x9001</gdfevent>
 			<hwtrigger>1</hwtrigger>
 		</dummy_k1>
 	</tasks>

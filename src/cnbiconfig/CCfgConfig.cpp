@@ -17,6 +17,7 @@
 */
 
 #include "CCfgConfig.hpp"
+#include <tobicore/TCException.hpp>
 #include <stdio.h>
 #include <iostream>
 #include <stdlib.h>
@@ -53,7 +54,8 @@ bool CCfgConfig::Validate(void) {
 }
 		
 CCfgTaskset* CCfgConfig::OnlineEx(const std::string& blockname, 
-		const std::string& taskset, ICMessage* icmessage, IDMessage* idmessage) {
+		const std::string& taskset, 
+		ICMessage* icmessage, IDMessage* idmessage) {
 	CCfgTaskset* tasks = new CCfgTaskset(taskset);
 	try {
 		CCfgXMLConfig::RootEx()->GoEx("online")->GoEx(blockname)->SetBranch();
@@ -187,7 +189,7 @@ void CCfgConfig::ParseConfigEx(const std::string& mode, const std::string& block
 		node = CCfgXMLConfig::NextSibling();
 	}
 }
-		
+	
 void CCfgConfig::ParseClassifierEx(const std::string& bl, const std::string& ts,
 		CCfgTaskset* taskset, ICMessage* icmessage, IDMessage* idmessage) {
 	CCfgXMLConfig::RootEx()->GoEx("online")->GoEx(bl)->GoEx("taskset")->SetBranch();
@@ -202,7 +204,6 @@ void CCfgConfig::ParseClassifierEx(const std::string& bl, const std::string& ts,
 		if(tname.compare(ts) == 0) {
 			cname = CCfgXMLConfig::GetAttrEx("classifier");
 			ctype = CCfgXMLConfig::GetAttrEx("ctype");
-			//taskset->classifier.assign(cname);
 			tnode = CCfgXMLConfig::Child();
 			break;
 		}
@@ -265,44 +266,52 @@ void CCfgConfig::ParseClassifierEx(const std::string& bl, const std::string& ts,
 	ftype = CCfgXMLConfig::BranchEx()->GoEx("tobi")->QuickStringEx("idfamily");
 	
 	if(icmessage != NULL) {
-		ICClassifier* classifier = new ICClassifier(cname, cdesc);
-		if(classifier->SetValueType(vtype) == false) {
-			std::string info;
-			info += "TOBI iC value type is not valid: ";
-			info += vtype;
-			throw XMLException(info, __PRETTY_FUNCTION__);
-		}
-
-		if(classifier->SetLabelType(ltype) == false) {
-			std::string info;
-			info += "TOBI iC label type is not valid: ";
-			info += ltype;
-			throw XMLException(info, __PRETTY_FUNCTION__);
-		}
-
-		CCfgTasksetIt it = taskset->tasks.begin();
-		while(it != taskset->tasks.end()) {
-			std::string label;
-
-			ICClass* cclass = NULL;
-			if(ltype.compare(ICClassifier::TxtLabelBiosig) == 0) {
-				cclass = new ICClass(it->second->gdf, 0.00f);
-			} else {
-				cclass = new ICClass(it->first, 0.00f);
+		try { 
+			ICClassifier* classifier = new ICClassifier(cname, cdesc);
+			if(classifier->SetValueType(vtype) == false) {
+				std::string info;
+				info += "TOBI iC value type is not valid: ";
+				info += vtype;
+				throw XMLException(info, __PRETTY_FUNCTION__);
 			}
-			classifier->classes.Add(cclass);
-			it++;
+
+			if(classifier->SetLabelType(ltype) == false) {
+				std::string info;
+				info += "TOBI iC label type is not valid: ";
+				info += ltype;
+				throw XMLException(info, __PRETTY_FUNCTION__);
+			}
+
+			CCfgTasksetIt it = taskset->tasks.begin();
+			while(it != taskset->tasks.end()) {
+				std::string label;
+
+				ICClass* cclass = NULL;
+				if(ltype.compare(ICClassifier::TxtLabelBiosig) == 0) {
+					cclass = new ICClass(it->second->gdf, 0.00f);
+				} else {
+					cclass = new ICClass(it->first, 0.00f);
+				}
+				classifier->classes.Add(cclass);
+				it++;
+			}
+			icmessage->classifiers.Add(classifier);
+		} catch(TCException tce) {
+			throw(XMLException(tce.GetInfo(), tce.GetCaller()));
 		}
-		icmessage->classifiers.Add(classifier);
 	}
 
 	if(idmessage != NULL) {
-		if(idmessage->SetFamilyType(ftype) == false) {
-			std::string info;
-			info += "TOBI iD family type is not valid: ";
-			info += ftype;
-			throw XMLException(info, __PRETTY_FUNCTION__);
+		try { 
+			if(idmessage->SetFamilyType(ftype) == false) {
+				std::string info;
+				info += "TOBI iD family type is not valid: ";
+				info += ftype;
+				throw XMLException(info, __PRETTY_FUNCTION__);
+			}
+			idmessage->SetDescription(cdesc);
+		} catch(TCException tce) {
+			throw(XMLException(tce.GetInfo(), tce.GetCaller()));
 		}
-		idmessage->SetDescription(cdesc);
 	}
 }

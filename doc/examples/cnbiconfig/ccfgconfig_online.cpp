@@ -26,7 +26,8 @@
 using namespace std;
 
 int main(void) {
-	std::string blockname("mi"), tasksetname("mi_rhlh");
+	//std::string blockname("mi"), tasksetname("mi_rhlh");
+	std::string blockname("checkloop"), tasksetname("dummy");
 	
 	CCfgConfig config;
 	try {
@@ -40,6 +41,8 @@ int main(void) {
 	if(config.Validate() == false) {
 		cout << "XML file is not valid\n";
 		return 1;
+	} else {
+		cout << "XML is valid\n";
 	}
 			
 
@@ -53,6 +56,7 @@ int main(void) {
 	IDMessage idM;
 
 	try { 
+		cout << "Assembling taskset" << endl;
 		online = config.OnlineEx(blockname, tasksetname, &icM, &idM);
 		cout << "Taskset assembled" << endl;
 	} catch(XMLException e) {

@@ -229,9 +229,7 @@ try
 		end
 	end
 catch exception
-	disp(['[ndf_checkloop] Exception: ' exception.message ]);
-	disp(exception);
-	disp(exception.stack);
+	ndf_printexception(exception);
 	disp('[ndf_checkloop] Going down');
 	loop.exit = true;
 end
@@ -248,9 +246,7 @@ try
 	if(loop.nD); tr_free(loop.nD); end
 	fclose('all');
 catch exception
-	disp(['[ndf_checkloop] Exception: ' exception.message ]);
-	disp(exception);
-	disp(exception.stack);
+	ndf_printexception(exception);
 	loop.exit = true;
 end
 
