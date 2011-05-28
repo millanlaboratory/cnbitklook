@@ -3,5 +3,3 @@
 killall cl_nameserver
 killall cl_processing
 killall cl_acquisition
-killall cl_keeprunning
-killall cl_keepalive

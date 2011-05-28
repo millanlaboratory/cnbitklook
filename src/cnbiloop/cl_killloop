@@ -3,5 +3,3 @@
 kill -n 9 `pidof cl_nameserver`
 kill -n 9 `pidof cl_processing`
 kill -n 9 `pidof cl_acquisition`
-kill -n 9 `pidof cl_keeprunning`
-kill -n 9 `pidof cl_keepalive`
