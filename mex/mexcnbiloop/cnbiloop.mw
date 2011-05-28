@@ -32,12 +32,6 @@ $ #include <stdio.h>
 	$ }
 	# ClLoop *c = clnew();
 
-@function [c] = cl_delete(c)
-% Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
-% Michele Tavella <michele.tavella@epfl.ch>
-	# ClLoop::Release();
-	sptr = 0;
-
 @function [status] = cl_connect(c, nameserver)
 % Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
 % Michele Tavella <michele.tavella@epfl.ch>

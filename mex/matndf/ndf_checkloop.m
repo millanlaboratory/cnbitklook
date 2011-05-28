@@ -192,7 +192,7 @@ try
 		%   endpoint to come up again
 		% - If the endpoint is connected, send the current TiC/TiD message
 		if(ndf_tobi_connectid(tobi) == true)
-			if(mod(ndf.frame.index, 160) == 0)
+			if(mod(ndf.frame.index, 16) == 0)
 				idmessage_setevent(tobi.iD.message, ndf.frame.index);
 				ndf_tobi_sendd(tobi, ndf.frame.index);
 			end
@@ -235,8 +235,9 @@ catch exception
 end
 
 try 
-	if(ndf.sink); ndf_close(ndf.sink); end
-	if(loop.cl); cl_delete(loop.cl); end
+	if(ndf.sink); 
+		ndf_close(ndf.sink); 
+	end
 	loop = ndf_loopdelete(loop);
 	if(loop.sC); icserializerrapid_delete(loop.sC); end
 	if(loop.sD); idserializerrapid_delete(loop.sD); end

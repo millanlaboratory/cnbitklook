@@ -68,10 +68,9 @@ bool ClTobiIdAsServer::CommunicationTiD(CcServer* server, CcAddress address,
 	if(this->_messageD.absolute.IsSet()) {
 		this->_writer->Tic(&this->_messageD);
 		this->_semframe->Wait();
-		if(idblock == TCBlock::BlockIdxUnset) {
-			ndfblock = ndf_get_fidx(this->_frame);
+		ndfblock = ndf_get_fidx(this->_frame);
+		if(idblock == TCBlock::BlockIdxUnset)
 			this->_messageD.SetBlockIdx(ndfblock);
-		}
 		if(ndf_add_label(this->_frame, &idevent) == NULL)
 			CcLogError("TiD event is valid but cannot be added to NDF frame");
 		this->_writer->AddEvent(idevent);
@@ -87,9 +86,9 @@ bool ClTobiIdAsServer::CommunicationTiD(CcServer* server, CcAddress address,
 		if(onset <= 0)
 			onset = 0;
 		CcLogInfoS("TiD event: " << this->_messageD.GetDescription() <<
-				", Event=" <<
-				idevent << 
-				", Block=" << ndfblock << 
+				", Event=" << idevent << 
+				", NDF=" << ndfblock << 
+				", TiD=" << idblock << 
 				", Onset=" << onset/1000 << "s");
 		/*
 		CcLogDebugS("TiD event: " << this->_messageD.GetDescription() <<
