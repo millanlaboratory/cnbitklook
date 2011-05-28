@@ -39,7 +39,6 @@ if(ccfg_importfile(loop.cfg.config, loop.cfg.ns.xml) == 0)
 end
 
 % Use ccfg_* to load the XML and retrieve the taskset. 
-kk
 loop.cfg.taskset = ccfg_online(loop.cfg.config, loop.cfg.ns.block, loop.cfg.ns.taskset, ...
 	loop.mC, loop.mD);
 if(loop.cfg.taskset == 0)	
