@@ -133,19 +133,27 @@ bool classifier_start(CCfgConfig* config, const std::string& block,
 	ClLoop::processing.Exec(pid, ts->ndf.exec);
 
 	if(monitor == true) {
+		CcCore::CatchSIGINT();
+		CcCore::CatchSIGTERM();
 		CcTimeValue tic;
 		CcTime::Tic(&tic);
-		printf("[cl_init] Monitoring classifier with PID=%d\n", pid); 
+		printf("[cl_init] Monitoring classifier with PID=%d (SIGTERM/SIGINT to stop)\n", 
+				pid); 
 		while(true) {
+			if(CcCore::receivedSIGAny.Get()) {
+				printf("[cl_init] Terminating classifier with PID=%d\n", pid);
+				return(ClLoop::processing.Terminate(pid) == ClProLang::Successful);
+			}
+
 			if(ClLoop::processing.IsAlive(pid) != ClProLang::Successful) {
 				printf(" Classifier '%s' for block '%s' PID=%d died (%.2f minutes)\n", 
 						ts->classifier.name.c_str(), block.c_str(), 
 						pid, CcTime::Toc(&tic)/1000/60);
 				return 0;
 			}
-				printf(" Classifier '%s' for block '%s' PID=%d running (%.2f minutes)\n", 
-						ts->classifier.name.c_str(), block.c_str(), 
-						pid, CcTime::Toc(&tic)/1000/60);
+			printf(" Classifier '%s' for block '%s' PID=%d running (%.2f minutes)\n", 
+					ts->classifier.name.c_str(), block.c_str(), 
+					pid, CcTime::Toc(&tic)/1000/60);
 			CcTime::Sleep(5000);
 		}
 	}
