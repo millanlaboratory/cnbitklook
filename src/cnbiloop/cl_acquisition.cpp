@@ -212,7 +212,7 @@ int main(int argc, char* argv[]) {
 				CcLogFatal("EGD device is down");
 				break;
 			} else {
-				CcLogWarning("EGD device is down, trying to re-open");
+				CcLogWarning("EGD device is down");
 				eegdev.Close();
 				if(eegdev.Open(optdevice) == false) {
 					CcLogFatal("Cannot re-open EGD device");
