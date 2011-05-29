@@ -58,7 +58,7 @@ bool dump_configuration(CCfgConfig* config, const int modality,
 }
 
 int unload_configuration(const std::string& block) {
-	int status[5];
+	bool status[5];
 	status[0] = ClLoop::nameserver.EraseConfig(block, "block");
 	status[1] = ClLoop::nameserver.EraseConfig(block, "taskset");
 	status[2] = ClLoop::nameserver.EraseConfig(block, "xml");
@@ -66,7 +66,7 @@ int unload_configuration(const std::string& block) {
 	status[4] = ClLoop::nameserver.EraseConfig(block, "modality");
 	
 	for(int i = 0; i < 5; i++)
-		if(status[i] != ClNamesLang::Successful)
+		if(status[i] != true)
 			return 1;
 	return 0;
 }
@@ -97,7 +97,7 @@ int load_configuration(CCfgConfig* config, std::string file, const int modality,
 		path = file.substr(0, pos+1);
 	}
 
-	int status[5];
+	bool status[5];
 	status[0] = ClLoop::nameserver.StoreConfig(component, "modality", 
 			modality == MODALITY_ONLINE ?  "online" : "offline");
 	status[1] = ClLoop::nameserver.StoreConfig(component, "block", block);
@@ -105,9 +105,10 @@ int load_configuration(CCfgConfig* config, std::string file, const int modality,
 	status[3] = ClLoop::nameserver.StoreConfig(component, "xml", file);
 	status[4] = ClLoop::nameserver.StoreConfig(component, "path", "unknown");
 
-	for(int i = 0; i < 5; i++)
-		if(status[i] != ClNamesLang::Successful)
+	for(int i = 0; i < 5; i++) {
+		if(status[i] != true)
 			return 3;
+	}
 	return 0;
 }
 
