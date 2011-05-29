@@ -105,12 +105,11 @@ catch e;\
 	exit;\
 end\n"
 
-ClMatlab::ClMatlab(const std::string& cmd, bool write, bool read) : 
-	CcProcess(cmd, write, read) {
+ClMatlab::ClMatlab(void) : CcProcess("matlab", true, true) {
 	std::string timestamp;
 	CcTime::Daystamp(&timestamp);
 	this->_logfile = CcCore::GetDirectoryTmp() + timestamp + "." + "cl_matlab.xml";
-	CcLogConfigS("Matlab log: " << this->_logfile);
+	CcLogConfigS("Matlab log file: " << this->_logfile);
 }
 
 ClMatlab::~ClMatlab(void) {

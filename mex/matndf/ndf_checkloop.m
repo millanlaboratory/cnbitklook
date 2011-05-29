@@ -23,6 +23,7 @@ ndf_include();
 % Prepare and enter main loop
 try 
 	% Prepare Loop structure
+	loop.uptime = ndf_tic();
 	loop.exit = true;
 	loop.cl   = cl_new();
 	loop.jump = ndf_jump();
@@ -250,6 +251,10 @@ catch exception
 	ndf_printexception(exception);
 	loop.exit = true;
 end
+
+disp(['[ndf_checkloop] Loop uptime: ' ...
+	num2str(ndf_toc(loop.uptime)/1000/60) ...
+	' minutes']);
 
 disp('[ndf_checkloop] Killing Matlab...');
 if(loop.exit == true)

@@ -24,8 +24,7 @@
 
 class ClMatlab : public CcProcess {
 	public:
-		ClMatlab(const std::string& cmd = "matlab", 
-				bool write = true, bool read = true);
+		ClMatlab(void);
 		virtual ~ClMatlab(void);
 		void AddPath(const std::string& path);
 		void Include(const std::string& path);

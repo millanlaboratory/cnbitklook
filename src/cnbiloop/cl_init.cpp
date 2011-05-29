@@ -112,7 +112,7 @@ bool load_configuration(CCfgConfig* config, std::string file, const int modality
 }
 
 bool classifier_start(CCfgConfig* config, const std::string& block, 
-		const std::string& taskset) {
+		const std::string& taskset, bool monitor) {
 	CCfgTaskset* ts = NULL;
 	try {
 		ts = config->OnlineEx(block, taskset);
@@ -126,19 +126,31 @@ bool classifier_start(CCfgConfig* config, const std::string& block,
 		fprintf(stderr, "Error: cannot fork\n");
 		return 0;
 	}
-	
 	ClLoop::processing.Directory(pid, ts->ndf.directory);
 	ClLoop::processing.IncludeNDF(pid);
 	if(ts->ndf.include.empty() == false)
 		ClLoop::processing.Include(pid, ts->ndf.include);
 	ClLoop::processing.Exec(pid, ts->ndf.exec);
 
-	return(ClLoop::processing.IsAlive(pid) == ClProLang::Successful);
-}
+	if(monitor == true) {
+		CcTimeValue tic;
+		CcTime::Tic(&tic);
+		printf("[cl_init] Monitoring classifier with PID=%d\n", pid); 
+		while(true) {
+			if(ClLoop::processing.IsAlive(pid) != ClProLang::Successful) {
+				printf(" Classifier '%s' for block '%s' PID=%d died (%.2f minutes)\n", 
+						ts->classifier.name.c_str(), block.c_str(), 
+						pid, CcTime::Toc(&tic)/1000/60);
+				return 0;
+			}
+				printf(" Classifier '%s' for block '%s' PID=%d running (%.2f minutes)\n", 
+						ts->classifier.name.c_str(), block.c_str(), 
+						pid, CcTime::Toc(&tic)/1000/60);
+			CcTime::Sleep(5000);
+		}
+	}
 
-bool classifier_monitor(CCfgConfig* config, const std::string& block, 
-		const std::string& taskset) {
-	return 1;
+	return(ClLoop::processing.IsAlive(pid) == ClProLang::Successful);
 }
 
 void usage(void) { 
@@ -174,7 +186,9 @@ void usage(void) {
 	printf("  cl_init -x /home/mtavella/Desktop/example.xml -lN -B checkloop -T dummy\n");
 	printf("    Load the loop configuration on the nameserver'\n");
 	printf("  cl_init -x /home/mtavella/Desktop/example.xml -scN -B checkloop -T dummy\n");
-	printf("    Ask the processing server to fork a classifier'\n");
+	printf("    Ask the processing server to start a classifier'\n");
+	printf("  cl_init -x /home/mtavella/Desktop/example.xml -mcN -B checkloop -T dummy\n");
+	printf("    As before, but monitoring the classifier'\n");
 	printf("  cl_init -x /home/mtavella/Desktop/example.xml -u -B checkloop\n");
 	printf("    Unload the loop configuration'\n");
 }
@@ -280,9 +294,9 @@ int main(int argc, char* argv[]) {
 	bool status = false;
 	if(module == MODULE_CLASSIFIER) { 
 		if(what == WHAT_START) 
-			status = classifier_start(config, block, taskset);
+			status = classifier_start(config, block, taskset, false);
 		else if(what == WHAT_MONITOR)
-			status = classifier_monitor(config, block, taskset);
+			status = classifier_start(config, block, taskset, true);
 		else {
 			fprintf(stderr, "Error: not implemented\n");
 			status = false;

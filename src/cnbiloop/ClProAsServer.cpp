@@ -52,6 +52,7 @@ void ClProAsServer::HandleRecvPeer(CcSocket* caller, CcAddress addr,
 			function.append("\n");
 			process->Exec(function);
 			server->Send(language.Ok(pid), addr);
+			function = function.substr(0, function.size()-1);
 			CcLogInfoS("Exec from " << addr << ": " << pid << " " << function);
 		}
 	} else if(this->language.IsTerminate(message.c_str(), &pid)) {
@@ -77,10 +78,8 @@ void ClProAsServer::HandleRecvPeer(CcSocket* caller, CcAddress addr,
 				server->Send(language.Ok(pid), addr);
 			} else {
 				server->Send(language.Error(ClProLang::IsDead), addr);
-				char buffer[CCCORE_1MB];
-				process->Read(buffer, CCCORE_1MB);
 				CcLogWarningS("IsAlive from " << addr << ": " 
-						<< pid << " IsDead, " << buffer);
+						<< pid << " IsDead");
 			}
 		}
 	} else if(this->language.IsDirectory(message.c_str(), &pid, &path0)) {
@@ -135,7 +134,7 @@ void ClProAsServer::Register(CcServer* server) {
 
 int ClProAsServer::Fork(void) {
 	int pid = 0;
-	ClMatlab* process = new ClMatlab();
+	ClMatlab* process = new ClMatlab;
 	pid = process->Fork();
 	this->_sempool.Wait();
 	this->_pool[pid] = process;
