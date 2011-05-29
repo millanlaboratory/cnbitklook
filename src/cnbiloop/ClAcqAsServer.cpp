@@ -73,9 +73,8 @@ bool ClAcqAsServer::CommunicationCl(CcServer* server, CcAddress address,
 			std::string cnbitkdata = CcCore::GetEnvCnbiTkData();
 			if(cnbitkdata.empty() == false) {
 				CcLogConfigS("CNBITK_DATA points to: " << cnbitkdata);
-				cnbitkdata.append("/");
-				cnbitkdata.append(xdffile);
-				xdffile.assign(cnbitkdata);
+				xdffile = cnbitkdata + "/" + xdffile;
+				logfile = cnbitkdata + "/" + logfile;
 			}
 
 			if(this->_writer->Open(xdffile) == false) {
