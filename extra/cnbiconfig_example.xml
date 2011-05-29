@@ -122,7 +122,7 @@
 	<!-- Online Block -->
 	<online>
 		<checkloop description="NDF loop check" protocol="">
-			<taskset ttype="dummy" ctype="checkloop" classifier="kmi0">
+			<taskset ttype="dummy" ctype="checkloop" classifier="kcl0">
 				<threshold>
 					<dummy_k0>0.10</dummy_k0>
 					<dummy_k1>0.10</dummy_k1>
@@ -193,6 +193,10 @@
 
 	<!-- Classifiers Block -->
 	<classifier>
+		<kcl0>
+			<description>CL_classifier_0</description>
+			<filename></filename>
+		</kcl0>
 		<kmi0>
 			<description>MI_classifier</description>
 			<filename>b3_mi_20091204.mat</filename>
@@ -210,7 +214,7 @@
 
 	<!-- Standard classifier type list -->
 	<classifiers>
-		<checkloop description="NDF classifier template (pipeline 0)">
+		<checkloop description="NDF checkloop classifier (pipeline 0)">
 			<tobi>
 				<icvalue>ValueProb</icvalue>
 				<iclabel>LabelBiosig</iclabel>
@@ -314,7 +318,7 @@
 			<class id="0" key="va_left"/>
 			<class id="1" key="va_right"/>
 		</va_rl> 
-		<dummy description="Dummy Taskset">
+		<dummy description="Checkloop Dummy Taskset">
 			<class id="0" key="dummy_k0"/>
 			<class id="1" key="dummy_k1"/>
 		</dummy> 

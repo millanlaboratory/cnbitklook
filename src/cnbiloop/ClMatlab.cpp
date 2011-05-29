@@ -109,8 +109,8 @@ ClMatlab::ClMatlab(const std::string& cmd, bool write, bool read) :
 	CcProcess(cmd, write, read) {
 	std::string timestamp;
 	CcTime::Daystamp(&timestamp);
-	this->_logfile = CcCore::GetDirectoryTmp() + timestamp + "_" + "cl_matlab.xml";
-	CcLogConfigS("Matlab child will log to: " << this->_logfile);
+	this->_logfile = CcCore::GetDirectoryTmp() + timestamp + "." + "cl_matlab.xml";
+	CcLogConfigS("Matlab log: " << this->_logfile);
 }
 
 ClMatlab::~ClMatlab(void) {

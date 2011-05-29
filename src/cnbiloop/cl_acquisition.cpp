@@ -50,6 +50,7 @@ void usage(void) {
 	printf("  -p       print labels added to NDF frame\n");
 	printf("  -b       print EGD/NDF buffer informations\n");
 	printf("  -w       warn when late\n");
+	printf("  -r       re-open device once down\n");
 	printf("  -h       display this help and exit\n");
 }
 
@@ -60,9 +61,9 @@ int main(int argc, char* argv[]) {
 	CcEndpoint optepAcq("0.0.0.0:8125"), optepBus("0.0.0.0:8126");
 	std::string optpipename("/tmp/cl.pipe.ndf.");
 	bool optinteractive = false, optprintndf = false, optprintbuffers = false,
-		 optwarnlate = false;
+		 optwarnlate = false, optreopen = false;
 
-	while((opt = getopt(argc, argv, "A:B:d:f:l:n:hipwb")) != -1) {
+	while((opt = getopt(argc, argv, "A:B:d:f:l:n:hipwbr")) != -1) {
 		if(opt == 'd')
 			optdevice.assign(optarg);
 		else if(opt == 'f')
@@ -75,6 +76,8 @@ int main(int argc, char* argv[]) {
 			optpipename.assign(optarg);
 		else if(opt == 'i')
 			optinteractive = true;
+		else if(opt == 'r')
+			optreopen = true;
 		else if(opt == 'p')
 			optprintndf = true;
 		else if(opt == 'w')
@@ -204,9 +207,25 @@ int main(int argc, char* argv[]) {
 	while(true) {
 		gsize = eegdev.GetData();
 		asize = eegdev.GetAvailable();
-		if(gsize == (size_t)-1) {
-			CcLogFatal("EGD device is down");
-			break;
+		if(gsize == (size_t)-1) { 
+			if(optreopen == false) {
+				CcLogFatal("EGD device is down");
+				break;
+			} else {
+				CcLogWarning("EGD device is down, trying to re-open");
+				eegdev.Close();
+				if(eegdev.Open(optdevice) == false) {
+					CcLogFatal("Cannot re-open EGD device");
+					break;
+				}
+				if(eegdev.Setup((float)atof(optfs.c_str())) == false) {
+					CcLogFatal("Cannot re-setup EGD device");
+					break;
+				}
+				eegdev.Start();
+				CcLogInfo("EGD device was successfully re-opened");
+			}
+			continue;
 		}
 		writer.Write(gsize);
 		

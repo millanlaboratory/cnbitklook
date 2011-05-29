@@ -156,24 +156,24 @@
 	}
 
 #define CcLogConfigSH(message, header, ...)\
-	CcLogConfigS(message, "[" << header << "] " << __VA_ARGS__);
+	{CcLogConfigS(message, "[" << header << "] " << __VA_ARGS__);}
 
 #define CcLogExceptionSH(message, header, ...)\
-	CcLogExceptionS(message, "[" << header << "] " << __VA_ARGS__);
+	{CcLogExceptionS(message, "[" << header << "] " << __VA_ARGS__);}
 
 #define CcLogDebugSH(message, header, ...)\
-	CcLogDebugS(message, "[" << header << "] " << __VA_ARGS__);
+	{CcLogDebugS(message, "[" << header << "] " << __VA_ARGS__)};
 
 #define CcLogInfoSH(message, header, ...)\
-	CcLogInfoS(message, "[" << header << "] " << __VA_ARGS__);
+	{CcLogInfoS(message, "[" << header << "] " << __VA_ARGS__)};
 
 #define CcLogWarningSH(message, header, ...)\
-	CcLogWarningS(message, "[" << header << "] " << __VA_ARGS__);
+	{CcLogWarningS(message, "[" << header << "] " << __VA_ARGS__)};
 
 #define CcLogErrorSH(message, header, ...)\
-	CcLogErrorS(message, "[" << header << "] " << __VA_ARGS__);
+	{CcLogErrorS(message, "[" << header << "] " << __VA_ARGS__)};
 
 #define CcLogFatalSH(message, header, ...)\
-	CcLogFatalS(message, "[" << header << "] " << __VA_ARGS__);
+	{CcLogFatalS(message, "[" << header << "] " << __VA_ARGS__)};
 
 #endif

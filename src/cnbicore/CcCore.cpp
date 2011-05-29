@@ -128,7 +128,7 @@ void CcCore::OpenLogger(std::string modulename, CcTermType termtype,
 
 	CcCore::_modulename.assign(modulename);
 
-	CcCore::_filename = directory + timestamp + "_" + 
+	CcCore::_filename = directory + timestamp + "." + 
 		CcCore::_modulename + ".xml";
 	CcCore::_linkname = directory + CcCore::_modulename + ".xml";
 

@@ -44,7 +44,7 @@ $ #include <stdlib.h>
 @function [sptr] = tr_init_socket_default(sptr);
 % Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
 % Michele Tavella <michele.tavella@epfl.ch>
-	# tr_init_socket(tr_socket* sptr, int 1024, int 1);
+	# tr_init_socket(tr_socket* sptr, int 20480, int 1);
 
 @function [sptr] = tr_tcpclient(sptr);
 % Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)

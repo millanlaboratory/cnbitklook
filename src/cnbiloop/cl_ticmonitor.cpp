@@ -24,21 +24,24 @@ void usage(void) {
 	printf("  -n       TCP server name (/ctrl0 default)\n");
 	printf("  -h       display this help and exit\n");
 	printf("  -l       lock on iC stream\n");
+	printf("  -d       dump iC message instead of logging\n");
 }
 
 int main(int argc, char* argv[]) {
 	int opt;
 	std::string optname("/ctrl0");
 	CcPort optport("");
-	bool locking = false;
+	bool locking = false, dump = false;
 	
-	while((opt = getopt(argc, argv, "p:n:hl")) != -1) {
+	while((opt = getopt(argc, argv, "p:n:hld")) != -1) {
 		if(opt == 'p')
 			optport.assign(optarg);
 		else if(opt == 'n')
 			optname.assign(optarg);
 		else if(opt == 'l')
 			locking = true;
+		else if(opt == 'd')
+			dump = true;
 		else {
 			usage();
 			CcCore::Exit(opt == 'h' ? EXIT_SUCCESS : EXIT_FAILURE);
@@ -101,12 +104,16 @@ int main(int argc, char* argv[]) {
 			if(it++ != message.classifiers.Begin())
 				classifiers.append(",");
 		}
-
-		CcLogInfoS("Classifiers=" << classifiers <<
-				", Total=" << total <<
-				", Block=" << message.GetBlockIdx() << 
-				", A=" << absolute << 
-				", R=" << relative);
+	
+		if(dump == false) {
+			CcLogInfoS("Classifiers=" << classifiers <<
+					", Total=" << total <<
+					", Block=" << message.GetBlockIdx() << 
+					", A=" << absolute << 
+					", R=" << relative);
+		} else {
+			message.Dump();
+		}
 	}
 shutdown:
 	ic.Detach();
