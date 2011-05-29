@@ -108,7 +108,7 @@ bool CcPipeWriter::IsBroken(void) {
 size_t CcPipeWriter::Write(const void* buffer, const size_t bsize) {
 	size_t result = this->_pipe->Write(buffer, bsize);
 	if(result == TP_BROKENS) {
-		CcLogWarningS("Pipe is broken");
+		CcLogWarningS("Pipe is broken: " << this->_filename);
 		CcThread::Stop();
 		this->iOnBroken.Execute(this);
 	} else 

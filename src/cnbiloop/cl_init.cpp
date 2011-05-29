@@ -57,7 +57,7 @@ bool dump_configuration(CCfgConfig* config, const int modality,
 	return 1;
 }
 
-bool unload_configuration(const std::string& block) {
+int unload_configuration(const std::string& block) {
 	int status[5];
 	status[0] = ClLoop::nameserver.EraseConfig(block, "block");
 	status[1] = ClLoop::nameserver.EraseConfig(block, "taskset");
@@ -67,11 +67,11 @@ bool unload_configuration(const std::string& block) {
 	
 	for(int i = 0; i < 5; i++)
 		if(status[i] != ClNamesLang::Successful)
-			return false;
-	return true;
+			return 1;
+	return 0;
 }
 
-bool load_configuration(CCfgConfig* config, std::string file, const int modality,
+int load_configuration(CCfgConfig* config, std::string file, const int modality,
 		const std::string& block, const std::string& taskset) {
 	CCfgTaskset* ts = NULL;
 	try {
@@ -82,7 +82,7 @@ bool load_configuration(CCfgConfig* config, std::string file, const int modality
 		}
 	} catch(XMLException e) { 
 		fprintf(stderr, "Error: %s\n", e.Info().c_str());
-		return 0;
+		return 1;
 	}
 
 	std::string component = block;
@@ -92,7 +92,7 @@ bool load_configuration(CCfgConfig* config, std::string file, const int modality
 	if(pos == std::string::npos) {
 		fprintf(stderr, "Error: XML path (%s) not absolute or something wrong\n",
 				file.c_str());
-		return 0;
+		return 2;
 	} else {
 		path = file.substr(0, pos+1);
 	}
@@ -107,22 +107,25 @@ bool load_configuration(CCfgConfig* config, std::string file, const int modality
 
 	for(int i = 0; i < 5; i++)
 		if(status[i] != ClNamesLang::Successful)
-			return false;
-	return true;
+			return 3;
+	return 0;
 }
 
-bool classifier_start(CCfgConfig* config, const std::string& block, 
+int classifier_start(CCfgConfig* config, const std::string& block, 
 		const std::string& taskset, bool monitor) {
 	CCfgTaskset* ts = NULL;
 	try {
 		ts = config->OnlineEx(block, taskset);
 	} catch(XMLException e) { 
+		if(monitor == false)
+			printf("%d\n", 0);
 		fprintf(stderr, "Error: %s\n", e.Info().c_str());
 		return 0;
 	}
 
 	int pid = 0;
 	if(ClLoop::processing.ForkAndCheck(&pid) != ClProLang::Successful) {
+		printf("%d\n", 0);
 		fprintf(stderr, "Error: cannot fork\n");
 		return 0;
 	}
@@ -156,9 +159,16 @@ bool classifier_start(CCfgConfig* config, const std::string& block,
 					pid, CcTime::Toc(&tic)/1000/60);
 			CcTime::Sleep(5000);
 		}
+	} else {
+		if(ClLoop::processing.IsAlive(pid) != ClProLang::Successful) {
+			printf("%d\n", 0);
+			return 0;
+		} else {
+			printf("%d\n", pid);
+		}
 	}
 
-	return(ClLoop::processing.IsAlive(pid) == ClProLang::Successful);
+	return pid;
 }
 
 void usage(void) { 
@@ -299,7 +309,7 @@ int main(int argc, char* argv[]) {
 		CcCore::Exit(3);;
 	}
 
-	bool status = false;
+	int status = 1;
 	if(module == MODULE_CLASSIFIER) { 
 		if(what == WHAT_START) 
 			status = classifier_start(config, block, taskset, false);
@@ -307,7 +317,7 @@ int main(int argc, char* argv[]) {
 			status = classifier_start(config, block, taskset, true);
 		else {
 			fprintf(stderr, "Error: not implemented\n");
-			status = false;
+			status = 666;
 		}
 	} else if (module == MODULE_LOOP) {
 		if(what == WHAT_LOAD)
@@ -318,8 +328,9 @@ int main(int argc, char* argv[]) {
 			status = dump_configuration(config, modality, block, taskset);
 		else {
 			fprintf(stderr, "Error: not implemented\n");
-			status = false;
+			status = 666;
 		}
 	}
-	CcCore::Exit(status);;
+	CcCore::CloseLogger();
+	return status;
 }
