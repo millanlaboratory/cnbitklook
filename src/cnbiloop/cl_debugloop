@@ -10,6 +10,7 @@ fi
 cl_rpcnotify "CnbiTk cl_debugloop" "Starting: $*"
 
 gnome-terminal \
+---tab "CnbiTk RPC Shell (devel)" \
 ---tab -e "bash -c 'cl_keeprunning cl_nameserver'" --title "CnbiTk Nameserver (debug, keeprunning)" \
 ---tab -e "bash -c 'sleep 2; cl_keeprunning cl_processing'" --title "CnbiTk Processing (debug, keeprunning)" \
 ---tab -e "bash -c 'sleep 4; cl_keeprunning cl_acquisition $*'" --title "CnbiTk Acquisition (debug, keeprunning)" \

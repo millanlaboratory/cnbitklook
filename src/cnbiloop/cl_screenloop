@@ -32,25 +32,33 @@ else
 	exit 2;
 fi
 
-ACQUISITION="cl_acquisition  $@";
+ACQUISITION="cl_acquisition  $*";
 echo "[cl_screenloop] Starting screen session"
 screen -c $HOME/.screenrc-cnbitk -d -m -S cnbitk 
 CHECK=`screen -ls | grep cnbitk | awk '{print $1}'`;
 
+echo "[cl_screenloop] Attaching bash to $CHECK"
+screen -S $CHECK -dr -X screen "bash"
+
 echo "[cl_screenloop] Attaching cl_nameserver to $CHECK"
 screen -S $CHECK -dr -X screen "cl_nameserver"
 
-sleep 5
+sleep 4
 echo "[cl_screenloop] Attaching cl_processing to $CHECK"
 screen -S $CHECK -dr -X screen "cl_processing"
 
+sleep 4
 echo "[cl_screenloop] Attaching cl_acquisition to $CHECK"
 screen -S $CHECK -dr -X screen  $ACQUISITION
 
+sleep 4
 echo "[cl_screenloop] Attaching cl_tidmonitor to $CHECK"
 screen -S $CHECK -dr -X screen "cl_tidmonitor"
 
+echo "[cl_screenloop] Attaching cl_ticmonitor to $CHECK"
+screen -S $CHECK -dr -X screen "cl_ticmonitor"
+
 CHECK=`screen -ls | grep cnbitk | awk '{print $1}'`;
-cl_rpcnotify "CnbiTk cl_screenloop" "GNU Screen attached: $CHECK";
+cl_rpcnotify "CnbiTk cl_screenloop" "GNU Screen started: $CHECK";
 
 exit 0;

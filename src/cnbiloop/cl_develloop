@@ -10,6 +10,7 @@ fi
 cl_rpcnotify "CnbiTk cl_develloop" "Starting: $*"
 
 gnome-terminal \
+---tab "CnbiTk RPC Shell (devel)" \
 ---tab -e "bash -c 'cl_keepalive cl_nameserver'" --title "CnbiTk Nameserver (devel)" \
 ---tab -e "bash -c 'sleep 2; cl_keepalive cl_processing'" --title "CnbiTk Processing (devel)" \
 ---tab -e "bash -c 'sleep 4; cl_keepalive cl_acquisition $*'" --title "CnbiTk Acquisition (devel)" \
