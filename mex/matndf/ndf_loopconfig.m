@@ -13,11 +13,7 @@
 %
 % You should have received a copy of the GNU General Public License
 % along with this program.  If not, see <http://www.gnu.org/licenses/>.
-function loop = ndf_loopconfig(loop, name, pn, aD, aC);
-
-if(nargin < 3); pn = ''; end
-if(nargin < 4); aD = ''; end
-if(nargin < 5); aC = ''; end
+function loop = ndf_loopconfig(loop, name) %, pn, aD, aC);
 
 % Retrieve from nameserver:
 % - block		the XML block (i.e. mi)
@@ -56,33 +52,31 @@ end
 [loop.cfg.ndf.exec, loop.cfg.ndf.pipe, loop.cfg.ndf.id, loop.cfg.ndf.ic] = ...
 	ccfgtaskset_getndf(loop.cfg.taskset);
 
-
-% Override NDF option from XML if needed
-if(isempty(aC) == false); 
-	disp('[ndf_cl_config] Overriding iC address');
-	loop.cfg.ndf.ic = aC;
-end
-if(isempty(aD) == false); 
-	disp('[ndf_cl_config] Overriding iD address');
-	loop.cfg.ndf.id = aD;
-end
-if(isempty(pn) == false); 
-	disp('[ndf_cl_config] Overriding pipename');
-	loop.cfg.ndf.pipe = pn;
-end
-
-fprintf(1, '[ndf_cl_config] Nameserver configuration:\n');
+fprintf(1, '[ndf_loopconfig] Nameserver configuration:\n');
 fprintf(1, '  Modality: %s\n', loop.cfg.ns.modality);
 fprintf(1, '  Block:    %s\n', loop.cfg.ns.block);
 fprintf(1, '  Taskset:  %s\n', loop.cfg.ns.taskset);
 fprintf(1, '  XML:      %s\n', loop.cfg.ns.xml);
 fprintf(1, '  Path:     %s\n', loop.cfg.ns.path);
-fprintf(1, '[ndf_cl_config] NDF configuration:\n');
+fprintf(1, '[ndf_loopconfig] NDF configuration:\n');
 fprintf(1, '  Exec:     %s\n', loop.cfg.ndf.exec);
 fprintf(1, '  Pipe:     %s\n', loop.cfg.ndf.pipe);
 fprintf(1, '  TOBI iD:  %s\n', loop.cfg.ndf.id);
 fprintf(1, '  TOBI iC:  %s\n', loop.cfg.ndf.ic);
-fprintf(1, '[ndf_cl_config] Classifier configuration:\n');
+fprintf(1, '[ndf_loopconfig] Classifier configuration:\n');
 fprintf(1, '  Name      %s\n', loop.cfg.classifier.name);
 fprintf(1, '  Desc.:    %s\n', loop.cfg.classifier.desc);
 fprintf(1, '  Filename: %s\n', loop.cfg.classifier.file);
+
+fprintf(1, '[ndf_loopconfig] TOBI interfaces status:\n');
+if(tid_attach(loop.iD, loop.cfg.ndf.id) == true)
+	fprintf(1, '  TOBI iD:  attached\n');
+else
+	fprintf(1, '  TOBI iD:  not attached\n');
+end
+
+if(tic_attach(loop.iC, loop.cfg.ndf.ic) == true)
+	fprintf(1, '  TOBI iC:  attached\n');
+else
+	fprintf(1, '  TOBI iC:  not attached\n');
+end

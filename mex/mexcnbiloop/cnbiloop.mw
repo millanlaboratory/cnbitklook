@@ -216,6 +216,24 @@ $ #include <stdio.h>
 	$ }
 	# ClTobiId *d = tidnew();
 
+@function [d] = tid_new_setonly();
+% Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
+% Michele Tavella <michele.tavella@epfl.ch>
+	$ ClTobiId* tidnewsetonly(void) {
+	$ 	ClTobiId* id = new ClTobiId(ClTobiId::SetOnly);
+	$ 	return id;
+	$ }
+	# ClTobiId *d = tidnewsetonly();
+
+@function [d] = tid_new_getonly();
+% Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
+% Michele Tavella <michele.tavella@epfl.ch>
+	$ ClTobiId* tidnewgetonly(void) {
+	$ 	ClTobiId* id = new ClTobiId(ClTobiId::GetOnly);
+	$ 	return id;
+	$ }
+	# ClTobiId *d = tidnewgetonly();
+
 @function [d] = tid_delete(d);
 % Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
 % Michele Tavella <michele.tavella@epfl.ch>
@@ -227,13 +245,17 @@ $ #include <stdio.h>
 	$ }
 	# ClTobiId *d = tiddelete(ClTobiId* d);
 
-@function [attached] = tid_attach(d);
+@function [attached] = tid_attach(d, name);
 % Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
 % Michele Tavella <michele.tavella@epfl.ch>
-	$ bool tidattach(ClTobiId* d) {
-	$	return d->Attach("/bus");
+	$ bool tidattach(ClTobiId* d, std::string* name) {
+	$	return d->Attach(*name);
 	$ }
-	# bool attached = tidattach(ClTobiId* d);
+	if(nargin == 1)
+		name = '/bus';
+	end
+	# std::string* tname = new std::string(cstring name);
+	# bool attached = tidattach(ClTobiId* d, std::string* tname);
 
 @function [attached] = tid_detach(d);
 % Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
@@ -284,25 +306,23 @@ $ #include <stdio.h>
 	# bool setmessage = tidsetmessage(ClTobiId* d, IDSerializerRapid* s, int blockidx);
 
 
-
-
-
-
-
-
-
-
-
-
-@function [d] = tic_new();
+@function [d] = tic_newgetonly();
 % Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
 % Michele Tavella <michele.tavella@epfl.ch>
-	$ ClTobiIc* ticnew(void) {
-	$ 	ClTobiIc* id = new ClTobiIc;
-	$ 	ClLoop::Instance();
+	$ ClTobiIc* ticnewgetonly(void) {
+	$ 	ClTobiIc* id = new ClTobiIc(ClTobiIc::GetOnly);
 	$ 	return id;
 	$ }
-	# ClTobiIc *d = ticnew();
+	# ClTobiIc *d = ticnewgetonly();
+
+@function [d] = tic_newsetonly();
+% Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
+% Michele Tavella <michele.tavella@epfl.ch>
+	$ ClTobiIc* ticnewsetonly(void) {
+	$ 	ClTobiIc* id = new ClTobiIc(ClTobiIc::SetOnly);
+	$ 	return id;
+	$ }
+	# ClTobiIc *d = ticnewsetonly();
 
 @function [d] = tic_delete(d);
 % Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
@@ -318,14 +338,11 @@ $ #include <stdio.h>
 @function [attached] = tic_attach(d, name);
 % Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
 % Michele Tavella <michele.tavella@epfl.ch>
-	$ bool ticattach(ClTobiIc* d, const std::string& name) {
-	$	return d->Attach(name);
+	$ bool ticattach(ClTobiIc* d, const std::string* name) {
+	$	return d->Attach(*name);
 	$ }
-	if(nargin == 1)
-		name = '/bus';
-	end
 	# std::string* tname = new std::string(cstring name);
-	# bool attached = ticattach(ClTobiIc* d, std::string name);
+	# bool attached = ticattach(ClTobiIc* d, std::string* tname);
 
 @function [attached] = tic_detach(c);
 % Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
@@ -335,26 +352,34 @@ $ #include <stdio.h>
 	$ }
 	# bool attached = ticdetach(ClTobiIc* c);
 
-@function [attached] = tic_isattached(d);
+@function [attached] = tic_isattached(c);
 % Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
 % Michele Tavella <michele.tavella@epfl.ch>
-	$ bool ticisattached(ClTobiIc* d) {
-	$	return d->IsAttached();
+	$ bool ticisattached(ClTobiIc* c) {
+	$	return c->IsAttached();
 	$ }
-	# bool attached = ticisattached(ClTobiIc* d);
+	# bool attached = ticisattached(ClTobiIc* c);
 
-@function [messages] = tic_waitmessage(d, s);
+@function [hasmessage] = tic_waitmessage(d, s);
 % Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
 % Michele Tavella <michele.tavella@epfl.ch>
 	$ bool ticwaitmessage(ClTobiIc* d, ICSerializerRapid* s) {
-	$	return d->WaitMessage(s);
+	$	return(d->WaitMessage(s) == ClTobiIc::HasMessage);
 	$ }
-	# int messages = ticwaitmessage(ClTobiIc* d, ICSerializerRapid* s);
+	# bool hasmessage = ticwaitmessage(ClTobiIc* d, ICSerializerRapid* s);
 
-@function [messages] = tic_getmessage(d, s);
+@function [hasmessage] = tic_getmessage(d, s);
 % Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
 % Michele Tavella <michele.tavella@epfl.ch>
 	$ bool ticgetmessage(ClTobiIc* d, ICSerializerRapid* s) {
-	$	return d->GetMessage(s);
+	$	return(d->GetMessage(s) == ClTobiIc::HasMessage);
 	$ }
-	# int messages = ticgetmessage(ClTobiIc* d, ICSerializerRapid* s);
+	# bool hasmessage = ticgetmessage(ClTobiIc* d, ICSerializerRapid* s);
+
+@function [setmessage] = tic_setmessage(c, s, blockidx);
+% Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
+% Michele Tavella <michele.tavella@epfl.ch>
+	$ bool ticsetmessage(ClTobiIc* c, ICSerializerRapid* s, int blockidx) {
+	$	return c->SetMessage(s, blockidx);
+	$ }
+	# bool setmessage = ticsetmessage(ClTobiIc* c, ICSerializerRapid* s, int blockidx);

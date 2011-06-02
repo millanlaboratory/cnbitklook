@@ -13,15 +13,15 @@
 %
 % You should have received a copy of the GNU General Public License
 % along with this program.  If not, see <http://www.gnu.org/licenses/>.
-function tobi = ndf_tobi_receiveid(tobi)
 
-% Receive from iD
-if(tr_recv(tobi.iD.socket) > 0)
-	tobi.iD.buffer = [tobi.iD.buffer, tr_getbuffer(tobi.iD.socket)];
-end
-
-% Dequeue all messages
-tobi.iD.queue = {};
-[tobi.iD.queue, tobi.iD.buffer] = ...
-	ndf_streamerq(tobi.iD.buffer, tobi.iD.hdr, tobi.iD.trl);
-tobi.iD.messages = length(tobi.iD.queue);
+loop.uptime = ndf_tic();
+loop.exit = true;
+loop.cl   = cl_new();
+loop.jump = ndf_jump();
+loop.cfg  = ccfg_new();
+loop.iC   = tic_newsetonly();
+loop.iD   = tid_new();
+loop.mC   = icmessage_new();
+loop.mD   = idmessage_new();
+loop.sC   = icserializerrapid_new(loop.mC);
+loop.sD   = idserializerrapid_new(loop.mD);

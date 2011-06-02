@@ -14,27 +14,17 @@
 % You should have received a copy of the GNU General Public License
 % along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-function ndf_checkloop(pn, aD, aC)
+function ndf_checkloop(arg0, arg1, arg2)
 
-if(nargin == 0) pn = ''; aD = ''; aC = ''; end
+if(nargin == 0) arg0 = ''; arg1 = ''; arg2 = ''; end
 % Include all the required toolboxes
 ndf_include();
 
 % Prepare and enter main loop
 try 
-	% Prepare Loop structure
-	loop.uptime = ndf_tic();
-	loop.exit = true;
-	loop.cl   = cl_new();
-	loop.jump = ndf_jump();
-	loop.cfg  = ccfg_new();
-	loop.mC   = icmessage_new();
-	loop.mD   = idmessage_new();
-	loop.sC   = icserializerrapid_new(loop.mC);
-	loop.sD   = idserializerrapid_new(loop.mD);
-	loop.nC   = tr_new();
-	loop.nD   = tr_new();
-	
+	% Initialize loop structure
+	ndf_loopnew;
+
 	if(cl_connect(loop.cl) == false)
 		disp('[ndf_checkloop] Cannot connect to CNBI Loop, killing matlab');
 		exit;
@@ -47,7 +37,7 @@ try
 	%   will be set according to what is stored in the XML configuration
 	% - also, if the nameserver query fails, pn, aD and aC will be empty and
 	%   their values will be set according to the XML configuration
-	loop = ndf_loopconfig(loop, 'checkloop', pn, aD, aC);
+	loop = ndf_loopconfig(loop, 'checkloop');
 	if(loop.cfg.config == 0)
 		disp('[ndf_checkloop] Cannot retrieve loop configuration, killing matlab');
 		exit;
@@ -61,13 +51,6 @@ try
 		disp(['  iD address: "' loop.cfg.ndf.id '"']);
 		exit;
 	end
-
-	% Prepare TOBI structure
-	% - when retrieving the taskset from the XML configuration, we also ask 
-	%   for an iC message to be returned configured according to the taskset
-	% - later on we will also aks for an iD message, but as today this is not
-	%   implemented yet
-	tobi = ndf_tobi(loop);
 
 	% -------------------------------------------------------------- %
 	% User initialization                                            %
@@ -88,10 +71,10 @@ try
 	% User TOBI configuration                                        %
 	% -------------------------------------------------------------- %
 	% Configure TiD message
-	idmessage_setevent(tobi.iD.message, 0);
+	idmessage_setevent(loop.mD, 0);
 	% Dump TiC/TiD messages
-	icmessage_dumpmessage(tobi.iC.message);
-	idmessage_dumpmessage(tobi.iD.message);
+	icmessage_dumpmessage(loop.mC);
+	idmessage_dumpmessage(loop.mD);
 	% -------------------------------------------------------------- %
 	% /User TOBI configuration                                       %
 	% -------------------------------------------------------------- %
@@ -186,37 +169,31 @@ try
 			drawnow;
 		end
 
-		% Connect and send data to endpoint
-		% - The idea is that the endpoint might go up/down while this module
-		%   follows the acquisition
-		% - So, if the endpoint falls, we disconnect the socket and wait for the
-		%   endpoint to come up again
-		% - If the endpoint is connected, send the current TiC/TiD message
-		if(ndf_tobi_connectid(tobi) == true)
+		% Handle async TOBI iD communication
+		if(tid_isattached(loop.iD) == true)
 			if(mod(ndf.frame.index, 16) == 0)
-				idmessage_setevent(tobi.iD.message, ndf.frame.index);
-				ndf_tobi_sendd(tobi, ndf.frame.index);
+				idmessage_setevent(loop.mD, ndf.frame.index);
+				tid_setmessage(loop.iD, loop.sD, ndf.frame.index);
 			end
-			tobi = ndf_tobi_receiveid(tobi);
-			if(tobi.iD.messages > 0)
-				for iq = 1:length(tobi.iD.queue)
-					idmessage_deserialize(tobi.iD.serializer, tobi.iD.queue{iq});
-					idmessage_dumpmessage(tobi.iD.message);
-				end
+			
+			while(tid_getmessage(loop.iD, loop.sD) == true)
+				idmessage_dumpmessage(loop.mD);
 			end
+		else
+			tid_attach(loop.iD, loop.cfg.ndf.id);
 		end
 		
-		% Same as before, for TiC
-		if(ndf_tobi_connectic(tobi) == true)
+		% Handle sync TOBI iC communication
+		if(tic_isattached(loop.iC) == true)
 			for t = 0:ccfgtaskset_count(loop.cfg.taskset) - 1
 				taskname = ccfgtaskset_gettaskbyid(loop.cfg.taskset, t);
 				tasklabel = num2str(ccfgtask_getgdf(taskname));
-				icmessage_setvalue(tobi.iC.message, ...
-					loop.cfg.classifier.name, ...
-					tasklabel, ...
-					ndf.frame.index);
+				icmessage_setvalue(loop.mC, loop.cfg.classifier.name, ...
+					tasklabel, ndf.frame.index);
 			end
-			ndf_tobi_sendc(tobi, ndf.frame.index);
+			tic_setmessage(loop.iC, loop.sC, ndf.frame.index);
+		else
+			tic_attach(loop.iC, loop.cfg.ndf.ic);
 		end
 		% -------------------------------------------------------------- %
 		% /User main loop                                                %
@@ -236,17 +213,8 @@ catch exception
 end
 
 try 
-	if(ndf.sink); 
-		ndf_close(ndf.sink); 
-	end
-	loop = ndf_loopdelete(loop);
-	if(loop.sC); icserializerrapid_delete(loop.sC); end
-	if(loop.sD); idserializerrapid_delete(loop.sD); end
-	if(loop.mC); icmessage_delete(loop.mC); end
-	if(loop.mD); idmessage_delete(loop.mD); end
-	if(loop.nC); tr_free(loop.nC); end
-	if(loop.nD); tr_free(loop.nD); end
-	fclose('all');
+	% Tear down loop structure
+	ndf_loopdelete;
 catch exception
 	ndf_printexception(exception);
 	loop.exit = true;

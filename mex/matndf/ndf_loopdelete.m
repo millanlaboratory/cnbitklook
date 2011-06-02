@@ -13,7 +13,10 @@
 %
 % You should have received a copy of the GNU General Public License
 % along with this program.  If not, see <http://www.gnu.org/licenses/>.
-function loop = ndf_loopdelete(loop)
+
+if(ndf.sink); 
+	ndf_close(ndf.sink); 
+end
 
 if(loop.cfg.config)
 	loop.cfg.config = ccfg_delete(loop.cfg.config); 
@@ -22,3 +25,25 @@ end
 if(loop.cfg.taskset);
 	loop.cfg.taskset = ccfgtaskset_delete(loop.cfg.taskset);
 end
+	
+if(loop.sC); 
+	loop.sC = icserializerrapid_delete(loop.sC); 
+end
+
+if(loop.sD); 
+	loop.sD = idserializerrapid_delete(loop.sD); 
+end
+
+if(loop.mC); 
+	loop.mC = icmessage_delete(loop.mC); 
+end
+
+if(loop.mD); 
+	loop.mD = idmessage_delete(loop.mD); 
+end
+
+if(loop.iC)
+	tic_detach(loop.iC);
+	loop.iC = tic_delete(loop.iC);
+end
+fclose('all');

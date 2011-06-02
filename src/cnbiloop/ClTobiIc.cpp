@@ -185,7 +185,7 @@ int ClTobiIc::WaitMessage(ICSerializerRapid* serializer) {
 	return Deserialize(serializer);
 }
 		
-int ClTobiIc::SetMessage(ICSerializerRapid* serializer) {
+int ClTobiIc::SetMessage(ICSerializerRapid* serializer, int blockidx) {
 	if(this->_mode != ClTobiIc::SetOnly) {
 		CcLogError("Cannot set messages when not SetOnly");
 		return ClTobiIc::WrongMode;
@@ -194,9 +194,11 @@ int ClTobiIc::SetMessage(ICSerializerRapid* serializer) {
 	if(this->IsAttached() == false)
 		return ClTobiIc::Detached;
 
-	std::string cache;
-	serializer->Serialize(&cache);
-	if(this->_client->Send(cache) < 0)
+	std::string buffer;
+	serializer->message->absolute.Tic();
+	serializer->message->SetBlockIdx(blockidx);
+	serializer->Serialize(&buffer);
+	if(this->_client->Send(buffer) < 0)
 		return ClTobiIc::Detached;	
 	return ClTobiIc::MessageSet;
 }

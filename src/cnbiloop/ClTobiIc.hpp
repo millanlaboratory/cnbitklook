@@ -40,7 +40,8 @@ class ClTobiIc : public CcSocketProxy {
 		bool IsAttached(void);
 		int WaitMessage(ICSerializerRapid* serializer);
 		int GetMessage(ICSerializerRapid* serializer);
-		int SetMessage(ICSerializerRapid* serializer);
+		int SetMessage(ICSerializerRapid* serializer, 
+				int blockidx = TCBlock::BlockIdxUnset);
 	protected:
 		int Deserialize(ICSerializerRapid* serializer);
 		void HandleAccept(CcSocket* caller);
