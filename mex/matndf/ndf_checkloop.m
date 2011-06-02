@@ -16,7 +16,15 @@
 
 function ndf_checkloop(arg0, arg1, arg2)
 
-if(nargin == 0) arg0 = ''; arg1 = ''; arg2 = ''; end
+% For historical reasons this function accepts 3 arguments.
+% Normally not needed, but the users might want to pass something
+% when launching this function for debugging (and not within the loop)
+if(nargin == 0) 
+	arg0 = ''; 
+	arg1 = ''; 
+	arg2 = ''; 
+end
+
 % Include all the required toolboxes
 ndf_include();
 
