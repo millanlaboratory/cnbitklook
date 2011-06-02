@@ -43,7 +43,7 @@ bool dump_configuration(CCfgConfig* config, const int modality,
 		if(modality == MODALITY_ONLINE) {
 			ts = config->OnlineEx(block, taskset);
 		} else {
-			ts = config->OnlineEx(block, taskset);
+			ts = config->OfflineEx(block, taskset);
 		}
 	} catch(XMLException e) { 
 		fprintf(stderr, "Error: %s\n", e.Info().c_str());
@@ -78,7 +78,7 @@ int load_configuration(CCfgConfig* config, std::string file, const int modality,
 		if(modality == MODALITY_ONLINE) {
 			ts = config->OnlineEx(block, taskset);
 		} else {
-			ts = config->OnlineEx(block, taskset);
+			ts = config->OfflineEx(block, taskset);
 		}
 	} catch(XMLException e) { 
 		fprintf(stderr, "Error: %s\n", e.Info().c_str());
