@@ -67,7 +67,7 @@ int main(int argc, char* argv[]) {
 		
 	attached = optport.empty() ? ic.Attach(optname) : ic.Attach(optport, optname);
 	if(attached == false) {
-		CcLogWarning("Cannot attach iC");
+		CcLogFatal("Cannot attach iC");
 		goto shutdown;
 	}
 
@@ -77,9 +77,9 @@ int main(int argc, char* argv[]) {
 			goto shutdown;
 
 		if(locking == false)
-			status = ic.WaitMessage(&serializer);
-		else
 			status = ic.GetMessage(&serializer);
+		else
+			status = ic.WaitMessage(&serializer);
 	
 		if(ClLoop::IsConnected() == false) {
 			CcLogFatal("Lost connection with loop");

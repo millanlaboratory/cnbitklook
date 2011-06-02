@@ -23,6 +23,7 @@
 #include <cnbicore/CcBasic.hpp>
 #include <cnbicore/CcCallback.hpp>
 #include <cnbicore/CcProxy.hpp>
+#include <cnbicore/CcClient.hpp>
 #include <cnbicore/CcServer.hpp>
 #include <cnbicore/CcSocketProxy.hpp>
 #include <tobicore/TCException.hpp>
@@ -31,7 +32,7 @@
 
 class ClTobiIc : public CcSocketProxy {
 	public:
-		ClTobiIc(void);
+		ClTobiIc(int mode = ClTobiIc::GetOnly);
 		virtual ~ClTobiIc(void);
 		bool Attach(const CcPort port, const std::string& name);
 		bool Attach(const std::string& name);
@@ -39,6 +40,7 @@ class ClTobiIc : public CcSocketProxy {
 		bool IsAttached(void);
 		int WaitMessage(ICSerializerRapid* serializer);
 		int GetMessage(ICSerializerRapid* serializer);
+		int SetMessage(ICSerializerRapid* serializer);
 	protected:
 		int Deserialize(ICSerializerRapid* serializer);
 		void HandleAccept(CcSocket* caller);
@@ -46,9 +48,13 @@ class ClTobiIc : public CcSocketProxy {
 		void HandleRecvPeer(CcSocket* caller, CcAddress addr, CcStreamer* stream);
 
 	public:
+		const static int WrongMode = -2;
 		const static int Detached = -1;
 		const static int HasMessage = 1;
+		const static int MessageSet = 2;
 		const static int NoMessage = 0;
+		static const int SetOnly = 0;
+		static const int GetOnly = 1;
 		CcCallback0<CcProxy> iOnAttach;
 		CcCallback0<CcProxy> iOnDetach;
 		CcCallback0<CcProxy> iOnHasMessage;
@@ -56,9 +62,11 @@ class ClTobiIc : public CcSocketProxy {
 		CcCallback0<CcProxy> iOnDrop;
 
 	protected:
+		CcClient* _client;
 		CcServer* _server;
 		std::string _name;
 		bool _onwsname;
+		int _mode;
 		std::string _buffer;
 		CcSemaphore _sembuffer;
 		CcSemaphore _hasmessage;
