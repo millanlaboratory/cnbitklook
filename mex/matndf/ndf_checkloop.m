@@ -25,6 +25,7 @@ try
 	% Initialize loop structure
 	ndf_loopnew;
 
+	% Connect to the CnbiTk loop
 	if(cl_connect(loop.cl) == false)
 		disp('[ndf_checkloop] Cannot connect to CNBI Loop, killing matlab');
 		exit;
