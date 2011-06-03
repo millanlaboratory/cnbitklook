@@ -29,11 +29,12 @@ int tr_flags(tr_socket* sock) {
 	int opts = fcntl(sock->fd, F_GETFL);
 	if(opts < 0)
 		return 1;
-		//perror("fcntl(F_GETFL)");
+#ifdef O_CLOEXEC
 	opts = (opts | O_CLOEXEC);
+#endif
 	if(fcntl(sock->fd, F_SETFL, opts) < 0)
-		return 0;
-		//perror("fcntl(F_SETFL)");
+		return 1;
+	return 0;
 }
 
 void tr_init_host(tr_host* host) {
