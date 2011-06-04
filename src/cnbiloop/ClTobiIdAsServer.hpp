@@ -32,11 +32,13 @@ class ClTobiIdAsServer  : public CcSocketProxy {
 		ClTobiIdAsServer(CaWriter* writer, 
 				ndf_frame* frame, CcSemaphore* semframe);
 		virtual ~ClTobiIdAsServer(void);
-		virtual void HandleRecvPeer(CcSocket* caller, CcAddress addr, CcStreamer* stream);
+		virtual void HandleRecvPeer(CcSocket* caller, CcAddress addr, 
+				CcStreamer* stream);
 		void Register(CcServer* server);
 
 	private:
-		virtual bool CommunicationTiD(CcServer* server, CcAddress address, CcStreamer* stream);
+		virtual bool CommunicationTiD(CcServer* server, CcAddress address, 
+				CcStreamer* stream);
 	protected:
 
 	private:

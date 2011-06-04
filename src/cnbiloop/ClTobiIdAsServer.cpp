@@ -90,14 +90,6 @@ bool ClTobiIdAsServer::CommunicationTiD(CcServer* server, CcAddress address,
 				", NDF=" << ndfblock << 
 				", TiD=" << idblock << 
 				", Onset=" << onset/1000 << "s");
-		/*
-		CcLogDebugS("TiD event: " << this->_messageD.GetDescription() <<
-				"/" << address <<
-				": " <<
-				idevent << "@" <<
-				idblock << "/" << ndfblock << 
-				" (" << this->_writer->TocOpen()/1000 << "s)");
-		 */
 	} else {
 		CcLogError("TiD event is not valid and will not be distributed");
 	}

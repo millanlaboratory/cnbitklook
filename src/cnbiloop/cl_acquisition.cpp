@@ -144,7 +144,6 @@ int main(int argc, char* argv[]) {
 		CcCore::Exit(4);
 	}
 
-
 	CcServer serverBus(CCCORE_1MB);
 	ClTobiIdAsServer handleBus(&writer, &frame, &semframe);
 	handleBus.Register(&serverBus);
@@ -157,7 +156,6 @@ int main(int argc, char* argv[]) {
 		CcLogFatal("Cannot connect to nameserver");
 		CcCore::Exit(6);
 	}
-
 
 	nsstatus = nsclient.Set("/acquisition", serverAcq.GetLocal());
 	if(nsstatus != ClNamesLang::Successful) {
