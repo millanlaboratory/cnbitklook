@@ -17,6 +17,7 @@
 */
 
 #include "ClAcqAsServer.hpp" 
+#include "ClDevicesAsServer.hpp" 
 #include "ClTobiIdAsServer.hpp" 
 #include "ClAcqLang.hpp"
 #include "ClNamesClient.hpp"
@@ -45,6 +46,7 @@ void usage(void) {
 	printf("  -f       the buffering rate in Hz (16 default)\n");
 	printf("  -A       the TCP port for the acquisition server (8125 default)\n");
 	printf("  -B       the TCP port for the bus server (8126 default)\n");
+	printf("  -D       the TCP port for the devices server (8127 default)\n");
 	printf("  -n       the basename for the pipes (/tmp/cl.pipe.ndf. default)\n");
 	printf("  -i       interactive acquisition starting\n");
 	printf("  -p       print labels added to NDF frame\n");
@@ -58,12 +60,13 @@ int main(int argc, char* argv[]) {
 	int opt;
 	std::string optdevice("");
 	std::string optfs("16");
-	CcEndpoint optepAcq("0.0.0.0:8125"), optepBus("0.0.0.0:8126");
+	CcEndpoint optepAcq("0.0.0.0:8125"), optepBus("0.0.0.0:8126"), 
+			   optepDev("0.0.0.0:8127");
 	std::string optpipename("/tmp/cl.pipe.ndf.");
 	bool optinteractive = false, optprintndf = false, optprintbuffers = false,
 		 optwarnlate = false, optreopen = false;
 
-	while((opt = getopt(argc, argv, "A:B:d:f:l:n:hipwbr")) != -1) {
+	while((opt = getopt(argc, argv, "A:B:D:d:f:l:n:hipwbr")) != -1) {
 		if(opt == 'd')
 			optdevice.assign(optarg);
 		else if(opt == 'f')
@@ -72,6 +75,8 @@ int main(int argc, char* argv[]) {
 			optepAcq.SetPort(optarg);
 		else if(opt == 'B')
 			optepBus.SetPort(optarg);
+		else if(opt == 'D')
+			optepDev.SetPort(optarg);
 		else if(opt == 'n')
 			optpipename.assign(optarg);
 		else if(opt == 'i')
@@ -151,6 +156,14 @@ int main(int argc, char* argv[]) {
 		CcLogFatal("Cannot bind bus socket");
 		CcCore::Exit(5);
 	}
+	
+	CcServer serverDev(CCCORE_1MB);
+	ClDevicesAsServer handleDev(&writer, &frame, &semframe);
+	handleDev.Register(&serverDev);
+	if(serverDev.Bind(optepDev.GetPort()) == false) {
+		CcLogFatal("Cannot bind dev socket");
+		CcCore::Exit(50);
+	}
 
 	if(nsclient.Connect() == false) {
 		CcLogFatal("Cannot connect to nameserver");
@@ -169,6 +182,11 @@ int main(int argc, char* argv[]) {
 		CcCore::Exit(8);
 	}
 	
+	nsstatus = nsclient.Set("/dev", serverDev.GetLocal());
+	if(nsstatus != ClNamesLang::Successful) {
+		CcLogFatal("Cannot register dev with nameserver");
+		CcCore::Exit(8);
+	}
 	
 	// Register pipes on nameserver
 	for(int p = 0; p < PIPELINES; p++) { 
@@ -258,6 +276,9 @@ shutdown:
 	
 	serverBus.Release();
 	nsclient.Unset("/bus");
+	
+	serverDev.Release();
+	nsclient.Unset("/dev");
 	
 	// Deregister pipes on nameserver
 	for(int p = 0; p < PIPELINES; p++) { 

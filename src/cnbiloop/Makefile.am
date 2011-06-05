@@ -79,7 +79,9 @@ cl_acquisition_SOURCES = cl_acquisition.cpp \
 						 ClAcqAsServer.cpp \
 						 ClAcqAsServer.hpp \
 						 ClTobiIdAsServer.cpp \
-						 ClTobiIdAsServer.hpp
+						 ClTobiIdAsServer.hpp \
+						 ClDevicesAsServer.cpp \
+						 ClDevicesAsServer.hpp
 cl_acquisition_LDADD = libcnbiloop.la \
 					   $(top_builddir)/src/cnbiacq/libcnbiacq.la
 cl_processing_SOURCES = cl_processing.cpp \

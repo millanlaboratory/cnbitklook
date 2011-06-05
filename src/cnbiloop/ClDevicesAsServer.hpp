@@ -16,8 +16,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CLACQASSERVER_HPP 
-#define CLACQASSERVER_HPP 
+#ifndef CLDEVICESASSERVER_HPP 
+#define CLDEVICESASSERVER_HPP 
 
 #include "ClAcqLang.hpp"
 #include <cnbiacq/CaWriter.hpp>
@@ -27,25 +27,26 @@
 #include <cnbicore/CcServer.hpp>
 #include <cnbicore/CcSocketProxy.hpp>
 
-class ClAcqAsServer : public CcSocketProxy {
+class ClDevicesAsServer  : public CcSocketProxy {
 	public:
-		ClAcqAsServer(CaWriter* writer);
-		virtual ~ClAcqAsServer(void);
-
-		virtual void HandleRecvPeer(CcSocket* caller, CcAddress addr, CcStreamer* stream);
+		ClDevicesAsServer(CaWriter* writer, 
+				ndf_frame* frame, CcSemaphore* semframe);
+		virtual ~ClDevicesAsServer(void);
+		virtual void HandleRecvPeer(CcSocket* caller, CcAddress addr, 
+				CcStreamer* stream);
 		void Register(CcServer* server);
 
 	private:
-		virtual bool CommunicationCl(CcServer* server, CcAddress address, 
+		virtual bool CommunicationTiD(CcServer* server, CcAddress address, 
 				CcStreamer* stream);
-		virtual bool LogXDF(const std::string& logfile, const std::string& xdffile, 
-				const std::string& logline); 
 	protected:
 
-	public:
-		ClAcqLang language;
 	private:
 		CaWriter* _writer;
+		IDMessage _messageD;
+		IDSerializerRapid *_serializerD;
+		ndf_frame *_frame;
+		CcSemaphore *_semframe;
 };
 
 #endif
