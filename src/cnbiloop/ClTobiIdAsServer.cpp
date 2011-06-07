@@ -54,6 +54,7 @@ bool ClTobiIdAsServer::CommunicationTiD(CcServer* server, CcAddress address,
 	if(stream->Extract(&message, "<tobiid", "/>") == false)
 		return false;
 
+	this->_messageD.SetFamilyType(IDMessage::FamilyUndef);
 	this->_serializerD->Deserialize(&message);
 	idevent = this->_messageD.GetEvent();
 	idfamily = this->_messageD.GetFamilyType();
