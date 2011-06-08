@@ -67,10 +67,10 @@ bool ClLoop::Connect(void) {
 	CcAddress nameserver;
 	CcAddress envvar = CcCore::GetEnvCnbiTkAddress();
 	if(envvar.empty() == false) {
-		CcLogDebugS("$CNBITK_LOOP_ADDRESS defined as " << envvar);
+		CcLogDebugS("$CNBITK_ADDRESS defined as " << envvar);
 		nameserver = CcSocket::Lookup(envvar) + ":8123";
 	} else {
-		CcLogDebug("$CNBITK_LOOP_ADDRESS not defined, assuming localhost");
+		CcLogDebug("$CNBITK_ADDRESS not defined, assuming localhost");
 		nameserver = "127.0.0.1:8123";
 	}
 
