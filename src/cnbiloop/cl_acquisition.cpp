@@ -30,7 +30,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define PIPELINES 20
+#define PIPELINES 10
 
 using namespace std;
 
@@ -47,6 +47,7 @@ void usage(void) {
 	printf("  -A       TCP port for the acquisition server (8125 default)\n");
 	printf("  -B       TCP port for the bus server (8126 default)\n");
 	printf("  -D       TCP port for the devices server (8127 default)\n");
+	printf("  -N       TCP port for the nameserver (8123 default)\n");
 	printf("  -n       basename for the pipes (/tmp/cl.pipe.ndf. default)\n");
 	printf("  -i       interactive acquisition starting\n");
 	printf("  -p       print labels added to NDF frame\n");
@@ -60,6 +61,7 @@ int main(int argc, char* argv[]) {
 	int opt;
 	std::string optdevice("");
 	std::string optfs("16");
+	CcPort portNameserver("8123");
 	CcEndpoint optepAcq("0.0.0.0:8125"), 
 			   optepBus("0.0.0.0:8126"), 
 			   optepDev("0.0.0.0:8127");
@@ -67,7 +69,7 @@ int main(int argc, char* argv[]) {
 	bool optinteractive = false, optprintndf = false, optprintbuffers = false,
 		 optwarnlate = false, optreopen = false;
 
-	while((opt = getopt(argc, argv, "A:B:D:d:f:l:n:hipwbr")) != -1) {
+	while((opt = getopt(argc, argv, "A:B:D:N:d:f:l:n:hipwbr")) != -1) {
 		if(opt == 'd')
 			optdevice.assign(optarg);
 		else if(opt == 'f')
@@ -78,6 +80,8 @@ int main(int argc, char* argv[]) {
 			optepBus.SetPort(optarg);
 		else if(opt == 'D')
 			optepDev.SetPort(optarg);
+		else if(opt == 'M')
+			portNameserver.assign(optarg);
 		else if(opt == 'n')
 			optpipename.assign(optarg);
 		else if(opt == 'i')
@@ -105,6 +109,9 @@ int main(int argc, char* argv[]) {
 		cnbitkip.assign("127.0.0.1");
 	}
 	CcLogConfigS("CnbkTk loop running on: " << cnbitkip);
+	
+	// Handle hosts
+	CcEndpoint epNameserver(cnbitkip, portNameserver);
 
 	optepAcq.SetIp(cnbitkip);
 	optepBus.SetIp(cnbitkip);
@@ -177,7 +184,7 @@ int main(int argc, char* argv[]) {
 		CcCore::Exit(50);
 	}
 
-	if(nsclient.Connect() == false) {
+	if(nsclient.Connect(epNameserver.GetAddress()) == false) {
 		CcLogFatal("Cannot connect to nameserver");
 		CcCore::Exit(6);
 	}
