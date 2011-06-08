@@ -24,18 +24,18 @@
 
 void usage(void) { 
 	printf("Usage: cl_nameserver [OPTION]...\n\n");
-	printf("  -p       TCP port (8123 default)\n");
+	printf("  -p       nameserver TCP port (8123 default)\n");
 	printf("  -h       display this help and exit\n");
 }
 
 int main(int argc, char* argv[]) {
 	int opt;
 	std::string optopt;
-	CcPort optport("8123");
+	CcPort portNameserver("8123");
 	
 	while((opt = getopt(argc, argv, "p:h")) != -1) {
 		if(opt == 'p')
-			optport.assign(optarg);
+			portNameserver.assign(optarg);
 		else {
 			usage();
 			CcCore::Exit(opt == 'h' ? EXIT_SUCCESS : EXIT_FAILURE);
@@ -45,25 +45,32 @@ int main(int argc, char* argv[]) {
 	CcCore::OpenLogger("cl_nameserver");
 	CcCore::CatchSIGINT();
 	CcCore::CatchSIGTERM();
-
-	CcLogInfoS("Nameserver configured: " << optport << "/TCP");
 	
-	// Setup TCP server
-	CcEndpoint endpoint("127.0.0.1", optport);
+	// Handle the CNBITK_ADDRESS envvar
+	CcIp cnbitkip = CcCore::GetEnvCnbiTkAddress();
+	if(cnbitkip.empty() == true) {
+		cnbitkip.assign("127.0.0.1");
+	}
+	CcLogConfigS("CnbkTk loop running on: " << cnbitkip);
+
+	// Handle hosts
+	CcEndpoint epNameserver(cnbitkip, portNameserver);
+	CcLogConfigS("Nameserver configured as: " << epNameserver.GetAddress());
+
 	CcServer server(CCCORE_1MB);
 	ClNamesAsServer handler;
 	ClNamesClient nsclient;
 	handler.StartMonitor();
 	try {
 		handler.Register(&server);
-		server.Bind(endpoint.GetPort());
+		server.Bind(epNameserver.GetPort());
 	} catch(CcException e) {
 		CcLogFatal("Cannot bind socket");
 		CcCore::Exit(2);
 	}
 
 	CcTime::Sleep(1000.00f);
-	if(nsclient.Connect(endpoint.GetAddress()) == false) {
+	if(nsclient.Connect(epNameserver.GetAddress()) == false) {
 		CcLogFatal("Cannot connect to nameserver");
 		CcCore::Exit(3);
 	}

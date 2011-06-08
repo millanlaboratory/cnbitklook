@@ -42,12 +42,12 @@ void idle(void) {
 
 void usage(void) { 
 	printf("Usage: cl_acquisition [OPTION]...\n\n");
-	printf("  -d       the device: gtec, biosemi, GDF/BDF file, EGD string\n");
-	printf("  -f       the buffering rate in Hz (16 default)\n");
-	printf("  -A       the TCP port for the acquisition server (8125 default)\n");
-	printf("  -B       the TCP port for the bus server (8126 default)\n");
-	printf("  -D       the TCP port for the devices server (8127 default)\n");
-	printf("  -n       the basename for the pipes (/tmp/cl.pipe.ndf. default)\n");
+	printf("  -d       device: gtec, biosemi, GDF/BDF file, EGD string\n");
+	printf("  -f       buffering rate in Hz (16 default)\n");
+	printf("  -A       TCP port for the acquisition server (8125 default)\n");
+	printf("  -B       TCP port for the bus server (8126 default)\n");
+	printf("  -D       TCP port for the devices server (8127 default)\n");
+	printf("  -n       basename for the pipes (/tmp/cl.pipe.ndf. default)\n");
 	printf("  -i       interactive acquisition starting\n");
 	printf("  -p       print labels added to NDF frame\n");
 	printf("  -b       print EGD/NDF buffer informations\n");
@@ -60,7 +60,8 @@ int main(int argc, char* argv[]) {
 	int opt;
 	std::string optdevice("");
 	std::string optfs("16");
-	CcEndpoint optepAcq("0.0.0.0:8125"), optepBus("0.0.0.0:8126"), 
+	CcEndpoint optepAcq("0.0.0.0:8125"), 
+			   optepBus("0.0.0.0:8126"), 
 			   optepDev("0.0.0.0:8127");
 	std::string optpipename("/tmp/cl.pipe.ndf.");
 	bool optinteractive = false, optprintndf = false, optprintbuffers = false,
@@ -97,6 +98,17 @@ int main(int argc, char* argv[]) {
 	CcCore::OpenLogger("cl_acquisition");
 	CcCore::CatchSIGINT();
 	CcCore::CatchSIGTERM();
+	
+	// Handle the CNBITK_ADDRESS envvar
+	CcIp cnbitkip = CcCore::GetEnvCnbiTkAddress();
+	if(cnbitkip.empty() == true) {
+		cnbitkip.assign("127.0.0.1");
+	}
+	CcLogConfigS("CnbkTk loop running on: " << cnbitkip);
+
+	optepAcq.SetIp(cnbitkip);
+	optepBus.SetIp(cnbitkip);
+	optepDev.SetIp(cnbitkip);
 
 	CcLogInfoS("Acquisition configured: " << 
 			optfs << "Hz, " << 
@@ -170,19 +182,19 @@ int main(int argc, char* argv[]) {
 		CcCore::Exit(6);
 	}
 
-	nsstatus = nsclient.Set("/acquisition", serverAcq.GetLocal());
+	nsstatus = nsclient.Set("/acquisition", optepAcq.GetAddress());
 	if(nsstatus != ClNamesLang::Successful) {
 		CcLogFatal("Cannot register acquisition with nameserver");
 		CcCore::Exit(7);
 	}
 	
-	nsstatus = nsclient.Set("/bus", serverBus.GetLocal());
+	nsstatus = nsclient.Set("/bus", optepBus.GetAddress());
 	if(nsstatus != ClNamesLang::Successful) {
 		CcLogFatal("Cannot register bus with nameserver");
 		CcCore::Exit(8);
 	}
 	
-	nsstatus = nsclient.Set("/dev", serverDev.GetLocal());
+	nsstatus = nsclient.Set("/dev", optepDev.GetAddress());
 	if(nsstatus != ClNamesLang::Successful) {
 		CcLogFatal("Cannot register dev with nameserver");
 		CcCore::Exit(8);
@@ -202,7 +214,7 @@ int main(int argc, char* argv[]) {
 	for(int p = 0; p < PIPELINES; p++) { 
 		std::stringstream ctlname, ctrladdr;
 		ctlname << "/ctrl" << p;
-		ctrladdr << "127.0.0.1:950" << p;
+		ctrladdr << cnbitkip << ":950" << p;
 		int nsstatus = nsclient.Set(ctlname.str(), ctrladdr.str());
 		if(nsstatus != ClNamesLang::Successful) {
 			CcLogFatal("Cannot register controllers with nameserver");

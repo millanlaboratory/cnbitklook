@@ -56,6 +56,7 @@ class CcCore {
 		static std::string GetModulename(void);
 		static std::string GetEnvCnbiTkData(void);
 		static std::string GetEnvCnbiTkMat(void);
+		static std::string GetEnvCnbiTkAddress(void);
 		static std::string GetEnvTobiCoreMat(void);
 		static void CatchSIGINT(void);
 		static void CatchSIGQUIT(void);

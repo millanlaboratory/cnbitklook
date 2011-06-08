@@ -78,34 +78,34 @@ AC_SUBST(AM_LDFLAGS)
 
 AC_CONFIG_FILES([Makefile\
 				 doc/Makefile\
-				 extra/Makefile\
 				 doc/doxygen.cfg\
-				 src/cnbicore/Makefile\
-				 doc/examples/cnbicore/Makefile\
-				 src/cnbicore/cnbicore.pc\
-				 src/transport/Makefile\
-				 doc/examples/transport/Makefile\
-				 src/transport/transport.pc\
-				 src/transpipe/Makefile\
-				 doc/examples/transpipe/Makefile\
-				 src/transpipe/transpipe.pc\
-				 src/cnbiacq/Makefile\
-				 src/cnbiacq/cnbiacq.pc\
-				 src/cnbiconfig/Makefile\
 				 doc/examples/cnbiconfig/Makefile\
-				 src/cnbiconfig/cnbiconfig.pc\
-				 src/cnbiloop/Makefile\
+				 doc/examples/cnbicore/Makefile\
 				 doc/examples/cnbiloop/Makefile\
-				 src/cnbiloop/cnbiloop.pc\
-				 src/ndf/Makefile\
 				 doc/examples/ndf/Makefile\
-				 src/ndf/ndf.pc\
+				 doc/examples/transpipe/Makefile\
+				 doc/examples/transport/Makefile\
+				 extra/Makefile\
 				 mex/Makefile\
 				 mex/cnbitkmat/Makefile\
-				 mex/mtpath/Makefile\
 				 mex/matndf/Makefile\
 				 mex/mexcnbiconfig/Makefile\
 				 mex/mexcnbiloop/Makefile\
-				 mex/mextransport/Makefile])
+				 mex/mextransport/Makefile\
+				 mex/mtpath/Makefile\
+				 src/cnbiacq/Makefile\
+				 src/cnbiacq/cnbiacq.pc\
+				 src/cnbiconfig/Makefile\
+				 src/cnbiconfig/cnbiconfig.pc\
+				 src/cnbicore/Makefile\
+				 src/cnbicore/cnbicore.pc\
+				 src/cnbiloop/Makefile\
+				 src/cnbiloop/cnbiloop.pc\
+				 src/ndf/Makefile\
+				 src/ndf/ndf.pc\
+				 src/transpipe/Makefile\
+				 src/transpipe/transpipe.pc\
+				 src/transport/Makefile\
+				 src/transport/transport.pc])
 
 AC_OUTPUT

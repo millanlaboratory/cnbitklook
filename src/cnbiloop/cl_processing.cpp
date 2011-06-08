@@ -24,18 +24,21 @@
 
 void usage(void) { 
 	printf("Usage: cl_processing [OPTION]...\n\n");
-	printf("  -p       TCP port (8124 default)\n");
+	printf("  -p       processing TCP port (8124 default)\n");
+	printf("  -n       nameserver TCP port (8123 default)\n");
 	printf("  -h       display this help and exit\n");
 }
 
 int main(int argc, char* argv[]) {
 	int opt;
 	std::string optopt;
-	CcPort optport("8124");
+	CcPort portProcessing("8124"), portNameserver("8123");
 
 	while((opt = getopt(argc, argv, "p:h")) != -1) {
 		if(opt == 'p')
-			optport.assign(optarg);
+			portProcessing.assign(optarg);
+		else if(opt == 'n')
+			portNameserver.assign(optarg);
 		else {
 			usage();
 			CcCore::Exit(opt == 'h' ? EXIT_SUCCESS : EXIT_FAILURE);
@@ -45,8 +48,19 @@ int main(int argc, char* argv[]) {
 	CcCore::OpenLogger("cl_processing");
 	CcCore::CatchSIGINT();
 	CcCore::CatchSIGTERM();
+
+	// Handle the CNBITK_ADDRESS envvar
+	CcIp cnbitkip = CcCore::GetEnvCnbiTkAddress();
+	if(cnbitkip.empty() == true) {
+		cnbitkip.assign("127.0.0.1");
+	}
+	CcLogConfigS("CnbkTk loop running on: " << cnbitkip);
 	
-	CcLogInfoS("Processing configured: " << optport << "/TCP");
+	// Handle hosts
+	CcEndpoint epProcessing(cnbitkip, portProcessing);
+	CcEndpoint epNameserver(cnbitkip, portNameserver);
+	CcLogConfigS("Processing configured as: " << epProcessing.GetAddress());
+	CcLogConfigS("Nameserver configured as: " << epNameserver.GetAddress());
 	
 	// Setup TCP server
 	CcServer server(CCCORE_1MB);
@@ -55,13 +69,13 @@ int main(int argc, char* argv[]) {
 
 	try { 
 		handler.Register(&server);
-		server.Bind(optport);
+		server.Bind(epProcessing.GetPort());
 	} catch(CcException e) {
 		CcLogFatal("Cannot bind socket");
 		CcCore::Exit(2);
 	}
 
-	if(nsclient.Connect() == false) {
+	if(nsclient.Connect(epNameserver.GetAddress()) == false) {
 		CcLogFatal("Cannot connect to nameserver");
 		CcCore::Exit(3);
 	}

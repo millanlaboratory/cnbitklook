@@ -64,11 +64,9 @@ void ClLoop::Destroy(void) {
 }
 
 bool ClLoop::Connect(void) {
-	char* envptr = getenv("CNBITK_LOOP_ADDRESS");
-	
 	CcAddress nameserver;
-	if(envptr != NULL) {
-		std::string envvar(envptr);
+	CcAddress envvar = CcCore::GetEnvCnbiTkAddress();
+	if(envvar.empty() == false) {
 		CcLogDebugS("$CNBITK_LOOP_ADDRESS defined as " << envvar);
 		nameserver = CcSocket::Lookup(envvar) + ":8123";
 	} else {

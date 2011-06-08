@@ -203,6 +203,14 @@ std::string CcCore::GetEnvCnbiTkData(void) {
 	return value;
 }
 
+std::string CcCore::GetEnvCnbiTkAddress(void) {
+	char* env = getenv("CNBITK_ADDRESS");
+	std::string value;
+	if(env != NULL)
+		value.assign((const char*)env);
+	return value;
+}
+
 std::string CcCore::GetEnvCnbiTkMat(void) {
 	char* env = getenv("CNBITKMAT_ROOT");
 	std::string value;
