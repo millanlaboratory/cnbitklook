@@ -14,7 +14,7 @@ gnome-terminal \
 ---tab -e "bash -c 'cl_keepalive cl_nameserver'" --title "CnbiTk Nameserver (devel)" \
 ---tab -e "bash -c 'sleep 2; cl_keepalive cl_processing'" --title "CnbiTk Processing (devel)" \
 ---tab -e "bash -c 'sleep 4; cl_keepalive cl_acquisition $*'" --title "CnbiTk Acquisition (devel)" \
----tab -e "bash -c 'sleep 6; cl_keepalive cl_ndfmonitor -p /pipe15'" --title "CnbiTk NDF Monitor (devel)" \
+---tab -e "bash -c 'sleep 6; cl_keepalive cl_ndfmonitor -p /pipe14'" --title "CnbiTk NDF Monitor (devel)" \
 ---tab -e "bash -c 'sleep 6; cl_keepalive cl_tidmonitor'" --title "CnbiTk TiD Monitor (devel)" \
 ---tab -e "bash -c 'sleep 6; cl_keepalive cl_ticmonitor'" --title "CnbiTk TiC Monitor (devel)"
 

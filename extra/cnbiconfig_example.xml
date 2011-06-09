@@ -43,7 +43,7 @@
 				<waitmax>3500.00</waitmax>
 				<fixation>2000.00</fixation>
 				<cue>2000.00</cue>
-				<cfeedback>2000.00</cfeedback>
+				<dfeedback>2000.00</dfeedback>
 				<step>2500.00</step>
 				<waitundo>1000.00</waitundo>
 			</trial>
@@ -401,46 +401,50 @@
 	<!-- Standard Events List -->
 	<events>
 		<gdfevents>
-			<inc>0x030a</inc>
+			<off>0x7000</off>
 			<trial>0x0300</trial>
-			<trialoff>0x8300</trialoff>
+			<go>0x0144</go>
+			<nogo>0x0145</nogo>
+			<cue>0x030f</cue>
+			<wait>0x0001</wait>
+			<fixation>0x0312</fixation>
+			<beep>0x0311</beep>
 			<cfeedback>0x030d</cfeedback>
-			<cfeedbackoff>0x830d</cfeedbackoff>
+			<dfeedback>0x030e</dfeedback>
 			<targethit>0x0381</targethit>
 			<targetmiss>0x0382</targetmiss>
-			<beep>0x0311</beep>
-			<cueundef>0x030f</cueundef>
-			<wait>0x0001</wait>
-			<fixation>0x0001</fixation>
-			<errp>
-				<start>0x0010</start>
-				<stop>0x0011</stop>
-				<correct>0x0001</correct>
-				<error>0x0001</error>
-				<left>0x0400</left>
-				<right>0x0401</right>
-			</errp>
+			<cnbi>
+				<inc>0x002</inc>
+				<correct>0x003</correct>
+				<error>0x004</error>
+				<right>0x005</right>
+				<left>0x006</left>
+				<top>0x007</top>
+				<bottom>0x008</bottom>
+			</cnbi>
 		</gdfevents>
 		<hwtriggers>
-			<inc>255</inc>
-			<trial>255</trial>
-			<trialoff>255</trialoff>
-			<cfeedback>255</cfeedback>
-			<cfeedbackoff>255</cfeedbackoff>
-			<targethit>255</targethit>
-			<targetmiss>255</targetmiss>
-			<beep>255</beep>
-			<cueundef>255</cueundef>
-			<wait>255</wait>
-			<fixation>255</fixation>
-			<errp>
-				<start>17</start>
-				<stop>18</stop>
-				<correct>4</correct>
-				<error>5</error>
-				<left>2</left>
-				<right>3</right>
-			</errp>
+			<off>1</off>
+			<trial>2</trial>
+			<go>11</go>
+			<nogo>12</nogo>
+			<cue>3</cue>
+			<wait>4</wait>
+			<fixation>5</fixation>
+			<beep>6</beep>
+			<cfeedback>7</cfeedback>
+			<dfeedback>8</dfeedback>
+			<targethit>9</targethit>
+			<targetmiss>10</targetmiss>
+			<cnbi>
+				<inc>12</inc>
+				<correct>11</correct>
+				<error>12</error>
+				<right>13</right>
+				<left>14</left>
+				<top>15</top>
+				<bottom>16</bottom>
+			</cnbi>
 		</hwtriggers>
 	</events>
 
@@ -465,3 +469,21 @@
 		</csmrengine>
 	</configuration>
 </cnbiconfig>
+
+
+			<!-- <errp>
+				<start>0x0010</start>
+				<stop>0x0011</stop>
+				<correct>0x0001</correct>
+				<error>0x0001</error>
+				<left>0x0400</left>
+				<right>0x0401</right>
+			</errp> 
+			<errp>
+				<start>17</start>
+				<stop>18</stop>
+				<correct>4</correct>
+				<error>5</error>
+				<left>2</left>
+				<right>3</right>
+			</errp>-->

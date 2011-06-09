@@ -30,7 +30,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define PIPELINES 10
+#define PIPELINES 15
 
 using namespace std;
 

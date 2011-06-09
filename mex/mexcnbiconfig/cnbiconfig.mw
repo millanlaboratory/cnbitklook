@@ -454,7 +454,7 @@ $ #include <stdio.h>
 	$ 	try {
 	$		*value = tptr->config[*key].Bool();
 	$	} catch(XMLException e) {
-	$		prboolf("[ccfg_offline] Exception in libcnbiconfig: %s, %s\n",
+	$		printf("[ccfg_offline] Exception in libcnbiconfig: %s, %s\n",
 	$			e.Caller().c_str(), e.Info().c_str());
 	$		return;
 	$	}
