@@ -130,6 +130,10 @@ int main(int argc, char* argv[]) {
 
 		if(CcCore::receivedSIGAny.Get())
 			goto shutdown;
+		if(ClLoop::IsConnected() == false) {
+			CcLogFatal("Lost connection with loop");
+			goto shutdown;
+		}
 	}
 shutdown:
 	reader.Close();
