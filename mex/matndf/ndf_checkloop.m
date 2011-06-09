@@ -80,10 +80,10 @@ try
 	% User TOBI configuration                                        %
 	% -------------------------------------------------------------- %
 	% Configure TiD message
-	idmessage_setevent(loop.mD, 0);
+	idmessage_setevent(loop.mDo, 0);
 	% Dump TiC/TiD messages
 	icmessage_dumpmessage(loop.mC);
-	idmessage_dumpmessage(loop.mD);
+	idmessage_dumpmessage(loop.mDo);
 	% -------------------------------------------------------------- %
 	% /User TOBI configuration                                       %
 	% -------------------------------------------------------------- %
@@ -181,12 +181,12 @@ try
 		% Handle async TOBI iD communication
 		if(tid_isattached(loop.iD) == true)
 			if(mod(ndf.frame.index, 16) == 0)
-				idmessage_setevent(loop.mD, ndf.frame.index);
-				tid_setmessage(loop.iD, loop.sD, ndf.frame.index);
+				idmessage_setevent(loop.mDo, ndf.frame.index);
+				tid_setmessage(loop.iD, loop.sDo, ndf.frame.index);
 			end
 			
-			while(tid_getmessage(loop.iD, loop.sD) == true)
-				idmessage_dumpmessage(loop.mD);
+			while(tid_getmessage(loop.iD, loop.sDi) == true)
+				idmessage_dumpmessage(loop.mDi);
 			end
 		else
 			tid_attach(loop.iD, loop.cfg.ndf.id);

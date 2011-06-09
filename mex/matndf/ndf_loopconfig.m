@@ -36,7 +36,7 @@ end
 
 % Use ccfg_* to load the XML and retrieve the taskset. 
 loop.cfg.taskset = ccfg_online(loop.cfg.config, loop.cfg.ns.block, loop.cfg.ns.taskset, ...
-	loop.mC, loop.mD);
+	loop.mC, loop.mDo);
 if(loop.cfg.taskset == 0)	
 	disp('[ndf_loopconfig] Cannot retrieve taskset');
 	loop.cfg.config = ccfg_delete(loop.cfg.config);

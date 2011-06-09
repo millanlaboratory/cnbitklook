@@ -30,16 +30,24 @@ if(loop.sC);
 	loop.sC = icserializerrapid_delete(loop.sC); 
 end
 
-if(loop.sD); 
-	loop.sD = idserializerrapid_delete(loop.sD); 
+if(loop.sDi); 
+	loop.sDi = idserializerrapid_delete(loop.sDi); 
+end
+
+if(loop.sDo); 
+	loop.sDo = idserializerrapid_delete(loop.sDo); 
 end
 
 if(loop.mC); 
 	loop.mC = icmessage_delete(loop.mC); 
 end
 
-if(loop.mD); 
-	loop.mD = idmessage_delete(loop.mD); 
+if(loop.mDi); 
+	loop.mDi = idmessage_delete(loop.mDi); 
+end
+
+if(loop.mDo); 
+	loop.mDo = idmessage_delete(loop.mDo); 
 end
 
 if(loop.iC)
