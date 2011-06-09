@@ -52,12 +52,9 @@ int main(int argc, char* argv[]) {
 	CcCore::CatchSIGINT();
 	CcCore::CatchSIGTERM();
 
-	// Connect to loop
-	CcLogInfo("Connecting to loop...");
-	while(ClLoop::Connect() == false) {
-		if(CcCore::receivedSIGAny.Get())
-			CcCore::Exit(1);
-		CcTime::Sleep(2000);
+	if(ClLoop::Connect() == false) {
+		CcLogFatal("Cannot connect to loop");
+		CcCore::Exit(2);
 	}
 	
 	if(ClLoop::nameserver.Query(optname, &pipename) != ClNamesLang::Successful) {
