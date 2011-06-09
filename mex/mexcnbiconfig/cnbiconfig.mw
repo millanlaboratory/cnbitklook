@@ -190,38 +190,39 @@ $ #include <stdio.h>
 	$		return 0;
 	$	}
 	$ }
+	retval = NaN;
 	# std::string* spath = new std::string(cstring path);
 	# bool retval = quickbool(CCfgConfig* cptr, std::string* spath);
 
 @function [retval, cptr] = ccfg_quickfloat(cptr, path)
 % Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
 % Michele Tavella <michele.tavella@epfl.ch>
-	$ float quickfloat(CCfgConfig* cptr, std::string* path) {
+	$ float quickfloat(CCfgConfig* cptr, std::string* path, float* value) {
 	$	try {
-	$ 		return cptr->QuickFloatEx(*path);
+	$ 		*value = cptr->QuickFloatEx(*path);
 	$	} catch(XMLException e) {
 	$		printf("[ccfg_quickfloat] Exception in libcnbiconfig: %s, %s\n",
 	$			e.Caller().c_str(), e.Info().c_str());
-	$		return 0.00f;
 	$	}
 	$ }
+	retval = NaN;
 	# std::string* spath = new std::string(cstring path);
-	# float retval = quickfloat(CCfgConfig* cptr, std::string* spath);
+	# quickfloat(CCfgConfig* cptr, std::string* spath, inout float* retval);
 
 @function [retval, cptr] = ccfg_quickint(cptr, path)
 % Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
 % Michele Tavella <michele.tavella@epfl.ch>
-	$ bool quickint(CCfgConfig* cptr, std::string* path) {
+	$ bool quickint(CCfgConfig* cptr, std::string* path, int* value) {
 	$	try {
-	$ 		return cptr->QuickIntEx(*path);
+	$ 		*value = cptr->QuickIntEx(*path);
 	$	} catch(XMLException e) {
 	$		printf("[ccfg_quickint] Exception in libcnbiconfig: %s, %s\n",
 	$			e.Caller().c_str(), e.Info().c_str());
-	$		return 0;
 	$	}
 	$ }
+	retval = NaN;
 	# std::string* spath = new std::string(cstring path);
-	# bool retval = quickint(CCfgConfig* cptr, std::string* spath);
+	# bool retval = quickint(CCfgConfig* cptr, std::string* spath, inout int* retval);
 
 @function [retval, cptr] = ccfg_quickgdf(cptr, path)
 % Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
@@ -445,3 +446,19 @@ $ #include <stdio.h>
 	value = NaN;
 	# std::string* skey = new std::string(cstring key);
 	# get_configint(CCfgTask* tptr, std::string* skey, inout int* value);
+
+@function [value, tptr] = ccfgtask_getconfig_bool(tptr, key);
+% Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
+% Michele Tavella <michele.tavella@epfl.ch>
+	$ void get_configbool(CCfgTask* tptr, std::string* key, bool* value) {
+	$ 	try {
+	$		*value = tptr->config[*key].Bool();
+	$	} catch(XMLException e) {
+	$		prboolf("[ccfg_offline] Exception in libcnbiconfig: %s, %s\n",
+	$			e.Caller().c_str(), e.Info().c_str());
+	$		return;
+	$	}
+	$ }
+	value = NaN;
+	# std::string* skey = new std::string(cstring key);
+	# get_configbool(CCfgTask* tptr, std::string* skey, inout bool* value);
