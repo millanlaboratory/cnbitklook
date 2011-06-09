@@ -37,9 +37,6 @@ echo "[cl_screenloop] Starting screen session"
 screen -c $HOME/.screenrc-cnbitk -d -m -S cnbitk 
 CHECK=`screen -ls | grep cnbitk | awk '{print $1}'`;
 
-echo "[cl_screenloop] Attaching bash to $CHECK"
-screen -S $CHECK -dr -X screen "bash"
-
 echo "[cl_screenloop] Attaching cl_nameserver to $CHECK"
 screen -S $CHECK -dr -X screen "cl_nameserver"
 

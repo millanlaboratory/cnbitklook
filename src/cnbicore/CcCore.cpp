@@ -26,6 +26,7 @@
 #include "CcPtable.hpp"
 #include "CcThreadSafe.hpp"
 #include "CcTime.hpp"
+#include <transport/tr_names.h>
 #include <errno.h>
 #include <errno.h>
 #include <signal.h>
@@ -205,9 +206,15 @@ std::string CcCore::GetEnvCnbiTkData(void) {
 
 std::string CcCore::GetEnvCnbiTkAddress(void) {
 	char* env = getenv("CNBITK_ADDRESS");
+	char* addr = new char[tr_getaddrlen()];
 	std::string value;
-	if(env != NULL)
-		value.assign((const char*)env);
+	if(env != NULL) {
+		if(tr_resolve(env, addr) == 0)
+			value.assign(addr);
+		else
+			value.assign(env);
+	}
+	delete addr;
 	return value;
 }
 

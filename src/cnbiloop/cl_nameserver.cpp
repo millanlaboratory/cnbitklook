@@ -55,7 +55,7 @@ int main(int argc, char* argv[]) {
 
 	// Handle hosts
 	CcEndpoint epNameserver(cnbitkip, portNameserver);
-	CcLogConfigS("Nameserver configured as: " << epNameserver.GetAddress());
+	CcLogConfigS("Nameserver will bind: " << epNameserver.GetAddress());
 
 	CcServer server(CCCORE_1MB);
 	ClNamesAsServer handler;

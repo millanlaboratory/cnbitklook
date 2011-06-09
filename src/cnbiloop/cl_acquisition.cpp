@@ -61,10 +61,10 @@ int main(int argc, char* argv[]) {
 	int opt;
 	std::string optdevice("");
 	std::string optfs("16");
-	CcPort portNameserver("8123");
-	CcEndpoint optepAcq("0.0.0.0:8125"), 
-			   optepBus("0.0.0.0:8126"), 
-			   optepDev("0.0.0.0:8127");
+	CcPort portNs("8123"),
+		   portAcq("8125"), 
+		   portBus("8126"), 
+		   portDev("8127");
 	std::string optpipename("/tmp/cl.pipe.ndf.");
 	bool optinteractive = false, optprintndf = false, optprintbuffers = false,
 		 optwarnlate = false, optreopen = false;
@@ -75,13 +75,13 @@ int main(int argc, char* argv[]) {
 		else if(opt == 'f')
 			optfs.assign(optarg);
 		else if(opt == 'A')
-			optepAcq.SetPort(optarg);
+			portAcq.assign(optarg);
 		else if(opt == 'B')
-			optepBus.SetPort(optarg);
+			portBus.assign(optarg);
 		else if(opt == 'D')
-			optepDev.SetPort(optarg);
+			portDev.assign(optarg);
 		else if(opt == 'M')
-			portNameserver.assign(optarg);
+			portNs.assign(optarg);
 		else if(opt == 'n')
 			optpipename.assign(optarg);
 		else if(opt == 'i')
@@ -111,16 +111,19 @@ int main(int argc, char* argv[]) {
 	CcLogConfigS("CnbkTk loop running on: " << cnbitkip);
 	
 	// Handle hosts
-	CcEndpoint epNameserver(cnbitkip, portNameserver);
+	CcEndpoint epNs(cnbitkip, portNs);
+	CcEndpoint epAcq(cnbitkip, portAcq); 
+	CcEndpoint epBus(cnbitkip, portBus); 
+	CcEndpoint epDev(cnbitkip, portDev);
+	CcLogConfigS("Acquisition will bind: " << epAcq.GetAddress());
+	CcLogConfigS("Bus will bind: " << epBus.GetAddress());
+	CcLogConfigS("Dev will bind: " << epDev.GetAddress());
+	CcLogConfigS("Nameserver configured as: " << epNs.GetAddress());
 
-	optepAcq.SetIp(cnbitkip);
-	optepBus.SetIp(cnbitkip);
-	optepDev.SetIp(cnbitkip);
-
-	CcLogInfoS("Acquisition configured: " << 
+	CcLogConfigS("Acquisition: " << 
 			optfs << "Hz, " << 
 			optpipename << "[0," << PIPELINES-1 << "]");
-	CcLogInfoS("Total pipelines set to " << PIPELINES << ": " <<
+	CcLogConfigS("Pipelines " << PIPELINES << ": " <<
 			"/pipe[0," << PIPELINES-1 << "] and /ctrl[0," << PIPELINES-1 << "]");
 
 	// Variables for mainloop
@@ -144,6 +147,12 @@ int main(int argc, char* argv[]) {
 	// Initialize XDF writer and NDF frame
 	CaWriter writer(&eegdev);
 	eegdev.InitNDF(&frame);
+	CcLogConfigS("NDF/EGD configured:" <<
+			" Sf=" << frame.config.sf << " Hz" <<
+			", Block=" << frame.config.samples << " samples" << 
+			", EEG=" << frame.config.eeg_channels <<
+			", EXG=" << frame.config.exg_channels <<
+			", TRI=" << frame.config.tri_channels);
 
 	// Setup XDF writer
 	std::string tmpfn;
@@ -163,7 +172,7 @@ int main(int argc, char* argv[]) {
 	CcServer serverAcq(CCCORE_1MB);
 	ClAcqAsServer handleAcq(&writer);
 	handleAcq.Register(&serverAcq);
-	if(serverAcq.Bind(optepAcq.GetPort()) == false) {
+	if(serverAcq.Bind(epAcq.GetPort()) == false) {
 		CcLogFatal("Cannot bind acquisition socket");
 		CcCore::Exit(4);
 	}
@@ -171,7 +180,7 @@ int main(int argc, char* argv[]) {
 	CcServer serverBus(CCCORE_1MB);
 	ClTobiIdAsServer handleBus(&writer, &frame, &semframe);
 	handleBus.Register(&serverBus);
-	if(serverBus.Bind(optepBus.GetPort()) == false) {
+	if(serverBus.Bind(epBus.GetPort()) == false) {
 		CcLogFatal("Cannot bind bus socket");
 		CcCore::Exit(5);
 	}
@@ -179,29 +188,29 @@ int main(int argc, char* argv[]) {
 	CcServer serverDev(CCCORE_1MB);
 	ClDevicesAsServer handleDev(&writer, &frame, &semframe);
 	handleDev.Register(&serverDev);
-	if(serverDev.Bind(optepDev.GetPort()) == false) {
+	if(serverDev.Bind(epDev.GetPort()) == false) {
 		CcLogFatal("Cannot bind dev socket");
 		CcCore::Exit(50);
 	}
 
-	if(nsclient.Connect(epNameserver.GetAddress()) == false) {
+	if(nsclient.Connect(epNs.GetAddress()) == false) {
 		CcLogFatal("Cannot connect to nameserver");
 		CcCore::Exit(6);
 	}
 
-	nsstatus = nsclient.Set("/acquisition", optepAcq.GetAddress());
+	nsstatus = nsclient.Set("/acquisition", epAcq.GetAddress());
 	if(nsstatus != ClNamesLang::Successful) {
 		CcLogFatal("Cannot register acquisition with nameserver");
 		CcCore::Exit(7);
 	}
 	
-	nsstatus = nsclient.Set("/bus", optepBus.GetAddress());
+	nsstatus = nsclient.Set("/bus", epBus.GetAddress());
 	if(nsstatus != ClNamesLang::Successful) {
 		CcLogFatal("Cannot register bus with nameserver");
 		CcCore::Exit(8);
 	}
 	
-	nsstatus = nsclient.Set("/dev", optepDev.GetAddress());
+	nsstatus = nsclient.Set("/dev", epDev.GetAddress());
 	if(nsstatus != ClNamesLang::Successful) {
 		CcLogFatal("Cannot register dev with nameserver");
 		CcCore::Exit(8);

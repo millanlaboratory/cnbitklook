@@ -32,13 +32,13 @@ void usage(void) {
 int main(int argc, char* argv[]) {
 	int opt;
 	std::string optopt;
-	CcPort portProcessing("8124"), portNameserver("8123");
+	CcPort portPro("8124"), portNs("8123");
 
 	while((opt = getopt(argc, argv, "p:h")) != -1) {
 		if(opt == 'p')
-			portProcessing.assign(optarg);
+			portPro.assign(optarg);
 		else if(opt == 'n')
-			portNameserver.assign(optarg);
+			portNs.assign(optarg);
 		else {
 			usage();
 			CcCore::Exit(opt == 'h' ? EXIT_SUCCESS : EXIT_FAILURE);
@@ -57,10 +57,10 @@ int main(int argc, char* argv[]) {
 	CcLogConfigS("CnbkTk loop running on: " << cnbitkip);
 	
 	// Handle hosts
-	CcEndpoint epProcessing(cnbitkip, portProcessing);
-	CcEndpoint epNameserver(cnbitkip, portNameserver);
-	CcLogConfigS("Processing configured as: " << epProcessing.GetAddress());
-	CcLogConfigS("Nameserver configured as: " << epNameserver.GetAddress());
+	CcEndpoint epPro(cnbitkip, portPro);
+	CcEndpoint epNs(cnbitkip, portNs);
+	CcLogConfigS("Processing will bind: " << epPro.GetAddress());
+	CcLogConfigS("Nameserver configured as: " << epNs.GetAddress());
 	
 	// Setup TCP server
 	CcServer server(CCCORE_1MB);
@@ -69,13 +69,13 @@ int main(int argc, char* argv[]) {
 
 	try { 
 		handler.Register(&server);
-		server.Bind(epProcessing.GetPort());
+		server.Bind(epPro.GetPort());
 	} catch(CcException e) {
 		CcLogFatal("Cannot bind socket");
 		CcCore::Exit(2);
 	}
 
-	if(nsclient.Connect(epNameserver.GetAddress()) == false) {
+	if(nsclient.Connect(epNs.GetAddress()) == false) {
 		CcLogFatal("Cannot connect to nameserver");
 		CcCore::Exit(3);
 	}
