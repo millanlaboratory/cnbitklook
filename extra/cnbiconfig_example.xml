@@ -124,8 +124,8 @@
 		<checkloop description="NDF loop check" protocol="">
 			<taskset ttype="dummy" ctype="checkloop" classifier="kcl0">
 				<threshold>
-					<dummy_k0>0.10</dummy_k0>
-					<dummy_k1>0.10</dummy_k1>
+					<dummy_k0>0.11</dummy_k0>
+					<dummy_k1>0.12</dummy_k1>
 				</threshold>
 				<trials>
 					<dummy_k0>10</dummy_k0>

@@ -26,12 +26,12 @@
 using namespace std;
 
 int main(void) {
-	//std::string blockname("mi"), tasksetname("mi_rhlh");
-	std::string blockname("checkloop"), tasksetname("dummy");
+	std::string blockname("mi"), tasksetname("mi_rhlh");
+	//std::string blockname("checkloop"), tasksetname("dummy");
 	
 	CCfgConfig config;
 	try {
-		config.ImportFileEx("../extra/cnbiconfig_example.xml");
+		config.ImportFileEx("../../../../extra/cnbiconfig_example.xml");
 		cout << "File loaded" << endl;
 	} catch(XMLException e) {
 		cout << "Exception: " << e << endl;
@@ -104,25 +104,6 @@ int main(void) {
 	 * life in coding, so the logical mapping can somehow help you.
 	 */
 
-	/* I imagine I need to configure the CSmrCopilot. First thing, I need to get
-	 * the unique threshold we use for training.
-	 *
-	 * I heavily use CCfgXMLConfig here. The Ex methods raise exceptions. 
-	 *
-	 * Here we try to get a unique-per block threshold. It will fail.
-	 */
-	float threshold = 0.00f;
-	try {
-		threshold = 
-			config.RootEx()->
-			GoEx("online")->
-			GoEx(blockname)->
-			QuickFloatEx("threshold");
-	} catch(XMLException e) {
-		cout << "Exception: " << e << endl;
-	}
-	printf("Threshold is: %f\n", threshold);	
-	
 	
 	/* Now I need to assemble a trials vector to pass to CSmrCopilot.
 	 * Watch out that here we access std::maps directly, like:

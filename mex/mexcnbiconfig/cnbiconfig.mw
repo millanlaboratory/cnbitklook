@@ -413,3 +413,35 @@ $ #include <stdio.h>
 	$	return (int)tptr->gdf;
 	$ }
 	# int gdf = get_gdf(CCfgTask* tptr);
+
+@function [value, tptr] = ccfgtask_getconfig_float(tptr, key);
+% Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
+% Michele Tavella <michele.tavella@epfl.ch>
+	$ void get_configfloat(CCfgTask* tptr, std::string* key, float* value) {
+	$ 	try {
+	$		*value = tptr->config[*key].Float();
+	$	} catch(XMLException e) {
+	$		printf("[ccfg_offline] Exception in libcnbiconfig: %s, %s\n",
+	$			e.Caller().c_str(), e.Info().c_str());
+	$		return;
+	$	}
+	$ }
+	value = NaN;
+	# std::string* skey = new std::string(cstring key);
+	# get_configfloat(CCfgTask* tptr, std::string* skey, inout float* value);
+
+@function [value, tptr] = ccfgtask_getconfig_int(tptr, key);
+% Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
+% Michele Tavella <michele.tavella@epfl.ch>
+	$ void get_configint(CCfgTask* tptr, std::string* key, int* value) {
+	$ 	try {
+	$		*value = tptr->config[*key].Int();
+	$	} catch(XMLException e) {
+	$		printf("[ccfg_offline] Exception in libcnbiconfig: %s, %s\n",
+	$			e.Caller().c_str(), e.Info().c_str());
+	$		return;
+	$	}
+	$ }
+	value = NaN;
+	# std::string* skey = new std::string(cstring key);
+	# get_configint(CCfgTask* tptr, std::string* skey, inout int* value);
