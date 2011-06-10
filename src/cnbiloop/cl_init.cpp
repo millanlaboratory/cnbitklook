@@ -103,7 +103,7 @@ int load_configuration(CCfgConfig* config, std::string file, const int modality,
 	status[1] = ClLoop::nameserver.StoreConfig(component, "block", block);
 	status[2] = ClLoop::nameserver.StoreConfig(component, "taskset", ts->name);
 	status[3] = ClLoop::nameserver.StoreConfig(component, "xml", file);
-	status[4] = ClLoop::nameserver.StoreConfig(component, "path", "unknown");
+	status[4] = ClLoop::nameserver.StoreConfig(component, "path", path);
 
 	for(int i = 0; i < 5; i++) {
 		if(status[i] != true)

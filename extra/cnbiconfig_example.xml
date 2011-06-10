@@ -469,21 +469,3 @@
 		</csmrengine>
 	</configuration>
 </cnbiconfig>
-
-
-			<!-- <errp>
-				<start>0x0010</start>
-				<stop>0x0011</stop>
-				<correct>0x0001</correct>
-				<error>0x0001</error>
-				<left>0x0400</left>
-				<right>0x0401</right>
-			</errp> 
-			<errp>
-				<start>17</start>
-				<stop>18</stop>
-				<correct>4</correct>
-				<error>5</error>
-				<left>2</left>
-				<right>3</right>
-			</errp>-->
