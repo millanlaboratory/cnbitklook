@@ -164,6 +164,15 @@ $ #include <stdio.h>
 	$ }
 	# bool status = clclosexdf(ClLoop* c);
 
+@function [status] = cl_updatelog(c, linelog)
+% Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
+% Michele Tavella <michele.tavella@epfl.ch>
+	$ bool clupdatelog(ClLoop* q, std::string* linelog) {
+	$	return(q->acquisition.UpdateLog(*linelog));
+	$ }
+	# std::string* tlinelog = new std::string(cstring linelog);
+	# bool status = clupdatelog(ClLoop* c, std::string* tlinelog);
+
 @function [isvalid] = cl_checkname(name)
 % Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
 % Michele Tavella <michele.tavella@epfl.ch>

@@ -64,4 +64,23 @@ int ClAcqClient::CloseXDF(void) {
 		return ClAcqLang::StatusLost;
 }
 
+int ClAcqClient::UpdateLog(const std::string& linelog) {
+	int errorid = 0;
+	std::string message, reply;
+	
+	this->_language.UpdateLog(linelog);
+	bool status = ClClient::_client.SendRecv(this->_language.message->buffer,
+			&reply, ClAcqLang::Hdr, ClAcqLang::Trl, ClClient::_waitms);
+
+	if(status == false)
+		return ClAcqLang::NoReply;
+
+	if(this->_language.IsOk(reply.c_str()))
+		return ClAcqLang::Successful;
+	else if(this->_language.IsError(reply.c_str(), &errorid))
+		return errorid;
+	else
+		return ClAcqLang::StatusLost;
+}
+
 #endif

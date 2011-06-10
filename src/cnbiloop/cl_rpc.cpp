@@ -29,6 +29,7 @@ void example(void) {
 	printf(" example\n");
 	printf(" openxdf test.gdf test.log \"threshold=0.76 integration=0.96\"\n");
 	printf(" closexdf\n");
+	printf(" updatelog \"extra1=0.72 extra2=2.50\"\n");
 	printf(" set /acquisition 127.0.0.1:9000\n");
 	printf(" unset /acquisition\n");
 	printf(" query /acquisition\n");
@@ -53,6 +54,7 @@ void usage(void) {
 	printf(" example                           display the examples and exit\n");
 	printf(" openxdf XDFFILE LOGFILE LOGLINE   open XDFFILE and adds LOGLINE to LOGFILE\n");
 	printf(" closexdf                          close the currently open XDFFILE\n");
+	printf(" updatelog LOGLINE                 adds LOGLINE to the log\n");
 	printf(" set NAME IP:PORT                  sets a NAME\n");
 	printf(" unset NAME                        unsets a NAME\n");
 	printf(" query NAME                        queries a NAME\n");
@@ -148,6 +150,9 @@ void acquisition(int status) {
 		case ClAcqLang::XDFSetupFailed:
 			fprintf(stderr, "XDFSetupFailed\n");
 			break;
+		case ClAcqLang::LogUpdateFailed:
+			fprintf(stderr, "LogUpdateFailed\n");
+			break;
 	}
 }
 
@@ -218,6 +223,14 @@ int main(int argc, char* argv[]) {
 		connect();
 
 		status = ClLoop::acquisition.CloseXDF();
+		acquisition(status);
+		CcCore::Exit(status);
+	
+	} else if(command.compare("updatelog") == 0) {
+		if(argc != 3) usage();
+		connect();
+
+		status = ClLoop::acquisition.UpdateLog(arg1);
 		acquisition(status);
 		CcCore::Exit(status);
 

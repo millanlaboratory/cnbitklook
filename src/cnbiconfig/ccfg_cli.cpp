@@ -208,7 +208,7 @@ bool get_logline(CCfgConfig* config, const std::string& modality,
 	std::string daystamp;
 	get_daystamp(&daystamp);
 
-	printf("\"Experimenter=%s Subject=%s Daystamp=%s Modality=%s Block=%s Taskset=%s\"\n",
+	printf("\"experimenter=%s subject=%s daystamp=%s modality=%s block=%s taskset=%s\"\n",
 			experimenter.c_str(), subjectid.c_str(), daystamp.c_str(), 
 			modality.c_str(), block.c_str(), taskset.c_str());
 

@@ -23,6 +23,8 @@
 #include <stdio.h>
 #include <string.h>
 
+#define CLLA_UPDATE_LOG_OUT		"[clla]update_log|%s[/clla]"
+#define CLLA_UPDATE_LOG_IN		"[clla]update_log|%[^'['][/clla]"
 #define CLLA_OPEN_XDF_OUT		"[clla]open_xdf|%s|%s|%s[/clla]"
 #define CLLA_OPEN_XDF_IN		"[clla]open_xdf|%[^'|']|%[^'|']|%[^'['][/clla]"
 #define CLLA_CLOSE_XDF			"[clla]close_xdf[/clla]"
@@ -43,6 +45,12 @@ char* ClAcqLang::OpenXDF(const std::string& filegdf,
 char* ClAcqLang::CloseXDF(void) {
 	snprintf(ClLanguage::message->buffer, ClLanguage::MessageSize(),
 			CLLA_CLOSE_XDF);
+	return ClLanguage::message->buffer;
+}
+		
+char* ClAcqLang::UpdateLog(const std::string& linelog) {
+	snprintf(ClLanguage::message->buffer, ClLanguage::MessageSize(),
+			CLLA_UPDATE_LOG_OUT, linelog.c_str());
 	return ClLanguage::message->buffer;
 }
 
@@ -75,6 +83,16 @@ bool ClAcqLang::IsOpenXDF(const char* message, std::string* filegdf,
 
 bool ClAcqLang::IsCloseXDF(const char* message) {
 	return(strcmp(CLLA_CLOSE_XDF, message) == 0);
+}
+		
+bool ClAcqLang::IsUpdateLog(const char* message, std::string* linelog) {
+	int count = sscanf(message, CLLA_UPDATE_LOG_IN, 
+			ClLanguage::_cache0->buffer);
+	if(count < 1)
+		return false;
+
+	linelog->assign(ClLanguage::_cache0->buffer);
+	return true;
 }
 
 bool ClAcqLang::IsOk(const char* message) {

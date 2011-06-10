@@ -28,6 +28,7 @@ class ClAcqClient : public ClClient {
 		int OpenXDF(const std::string& filegdf, 
 				const std::string& filelog, const std::string& linelog);
 		int CloseXDF(void);
+		int UpdateLog(const std::string& linelog);
 
 	private:
 		ClAcqLang _language;

@@ -29,6 +29,7 @@ class ClAcqLang : public ClLanguage {
 				const std::string& filelog, 
 				const std::string& linelog);
 		char* CloseXDF(void);
+		char* UpdateLog(const std::string& linelog);
 		char* Ok(void);
 		char* Error(const int code);
 		bool IsOpenXDF(const char* message, 
@@ -36,6 +37,7 @@ class ClAcqLang : public ClLanguage {
 				std::string* filelog, 
 				std::string* linelog);
 		bool IsCloseXDF(const char* message);
+		bool IsUpdateLog(const char* message, std::string* linelog);
 		bool IsOk(const char* message);
 		bool IsError(const char* message, int* code);
 
@@ -54,6 +56,7 @@ class ClAcqLang : public ClLanguage {
 		static const int XDFNotOpen = 5;
 		static const int XDFCloseFailed = 6;
 		static const int XDFSetupFailed = 7;
+		static const int LogUpdateFailed = 8;
 };
 
 #endif

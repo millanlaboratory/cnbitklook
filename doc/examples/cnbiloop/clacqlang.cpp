@@ -22,22 +22,26 @@ using namespace std;
 
 int main(void) {
 	string label;
-	string filegdf, filemat, filelog;
+	string filegdf, linelog, filelog;
 	int id = 0;
 
 	ClAcqLang acq;
 	cout << acq.OpenXDF("test.gdf", "mylog", "classifier=test.mat") << endl;
-	cout << acq.IsOpenXDF(acq.message->buffer, &filegdf, &filelog, &filemat) << endl;
+	cout << acq.IsOpenXDF(acq.message->buffer, &filegdf, &filelog, &linelog) << endl;
 	cout << "--> Message:  " << acq.message->buffer << endl;
 	cout << "--> File XDF: " << filegdf << endl;
-	cout << "--> Line LOG: " << filemat << endl;
+	cout << "--> Line LOG: " << linelog << endl;
 	
 	cout << acq.OpenXDF("test.gdf", "mylog", "classifier=test.mat rejection=0.60") 
 		<< endl;
-	cout << acq.IsOpenXDF(acq.message->buffer, &filegdf, &filelog, &filemat) << endl;
+	cout << acq.IsOpenXDF(acq.message->buffer, &filegdf, &filelog, &linelog) << endl;
 	cout << "--> Message:  " << acq.message->buffer << endl;
 	cout << "--> File XDF: " << filegdf << endl;
-	cout << "--> Line LOG: " << filemat << endl;
+	cout << "--> Line LOG: " << linelog << endl;
+	
+	cout << acq.UpdateLog("classifier=test.mat rejection=0.60") << endl;
+	cout << acq.IsUpdateLog(acq.message->buffer, &linelog) << endl;
+	cout << "--> Line LOG: " << linelog << endl;
 	
 	cout << acq.CloseXDF() << endl;
 	cout << acq.IsCloseXDF(acq.message->buffer) << endl;

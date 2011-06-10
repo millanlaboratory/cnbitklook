@@ -38,14 +38,18 @@ class ClAcqAsServer : public CcSocketProxy {
 	private:
 		virtual bool CommunicationCl(CcServer* server, CcAddress address, 
 				CcStreamer* stream);
-		virtual bool LogXDF(const std::string& logfile, const std::string& xdffile, 
+		virtual bool CreateLog(const std::string& logfile, const std::string& xdffile, 
 				const std::string& logline); 
+		virtual bool UpdateLog(const std::string& logfile,  
+				const std::string& logline, bool space = false); 
 	protected:
 
 	public:
 		ClAcqLang language;
 	private:
 		CaWriter* _writer;
+		std::string _log;
+		std::string _xdf;
 };
 
 #endif

@@ -36,7 +36,7 @@ void ClAcqAsServer::HandleRecvPeer(CcSocket* caller, CcAddress addr,
 	while(this->CommunicationCl((CcServer*)caller, addr, stream));
 }
 
-bool ClAcqAsServer::LogXDF(const std::string& logfile, 
+bool ClAcqAsServer::CreateLog(const std::string& logfile, 
 		const std::string& xdffile, const std::string& logline) {
 
 	if(logfile.empty())
@@ -49,7 +49,24 @@ bool ClAcqAsServer::LogXDF(const std::string& logfile,
 		return false;
 
 	fid << xdffile << " ";
-	fid << logline << std::endl;
+	fid << logline;
+	fid.close();
+
+	return true;
+}
+
+bool ClAcqAsServer::UpdateLog(const std::string& logfile, const std::string& logline, bool space) {
+	if(logfile.empty())
+		return false;
+	std::ofstream fid;
+	fid.open(logfile.c_str(), std::ios::out | std::ios::app);
+
+	if(fid.is_open() == false)
+		return false;
+
+	if(space == true)
+		fid << " ";
+	fid << logline;
 	fid.close();
 
 	return true;
@@ -76,23 +93,25 @@ bool ClAcqAsServer::CommunicationCl(CcServer* server, CcAddress address,
 				xdffile = cnbitkdata + "/" + xdffile;
 				logfile = cnbitkdata + "/" + logfile;
 			}
+			this->_log = logfile;
+			this->_xdf = xdffile;
 
-			if(this->_writer->Open(xdffile) == false) {
+			if(this->_writer->Open(this->_xdf) == false) {
 				server->Send(language.Error(ClAcqLang::XDFOpenFailed), address);
 				CcLogErrorS("Open XDF from " << address << ": " 
-						<< xdffile << " XDFOpenFailed");
+						<< this->_xdf << " XDFOpenFailed");
 			} else {
 				if(this->_writer->Setup(NULL) == false) {
 					server->Send(language.Error(ClAcqLang::XDFSetupFailed), address);
 					CcLogErrorS("Open XDF from " << address << ": " 
-							<< xdffile << " XDFSetupFailed");
-				} else if(this->LogXDF(logfile, xdffile, logline) == false) {
+							<< this->_xdf << " XDFSetupFailed");
+				} else if(this->CreateLog(this->_log, this->_xdf, logline) == false) {
 					server->Send(language.Error(ClAcqLang::LogOpenFailed), address);
 					CcLogErrorS("Open Log from " << address << ": " 
-							<< xdffile << " LogOpenFailed");
+							<< this->_log << " LogOpenFailed");
 				} else {
 					server->Send(language.Ok(), address);
-					CcLogInfoS("Open XDF from " << address << ": " << xdffile);
+					CcLogInfoS("Open XDF from " << address << ": " << this->_xdf);
 				}
 			}
 		}
@@ -100,16 +119,29 @@ bool ClAcqAsServer::CommunicationCl(CcServer* server, CcAddress address,
 		if(this->_writer->IsOpen() == false) {
 				server->Send(language.Error(ClAcqLang::XDFNotOpen), address);
 				CcLogWarningS("Close XDF from " << address << ": " 
-						<< xdffile << " XDFNotOpen");
+						<< this->_xdf << " XDFNotOpen");
 		} else {
 			if(this->_writer->Close() == false) {
 				server->Send(language.Error(ClAcqLang::XDFCloseFailed), address);
 				CcLogWarningS("Close XDF from " << address << ": " 
-						<< xdffile << " XDFCloseFailed");
+						<< this->_xdf << " XDFCloseFailed");
 			} else {
+				this->UpdateLog(this->_log, "\n");
+				this->_log.clear();
+				this->_xdf.clear();
 				server->Send(language.Ok(), address);
 				CcLogInfoS("Close XDF from " << address);
 			}
+		}
+	} else if(language.IsUpdateLog(message.c_str(), &logline)) {
+		if(this->_log.empty() == true || this->_writer->IsOpen() == false) {
+			server->Send(language.Error(ClAcqLang::LogUpdateFailed), address);
+			CcLogWarningS("Update Log from " << address << ": " 
+					<< this->_log << " LogUpdateFailed");
+		} else {
+			server->Send(language.Ok(), address);
+			this->UpdateLog(this->_log, logline, true);
+			CcLogInfoS("Update Log from " << address << ": " << logline);
 		}
 	} else {
 		server->Send(language.Error(ClAcqLang::NotUndestood), address);
