@@ -233,7 +233,7 @@
 			<tobi>
 				<icvalue>ValueProb</icvalue>
 				<iclabel>LabelBiosig</iclabel>
-				<idfamily>FamilyUndef</idfamily>
+				<idfamily>FamilyBiosig</idfamily>
 			</tobi>
 			<ndf>
 				<exec>ndf_mi</exec>
@@ -294,6 +294,10 @@
 			<class id="0" key="mi_hand_right"/>
 			<class id="1" key="mi_hand_left"/>
 		</mi_rhlh>
+		<mi_lhrh description="Motor Imagery 2: Right, Left"> <!-- TEST -->
+			<class id="0" key="mi_hand_left"/>
+			<class id="1" key="mi_hand_right"/>
+		</mi_lhrh>
 		<mi_rhbf description="Motor Imagery 2: Right, Feet">
 			<class id="0" key="mi_hand_right"/>
 			<class id="1" key="mi_both_feet"/>

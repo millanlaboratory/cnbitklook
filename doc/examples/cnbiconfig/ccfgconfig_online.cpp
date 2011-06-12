@@ -25,9 +25,11 @@
 
 using namespace std;
 
+#define BLOCK	"mi"
+#define TAKSET	"mi_rhlh"
+
 int main(void) {
-	std::string blockname("mi"), tasksetname("mi_rhlh");
-	//std::string blockname("checkloop"), tasksetname("dummy");
+	std::string blockname(BLOCK), tasksetname(TAKSET);
 	
 	CCfgConfig config;
 	try {
@@ -73,7 +75,16 @@ int main(void) {
 			online->name.c_str(), 
 			online->description.c_str(), 
 			online->Count());
-
+	CCfgTask* temp = NULL;
+	
+	printf("\n\n");
+	temp = online->GetTaskEx(0);
+	temp->Dump();
+	
+	temp = online->GetTaskEx(1);
+	temp->Dump();
+	printf("\n\n");
+	
 	online->Dump();
 	online->DumpClassifier();
 	online->DumpNDF();
