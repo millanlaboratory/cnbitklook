@@ -115,7 +115,6 @@ void CCfgConfig::ParseTasksetEx(const std::string& name, CCfgTaskset* taskset) {
 		task->name = classKey;
 		converter.Guess(classId);
 		task->id = (unsigned int)converter.Int();
-		task->trials = (unsigned int)converter.Int();
 
 		// Fill up missing informations
 		XMLNode nTasks = CCfgXMLConfig::_document.doc.
@@ -227,12 +226,12 @@ void CCfgConfig::ParseClassifierEx(const std::string& bl, const std::string& ts,
 	 */
 	CCfgXMLConfig::RootEx()->GoEx("classifier")->GoEx(cname)->SetBranch();
 
-	std::string cdesc, cfile;
-	cdesc = CCfgXMLConfig::BranchEx()->QuickStringEx("description");
+	std::string cid, cfile;
+	cid = CCfgXMLConfig::BranchEx()->QuickStringEx("name");
 	cfile = CCfgXMLConfig::BranchEx()->QuickStringEx("filename");
 
-	taskset->classifier.name = cname;
-	taskset->classifier.description = cdesc;
+	taskset->classifier.id = cid;
+	taskset->classifier.description = cname;
 	taskset->classifier.filename = cfile;
 	
 	/* Configure ICMessage icmessage
@@ -267,7 +266,7 @@ void CCfgConfig::ParseClassifierEx(const std::string& bl, const std::string& ts,
 	
 	if(icmessage != NULL) {
 		try { 
-			ICClassifier* classifier = new ICClassifier(cname, cdesc);
+			ICClassifier* classifier = new ICClassifier(cid, cname);
 			if(classifier->SetValueType(vtype) == false) {
 				std::string info;
 				info += "TOBI iC value type is not valid: ";
@@ -309,7 +308,7 @@ void CCfgConfig::ParseClassifierEx(const std::string& bl, const std::string& ts,
 				info += ftype;
 				throw XMLException(info, __PRETTY_FUNCTION__);
 			}
-			idmessage->SetDescription(cdesc);
+			idmessage->SetDescription(cid);
 		} catch(TCException tce) {
 			throw(XMLException(tce.GetInfo(), tce.GetCaller()));
 		}

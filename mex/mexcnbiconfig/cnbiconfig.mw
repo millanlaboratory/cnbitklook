@@ -298,12 +298,12 @@ $ #include <stdio.h>
 	$ }
 	# int count = counttasks(CCfgTaskset* tptr);
 
-@function [name, desc, file, tptr] = ccfgtaskset_getclassifier(tptr)
+@function [id, desc, file, tptr] = ccfgtaskset_getclassifier(tptr)
 % Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
 % Michele Tavella <michele.tavella@epfl.ch>
-	$ void getclassifier(CCfgTaskset* tptr, char* name, char* desc, char* file) {
+	$ void getclassifier(CCfgTaskset* tptr, char* id, char* desc, char* file) {
 	$	try {
-	$ 		strcpy(name, tptr->classifier.name.c_str()); 
+	$ 		strcpy(id, tptr->classifier.id.c_str()); 
 	$ 		strcpy(desc, tptr->classifier.description.c_str()); 
 	$ 		strcpy(file, tptr->classifier.filename.c_str()); 
 	$	} catch(XMLException e) {
@@ -311,10 +311,10 @@ $ #include <stdio.h>
 	$			e.Caller().c_str(), e.Info().c_str());
 	$	}
 	$ }
-	name = '';
+	id= '';
 	desc = '';
 	file = '';
-	# getclassifier(CCfgTaskset* tptr, inout cstring[4096] name, inout  cstring[4096] desc, inout cstring[4096] file);
+	# getclassifier(CCfgTaskset* tptr, inout cstring[4096] id, inout  cstring[4096] desc, inout cstring[4096] file);
 
 @function [exec, pipe, id, ic] = ccfgtaskset_getndf(tptr)
 % Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
@@ -390,14 +390,6 @@ $ #include <stdio.h>
 	$	return tptr->id;
 	$ }
 	# int id = get_id(CCfgTask* tptr);
-
-@function [trials, tptr] = ccfgtask_gettrials(tptr);
-% Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
-% Michele Tavella <michele.tavella@epfl.ch>
-	$ int get_trials(CCfgTask* tptr) {
-	$	return tptr->trials;
-	$ }
-	# int trials = get_trials(CCfgTask* tptr);
 
 @function [hwt, tptr] = ccfgtask_gethwt(tptr);
 % Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)

@@ -173,11 +173,11 @@ bool get_classifier(CCfgConfig* config, const std::string& modality,
 			printf("%s\n", ts->classifier.filename.c_str());
 			break;
 		case MODE_FRIENDLY:
-			printf("\"%s\"\n", ts->classifier.name.c_str());
+			printf("\"%s\"\n", ts->classifier.id.c_str());
 			break;
 		case MODE_BOTH:
 			printf("%-30.30s \"%s\"\n", ts->classifier.filename.c_str(), 
-					ts->classifier.name.c_str());
+					ts->classifier.id.c_str());
 			break;
 	}
 	return true;

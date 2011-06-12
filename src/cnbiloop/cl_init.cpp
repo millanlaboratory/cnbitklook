@@ -151,12 +151,12 @@ int classifier_start(CCfgConfig* config, const std::string& block,
 
 			if(ClLoop::processing.IsAlive(pid) != ClProLang::Successful) {
 				printf(" Classifier '%s' for block '%s' PID=%d died (%.2f minutes)\n", 
-						ts->classifier.name.c_str(), block.c_str(), 
+						ts->classifier.id.c_str(), block.c_str(), 
 						pid, CcTime::Toc(&tic)/1000/60);
 				return 0;
 			}
 			printf(" Classifier '%s' for block '%s' PID=%d running (%.2f minutes)\n", 
-					ts->classifier.name.c_str(), block.c_str(), 
+					ts->classifier.id.c_str(), block.c_str(), 
 					pid, CcTime::Toc(&tic)/1000/60);
 			CcTime::Sleep(5000);
 		}

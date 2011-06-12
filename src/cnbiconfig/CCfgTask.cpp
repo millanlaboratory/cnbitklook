@@ -23,7 +23,6 @@ CCfgTask::CCfgTask(void) {
 	this->name.assign("undefined"); 	   
 	this->description.assign("undefined");
 	this->id = 0;
-	this->trials = 0;     
 	this->gdf = 0;   
 	this->hwt = 0; 
 }
@@ -33,7 +32,6 @@ void CCfgTask::Dump(void) {
 	printf("  ID:          %d\n", this->id);
 	printf("  Name:        %s\n", this->name.c_str());
 	printf("  Description: %s\n", this->description.c_str());
-	printf("  Trials:      %d\n", this->trials);
 	printf("  GDF:         %d\n", this->gdf);
 	printf("  LPT:         %d\n", (int)(this->hwt));
 	

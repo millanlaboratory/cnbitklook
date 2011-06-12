@@ -47,7 +47,7 @@ end
 % The taskset contains informations about:
 % - the classifier
 % - the NDF configuration (pipes etc)
-[loop.cfg.classifier.name, loop.cfg.classifier.desc, loop.cfg.classifier.file] = ...
+[loop.cfg.classifier.id, loop.cfg.classifier.desc, loop.cfg.classifier.file] = ...
 	ccfgtaskset_getclassifier(loop.cfg.taskset);
 [loop.cfg.ndf.exec, loop.cfg.ndf.pipe, loop.cfg.ndf.id, loop.cfg.ndf.ic] = ...
 	ccfgtaskset_getndf(loop.cfg.taskset);
@@ -64,7 +64,7 @@ fprintf(1, '  Pipe:     %s\n', loop.cfg.ndf.pipe);
 fprintf(1, '  TOBI iD:  %s\n', loop.cfg.ndf.id);
 fprintf(1, '  TOBI iC:  %s\n', loop.cfg.ndf.ic);
 fprintf(1, '[ndf_loopconfig] Classifier configuration:\n');
-fprintf(1, '  Name      %s\n', loop.cfg.classifier.name);
+fprintf(1, '  Id:       %s\n', loop.cfg.classifier.id);
 fprintf(1, '  Desc.:    %s\n', loop.cfg.classifier.desc);
 fprintf(1, '  Filename: %s\n', loop.cfg.classifier.file);
 

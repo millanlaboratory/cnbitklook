@@ -197,7 +197,7 @@ try
 			for t = 0:ccfgtaskset_count(loop.cfg.taskset) - 1
 				taskname = ccfgtaskset_gettaskbyid(loop.cfg.taskset, t);
 				tasklabel = num2str(ccfgtask_getgdf(taskname));
-				icmessage_setvalue(loop.mC, loop.cfg.classifier.name, ...
+				icmessage_setvalue(loop.mC, loop.cfg.classifier.id, ...
 					tasklabel, ndf.frame.index);
 			end
 			tic_setmessage(loop.iC, loop.sC, ndf.frame.index);

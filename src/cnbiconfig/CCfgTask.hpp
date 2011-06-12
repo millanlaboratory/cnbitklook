@@ -55,8 +55,6 @@ class CCfgTask {
 		std::string    	description;
 		//! \brief Task ID (i.e. 0, 1, 2, ... k-1)
 		unsigned int   	id;
-		//! \brief Number of trials for the current task
-		unsigned int   	trials;
 		//! \brief GDFEvent associated with the task (i.e. 0x301)
 		GDFEvent 		gdf;
 		//! \brief HWTrigger associated with the task (i.e. 0 - 2^8-1)

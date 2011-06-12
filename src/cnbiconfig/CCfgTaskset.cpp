@@ -129,7 +129,7 @@ void CCfgTaskset::DumpNDF(void) {
 
 void CCfgTaskset::DumpClassifier(void) {
 	printf("Classifier configuration for taskset %s:\n", this->name.c_str());
-	printf(" Name:        %s\n", this->classifier.name.c_str());
+	printf(" Id:          %s\n", this->classifier.id.c_str());
 	printf(" Description: %s\n", this->classifier.description.c_str());
 	printf(" Filename:    %s\n", this->classifier.filename.c_str());
 }

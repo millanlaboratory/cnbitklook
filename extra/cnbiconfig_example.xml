@@ -136,12 +136,12 @@
 		<mi description="Online MI" protocol="mi_online">
 			<taskset ttype="mi_rhlh" ctype="mi" classifier="kmi0">
 				<threshold>
-					<mi_hand_right>0.65</mi_hand_right>
-					<mi_hand_left>0.95</mi_hand_left>
+					<mi_hand_right>0.85</mi_hand_right>
+					<mi_hand_left>0.85</mi_hand_left>
 				</threshold>
 				<trials>
-					<mi_hand_right>150</mi_hand_right>
-					<mi_hand_left>250</mi_hand_left>
+					<mi_hand_right>15</mi_hand_right>
+					<mi_hand_left>15</mi_hand_left>
 				</trials>
 			</taskset>
 			<integration>0.96</integration>
@@ -194,19 +194,19 @@
 	<!-- Classifiers Block -->
 	<classifier>
 		<kcl0>
-			<description>CL_classifier_0</description>
+			<name>checkloop</name>
 			<filename></filename>
 		</kcl0>
 		<kmi0>
-			<description>MI_classifier</description>
+			<name>mi</name>
 			<filename>b3_mi_20091204.mat</filename>
 		</kmi0>
 		<kerrp0>
-			<description>ErrP_classifier</description>
+			<name>errp</name>
 			<filename>b3_errp_20091202.mat</filename>
 		</kerrp0>
 		<kva0>
-			<description>Luca's first classifier</description>
+			<name>va</name>
 			<filename>b4_va_20111204.mat</filename>
 		</kva0>
 	</classifier>

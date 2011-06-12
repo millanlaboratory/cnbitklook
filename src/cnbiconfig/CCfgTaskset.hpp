@@ -28,7 +28,7 @@ typedef CCfgTasksetMap::iterator CCfgTasksetIt;
 typedef CCfgTasksetMap::const_iterator	CCfgTasksetConstIt;
 
 typedef struct CCfgClassifier_struct {
-	std::string name;
+	std::string id;
 	std::string description;
 	std::string filename;
 } CCfgClassifier;
