@@ -76,7 +76,7 @@ bool ClAcqAsServer::CommunicationCl(CcServer* server, CcAddress address,
 		CcStreamer* stream) {
 	std::string txtlabel;
 	std::string message;
-	std::string xdffile, logfile, logline;
+	std::string xdffile, logfile, logline, xdffilename;
 
 	if(stream->Extract(&message, ClAcqLang::Hdr, ClAcqLang::Trl) == false)
 		return false;
@@ -87,6 +87,7 @@ bool ClAcqAsServer::CommunicationCl(CcServer* server, CcAddress address,
 			CcLogWarningS("Open XDF from " << address << ": " 
 					<< xdffile << " XDFAlreadyOpen");
 		} else {
+			xdffilename = xdffile;
 			std::string cnbitkdata = CcCore::GetEnvCnbiTkData();
 			if(cnbitkdata.empty() == false) {
 				CcLogConfigS("CNBITK_DATA points to: " << cnbitkdata);
@@ -105,7 +106,7 @@ bool ClAcqAsServer::CommunicationCl(CcServer* server, CcAddress address,
 					server->Send(language.Error(ClAcqLang::XDFSetupFailed), address);
 					CcLogErrorS("Open XDF from " << address << ": " 
 							<< this->_xdf << " XDFSetupFailed");
-				} else if(this->CreateLog(this->_log, this->_xdf, logline) == false) {
+				} else if(this->CreateLog(this->_log, xdffilename, logline) == false) {
 					server->Send(language.Error(ClAcqLang::LogOpenFailed), address);
 					CcLogErrorS("Open Log from " << address << ": " 
 							<< this->_log << " LogOpenFailed");

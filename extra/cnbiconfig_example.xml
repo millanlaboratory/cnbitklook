@@ -18,7 +18,7 @@
 
 	<!-- Protocol Block -->
 	<protocol>
-		<mi_offline>
+		<mi>
 			<scenes>
 				<wait>1000.00</wait>
 				<begin>5000.00</begin>
@@ -32,7 +32,7 @@
 				<cfeedback>4000.00</cfeedback>
 				<boom>1000.00</boom>
 			</trial>
-		</mi_offline>
+		</mi>
 		<errp>
 			<scenes>
 				<begin>5000.00</begin>
@@ -136,8 +136,8 @@
 		<mi description="Online MI" protocol="mi_online">
 			<taskset ttype="mi_rhlh" ctype="mi" classifier="kmi0">
 				<threshold>
-					<mi_hand_right>0.65</mi_hand_right>
-					<mi_hand_left>0.65</mi_hand_left>
+					<mi_hand_right>0.80</mi_hand_right>
+					<mi_hand_left>0.80</mi_hand_left>
 				</threshold>
 				<trials>
 					<mi_hand_right>15</mi_hand_right>
@@ -200,7 +200,7 @@
 		</kcl0>
 		<kmi0>
 			<name>mi</name>
-			<filename>b3_mi_20091204.mat</filename>
+			<filename>b3_mi_20100330.mat</filename>
 		</kmi0>
 		<kerrp0>
 			<name>errp</name>
@@ -237,11 +237,11 @@
 				<idfamily>FamilyBiosig</idfamily>
 			</tobi>
 			<ndf>
-				<exec>smr_online</exec>
+				<exec>ndf_mi</exec>
 				<pipe>/pipe1</pipe>
 				<id>/bus</id>
 				<ic>/ctrl1</ic>
-				<directory>/home/mtavella/Desktop/smr/</directory>
+				<directory>~/Desktop/ndf_mi/</directory>
 				<include></include>
 			</ndf>
 		</mi>
