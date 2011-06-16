@@ -269,7 +269,7 @@
 				<pipe>/pipe1</pipe>
 				<id>/bus</id>
 				<ic>/ctrl1</ic>
-				<directory>~/Desktop/ndf_mi/</directory>
+				<directory>./</directory>
 				<include></include>
 			</ndf>
 		</mi>

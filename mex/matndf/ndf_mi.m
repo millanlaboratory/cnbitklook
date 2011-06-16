@@ -14,7 +14,7 @@
 % You should have received a copy of the GNU General Public License
 % along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-function smr_online(arg0, arg1, arg2)
+function ndf_mi(arg0, arg1, arg2)
 
 % For historical reasons this function accepts 3 arguments.
 % Normally not needed, but the users might want to pass something
@@ -35,7 +35,7 @@ try
 
 	% Connect to the CnbiTk loop
 	if(cl_connect(loop.cl) == false)
-		disp('[ndf_checkloop] Cannot connect to CNBI Loop, killing matlab');
+		disp('[ndf_mi] Cannot connect to CNBI Loop, killing matlab');
 		exit;
 	end	
 
@@ -48,13 +48,13 @@ try
 	%   their values will be set according to the XML configuration
 	loop = ndf_loopconfig(loop, 'mi');
 	if(loop.cfg.config == 0)
-		disp('[ndf_checkloop] Cannot retrieve loop configuration, killing matlab');
+		disp('[ndf_mi] Cannot retrieve loop configuration, killing matlab');
 		exit;
 	end
 	loop = ndf_loopnames(loop);
 	
 	if(isempty(loop.cfg.ndf.pipe))
-		disp('[ndf_checkloop] NDF configuration failed, killing matlab:');
+		disp('[ndf_mi] NDF configuration failed, killing matlab:');
 		disp(['  Pipename:   "' loop.cfg.ndf.pipe '"']);
 		disp(['  iC address: "' loop.cfg.ndf.ic '"']);
 		disp(['  iD address: "' loop.cfg.ndf.id '"']);
@@ -91,55 +91,55 @@ try
 	% Pipe opening and NDF configurationf
 	% - Here the pipe is opened
 	% - ... and the NDF ACK frame is received
-	disp('[ndf_checkloop] Receiving ACK...');
+	disp('[ndf_mi] Receiving ACK...');
 	[ndf.conf, ndf.size] = ndf_ack(ndf.sink);
     
     % Read in parameters
-    ndf.nTasks = ccfgtaskset_count(loop.cfg.taskset);
-    for t = 0:ndf.nTasks-1
+    user.nTasks = ccfgtaskset_count(loop.cfg.taskset);
+    for t = 0:user.nTasks-1
         task = ccfgtaskset_gettaskbyid(loop.cfg.taskset, t);
         ndf.tasklabel{t+1} = ccfgtask_getgdf(task);
         ndf.thresholds(t+1) = ccfgtask_getconfig_float(task, 'threshold');
     end
     ccfg_root(loop.cfg.config);
     ccfg_setbranch(loop.cfg.config);
-    ndf.integration = ccfg_quickfloat(loop.cfg.config, 'online/mi/integration');
-    if isnan(ndf.integration)
-        disp('[smr_online] integration not found in XML file')
-        disp('[smr_online] Killing MATLAB')
+    user.integration = ccfg_quickfloat(loop.cfg.config, 'online/mi/integration');
+    if isnan(user.integration)
+        disp('[ndf_mi] integration not found in XML file')
+        disp('[ndf_mi] Killing MATLAB')
         exit;
     end
     ccfg_root(loop.cfg.config);
     ccfg_setbranch(loop.cfg.config);
-    ndf.rejection = ccfg_quickfloat(loop.cfg.config, 'online/mi/rejection');
-    if isnan(ndf.rejection)
-        disp('[smr_online] rejection not found in XML file')
-        disp('[smr_online] Killing MATLAB')
+    user.rejection = ccfg_quickfloat(loop.cfg.config, 'online/mi/rejection');
+    if isnan(user.rejection)
+        disp('[ndf_mi] rejection not found in XML file')
+        disp('[ndf_mi] Killing MATLAB')
         exit;
     end
 
-	cl_updatelog(loop.cl, sprintf('rejection=%f', ndf.rejection));
-	cl_updatelog(loop.cl, sprintf('integration=%f', ndf.integration));
+	cl_updatelog(loop.cl, sprintf('rejection=%f', user.rejection));
+	cl_updatelog(loop.cl, sprintf('integration=%f', user.integration));
 
 	% -------------------------------------------------------------- %
 	% User EEG data configuration                                    %
 	% -------------------------------------------------------------- %
-    
+	user.classifier = [loop.cfg.ns.path '/' loop.cfg.classifier.file];
 	bci = eegc3_smr_newbci();
     try
-        bci.analysis = load(loop.cfg.classifier.file);
+        bci.analysis = load(user.classifier);
     catch exception
-        disp(['[smr_online] Exception: Classifier Not Found: ' exception.message ]);
+        disp(['[ndf_mi] Exception: Classifier not found: ' exception.message ]);
         disp(exception);
         disp(exception.stack);
-        disp('[smr_online] Killing Matlab...');
+        disp('[ndf_mi] Killing Matlab...');
         exit;
     end
     bci.analysis = bci.analysis.analysis;
     bci.eeg = ndf_ringbuffer(bci.analysis.settings.eeg.fs, ...
                              bci.analysis.settings.eeg.chs, 1);
     bci.tri = ndf_ringbuffer(bci.analysis.settings.eeg.fs, 1, 1);
-    bci.support = eegc3_smr_newsupport(bci.analysis, ndf.rejection, ndf.integration);
+    bci.support = eegc3_smr_newsupport(bci.analysis, user.rejection, user.integration);
     bci.tim = ndf_ringbuffer(ndf.conf.sf/ndf.conf.samples, ndf.conf.tim_channels, 5.00);
     
     if user.plot
@@ -176,13 +176,13 @@ try
 	% NDF ACK check
 	% - The NDF id describes the acquisition module running
 	% - Bind your modules to a particular configuration (if needed)
-	disp(['[ndf_checkloop] NDF type id: ' num2str(ndf.conf.id)]);
+	disp(['[ndf_mi] NDF type id: ' num2str(ndf.conf.id)]);
     
 	% Initialize ndf_jump structure
 	% - Each NDF frame carries an index number
 	% - ndf_jump*.m are methods to verify whether your script is
 	%   running too slow
-	disp('[ndf_checkloop] Receiving NDF frames...');
+	disp('[ndf_mi] Receiving NDF frames...');
 	loop.jump.tic = ndf_tic();
     
 	while(true)
@@ -193,7 +193,7 @@ try
 
 		% Acquisition is down, exit
 		if(ndf.size == 0)
-			disp('[ndf_checkloop] Broken pipe');
+			disp('[ndf_mi] Broken pipe');
 			break;
 		end
 		
@@ -233,7 +233,7 @@ try
 			while(tid_getmessage(loop.iD, loop.sDi) == true)
                 id_event = idmessage_getevent(loop.mDi);
                 disp(num2str(id_event))
-                if id_event == 781 || id_event == 897 || id_event == 898
+                if(id_event == 781 || id_event == 897 || id_event == 898)
 					bci.support.nprobs = ones(size(bci.support.nprobs)) ...
 						/ length(bci.support.nprobs);
                 end
@@ -244,16 +244,16 @@ try
 		
 		% Handle sync TOBI iC communication
 		if(tic_isattached(loop.iC) == true)
-			for t = 1:ndf.nTasks
+			for t = 1:user.nTasks
                 % Map the tasklabel to the probabilities output from EEGC3
-                taskloc = find(ndf.tasklabel{t} == bci.analysis.settings.task.classes_old);
+                taskloc = find(user.tasklabel{t} == bci.analysis.settings.task.classes_old);
                 if length(taskloc) ~= 1
-                    disp('[smr_online] Task not present in classifier')
-                    disp('[smr_online] Killing MATLAB')
+                    disp('[ndf_mi] Task not present in classifier')
+                    disp('[ndf_mi] Killing MATLAB')
                     exit;
                 end
 				icmessage_setvalue(loop.mC, loop.cfg.classifier.id, ...
-					num2str(ndf.tasklabel{t}), bci.support.nprobs(taskloc));
+					num2str(user.tasklabel{t}), bci.support.nprobs(taskloc));
 			end
 			tic_setmessage(loop.iC, loop.sC, ndf.frame.index);
 		else
@@ -267,14 +267,14 @@ try
 		% Check if module is running slow
 		loop.jump = ndf_jump_update(loop.jump, ndf.frame.index);
 		if(loop.jump.isjumping)
-			disp('[ndf_checkloop] Error: running slow');
+			disp('[ndf_mi] Error: running slow');
 			break;
         end
         
 	end
 catch exception
 	ndf_printexception(exception);
-	disp('[ndf_checkloop] Going down');
+	disp('[ndf_mi] Going down');
 	loop.exit = true;
 end
 
@@ -286,11 +286,11 @@ catch exception
 	loop.exit = true;
 end
 
-disp(['[ndf_checkloop] Loop uptime: ' ...
+disp(['[ndf_mi] Loop uptime: ' ...
 	num2str(ndf_toc(loop.uptime)/1000/60) ...
 	' minutes']);
 
-disp('[ndf_checkloop] Killing Matlab...');
+disp('[ndf_mi] Killing Matlab...');
 if(loop.exit == true)
 	exit;
 end
