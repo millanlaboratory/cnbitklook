@@ -405,7 +405,7 @@
 	<!-- Standard Events List -->
 	<events>
 		<gdfevents>
-			<off>0x7000</off>
+			<off>0x8000</off>
 			<trial>0x0300</trial>
 			<go>0x0144</go>
 			<nogo>0x0145</nogo>
