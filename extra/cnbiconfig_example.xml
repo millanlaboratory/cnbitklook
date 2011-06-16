@@ -144,6 +144,26 @@
 					<mi_hand_left>15</mi_hand_left>
 				</trials>
 			</taskset>
+			<taskset ttype="mi_rhbf" ctype="mi" classifier="kmi1">
+				<threshold>
+					<mi_hand_right>0.80</mi_hand_right>
+					<mi_both_feet>0.80</mi_both_feet>
+				</threshold>
+				<trials>
+					<mi_hand_right>15</mi_hand_right>
+					<mi_both_feet>15</mi_both_feet>
+				</trials>
+			</taskset>
+			<taskset ttype="mi_bflh" ctype="mi" classifier="kmi2">
+				<threshold>
+					<mi_both_feet>0.80</mi_both_feet>
+					<mi_hand_left>0.80</mi_hand_left>
+				</threshold>
+				<trials>
+					<mi_both_feet>15</mi_both_feet>
+					<mi_hand_left>15</mi_hand_left>
+				</trials>
+			</taskset>
 			<rejection>0.96</rejection>
 			<integration>0.96</integration>
 		</mi>
@@ -202,6 +222,14 @@
 			<name>mi</name>
 			<filename>b3_mi_20100330.mat</filename>
 		</kmi0>
+		<kmi1>
+			<name>mi</name>
+			<filename>b3_mi_20100330.mat</filename>
+		</kmi1>
+		<kmi2>
+			<name>mi</name>
+			<filename>b3_mi_20100330.mat</filename>
+		</kmi2>
 		<kerrp0>
 			<name>errp</name>
 			<filename>b3_errp_20091202.mat</filename>
