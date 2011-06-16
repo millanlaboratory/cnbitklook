@@ -98,8 +98,8 @@ try
     user.nTasks = ccfgtaskset_count(loop.cfg.taskset);
     for t = 0:user.nTasks-1
         task = ccfgtaskset_gettaskbyid(loop.cfg.taskset, t);
-        ndf.tasklabel{t+1} = ccfgtask_getgdf(task);
-        ndf.thresholds(t+1) = ccfgtask_getconfig_float(task, 'threshold');
+        user.tasklabel{t+1} = ccfgtask_getgdf(task);
+        user.thresholds(t+1) = ccfgtask_getconfig_float(task, 'threshold');
     end
     ccfg_root(loop.cfg.config);
     ccfg_setbranch(loop.cfg.config);
@@ -124,51 +124,64 @@ try
 	% -------------------------------------------------------------- %
 	% User EEG data configuration                                    %
 	% -------------------------------------------------------------- %
+	user.bci = eegc3_smr_newbci();
 	user.classifier = [loop.cfg.ns.path '/' loop.cfg.classifier.file];
-	bci = eegc3_smr_newbci();
     try
-        bci.analysis = load(user.classifier);
+        user.bci.analysis = load(user.classifier);
+		user.bci.analysis = user.bci.analysis.analysis;
+		user.bci.support = eegc3_smr_newsupport(user.bci.analysis, ...
+			user.rejection, user.integration);
     catch exception
-        disp(['[ndf_mi] Exception: Classifier not found: ' exception.message ]);
-        disp(exception);
-        disp(exception.stack);
+		ndf_printexception(exception);
         disp('[ndf_mi] Killing Matlab...');
         exit;
     end
-    bci.analysis = bci.analysis.analysis;
-    bci.eeg = ndf_ringbuffer(bci.analysis.settings.eeg.fs, ...
-                             bci.analysis.settings.eeg.chs, 1);
-    bci.tri = ndf_ringbuffer(bci.analysis.settings.eeg.fs, 1, 1);
-    bci.support = eegc3_smr_newsupport(bci.analysis, user.rejection, user.integration);
-    bci.tim = ndf_ringbuffer(ndf.conf.sf/ndf.conf.samples, ndf.conf.tim_channels, 5.00);
+
+	if(user.bci.analysis.settings.eeg.chs ~= ndf.conf.eeg_channels)
+		disp('[ndf_mi] Error: NDF channels differ from classifier settings');
+        disp('[ndf_mi] Killing Matlab...');
+        exit;
+	end
+	
+	if(user.bci.analysis.settings.eeg.fs ~= ndf.conf.sf)
+		disp('[ndf_mi] Error: NDF sample rate differs from classifier settings');
+        disp('[ndf_mi] Killing Matlab...');
+        exit;
+	end
+
+	buffer.eeg = ndf_ringbuffer(ndf.conf.sf, ndf.conf.eeg_channels, 1.00);
+	%buffer.exg = ndf_ringbuffer(ndf.conf.sf, ndf.conf.exg_channels, 1.00);
+	buffer.tri = ndf_ringbuffer(ndf.conf.sf, ndf.conf.tri_channels, 1.00);
+	buffer.tim = ndf_ringbuffer(ndf.conf.sf/ndf.conf.samples, ...
+		ndf.conf.tim_channels, 5.00);
+
     
-    if user.plot
+    if(user.plot == true)
         eegc3_figure(1);
         subplot(10, 1, 1:3)
-        user.h_eeg = imagesc(eegc3_car(eegc3_dc(bci.eeg))');
-        user.h_eeg_title = ...
-			title(sprintf('Frame=%6.6d, Dl=%7.2f (ms)', ndf.frame.index, loop.jump.toc));
+        user.h_eeg = imagesc(eegc3_car(eegc3_dc(buffer.eeg))');
+		user.h_eeg_title = title(sprintf('Frame=%6.6d, Dl=%7.2f (ms)', ...
+			ndf.frame.index, loop.jump.toc));
         set(gca, 'XTickLabel', {});
         ylabel('eeg');
 
         user.h_teeg_axis = subplot(10, 1, 4:7);
-        user.h_teeg = plot(bsxfun(@plus,0*bci.eeg,20*(1:size(bci.eeg,2))));
+        user.h_teeg = plot(bsxfun(@plus,0*buffer.eeg,20*(1:size(buffer.eeg,2))));
 
         subplot(10, 1, 8)
-        user.h_tri = imagesc(bci.tri',[0 1]);
+        user.h_tri = imagesc(buffer.tri',[0 1]);
         ylabel('tri');
         set(gca, 'XTickLabel', {});
         set(gca, 'YTickLabel', {});
 
         user.h_tim_axis = subplot(10, 1, 9:10);
-        user.h_tim = plot(bci.tim);
+        user.h_tim = plot(buffer.tim);
         ylabel('tim');
         set(gca, 'XTickLabel', {});
-        user.h_tim_xlabel = xlabel(sprintf('Max delay %.2f ms', max(abs(bci.tim))));
+        user.h_tim_xlabel = xlabel(sprintf('Max delay %.2f ms', max(abs(buffer.tim))));
         axis tight;
         drawnow;
     end
-    
 	% -------------------------------------------------------------- %
 	% /User EEG data configuration                                   %
 	% -------------------------------------------------------------- %
@@ -201,41 +214,43 @@ try
 		% - If you want to keep track of the timestamps for debugging, 
 		%   update buffer.tim in this way:
 		%	buffer.tim = ndf_add2buffer(buffer.tim, ndf_toc(ndf.frame.timestamp));
-		bci.tim = ndf_add2buffer(bci.tim, ndf_toc(ndf.frame.timestamp));
-		bci.eeg = ndf_add2buffer(bci.eeg, ndf.frame.eeg);
-		bci.tri = ndf_add2buffer(bci.tri, ndf.frame.tri);
+		buffer.tim = ndf_add2buffer(buffer.tim, ndf_toc(ndf.frame.timestamp));
+		buffer.eeg = ndf_add2buffer(buffer.eeg, ndf.frame.eeg);
+		%buffer.exg = ndf_add2buffer(buffer.exg, ndf.frame.exg);
+		buffer.tri = ndf_add2buffer(buffer.tri, ndf.frame.tri);
         
 		% -------------------------------------------------------------- %
 		% User main loop                                                 %
 		% -------------------------------------------------------------- %
         
         % plot the data
-        if user.plot
-            set(user.h_eeg,'CData',eegc3_car(eegc3_dc(bci.eeg))')
+        if(user.plot == true)
+            set(user.h_eeg,'CData',eegc3_car(eegc3_dc(buffer.eeg))')
             set(user.h_eeg_title,'String', ...
                 sprintf('Frame=%6.6d, Dl=%7.2f (ms)',ndf.frame.index, loop.jump.toc))
             for i=1:length(user.h_teeg)
-                set(user.h_teeg(i),'YData',bci.eeg(:,i)+20*i)
+                set(user.h_teeg(i),'YData',buffer.eeg(:,i)+20*i)
             end
-            axis(user.h_teeg_axis,[1 size(bci.eeg,1) 0 20*(size(bci.eeg,2)+1)])
-            set(user.h_tri,'CData',bci.tri')
-            set(user.h_tim,'YData',bci.tim)
-            set(user.h_tim_xlabel,'String',sprintf('Max delay %.2f ms', max(abs(bci.tim))))
-            axis(user.h_tim_axis,[1 length(bci.tim) floor(min(bci.tim)) ceil(max(bci.tim))])
+            axis(user.h_teeg_axis,[1 size(buffer.eeg,1) 0 20*(size(buffer.eeg,2)+1)])
+            set(user.h_tri,'CData',buffer.tri')
+            set(user.h_tim,'YData',buffer.tim)
+            set(user.h_tim_xlabel,'String',sprintf('Max delay %.2f ms', max(abs(buffer.tim))))
+            axis(user.h_tim_axis,[1 length(buffer.tim) floor(min(buffer.tim)) ceil(max(buffer.tim))])
             drawnow
         end
         
-        [bci.support, tmp.nfeat] = ...
-            eegc3_smr_classify(bci.analysis, bci.eeg, bci.support);
+        [user.bci.support, tmp.nfeat] = ...
+            eegc3_smr_classify(user.bci.analysis, buffer.eeg, user.bci.support);
         
 		% Handle async TOBI iD communication
 		if(tid_isattached(loop.iD) == true)
 			while(tid_getmessage(loop.iD, loop.sDi) == true)
                 id_event = idmessage_getevent(loop.mDi);
-                disp(num2str(id_event))
-                if(id_event == 781 || id_event == 897 || id_event == 898)
-					bci.support.nprobs = ones(size(bci.support.nprobs)) ...
-						/ length(bci.support.nprobs);
+                
+				if(id_event == 781)
+					printf('---> resetting %d/%d\n',  ndf.frame.index, idmessage_getbidx(loop.mDi));
+					user.bci.support.nprobs = ones(size(user.bci.support.nprobs)) ...
+						/ length(user.bci.support.nprobs);
                 end
 			end
 		else
@@ -246,14 +261,14 @@ try
 		if(tic_isattached(loop.iC) == true)
 			for t = 1:user.nTasks
                 % Map the tasklabel to the probabilities output from EEGC3
-                taskloc = find(user.tasklabel{t} == bci.analysis.settings.task.classes_old);
+                taskloc = find(user.tasklabel{t} == user.bci.analysis.settings.task.classes_old);
                 if length(taskloc) ~= 1
                     disp('[ndf_mi] Task not present in classifier')
                     disp('[ndf_mi] Killing MATLAB')
                     exit;
                 end
 				icmessage_setvalue(loop.mC, loop.cfg.classifier.id, ...
-					num2str(user.tasklabel{t}), bci.support.nprobs(taskloc));
+					num2str(user.tasklabel{t}), user.bci.support.nprobs(taskloc));
 			end
 			tic_setmessage(loop.iC, loop.sC, ndf.frame.index);
 		else

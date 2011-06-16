@@ -96,9 +96,8 @@ void ClTobiId::HandleRecv(CcSocket* caller, CcStreamer* stream) {
 		stream->Clear();	
 	} else {
 		std::string buffer;
-		if(stream->Extract(&buffer, "<tobiid", "/>") == true) {
+		while(stream->Extract(&buffer, "<tobiid", "/>") == true) {
 			this->_queue.push_back(buffer);
-			this->_semqueue.Post();
 			this->iOnHasMessage.Execute();
 		}
 	}

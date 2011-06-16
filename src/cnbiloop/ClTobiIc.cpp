@@ -169,7 +169,7 @@ int ClTobiIc::GetMessage(ICSerializerRapid* serializer) {
 		return ClTobiIc::Detached;
 	if(this->_hasmessage.TryWait() == false)
 		return ClTobiIc::NoMessage;
-	return Deserialize(serializer);
+	return this->Deserialize(serializer);
 }
 
 int ClTobiIc::WaitMessage(ICSerializerRapid* serializer) {
@@ -183,7 +183,7 @@ int ClTobiIc::WaitMessage(ICSerializerRapid* serializer) {
 	this->_hasmessage.Wait();
 	if(this->IsAttached() == false)
 		return ClTobiIc::Detached;
-	return Deserialize(serializer);
+	return this->Deserialize(serializer);
 }
 		
 int ClTobiIc::SetMessage(ICSerializerRapid* serializer, int blockidx) {
