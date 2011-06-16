@@ -42,6 +42,7 @@ class ClTobiIc : public CcSocketProxy {
 		int GetMessage(ICSerializerRapid* serializer);
 		int SetMessage(ICSerializerRapid* serializer, 
 				int blockidx = TCBlock::BlockIdxUnset);
+		unsigned int GetPeers(void);
 	protected:
 		int Deserialize(ICSerializerRapid* serializer);
 		void HandleAccept(CcSocket* caller);

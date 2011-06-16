@@ -70,13 +70,13 @@ fprintf(1, '  Filename: %s\n', loop.cfg.classifier.file);
 
 fprintf(1, '[ndf_loopconfig] TOBI interfaces status:\n');
 if(tid_attach(loop.iD, loop.cfg.ndf.id) == true)
-	fprintf(1, '  TOBI iD:  attached\n');
+	fprintf(1, '  TOBI iD:  attached to %s\n', loop.cfg.ndf.id);
 else
 	fprintf(1, '  TOBI iD:  not attached\n');
 end
 
 if(tic_attach(loop.iC, loop.cfg.ndf.ic) == true)
-	fprintf(1, '  TOBI iC:  attached\n');
+	fprintf(1, '  TOBI iC:  attached to %s\n', loop.cfg.ndf.ic);
 else
 	fprintf(1, '  TOBI iC:  not attached\n');
 end

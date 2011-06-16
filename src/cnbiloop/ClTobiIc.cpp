@@ -55,25 +55,27 @@ bool ClTobiIc::Attach(const std::string& name) {
 	if(this->_mode == ClTobiIc::GetOnly) {
 		CcLogConfigS("Configuring iC for GetOnly (query name): " << address);
 		this->_server = new CcServer();
-		CB_CcSocket(this->_server->iOnAccept, this, HandleAccept);
-		CB_CcSocket(this->_server->iOnDrop, this, HandleDrop);
-		CB_CcSocket(this->_server->iOnRecvPeer, this, HandleRecvPeer);
 
 		if(this->_server->Bind(peer.GetPort()) == false) {
 			CcLogErrorS("Cannot bind to port " << peer.GetPort());
+			this->Detach();
 			return false;
 		}
+		CB_CcSocket(this->_server->iOnAccept, this, HandleAccept);
+		CB_CcSocket(this->_server->iOnDrop, this, HandleDrop);
+		CB_CcSocket(this->_server->iOnRecvPeer, this, HandleRecvPeer);
 		this->_hasmessage.Wait();
 	} else { 
 		CcLogConfigS("Configuring iC for SetOnly: " << address);
 		this->_client = new CcClient();
-		CB_CcSocket(this->_client->iOnConnect, this, HandleAccept);
-		CB_CcSocket(this->_client->iOnDisconnect, this, HandleDrop);
 		
 		if(this->_client->Connect(peer.GetAddress()) == false) {
 			CcLogErrorS("Cannot connect to address" << peer.GetAddress());
+			this->Detach();
 			return false;
 		}
+		CB_CcSocket(this->_client->iOnConnect, this, HandleAccept);
+		CB_CcSocket(this->_client->iOnDisconnect, this, HandleDrop);
 	}
 
 	this->iOnAttach.Execute();
@@ -122,7 +124,6 @@ bool ClTobiIc::Attach(const CcPort port, const std::string& name) {
 bool ClTobiIc::Detach(void) {
 	if(this->_server == NULL && this->_client == NULL)
 		return true;
-
 
 	if(this->_onwsname == true)
 		ClLoop::nameserver.Unset(this->_name);
@@ -237,8 +238,19 @@ void ClTobiIc::HandleAccept(CcSocket* caller) {
 void ClTobiIc::HandleDrop(CcSocket* caller) { 
 	CcServer *server = (CcServer*)caller;
 	CcLogDebugS("Dropped TCP endpoint: " << server->GetRemote());
+	this->Detach();
 	this->_hasmessage.Post();
 	this->iOnDrop.Execute();
+}
+	
+unsigned int ClTobiIc::GetPeers(void) { 
+	if(this->_mode == ClTobiIc::SetOnly) {
+		return this->IsAttached();
+	} else {
+		if(this->IsAttached() == false) 
+			return 0;
+		return(this->_server->GetPeers() - 1);
+	}
 }
 
 #endif

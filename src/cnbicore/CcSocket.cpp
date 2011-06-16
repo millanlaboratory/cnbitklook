@@ -249,5 +249,12 @@ CcAddress CcSocket::Lookup(std::string name) {
 	tr_resolve(name.c_str(), address);
 	return CcAddress(address);
 }
+		
+unsigned int CcSocket::GetPeers(void) {
+	this->_semsocket.Wait();
+	unsigned int peers = this->_peers.size();
+	this->_semsocket.Post();
+	return peers;
+}
 
 #endif

@@ -35,7 +35,7 @@ CcClient::CcClient(size_t bsize) : CcSocket(bsize) {
 }
 
 CcClient::~CcClient(void) {
-	this->Disconnect();
+	//this->Disconnect();
 }
 		
 bool CcClient::Connect(CcAddress address, int protocol) {
@@ -54,18 +54,16 @@ bool CcClient::Connect(CcAddress address, int protocol) {
 	
 	CcEndpoint cache(address);
 	
-	int status = 0;
-	status = tr_connect(CcSocket::_socket, 
+	int status = tr_connect(CcSocket::_socket, 
 			cache.GetIp().c_str(), cache.GetPort().c_str());
-	tr_set_nonblocking(CcSocket::_socket, 1);
-	CcSocket::AddStream(CcSocket::_socket->fd);
-	CcSocket::AddPeer(CcSocket::_socket);
-	
 	if(status != 0) {
 		CcSocket::_semsocket.Post();
 		CcLogError("Cannot connect socket");
 		return false;
 	}
+	tr_set_nonblocking(CcSocket::_socket, 1);
+	CcSocket::AddStream(CcSocket::_socket->fd);
+	CcSocket::AddPeer(CcSocket::_socket);
 	
 	CcEndpoint local, remote;
 	local.Set(&CcSocket::_socket->local);
@@ -81,24 +79,24 @@ bool CcClient::Connect(CcAddress address, int protocol) {
 }
 
 bool CcClient::Disconnect(void) {
-	if(this->IsConnected() == false && 0) {
-		CcLogWarning("Socket not connected, bitch");
+	if(this->IsConnected() == false) {
+		CcLogWarning("Socket not connected");
 		return false;
 	}
-	
-	if(CcThread::IsRunning()) {
+
+	if(CcThread::IsRunning() == true) {
 		CcThread::Stop();
 		CcThread::Join();
-	} 
+	}
 	
 	CcSocket::_semsocket.Wait();
 	if(this->Close() == false) {
 		CcSocket::_semsocket.Post();
 		return false;
 	}
-
 	CcSocket::RemStream(CcSocket::_socket->fd);
 	CcSocket::_semsocket.Post();
+	
 	this->iOnDisconnect.Execute(this);
 	return true;
 }
@@ -166,7 +164,12 @@ void CcClient::Main(void) {
 			CcSocket::iOnRecv.Execute(this, stream);
 	}
 	FD_ZERO(&readfds);
-	this->Disconnect();
+	
+	//this->Disconnect();
+	CcSocket::_semsocket.Wait();
+	CcSocket::RemStream(CcSocket::_socket->fd);
+	CcSocket::_semsocket.Post();
+	this->iOnDisconnect.Execute(this);
 }
 
 bool CcClient::Open(int protocol) {

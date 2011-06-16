@@ -31,29 +31,3 @@ if(isempty(loop.cfg.ndf.pipe) == false)
 else
 	disp('[ndf_checknames] Pipename is empty, XML configuration required');
 end
-
-if(isempty(loop.cfg.ndf.id) == false)
-	if(cl_checkname(loop.cfg.ndf.id) == true)
-		loop.cfg.ndf.id = cl_query(loop.cl, loop.cfg.ndf.id);
-		if(isempty(loop.cfg.ndf.id))
-			disp(['[ndf_checknames] Warning: iD address not found!']);
-		end
-	else
-		disp('[ndf_checknames] Warning: iD address in wrong format');
-	end
-else
-	disp('[ndf_checknames] iD address is empty, XML configuration required');
-end
-
-if(isempty(loop.cfg.ndf.ic) == false)
-	if(cl_checkname(loop.cfg.ndf.ic) == true)
-		loop.cfg.ndf.ic = cl_query(loop.cl, loop.cfg.ndf.ic);
-		if(isempty(loop.cfg.ndf.ic))
-			disp(['[ndf_checknames] Warning: iC address not found!']);
-		end
-	else
-		disp('[ndf_checknames] Warning: iC address in wrong format');
-	end
-else
-	disp('[ndf_checknames] iC address is empty, XML configuration required');
-end

@@ -136,8 +136,8 @@
 		<mi description="Online MI" protocol="mi_online">
 			<taskset ttype="mi_rhlh" ctype="mi" classifier="kmi0">
 				<threshold>
-					<mi_hand_right>0.85</mi_hand_right>
-					<mi_hand_left>0.85</mi_hand_left>
+					<mi_hand_right>0.65</mi_hand_right>
+					<mi_hand_left>0.65</mi_hand_left>
 				</threshold>
 				<trials>
 					<mi_hand_right>15</mi_hand_right>
@@ -236,12 +236,12 @@
 				<idfamily>FamilyBiosig</idfamily>
 			</tobi>
 			<ndf>
-				<exec>ndf_mi</exec>
+				<exec>smr_online</exec>
 				<pipe>/pipe1</pipe>
 				<id>/bus</id>
 				<ic>/ctrl1</ic>
-				<directory>/home/mtavella/</directory>
-				<include>/home/mtavella/toolbox/</include>
+				<directory>/home/mtavella/Desktop/smr/</directory>
+				<include></include>
 			</ndf>
 		</mi>
 		<errp description="Standard ErrP classifier (pipeline 2)">
@@ -425,6 +425,10 @@
 				<left>0x006</left>
 				<top>0x007</top>
 				<bottom>0x008</bottom>
+				<start>0x009</start>
+				<stop>0x00a</stop>
+				<suspend>0x00b</suspend>
+				<resume>0x00c</resume>
 			</cnbi>
 		</gdfevents>
 		<hwtriggers>

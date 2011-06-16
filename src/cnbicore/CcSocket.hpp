@@ -47,6 +47,7 @@ class CcSocket : public CcObject {
 		virtual CcAddress GetRemote(void);
 		long unsigned int GetSend(void);
 		long unsigned int GetRecv(void);
+		unsigned int GetPeers(void);
 		int GetFID(void);
 		virtual bool IsConnected(void);
 		void Dump(void);

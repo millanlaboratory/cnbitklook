@@ -27,8 +27,10 @@ CcThread::CcThread(void) {
 }
 
 CcThread::~CcThread(void) {
-	this->Stop();
-	this->Join();
+	if(this->IsRunning() == true) {
+		this->Stop();
+		this->Join();
+	}
 }
 
 void CcThread::Start(void) {
