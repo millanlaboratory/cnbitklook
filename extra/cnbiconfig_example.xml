@@ -144,6 +144,7 @@
 					<mi_hand_left>15</mi_hand_left>
 				</trials>
 			</taskset>
+			<rejection>0.96</rejection>
 			<integration>0.96</integration>
 		</mi>
 		<errp description="Online ErrPs (6x240)" protocol="errp_online">
