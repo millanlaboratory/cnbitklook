@@ -23,6 +23,8 @@
 #include "ClAcqLang.hpp"
 #include <iostream>
 #include <fstream>
+#include <sys/stat.h>
+#include <errno.h>
 
 ClAcqAsServer::ClAcqAsServer(CaWriter* writer) {
 	this->_writer = writer;
@@ -93,6 +95,14 @@ bool ClAcqAsServer::CommunicationCl(CcServer* server, CcAddress address,
 				CcLogConfigS("CNBITK_DATA points to: " << cnbitkdata);
 				xdffile = cnbitkdata + "/" + xdffile;
 				logfile = cnbitkdata + "/" + logfile;
+				mode_t mode = S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH;
+				if(mkdir(cnbitkdata.c_str(), mode) != 0) {
+					if(errno != EEXIST) {
+						CcLogFatalS("Cannot create directory: " << strerror(errno));
+					}
+				} else {
+					CcLogConfigS("Data directory ready: " << cnbitkdata);
+				}
 			}
 			this->_log = logfile;
 			this->_xdf = xdffile;
