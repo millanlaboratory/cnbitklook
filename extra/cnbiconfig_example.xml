@@ -20,7 +20,7 @@
 	<protocol>
 		<mi>
 			<scenes>
-				<wait>1000.00</wait>
+				<wait>5000.00</wait>
 				<begin>5000.00</begin>
 				<end>5000.00</end>
 			</scenes>
