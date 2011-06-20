@@ -145,16 +145,16 @@ int CaWriter::Write(int nswrite) {
 }
 
 int CaWriter::SetupChannelGroup(int igrp) {
-	char label[32], transducter[128], unit[16];
+	char label[32], transducter[128], unit[16], filtering[128];
 	double mm[2];
 	int isint = 0;
 	struct xdfch* ch;
 
 	egd_channel_info(this->_device->_dev, 
-			this->_device->_grp[igrp].sensortype, 
-			0,
+			this->_device->_grp[igrp].sensortype, 0,
 			EGD_UNIT, unit,
 			EGD_TRANSDUCTER, transducter,
+			EGD_PREFILTERING, filtering,
 			EGD_MM_D, mm,
 			EGD_ISINT, &isint,
 			EGD_EOL);
@@ -170,6 +170,7 @@ int CaWriter::SetupChannelGroup(int igrp) {
 			XDF_CF_PMIN, mm[0],
 			XDF_CF_PMAX, mm[1],
 			XDF_CF_TRANSDUCTER, transducter,
+			XDF_CF_PREFILTERING, filtering,
 			XDF_CF_UNIT, unit,
 			XDF_NOF);
 

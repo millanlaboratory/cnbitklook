@@ -118,6 +118,7 @@ try
         exit;
     end
 
+	cl_updatelog(loop.cl, sprintf('classifier=%s', loop.cfg.classifier.file));
 	cl_updatelog(loop.cl, sprintf('rejection=%f', user.rejection));
 	cl_updatelog(loop.cl, sprintf('integration=%f', user.integration));
 
