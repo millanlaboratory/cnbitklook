@@ -43,6 +43,12 @@ AC_CHECK_HEADERS([rapidxml.hpp rapidxml_print.hpp], [],
 AC_LANG_POP([C++])
 
 save_LIBS="$LIBS"
+AC_SEARCH_LIBS_CLASS([TCBlock], [tobicore], [#include <tobicore/TCBlock.hpp>],
+            AC_SUBST([TOBICORE_LIBS], "$LIBS"), 
+			AC_MSG_ERROR([The tobicore library cannot be found.]))
+LIBS="$save_LIBS"
+
+save_LIBS="$LIBS"
 AC_SEARCH_LIBS_CLASS([ICMessage], [tobiic], [#include <tobiic/ICMessage.hpp>],
             AC_SUBST([TOBIIC_LIBS], "$LIBS"), 
 			AC_MSG_ERROR([The tobiic library cannot be found.]))

@@ -74,7 +74,14 @@ libcnbiloop_la_LIBADD = $(builddir)/../cnbicore/libcnbicore.la \
 						$(TOBIIC_LIBS) \
 						$(TOBIID_LIBS)
 
-LDADD = libcnbiloop.la
+LDADD = libcnbiloop.la \
+		$(top_builddir)/src/cnbicore/libcnbicore.la \
+		$(builddir)/../cnbiconfig/libcnbiconfig.la \
+		$(builddir)/../ndf/libndf.la \
+		$(TOBICORE_LIBS) \
+		$(TOBIIC_LIBS) \
+		$(TOBIID_LIBS)
+
 cl_acquisition_SOURCES = cl_acquisition.cpp \
 						 ClAcqAsServer.cpp \
 						 ClAcqAsServer.hpp \
@@ -83,7 +90,8 @@ cl_acquisition_SOURCES = cl_acquisition.cpp \
 						 ClDevicesAsServer.cpp \
 						 ClDevicesAsServer.hpp
 cl_acquisition_LDADD = libcnbiloop.la \
-					   $(top_builddir)/src/cnbiacq/libcnbiacq.la
+					   $(top_builddir)/src/cnbiacq/libcnbiacq.la \
+					   $(LDADD)
 cl_processing_SOURCES = cl_processing.cpp \
 						ClProAsServer.cpp \
 						ClProAsServer.hpp
