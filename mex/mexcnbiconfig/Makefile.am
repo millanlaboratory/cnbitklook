@@ -4,7 +4,7 @@ mexmw = $(top_srcdir)/mex/mex$(interface)/$(interface).mw
 mexld = -L$(abs_top_builddir)/src/$(interface)/.libs/ -l$(interface) \
 		-ltobiic -ltobiid 
 mexinc = -I$(top_srcdir)/src/
-mexpath = ${pkgdatadir}/cnbitkmat/mex$(interface)/
+mexpath = ${DESTDIR}${pkgdatadir}/cnbitkmat/mex$(interface)/
 
 EXTRA_DIST = ${mexmw}
 

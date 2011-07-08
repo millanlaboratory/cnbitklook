@@ -1,5 +1,5 @@
 toolbox = mtpath
-matpath = ${pkgdatadir}/cnbitkmat/$(toolbox)/
+matpath = ${DESTDIR}${pkgdatadir}/cnbitkmat/$(toolbox)/
 matfiles = ${top_srcdir}/mex/$(toolbox)/*.m
 
 EXTRA_DIST = ${matfiles}

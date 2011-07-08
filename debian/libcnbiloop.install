@@ -1,7 +1,7 @@
-/usr/lib/cnbiacq.so.*
-/usr/lib/cnbiconfig.so.*
-/usr/lib/cnbicore.so.*
-/usr/lib/cnbiloop.so.*
-/usr/lib/ndf.so.*
-/usr/lib/transpipe.so.*
-/usr/lib/transport.so.*
+/usr/lib/libcnbiacq.so.*
+/usr/lib/libcnbiconfig.so.*
+/usr/lib/libcnbicore.so.*
+/usr/lib/libcnbiloop.so.*
+/usr/lib/libndf.so.*
+/usr/lib/libtranspipe.so.*
+/usr/lib/libtransport.so.*
