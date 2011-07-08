@@ -17,5 +17,3 @@ gnome-terminal \
 ---tab -e "bash -c 'sleep 6; cl_keepalive cl_ndfmonitor -p /pipe14'" --title "CnbiTk NDF Monitor (devel)" \
 ---tab -e "bash -c 'sleep 6; cl_keepalive cl_tidmonitor'" --title "CnbiTk TiD Monitor (devel)" \
 ---tab -e "bash -c 'sleep 6; cl_keepalive cl_ticmonitor'" --title "CnbiTk TiC Monitor (devel)"
-
-cl_rpcnotify "CnbiTk cl_develloop" "Stopped"

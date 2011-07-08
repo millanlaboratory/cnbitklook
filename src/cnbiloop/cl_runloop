@@ -14,5 +14,3 @@ gnome-terminal \
 ---tab -e "bash -c 'cl_keepalive cl_nameserver'" --title "CnbiTk Nameserver" \
 ---tab -e "bash -c 'sleep 1; cl_keepalive cl_processing'" --title "CnbiTk Processing" \
 ---tab -e "bash -c 'sleep 2; cl_keepalive cl_acquisition $*'" --title "CnbiTk Acquisition"
-
-cl_rpcnotify "CnbiTk cl_runloop" "Stopped"
