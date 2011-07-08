@@ -15,9 +15,9 @@ EXTRA_DIST = debian/changelog \
 			 debian/control\
 			 debian/copyright \
 			 debian/rules \
-			 debian/libtobicore.install \
-			 debian/libtobicore-dev.install \
-			 debian/libtobicore-mex.install
+			 debian/libcnbiloop.install \
+			 debian/libcnbiloop-dev.install \
+			 debian/libcnbiloop-mex.install
 
 REMOVE_DISTDIR = \
    { test ! -d "$(distdir)" \
