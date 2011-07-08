@@ -1,4 +1,4 @@
-Source: tobicore
+Source: cnbiloop
 Section: libs
 Priority: extra
 Maintainer: Michele Tavella <michele.tavella@epfl.ch>
@@ -6,7 +6,7 @@ Build-Depends: debhelper (>= 7), autotools-dev
 Standards-Version: 3.8.3
 Homepage: http://www.mtvl.org/cnbitk
 
-Package: libtobicore
+Package: libcnbiloop
 Section: libs
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
@@ -14,10 +14,10 @@ Homepage: http://www.mtvl.org/cnbitk
 Description: TOBI libs
  TOBI iC and iD interfaces, as well as the TOBI Core layer.
  
-Package: libtobicore-dev
+Package: libcnbiloop-dev
 Section: libdevel
 Architecture: any
-Depends: libtobicore (= ${binary:Version}), ${misc:Depends}
+Depends: libcnbiloop(= ${binary:Version}), ${misc:Depends}
 Homepage: http://www.mtvl.org/cnbitk
 Description: TOBI interfaces
  TOBI iC and iD interfaces, as well as the TOBI Core layer.
@@ -25,10 +25,10 @@ Description: TOBI interfaces
  This package contains the files needed to compile and link programs which
  use tobicore.
 
-Package: libtobicore-mex
+Package: libcnbiloop-mex
 Section: libdevel
 Architecture: any
-Depends: libtobicore (= ${binary:Version}), ${misc:Depends}
+Depends: libcnbiloop(= ${binary:Version}), ${misc:Depends}
 Homepage: http://www.mtvl.org/cnbitk
 Description: TOBI libs
  TOBI iC and iD interfaces, as well as the TOBI Core layer.
