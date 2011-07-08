@@ -11,7 +11,7 @@ Section: libs
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Homepage: http://www.mtvl.org/cnbitk
-Description: CNBI Toolkit Loop
+Description: CNBI Toolkit Loop libraries
  Core components of the CNBI Toolkit Loop.
  
 Package: libcnbiloop-dev
@@ -19,7 +19,7 @@ Section: libdevel
 Architecture: any
 Depends: libcnbiloop(= ${binary:Version}), ${misc:Depends}
 Homepage: http://www.mtvl.org/cnbitk
-Description: TOBI interfaces
+Description: CNBI Toolkit Loop libraries
  Core components of the CNBI Toolkit Loop.
  .
  This package contains the files needed to compile and link programs which
@@ -30,7 +30,7 @@ Section: libdevel
 Architecture: any
 Depends: libcnbiloop(= ${binary:Version}), ${misc:Depends}
 Homepage: http://www.mtvl.org/cnbitk
-Description: TOBI libs
+Description: CNBI Toolkit Loop libraries
  Core components of the CNBI Toolkit Loop.
  .
  This package contains the Matlab MEX interfaces for cnbiloop.
