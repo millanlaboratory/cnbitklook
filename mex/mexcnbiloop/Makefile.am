@@ -1,14 +1,18 @@
 interface = cnbiloop
 mexcc = $(interface).cc
 mexmw = $(top_srcdir)/mex/mex$(interface)/$(interface).mw
-mexld = -l$(interface) -lcnbicore
+mexld = -L$(abs_top_builddir)/src/$(interface)/.libs/ -l$(interface) \
+		-L$(abs_top_builddir)/src/cnbicore/.libs/ -lcnbicore
+mexinc = -I$(top_srcdir)/src/
 mexpath = ${pkgdatadir}/cnbitkmat/mex$(interface)/
 
-cc: $(mexmw)
+all: mex
+
+$(interface).cc: $(mexmw)
 	mwrap -mex $(interface) -c $(mexcc) -mb $(mexmw) 
 
-mex: cc
-	mex -largeArrayDims $(mexld) $(mexcc)
+mex: $(interface).cc
+	mex -largeArrayDims $(mexinc) $(mexcc) $(mexld)
 
 clean-local:
 	rm -rf $(mexcc)
