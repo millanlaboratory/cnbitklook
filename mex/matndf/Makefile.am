@@ -5,6 +5,8 @@ matfiles = ${top_srcdir}/mex/$(toolbox)/*.m
 ticc = $(top_srcdir)/mex/$(interface)/ndf_tic.c
 tocc = $(top_srcdir)/mex/$(interface)/ndf_toc.c
 
+EXTRA_DIST = ${matfiles}
+
 all: mex
 
 mex: mextic mextoc

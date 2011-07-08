@@ -6,6 +6,8 @@ mexld = -L$(abs_top_builddir)/src/$(interface)/.libs/ -l$(interface) \
 mexinc = -I$(top_srcdir)/src/
 mexpath = ${pkgdatadir}/cnbitkmat/mex$(interface)/
 
+EXTRA_DIST = ${mexmw}
+
 all: mex
 
 $(interface).cc: $(mexmw)

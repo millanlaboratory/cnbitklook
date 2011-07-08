@@ -1,0 +1,15 @@
+/usr/include/cnbiacq/*
+/usr/include/cnbiconfig/*
+/usr/include/cnbicore/*
+/usr/include/cnbiloop/*
+/usr/include/ndf/*
+/usr/include/transpipe/*
+/usr/include/transport/*
+/usr/lib/cnbiacq.so
+/usr/lib/cnbiconfig.so
+/usr/lib/cnbicore.so
+/usr/lib/cnbiloop.so
+/usr/lib/ndf.so
+/usr/lib/transpipe.so
+/usr/lib/transport.so
+/usr/lib/pkgconfig/*

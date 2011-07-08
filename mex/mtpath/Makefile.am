@@ -2,6 +2,8 @@ toolbox = mtpath
 matpath = ${pkgdatadir}/cnbitkmat/$(toolbox)/
 matfiles = ${top_srcdir}/mex/$(toolbox)/*.m
 
+EXTRA_DIST = ${matfiles}
+
 install-data-local:
 	mkdir -p ${matpath}
 	cp $(matfiles) ${matpath}

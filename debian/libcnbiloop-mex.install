@@ -1,0 +1,7 @@
+/usr/share/cnbiloop/*
+/usr/share/cnbiloop/cnbitkmat/*
+/usr/share/cnbiloop/cnbitkmat/matndf/*
+/usr/share/cnbiloop/cnbitkmat/mexcnbiconfig/*
+/usr/share/cnbiloop/cnbitkmat/mexcnbiloop/*
+/usr/share/cnbiloop/cnbitkmat/mextransport/*
+/usr/share/cnbiloop/cnbitkmat/mtpath/*
