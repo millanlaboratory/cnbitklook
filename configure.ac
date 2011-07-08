@@ -46,10 +46,10 @@ AC_SUBST([ACQ_LIBS], "$LIBS")
 LIBS="$save_LIBS"
 
 
-AC_LANG_PUSH([C++])
-AC_CHECK_HEADERS([rapidxml.hpp rapidxml_print.hpp], [], 
-       AC_MSG_ERROR([The RapidXML headers must be installed.]), [])
-AC_LANG_POP([C++])
+#AC_LANG_PUSH([C++])
+#AC_CHECK_HEADERS([rapidxml.hpp rapidxml_print.hpp], [], 
+#       AC_MSG_ERROR([The RapidXML headers must be installed.]), [])
+#AC_LANG_POP([C++])
 
 save_LIBS="$LIBS"
 AC_SEARCH_LIBS_CLASS([TCBlock], [tobicore], [#include <tobicore/TCBlock.hpp>],
