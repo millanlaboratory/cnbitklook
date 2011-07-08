@@ -12,7 +12,11 @@ libcnbiconfig_include_HEADERS = CCfgConfig.hpp \
 								CCfgTypes.hpp \
 								XMLType.hpp \
 								XMLDocument.hpp \
-								XMLException.hpp
+								XMLException.hpp \
+								rapidxml.hpp \
+								rapidxml_iterators.hpp \
+								rapidxml_print.hpp \
+								rapidxml_utils.hpp
 
 libcnbiconfig_la_SOURCES = CCfgConfig.cpp \
 						   CCfgConfig.hpp \

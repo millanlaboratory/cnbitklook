@@ -20,7 +20,7 @@
 #define XMLDOCUMENT_HPP
 
 #include <string>
-#include <rapidxml.hpp>
+#include "rapidxml.hpp"
 
 typedef rapidxml::xml_node<>* XMLNode; 
 typedef rapidxml::xml_attribute<>* XMLAttr; 

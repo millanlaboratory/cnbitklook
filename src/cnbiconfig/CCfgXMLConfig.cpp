@@ -17,7 +17,7 @@
 */
 
 #include "CCfgXMLConfig.hpp"
-#include <rapidxml.hpp>
+#include "rapidxml.hpp"
 #include <cstdio>
 #include <iostream>
 
