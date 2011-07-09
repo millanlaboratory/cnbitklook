@@ -1,3 +1,9 @@
+cnbiloop (3.1.0) lucid; urgency=low
+
+  * Expecting MEX interfaces to be installed in /usr/share/
+
+ -- Michele Tavella <michele.tavella@epfl.ch>  Fri, 08 Jul 2011 20:32:01 +0200
+
 cnbiloop (3.0.0) lucid; urgency=low
 
   * Initial release
