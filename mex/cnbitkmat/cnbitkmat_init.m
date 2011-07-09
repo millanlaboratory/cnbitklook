@@ -9,6 +9,6 @@ mtpath_include([basepath '/mexcnbiconfig']);
 mtpath_include([basepath '/mextransport']);
 
 if(isempty(getenv('TOBICOREMAT_ROOT')))
-    setenv('TOBICOREMAT_ROOT', '/usr/local/share/tobicore/tobicoremat/');
+    setenv('TOBICOREMAT_ROOT', '/usr/share/tobicore/tobicoremat/');
 end
 mtpath_include('$TOBICOREMAT_ROOT');
