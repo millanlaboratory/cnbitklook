@@ -1,6 +1,6 @@
 cnbiloop (3.2.0) lucid; urgency=low
 
-  * Fixed ClMatlab
+  * Fixed ClMatlab and ClProClient: now using /usr/share/
 
  -- Michele Tavella <michele.tavella@epfl.ch>  Fri, 08 Jul 2011 20:32:01 +0200
 
