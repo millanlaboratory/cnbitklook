@@ -25,8 +25,8 @@
 #define CLMATLAB_INCLUDE1 "\
 try;\
 	if(isempty(getenv('CNBITKMAT_ROOT')));\
-		disp('CNBITKMAT_ROOT unset, mtpath must be in /usr/local/share/cnbiloop/cnbitkmat/mtpath');\
-		addpath('/usr/local/share/cnbiloop/cnbitkmat/mtpath');\
+		disp('CNBITKMAT_ROOT unset, mtpath must be in /usr/share/cnbiloop/cnbitkmat/mtpath');\
+		addpath('/usr/share/cnbiloop/cnbitkmat/mtpath');\
 	end;\
 	status0 = mtpath_include('%s');\
 	if(status0 == false);\
@@ -44,8 +44,8 @@ end;\n"
 #define CLMATLAB_INCLUDE2 "\
 try;\
 	if(isempty(getenv('CNBITKMAT_ROOT')));\
-		disp('CNBITKMAT_ROOT unset, mtpath must be in /usr/local/share/cnbiloop/cnbitkmat/mtpath');\
-		addpath('/usr/local/share/cnbiloop/cnbitkmat/mtpath');\
+		disp('CNBITKMAT_ROOT unset, mtpath must be in /usr/share/cnbiloop/cnbitkmat/mtpath');\
+		addpath('/usr/share/cnbiloop/cnbitkmat/mtpath');\
 	end;\
 	status0 = mtpath_include('%s');\
 	if(status0 == false);\
