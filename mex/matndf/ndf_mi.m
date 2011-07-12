@@ -249,9 +249,10 @@ try
                 id_event = idmessage_getevent(loop.mDi);
                 
 				if(id_event == 781)
-					printf('---> resetting %d/%d\n',  ndf.frame.index, idmessage_getbidx(loop.mDi));
 					user.bci.support.nprobs = ones(size(user.bci.support.nprobs)) ...
 						/ length(user.bci.support.nprobs);
+					printf('[ndf_mi] Resetting NDF=%d/iD=%d\n', ...
+						ndf.frame.index, idmessage_getbidx(loop.mDi));
                 end
 			end
 		else
