@@ -60,7 +60,7 @@ int main(void) {
 	printf("[Main] Starting server\n");
 	server = new CcServer();
 	RegisterAll(server, handler);
-	server->Bind(8000, 2);
+	server->Bind("8000", 2);
 
 	printf("[Main] Up and running\n");
 	CcTimeValue clock;

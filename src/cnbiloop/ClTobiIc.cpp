@@ -54,6 +54,8 @@ bool ClTobiIc::Attach(const std::string& name) {
 	CcEndpoint peer(address);
 	if(this->_mode == ClTobiIc::GetOnly) {
 		CcLogConfigS("Configuring iC for GetOnly (query name): " << address);
+		if(this->_server != NULL) 
+			delete this->_server;
 		this->_server = new CcServer();
 
 		if(this->_server->Bind(peer.GetPort()) == false) {
@@ -67,6 +69,8 @@ bool ClTobiIc::Attach(const std::string& name) {
 		this->_hasmessage.Wait();
 	} else { 
 		CcLogConfigS("Configuring iC for SetOnly: " << address);
+		if(this->_client != NULL) 
+			delete this->_client;
 		this->_client = new CcClient();
 		
 		if(this->_client->Connect(peer.GetAddress()) == false) {
@@ -98,6 +102,8 @@ bool ClTobiIc::Attach(const CcPort port, const std::string& name) {
 	
 	CcEndpoint peer("0.0.0.0", port);
 	CcLogConfigS("Configuring iC for GetOnly (set name): " << peer.GetAddress());
+	if(this->_server != NULL)
+		delete(this->_server);
 	this->_server = new CcServer();
 	CB_CcSocket(this->_server->iOnAccept, this, HandleAccept);
 	CB_CcSocket(this->_server->iOnDrop, this, HandleDrop);
@@ -128,18 +134,11 @@ bool ClTobiIc::Detach(void) {
 	if(this->_onwsname == true)
 		ClLoop::nameserver.Unset(this->_name);
 	
-	if(this->_server != NULL) {
+	if(this->_server != NULL) 
 		this->_server->Release();
-		delete(this->_server);
-		this->_server = NULL;
-		this->_hasmessage.Post();
-	}
 	
-	if(this->_client != NULL) {
+	if(this->_client != NULL)
 		this->_client->Disconnect();
-		delete(this->_client);
-		this->_client = NULL;
-	}
 	
 	this->iOnDetach.Execute();
 	return true;

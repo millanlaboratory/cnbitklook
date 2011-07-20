@@ -77,12 +77,14 @@ bool CcServer::Bind(CcPort port, int protocol) {
 	return true;
 }
 
+/*
 bool CcServer::Bind(CcPortUInt port, int protocol) {
-	//CcEndpoint ep("0.0.0.0", port);
-	//CcLogWarningS(ep.GetPort());
-	//return this->Bind(ep.GetPort(), protocol);
+	CcEndpoint ep("0.0.0.0", port);
+	CcLogWarningS(ep.GetPort());
+	return this->Bind(ep.GetPort(), protocol);
 	return false;
 }
+*/
 
 bool CcServer::Release(void) {
 	if(this->IsConnected() == false) {
