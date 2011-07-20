@@ -207,9 +207,8 @@ int tr_connect(tr_socket* sock, const char* host, const char* port) {
 }
 
 int tr_connected(tr_socket* sock) {
-	return tr_send(sock, "\0");
+	return (int)tr_send(sock, "\0");
 }
-
 
 ssize_t tr_recv(tr_socket* sock) {
 	switch(sock->protocol) {

@@ -165,7 +165,7 @@ void CcClient::Main(void) {
 	}
 	FD_ZERO(&readfds);
 	
-	//this->Disconnect();
+	this->Disconnect();
 	CcSocket::_semsocket.Wait();
 	CcSocket::RemStream(CcSocket::_socket->fd);
 	CcSocket::_semsocket.Post();
