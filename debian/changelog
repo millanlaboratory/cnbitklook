@@ -1,3 +1,9 @@
+cnbiloop (3.4.0) lucid; urgency=low
+
+  * Solved bug in CcClient
+
+ -- Michele Tavella <michele.tavella@epfl.ch>  Wed, 20 Jul 2011 12:49:12 +0200
+
 cnbiloop (3.3.0) lucid; urgency=low
 
   * Minor beautifications
