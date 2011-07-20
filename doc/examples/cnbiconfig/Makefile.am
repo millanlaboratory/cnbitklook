@@ -12,4 +12,7 @@ ccfgtask_SOURCES = ccfgtask.cpp
 ccfgxmlconfig_SOURCES = ccfgxmlconfig.cpp
 xmltype_SOURCES = xmltype.cpp 
 
-LDADD = $(top_builddir)/src/cnbiconfig/libcnbiconfig.la
+LDADD = $(top_builddir)/src/cnbiconfig/libcnbiconfig.la \
+		$(TOBICORE_LIBS) \
+		$(TOBIIC_LIBS) \
+		$(TOBIID_LIBS)
