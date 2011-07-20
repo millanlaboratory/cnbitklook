@@ -291,7 +291,8 @@ int main(int argc, char* argv[]) {
 		connect();
 
 		status = ClLoop::nameserver.StoreConfig(arg1, arg2, arg3);
-		status = status == 0 ? ClNamesLang::ErrorGeneric : ClNamesLang::Successful;
+		status = status == 0 ? 
+			ClNamesLang::ErrorGeneric : ClNamesLang::Successful;
 		nameserver(status);
 		CcCore::Exit(status);
 
@@ -300,7 +301,8 @@ int main(int argc, char* argv[]) {
 		connect();
 
 		std::string storage = ClLoop::nameserver.RetrieveConfig(arg1, arg2);
-		status = storage.empty() == 1 ? ClNamesLang::ErrorGeneric : ClNamesLang::Successful;
+		status = storage.empty() == 1 ? 
+			ClNamesLang::ErrorGeneric : ClNamesLang::Successful;
 		nameserver(status);
 		if(status == ClNamesLang::Successful)
 			cout << storage << endl;
@@ -310,7 +312,8 @@ int main(int argc, char* argv[]) {
 		connect();
 
 		status = ClLoop::nameserver.EraseConfig(arg1, arg2);
-		status = status == 0 ? ClNamesLang::ErrorGeneric : ClNamesLang::Successful;
+		status = status == 0 ?
+			ClNamesLang::ErrorGeneric : ClNamesLang::Successful;
 		nameserver(status);
 		CcCore::Exit(status);
 	

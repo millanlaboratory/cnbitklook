@@ -38,7 +38,6 @@ class EventHandler : public CcSocketProxy {
 		}
 		
 		void HandleListen(CcSocket* caller) { 
-			//CcServerSingle *server = (CcServerSingle*)caller;
 			printf("[EventHandler] Server is listening\n");
 		}
 		
@@ -55,7 +54,6 @@ class EventHandler : public CcSocketProxy {
 		}
 		
 		void HandleSend(CcSocket* caller) { 
-			//CcServerSingle *server = (CcServerSingle*)caller;
 			printf("[EventHandler] Server sent a message\n");
 		}
 		
@@ -88,8 +86,6 @@ int main(void) {
 	server = new CcServerSingle();
 	RegisterAll(server, handler);
 	server->Bind(8000, 2);
-	//server->Listen();
-	//server->Start();
 
 	printf("[Main] Up and running\n");
 	CcTime::Sleep(5000);
@@ -99,11 +95,9 @@ int main(void) {
 	bool status = server->SendRecv(&query, &reply,
 			std::string("<"), std::string(">"));
 	printf("[Main] Reply was %d\n", status);
-	//server->Join();
+	
 	CcTime::Sleep(2000000);
 	printf("[Main] Stopping ASync server\n");
-	//server->Stop();
-	//server->Join();
 	server->Release();
 	
 	printf("[Main] Debug: %d\n", server->IsRunning());
