@@ -82,6 +82,12 @@ bool ClTobiIdAsServer::CommunicationTiD(CcServer* server, CcAddress address,
 		this->_serializerD->Serialize(&message);
 		server->SendNot(message.c_str(), address);
 		
+		/* At this point, send the status message back to the sender
+		 */
+		message = this->_tclang.Status(TCLanguage::ID, TCLanguage::Ready, 
+				ndfblock);
+		server->Send(message.c_str(), address);
+		
 		double onset = this->_writer->TocOpen();
 		if(onset <= 0)
 			onset = 0;
