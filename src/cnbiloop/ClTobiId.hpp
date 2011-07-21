@@ -21,7 +21,7 @@
 
 #include "ClLoop.hpp"
 #include <cnbicore/CcBasic.hpp>
-#include <cnbicore/CcClient.hpp>
+#include <cnbicore/CcClientExt.hpp>
 #include <cnbicore/CcCallback.hpp>
 #include <cnbicore/CcProxy.hpp>
 #include <tobicore/TCException.hpp>
@@ -38,7 +38,7 @@ class ClTobiId : public CcSocketProxy {
 		bool IsAttached(void);
 		bool GetMessage(IDSerializerRapid* serializer);
 		bool SetMessage(IDSerializerRapid* serializer, 
-				int blockidx = TCBlock::BlockIdxUnset);
+				int blockidx = TCBlock::BlockIdxUnset, int* fixd = NULL);
 		int Count(void);
 		int Clear(void);
 	protected:
@@ -55,7 +55,7 @@ class ClTobiId : public CcSocketProxy {
 		CcCallback0<CcProxy> iOnHasMessage;
 
 	protected:
-		CcClient* _client;
+		CcClientExt* _client;
 		std::string _name;
 		std::string _buffer;
 		CcSemaphore _sembuffer;

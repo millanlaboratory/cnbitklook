@@ -37,7 +37,7 @@ bool ClTobiId::Attach(const std::string& name) {
 	
 	this->_name.assign(name);
 	
-	this->_client = new CcClient;
+	this->_client = new CcClientExt;
 	CB_CcSocket(this->_client->iOnConnect, this, HandleConnect);
 	CB_CcSocket(this->_client->iOnDisconnect, this, HandleDisconnect);
 	CB_CcSocket(this->_client->iOnRecv, this, HandleRecv);
@@ -139,7 +139,7 @@ int ClTobiId::Clear(void) {
 	return count;
 }
 		
-bool ClTobiId::SetMessage(IDSerializerRapid* serializer, int blockidx) {
+bool ClTobiId::SetMessage(IDSerializerRapid* serializer, int blockidx, int* fixd) {
 	if(this->_mode == ClTobiId::GetOnly) {
 		CcLogError("iD interface configures as GetOnly");
 		return false;
@@ -149,7 +149,15 @@ bool ClTobiId::SetMessage(IDSerializerRapid* serializer, int blockidx) {
 	serializer->message->absolute.Tic();
 	serializer->message->SetBlockIdx(blockidx);
 	serializer->Serialize(&buffer);
-	return(this->_client->Send(buffer) == (int)buffer.size());
+	
+	if(fixd == NULL)
+		return(this->_client->Send(buffer) == (int)buffer.size());
+	
+	std::string reply;
+	bool status = this->_client->SendRecv(buffer,
+			&reply, "<tcstatus", "/>", 1000.00f);
+	CcLogFatalS(status << "-->" << reply);
+	return status;
 }
 
 #endif
