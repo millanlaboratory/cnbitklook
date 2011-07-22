@@ -9,7 +9,7 @@
 #   set age to 0.
 
 m4_define([lib_current],4)
-m4_define([lib_revision],0)
+m4_define([lib_revision],1)
 m4_define([lib_age],0)
 
 AC_INIT(cnbiloop,[lib_current.lib_revision.lib_age],

@@ -23,6 +23,7 @@
 #include <cnbiacq/CaWriter.hpp>
 #include <tobiid/IDMessage.hpp>
 #include <tobiid/IDSerializerRapid.hpp>
+#include <tobicore/TCLanguage.hpp>
 #include <cnbicore/CcBasic.hpp>
 #include <cnbicore/CcServer.hpp>
 #include <cnbicore/CcSocketProxy.hpp>
@@ -47,6 +48,7 @@ class ClDevicesAsServer  : public CcSocketProxy {
 		IDSerializerRapid *_serializerD;
 		ndf_frame *_frame;
 		CcSemaphore *_semframe;
+		TCLanguage _tclang;
 };
 
 #endif

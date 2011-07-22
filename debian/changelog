@@ -1,3 +1,9 @@
+cnbiloop (4.0.1) lucid; urgency=low
+
+  * /dev bus now uses TCLanguage
+
+ -- Michele Tavella <michele.tavella@epfl.ch>  Fri, 22 Jul 2011 18:48:12 +0200
+
 cnbiloop (4.0.0) lucid; urgency=low
 
   * Implemented TiD TCLanguage reply layer in ClTobiId and MEX
