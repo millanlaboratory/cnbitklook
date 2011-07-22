@@ -7,7 +7,6 @@ tocc = ${top_srcdir}/mex/${interface}/ndf_toc.c
 
 EXTRA_DIST = ${matfiles} ${ticc} ${tocc}
 
-#all: ${ticc} ${tocc}
 all: tic toc
 
 tic: ${ticc}
@@ -16,7 +15,7 @@ tic: ${ticc}
 toc: ${tocc}
 	mex ${tocc}
 
-install-data-local:
+install-data-local: all
 	mkdir -p ${matpath}
 	cp ${matfiles} ${matpath}
 	cp *.mex* ${matpath}

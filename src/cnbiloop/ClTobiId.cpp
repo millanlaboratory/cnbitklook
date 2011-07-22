@@ -21,10 +21,11 @@
 
 #include "ClTobiId.hpp" 
 
-ClTobiId::ClTobiId(int mode) {
+ClTobiId::ClTobiId(int mode, float waitms) {
 	ClLoop::Instance();
 	this->_client = NULL;
 	this->_mode = mode;
+	this->_waitms = waitms;
 }
 
 ClTobiId::~ClTobiId(void) {
@@ -78,13 +79,13 @@ bool ClTobiId::IsAttached(void) {
 }
 
 void ClTobiId::HandleConnect(CcSocket* caller) {
-	CcClient* client = (CcClient*)caller;
+	CcClientExt* client = (CcClientExt*)caller;
 	CcLogDebugS("Connected TCP endpoint: " << client->GetRemote());
 	this->iOnAttach.Execute();
 }
 
 void ClTobiId::HandleDisconnect(CcSocket* caller) {
-	CcClient* client = (CcClient*)caller;
+	CcClientExt* client = (CcClientExt*)caller;
 	CcLogDebugS("Disconnected TCP endpoint: " << client->GetRemote());
 	this->iOnDetach.Execute();
 }
@@ -92,9 +93,10 @@ void ClTobiId::HandleDisconnect(CcSocket* caller) {
 void ClTobiId::HandleRecv(CcSocket* caller, CcStreamer* stream) {
 	this->_semqueue.Wait();
 	
-	if(this->_mode == ClTobiId::SetOnly) {
-		stream->Clear();	
-	} else {
+	//if(this->_mode == ClTobiId::SetOnly) {
+	//	stream->Clear();	
+	//} else {
+	if(this->_mode != ClTobiId::SetOnly) {
 		std::string buffer;
 		while(stream->Extract(&buffer, "<tobiid", "/>") == true) {
 			this->_queue.push_back(buffer);
@@ -139,25 +141,40 @@ int ClTobiId::Clear(void) {
 	return count;
 }
 		
-bool ClTobiId::SetMessage(IDSerializerRapid* serializer, int blockidx, int* fixd) {
+bool ClTobiId::SetMessage(IDSerializerRapid* serializer, int blockidx, int* fidx) {
 	if(this->_mode == ClTobiId::GetOnly) {
 		CcLogError("iD interface configures as GetOnly");
 		return false;
 	}
 	
+	// Assemble iD message and serialize it
 	std::string buffer;
 	serializer->message->absolute.Tic();
 	serializer->message->SetBlockIdx(blockidx);
 	serializer->Serialize(&buffer);
 	
-	if(fixd == NULL)
-		return(this->_client->Send(buffer) == (int)buffer.size());
-	
+	// Prepare stuff for TCLanguage
 	std::string reply;
-	bool status = this->_client->SendRecv(buffer,
-			&reply, "<tcstatus", "/>", 1000.00f);
-	CcLogFatalS(status << "-->" << reply);
-	return status;
+	int component, status, tcfidx;
+
+	if(!this->_client->SendRecv(buffer, &reply, "<tcstatus", "/>", this->_waitms)) {
+		CcLogWarningS("TiD status message not received after " << this->_waitms << "ms");
+		return false;
+	}
+
+	if(!this->_tclang.IsStatus(reply, &component, &status, &tcfidx)) {
+		CcLogWarningS("TiD status message received but is not valid: " << reply);
+		return false;
+	}
+	
+	if(status != TCLanguage::Ready) {
+		CcLogErrorS("TiD interface reports to be down");
+		return false;
+	}
+	
+	if(fidx != NULL) 
+		*fidx = tcfidx;
+	return true;
 }
 
 #endif

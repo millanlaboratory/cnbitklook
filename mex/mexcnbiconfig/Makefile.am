@@ -21,7 +21,7 @@ clean-local:
 	rm -rf *.m
 	rm -rf *.mex*
 
-install-data-local:
+install-data-local: all
 	mkdir -p ${mexpath}
 	cp *.m ${mexpath}
 	cp *.mex* ${mexpath}

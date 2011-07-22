@@ -1,3 +1,9 @@
+cnbiloop (4.0.0) lucid; urgency=low
+
+  * Implemented TiD TCLanguage reply layer in ClTobiId and MEX
+
+ -- Michele Tavella <michele.tavella@epfl.ch>  Fri, 22 Jul 2011 18:02:45 +0200
+
 cnbiloop (3.4.0) lucid; urgency=low
 
   * Solved bug in CcClient

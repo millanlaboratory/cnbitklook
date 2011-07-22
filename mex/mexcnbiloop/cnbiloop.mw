@@ -306,13 +306,14 @@ $ #include <stdio.h>
 	$ }
 	# bool hasmessage = tidgetmessage(ClTobiId* d, IDSerializerRapid* s);
 
-@function [setmessage] = tid_setmessage(d, s, blockidx);
+@function [setmessage, fidx] = tid_setmessage(d, s, blockidx);
 % Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
 % Michele Tavella <michele.tavella@epfl.ch>
-	$ bool tidsetmessage(ClTobiId* d, IDSerializerRapid* s, int blockidx) {
-	$	return d->SetMessage(s, blockidx);
+	$ bool tidsetmessage(ClTobiId* d, IDSerializerRapid* s, int blockidx, int* fidx) {
+	$	return d->SetMessage(s, blockidx, fidx);
 	$ }
-	# bool setmessage = tidsetmessage(ClTobiId* d, IDSerializerRapid* s, int blockidx);
+	fidx = -1;
+	# bool setmessage = tidsetmessage(ClTobiId* d, IDSerializerRapid* s, int blockidx, inout int* fidx);
 
 
 @function [d] = tic_newgetonly();

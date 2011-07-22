@@ -63,6 +63,8 @@ int main(int argc, char* argv[]) {
 	messageI.SetFamilyType(IDMessage::FamilyBiosig);
 	messageI.SetEvent(event);
 
+	int fidx = TCBlock::BlockIdxUnset;
+
 	ClTobiId id(ClTobiId::SetOnly);
 	std::string absolute, relative;
 	while(true) { 
@@ -84,7 +86,7 @@ int main(int argc, char* argv[]) {
 				printf("\n\nPress 'enter' to send GDF=%u, 'q' to quit:\n", event);
 			}
 			while(id.IsAttached() == true) { 
-				printf(">> ");
+				printf("NDF=%d >> ", fidx);
 				if(interactive == true) {
 					if(!(std::cin >> event)) 
 						goto shutdown;
@@ -99,7 +101,7 @@ int main(int argc, char* argv[]) {
 							break;
 					}
 				}
-				id.SetMessage(&serializerI);
+				id.SetMessage(&serializerI, TCBlock::BlockIdxUnset, &fidx);
 			}
 		} else { 
 			printf("\n\nSending GDF=%u every %f ms\n", event, ms);

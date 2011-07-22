@@ -25,13 +25,14 @@
 #include <cnbicore/CcCallback.hpp>
 #include <cnbicore/CcProxy.hpp>
 #include <tobicore/TCException.hpp>
+#include <tobicore/TCLanguage.hpp>
 #include <tobiid/IDMessage.hpp>
 #include <tobiid/IDSerializerRapid.hpp>
 #include <list>
 
 class ClTobiId : public CcSocketProxy {
 	public:
-		ClTobiId(int mode = ClTobiId::SetOnly);
+		ClTobiId(int mode = ClTobiId::SetOnly, float waitms = 3.00);
 		virtual ~ClTobiId(void);
 		bool Attach(const std::string& name = "/bus");
 		bool Detach(void);
@@ -63,6 +64,8 @@ class ClTobiId : public CcSocketProxy {
 		CcSemaphore _semqueue;
 		std::list<std::string> _queue;
 		int _mode;
+		TCLanguage _tclang;
+		float _waitms;
 };
 
 #endif

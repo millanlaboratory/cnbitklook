@@ -27,7 +27,7 @@
 #define CCASYNC_WAIT_ACCEPT		   250.000
 #define CCASYNC_WAIT_MACCEPT	   250.000
 #define CCASYNC_WAIT_MRECV			 5.000
-#define CCASYNC_WAIT_RECV			 5.000
+#define CCASYNC_WAIT_RECV			 1.000
 
 /*! \mainpage CnbiTK cnbiloop
  *
