@@ -12,15 +12,23 @@ Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Homepage: http://www.mtvl.org/cnbitk
 Description: CNBI Toolkit Loop libraries
- Core components of the CNBI Toolkit Loop.
- 
+ Core components of the CNBI Toolkit. It provides basic functionalities such as 
+ TCP/UDP networking, named pipes communication and EEG data tranfers. 
+ It also provides high-level functionalities for acquiring/saving/streaming EEG
+ data and BCI/protocol configuration. Last but not least, it provides all the
+ applications required to run the BCI loop.
+
 Package: libcnbiloop-dev
 Section: libdevel
 Architecture: any
 Depends: libcnbiloop(= ${binary:Version}), ${misc:Depends}
 Homepage: http://www.mtvl.org/cnbitk
 Description: CNBI Toolkit Loop libraries
- Core components of the CNBI Toolkit Loop.
+ Core components of the CNBI Toolkit. It provides basic functionalities such as 
+ TCP/UDP networking, named pipes communication and EEG data tranfers. 
+ It also provides high-level functionalities for acquiring/saving/streaming EEG
+ data and BCI/protocol configuration. Last but not least, it provides all the
+ applications required to run the BCI loop.
  .
  This package contains the files needed to compile and link programs which
  use cnbiloop.
@@ -31,6 +39,10 @@ Architecture: any
 Depends: libcnbiloop(= ${binary:Version}), ${misc:Depends}
 Homepage: http://www.mtvl.org/cnbitk
 Description: CNBI Toolkit Loop libraries
- Core components of the CNBI Toolkit Loop.
+ Core components of the CNBI Toolkit. It provides basic functionalities such as 
+ TCP/UDP networking, named pipes communication and EEG data tranfers. 
+ It also provides high-level functionalities for acquiring/saving/streaming EEG
+ data and BCI/protocol configuration. Last but not least, it provides all the
+ applications required to run the BCI loop.
  .
  This package contains the Matlab MEX interfaces for cnbiloop.
