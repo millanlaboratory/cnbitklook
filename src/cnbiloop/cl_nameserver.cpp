@@ -42,7 +42,7 @@ int main(int argc, char* argv[]) {
 	CcCore::OpenLogger("cl_nameserver");
 	CcCore::CatchSIGINT();
 	CcCore::CatchSIGTERM();
-	ClLoopConfigSrv::Load();
+	ClLoopConfigSrv::LoadSrv();
 	
 	CcLogConfigS("Nms will bind: " << ClLoopConfigSrv::GetSrvNms());
 

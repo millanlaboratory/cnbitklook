@@ -43,7 +43,7 @@ int main(int argc, char* argv[]) {
 	CcCore::OpenLogger("cl_processing");
 	CcCore::CatchSIGINT();
 	CcCore::CatchSIGTERM();
-	ClLoopConfigSrv::Load();
+	ClLoopConfigSrv::LoadSrv();
 
 	CcLogConfigS("Processing will bind: " << ClLoopConfigSrv::GetSrvPro());
 	CcLogConfigS("Nameserver configured as: " << ClLoopConfigSrv::GetPro());

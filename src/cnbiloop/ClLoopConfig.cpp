@@ -38,7 +38,6 @@ CcPort ClLoopConfig::portBus;
 CcPort ClLoopConfig::portDev;
 
 ClLoopConfig::ClLoopConfig(void) {
-	ClLoopConfig::Load();
 }
 
 ClLoopConfig::~ClLoopConfig(void) {
@@ -111,8 +110,6 @@ void ClLoopConfig::Read(const std::string& filename) {
 		if(cache.find("loop.ip") != std::string::npos) {
 			if(sscanf(cache.c_str(), "%s = %s", trash, buffer) == 2) {
 				ClLoopConfig::ip.assign(buffer);
-				//if(ClLoopConfig::ip.compare("0.0.0.0") == 0)
-				//	ClLoopConfig::ipSrv.assign("127.0.0.1");	
 				continue;
 			}
 		} else if(cache.find("nms.port") != std::string::npos) {

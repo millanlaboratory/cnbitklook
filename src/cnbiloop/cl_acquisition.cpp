@@ -87,7 +87,7 @@ int main(int argc, char* argv[]) {
 	CcCore::OpenLogger("cl_acquisition");
 	CcCore::CatchSIGINT();
 	CcCore::CatchSIGTERM();
-	ClLoopConfigSrv::Load();
+	ClLoopConfigSrv::LoadSrv();
 	
 	CcLogConfigS("Acquisition: " << 
 			optfs << "Hz, " << 
