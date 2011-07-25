@@ -31,7 +31,6 @@ class ClLoop {
 		static ClLoop* Instance(void);
 		static void Release(void);
 		static unsigned int Refcount(void);
-
 		static bool Connect(void);
 		static bool Connect(CcAddress nameserver);
 		static bool Connect(CCfgConfig* configuration);
@@ -50,13 +49,6 @@ class ClLoop {
 		static ClProClient pro;
 		static ClAcqClient acq;
 		static ClNmsClient nms;
-		/*
-		const static CcPort portNms;
-		const static CcPort portPro;
-		const static CcPort portAcq;
-		const static CcPort portBus;
-		const static CcPort portDev;
-		*/
 	protected:
 		static CcAddress _addrPro;
 		static CcAddress _addrAcq;

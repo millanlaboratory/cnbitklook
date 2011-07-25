@@ -1,16 +1,45 @@
+/*
+    Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
+    Michele Tavella <michele.tavella@epfl.ch>
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #ifndef CLLOOPCONFIG_HPP 
 #define CLLOOPCONFIG_HPP 
 
+#include <cnbicore/CcNetworkTypes.hpp>
+
 class ClLoopConfig {
 	public:
+		static ClLoopConfig* Instance(void);
+		static void Release(void);
+		static unsigned int Refcount(void);
+	protected:
 		ClLoopConfig(void);
 		virtual ~ClLoopConfig(void);
-	private:
-	protected:
+		static void Destroy(void);
 
 	public:
+		const static CcPort portNms;
+		const static CcPort portPro;
+		const static CcPort portAcq;
+		const static CcPort portBus;
+		const static CcPort portDev;
 	private:
-	protected:
+		static ClLoopConfig* _instance;
+		static unsigned int _refCount;
 };
 
 #endif
