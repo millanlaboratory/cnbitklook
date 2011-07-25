@@ -50,6 +50,11 @@ class ClLoop {
 		static ClProClient processing;
 		static ClAcqClient acquisition;
 		static ClNamesClient nameserver;
+		const static CcPort portNsr;
+		const static CcPort portPro;
+		const static CcPort portAcq;
+		const static CcPort portBus;
+		const static CcPort portDev;
 	protected:
 		static CcAddress _processing;
 		static CcAddress _acquisition;
