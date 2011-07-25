@@ -16,16 +16,16 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CLNAMESASSERVER_CPP 
-#define CLNAMESASSERVER_CPP 
+#ifndef CLNMSSERVER_CPP 
+#define CLNMSSERVER_CPP 
 
-#include "ClNamesAsServer.hpp" 
+#include "ClNmsServer.hpp" 
 
-void ClNamesAsServer::HandleRecvPeer(CcSocket* caller, CcAddress addr, 
+void ClNmsServer::HandleRecvPeer(CcSocket* caller, CcAddress addr, 
 		CcStreamer* stream) { 
 	CcServer* server = (CcServer*)caller;
 	std::string message;
-	if(stream->Extract(&message, ClNamesLang::Hdr, ClNamesLang::Trl) == false)
+	if(stream->Extract(&message, ClNmsLang::Hdr, ClNmsLang::Trl) == false)
 		return;
 	
 	std::string luname, stname, stcontent;
@@ -40,10 +40,10 @@ void ClNamesAsServer::HandleRecvPeer(CcSocket* caller, CcAddress addr,
 			} else {
 				CcLogWarningS("Query from " << addr << ": " 
 						<< luname << " NotFound");
-				server->Send(language.Error(ClNamesLang::NotFound), addr);
+				server->Send(language.Error(ClNmsLang::NotFound), addr);
 			}
 		} else {
-			server->Send(language.Error(ClNamesLang::AlreadySet), addr);
+			server->Send(language.Error(ClNmsLang::AlreadySet), addr);
 			CcLogWarningS("Set from " << addr << ": " 
 					<< luname << " AlreadySet");
 		} 
@@ -64,12 +64,12 @@ void ClNamesAsServer::HandleRecvPeer(CcSocket* caller, CcAddress addr,
 				CcLogInfoS("Set from " << addr << ": " 
 						<< luname << "=" << luaddr);
 			} else {
-				server->Send(language.Error(ClNamesLang::AlreadySet), addr);
+				server->Send(language.Error(ClNmsLang::AlreadySet), addr);
 				CcLogWarningS("Set from " << addr << ": " 
 						<< luname << " AlreadySet");
 			} 
 		} else {
-			server->Send(language.Error(ClNamesLang::NameFormatError), addr);
+			server->Send(language.Error(ClNmsLang::NameFormatError), addr);
 			CcLogWarningS("Set from " << addr << ": " 
 					<< luname << " NameFormatError");
 		}
@@ -80,12 +80,12 @@ void ClNamesAsServer::HandleRecvPeer(CcSocket* caller, CcAddress addr,
 				CcLogInfoS("Unset from " << addr << ": " 
 						<< luname);
 			} else {
-				server->Send(language.Error(ClNamesLang::NotFound), addr);
+				server->Send(language.Error(ClNmsLang::NotFound), addr);
 				CcLogWarningS("Unset from " << addr << ": " 
 						<< luname << " NotFound");
 			}
 		} else {
-			server->Send(language.Error(ClNamesLang::NameFormatError), addr);
+			server->Send(language.Error(ClNmsLang::NameFormatError), addr);
 			CcLogWarningS("Set from " << addr << ": " 
 					<< luname << " NameFormatError");
 		}
@@ -95,7 +95,7 @@ void ClNamesAsServer::HandleRecvPeer(CcSocket* caller, CcAddress addr,
 			CcLogInfoS("Store from " << addr << ": " 
 					<< stname << ", " << stcontent.size() << " bytes");
 		} else {
-			server->Send(language.Error(ClNamesLang::AlreadyStored), addr);
+			server->Send(language.Error(ClNmsLang::AlreadyStored), addr);
 			CcLogWarningS("Store from " << addr << ": " 
 					<< stname << " AlreadyStored");
 		}
@@ -107,7 +107,7 @@ void ClNamesAsServer::HandleRecvPeer(CcSocket* caller, CcAddress addr,
 		} else {
 			CcLogWarningS("Retrieve from " << addr << ": " 
 					<< stname << " NotAvailable");
-			server->Send(language.Error(ClNamesLang::NotAvailable), addr);
+			server->Send(language.Error(ClNmsLang::NotAvailable), addr);
 		}
 	} else if(this->language.IsErase(message.c_str(), &stname)) {
 		if(this->Erase(stname) == true) {
@@ -115,18 +115,18 @@ void ClNamesAsServer::HandleRecvPeer(CcSocket* caller, CcAddress addr,
 			CcLogInfoS("Erase from " << addr << ": " 
 					<< stname);
 		} else {
-			server->Send(language.Error(ClNamesLang::NotAvailable), addr);
+			server->Send(language.Error(ClNmsLang::NotAvailable), addr);
 			CcLogWarningS("Erase from " << addr << ": " 
 					<< stname << " NotAvailable");
 		}
 	} else {
-		server->Send(language.Error(ClNamesLang::NotUndestood), addr);
+		server->Send(language.Error(ClNmsLang::NotUndestood), addr);
 		CcLogWarningS("Message from " << addr << 
 				" not understood: " << message); 
 	}
 }
 
-void ClNamesAsServer::Register(CcServer* server) {
+void ClNmsServer::Register(CcServer* server) {
 	CB_CcSocket(server->iOnRelease, this, HandleRelease);
 	CB_CcSocket(server->iOnAcceptPeer, this, HandleAcceptPeer);
 	CB_CcSocket(server->iOnDropPeer, this, HandleDropPeer);
@@ -134,7 +134,7 @@ void ClNamesAsServer::Register(CcServer* server) {
 	this->_master = server;
 }
 
-bool ClNamesAsServer::Get(const std::string& name, CcAddress* address) {
+bool ClNmsServer::Get(const std::string& name, CcAddress* address) {
 	this->_semlookup.Wait();
 	std::map<CcAddress, std::string>::iterator it;
 	it = this->_lookup.find(name);
@@ -148,7 +148,7 @@ bool ClNamesAsServer::Get(const std::string& name, CcAddress* address) {
 	return true;
 }
 		
-bool ClNamesAsServer::Set(const std::string& name, const CcAddress address) {
+bool ClNmsServer::Set(const std::string& name, const CcAddress address) {
 	this->_semlookup.Wait();
 	std::map<CcAddress, std::string>::iterator it;
 	it = this->_lookup.find(name);
@@ -162,7 +162,7 @@ bool ClNamesAsServer::Set(const std::string& name, const CcAddress address) {
 	return true;
 }
 
-bool ClNamesAsServer::Unset(const std::string& name) {
+bool ClNmsServer::Unset(const std::string& name) {
 	this->_semlookup.Wait();
 	std::map<CcAddress, std::string>::iterator it;
 	it = this->_lookup.find(name);
@@ -176,7 +176,7 @@ bool ClNamesAsServer::Unset(const std::string& name) {
 	return true;
 }
 		
-void ClNamesAsServer::Main(void) {
+void ClNmsServer::Main(void) {
 	if(CcThread::IsRunning() == false)
 		return;
 	
@@ -204,7 +204,7 @@ void ClNamesAsServer::Main(void) {
 	}
 }
 
-void ClNamesAsServer::StartMonitor(double waitms) {
+void ClNmsServer::StartMonitor(double waitms) {
 	if(waitms <= 0.00f)
 		return;
 
@@ -213,22 +213,22 @@ void ClNamesAsServer::StartMonitor(double waitms) {
 	CcThread::Start();
 }
 
-void ClNamesAsServer::StopMonitor(void) {
+void ClNmsServer::StopMonitor(void) {
 	CcLogConfig("Stopping monitor");
 	CcThread::Stop();
 }
 
-bool ClNamesAsServer::IsMonitoring(void) {
+bool ClNmsServer::IsMonitoring(void) {
 	return CcThread::IsRunning();
 }
 		
-void ClNamesAsServer::AddMonitored(const std::string& name, CcAddress address) {
+void ClNmsServer::AddMonitored(const std::string& name, CcAddress address) {
 	this->_semmonitor.Wait();
 	this->_monitor[name] = address;
 	this->_semmonitor.Post();
 }
 
-bool ClNamesAsServer::Retrieve(const std::string& name, std::string* content) {
+bool ClNmsServer::Retrieve(const std::string& name, std::string* content) {
 	this->_semstorage.Wait();
 	std::map<CcAddress, std::string>::iterator it;
 	it = this->_storage.find(name);
@@ -242,7 +242,7 @@ bool ClNamesAsServer::Retrieve(const std::string& name, std::string* content) {
 	return true;
 }
 		
-bool ClNamesAsServer::Store(const std::string& name, 
+bool ClNmsServer::Store(const std::string& name, 
 		const std::string& content) {
 	this->_semstorage.Wait();
 	std::map<CcAddress, std::string>::iterator it;
@@ -257,7 +257,7 @@ bool ClNamesAsServer::Store(const std::string& name,
 	return true;
 }
 
-bool ClNamesAsServer::Erase(const std::string& name) {
+bool ClNmsServer::Erase(const std::string& name) {
 	this->_semstorage.Wait();
 	std::map<std::string, std::string>::iterator it;
 	it = this->_storage.find(name);

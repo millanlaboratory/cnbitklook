@@ -16,8 +16,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CLPROASSERVER_HPP 
-#define CLPROASSERVER_HPP 
+#ifndef CLPROSERVER_HPP 
+#define CLPROSERVER_HPP 
 
 #include "ClMatlab.hpp"
 #include "ClProLang.hpp"
@@ -25,7 +25,7 @@
 #include <cnbicore/CcSocketProxy.hpp>
 #include <map>
 
-class ClProAsServer : public CcSocketProxy {
+class ClProServer : public CcSocketProxy {
 	public:
 		virtual void HandleRecvPeer(CcSocket* caller, CcAddress addr,
 				CcStreamer* stream);

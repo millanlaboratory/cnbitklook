@@ -16,15 +16,15 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CLDEVICESASSERVER_CPP 
-#define CLDEVICESASSERVER_CPP 
+#ifndef CLDEVSERVER_CPP 
+#define CLDEVSERVER_CPP 
 
-#include "ClDevicesAsServer.hpp" 
+#include "ClDevServer.hpp" 
 #include "ClAcqLang.hpp"
 #include <iostream>
 #include <fstream>
 
-ClDevicesAsServer::ClDevicesAsServer(CaWriter* writer, ndf_frame* frame,
+ClDevServer::ClDevServer(CaWriter* writer, ndf_frame* frame,
 		CcSemaphore* semframe) {
 	this->_writer = writer;
 	this->_frame = frame;
@@ -32,19 +32,19 @@ ClDevicesAsServer::ClDevicesAsServer(CaWriter* writer, ndf_frame* frame,
 	this->_serializerD = new IDSerializerRapid(&this->_messageD);
 }
 
-ClDevicesAsServer::~ClDevicesAsServer(void) {
+ClDevServer::~ClDevServer(void) {
 	if(this->_serializerD == NULL)
 		return;
 	delete this->_serializerD;
 	this->_serializerD = NULL;
 }
 
-void ClDevicesAsServer::HandleRecvPeer(CcSocket* caller, CcAddress addr, 
+void ClDevServer::HandleRecvPeer(CcSocket* caller, CcAddress addr, 
 		CcStreamer* stream) { 
 	while(this->CommunicationTiD((CcServer*)caller, addr, stream));
 }
 
-bool ClDevicesAsServer::CommunicationTiD(CcServer* server, CcAddress address, 
+bool ClDevServer::CommunicationTiD(CcServer* server, CcAddress address, 
 		CcStreamer* stream) {
 	int idblock = TCBlock::BlockIdxUnset, ndfblock = TCBlock::BlockIdxUnset;
 	IDevent idevent;
@@ -93,7 +93,7 @@ bool ClDevicesAsServer::CommunicationTiD(CcServer* server, CcAddress address,
 	return true;
 }
 
-void ClDevicesAsServer::Register(CcServer* server) {
+void ClDevServer::Register(CcServer* server) {
 	CB_CcSocket(server->iOnRelease, this, HandleRelease);
 	CB_CcSocket(server->iOnAcceptPeer, this, HandleAcceptPeer);
 	CB_CcSocket(server->iOnDropPeer, this, HandleDropPeer);

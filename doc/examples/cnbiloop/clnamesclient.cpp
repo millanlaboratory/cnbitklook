@@ -16,7 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <cnbiloop/ClNamesClient.hpp>
+#include <cnbiloop/ClNmsClient.hpp>
 #include <cnbicore/CcBasic.hpp>
 #include <cnbicore/CcFile.hpp>
 #include <iostream>
@@ -26,7 +26,7 @@ using namespace std;
 int main(void) {
 	CcCore::OpenLogger("clclientacq");
 
-	ClNamesClient client;
+	ClNmsClient client;
 	if(client.Connect("127.0.0.1:8000") == false) {
 		CcLogFatal("Cannot connect to endpoint");
 		CcCore::Exit(1);

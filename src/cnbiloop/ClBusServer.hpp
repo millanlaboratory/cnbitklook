@@ -16,8 +16,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CLTOBIIDASSERVER_HPP 
-#define CLTOBIIDASSERVER_HPP 
+#ifndef CLBUSSERVER_HPP 
+#define CLBUSSERVER_HPP 
 
 #include "ClAcqLang.hpp"
 #include <cnbiacq/CaWriter.hpp>
@@ -28,11 +28,11 @@
 #include <cnbicore/CcServer.hpp>
 #include <cnbicore/CcSocketProxy.hpp>
 
-class ClTobiIdAsServer  : public CcSocketProxy {
+class ClBusServer  : public CcSocketProxy {
 	public:
-		ClTobiIdAsServer(CaWriter* writer, 
+		ClBusServer(CaWriter* writer, 
 				ndf_frame* frame, CcSemaphore* semframe);
-		virtual ~ClTobiIdAsServer(void);
+		virtual ~ClBusServer(void);
 		virtual void HandleRecvPeer(CcSocket* caller, CcAddress addr, 
 				CcStreamer* stream);
 		void Register(CcServer* server);

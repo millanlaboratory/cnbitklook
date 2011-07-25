@@ -16,10 +16,10 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CLNAMESLANG_CPP 
-#define CLNAMESLANG_CPP 
+#ifndef CLNMSLANG_CPP 
+#define CLNMSLANG_CPP 
 
-#include "ClNamesLang.hpp" 
+#include "ClNmsLang.hpp" 
 #include <cnbicore/CcFlags.hpp>
 #include <stdio.h>
 #include <stdexcept>
@@ -44,73 +44,73 @@
 #define CLLN_ERASE_IN	"[clln]erase|%[^'['][/clln]"
 #define CLLN_ERASE_OUT	"[clln]erase|%s[/clln]"
 
-const std::string ClNamesLang::Hdr = "[clln]";
-const std::string ClNamesLang::Trl = "[/clln]";
+const std::string ClNmsLang::Hdr = "[clln]";
+const std::string ClNmsLang::Trl = "[/clln]";
 
-ClNamesLang::ClNamesLang(void) : ClLanguage(CCCORE_1MB) {
+ClNmsLang::ClNmsLang(void) : ClLanguage(CCCORE_1MB) {
 }
 		
-char* ClNamesLang::Query(const std::string& name) {
+char* ClNmsLang::Query(const std::string& name) {
 	snprintf(ClLanguage::message->buffer, ClLanguage::MessageSize(), 
 			CLLN_QUERY_OUT, name.c_str());
 	return ClLanguage::message->buffer;
 }
 
-char* ClNamesLang::Reply(CcAddress address) {
+char* ClNmsLang::Reply(CcAddress address) {
 	snprintf(ClLanguage::message->buffer, ClLanguage::MessageSize(),
 			CLLN_REPLY_OUT, address.c_str());
 	return ClLanguage::message->buffer;
 }
 
-char* ClNamesLang::Set(const std::string& name, CcAddress address) {
+char* ClNmsLang::Set(const std::string& name, CcAddress address) {
 	snprintf(ClLanguage::message->buffer, ClLanguage::MessageSize(),
 			CLLN_SET_OUT, name.c_str(), address.c_str());
 	return ClLanguage::message->buffer;
 }
 
-char* ClNamesLang::Unset(const std::string& name) {
+char* ClNmsLang::Unset(const std::string& name) {
 	snprintf(ClLanguage::message->buffer, ClLanguage::MessageSize(),
 			CLLN_UNSET_OUT, name.c_str());
 	return ClLanguage::message->buffer;
 }
 
-char* ClNamesLang::Store(const std::string& name, const std::string& content) {
+char* ClNmsLang::Store(const std::string& name, const std::string& content) {
 	snprintf(ClLanguage::message->buffer, ClLanguage::MessageSize(),
 			CLLN_STOR_OUT, name.c_str(), content.size(), content.c_str());
 	return ClLanguage::message->buffer;
 }
 
-char* ClNamesLang::Retrieve(const std::string& name) {
+char* ClNmsLang::Retrieve(const std::string& name) {
 	snprintf(ClLanguage::message->buffer, ClLanguage::MessageSize(),
 			CLLN_RETR_OUT, name.c_str());
 	return ClLanguage::message->buffer;
 }
 
-char* ClNamesLang::Dispatch(const std::string& content) {
+char* ClNmsLang::Dispatch(const std::string& content) {
 	snprintf(ClLanguage::message->buffer, ClLanguage::MessageSize(),
 			CLLN_DISP_OUT, content.size(), content.c_str());
 	return ClLanguage::message->buffer;
 }
 
-char* ClNamesLang::Erase(const std::string& name) {
+char* ClNmsLang::Erase(const std::string& name) {
 	snprintf(ClLanguage::message->buffer, ClLanguage::MessageSize(),
 			CLLN_ERASE_OUT, name.c_str());
 	return ClLanguage::message->buffer;
 }
 
-char* ClNamesLang::Ok(void) {
+char* ClNmsLang::Ok(void) {
 	snprintf(ClLanguage::message->buffer, ClLanguage::MessageSize(),
 			CLLN_OK);
 	return ClLanguage::message->buffer;
 }
 
-char* ClNamesLang::Error(const int code) {
+char* ClNmsLang::Error(const int code) {
 	snprintf(ClLanguage::message->buffer, ClLanguage::MessageSize(),
 			CLLN_ERROR, code);
 	return ClLanguage::message->buffer;
 }
 
-bool ClNamesLang::IsQuery(const char* message, std::string* name) {
+bool ClNmsLang::IsQuery(const char* message, std::string* name) {
 	int count = sscanf(message, CLLN_QUERY_IN, ClLanguage::_cache0->buffer);
 	if(count < 1)
 		return false;
@@ -119,7 +119,7 @@ bool ClNamesLang::IsQuery(const char* message, std::string* name) {
 	return true;
 }
 
-bool ClNamesLang::IsReply(const char* message, CcAddress* address) {
+bool ClNmsLang::IsReply(const char* message, CcAddress* address) {
 	int count = sscanf(message, CLLN_REPLY_IN, ClLanguage::_cache0->buffer);
 	if(count < 1)
 		return false;
@@ -128,7 +128,7 @@ bool ClNamesLang::IsReply(const char* message, CcAddress* address) {
 	return true;
 }
 
-bool ClNamesLang::IsSet(const char* message, std::string* name, 
+bool ClNmsLang::IsSet(const char* message, std::string* name, 
 		CcAddress* address) {
 	int count = sscanf(message, CLLN_SET_IN, ClLanguage::_cache0->buffer, 
 			ClLanguage::_cache1->buffer);
@@ -140,7 +140,7 @@ bool ClNamesLang::IsSet(const char* message, std::string* name,
 	return true;
 }
 
-bool ClNamesLang::IsUnset(const char* message, std::string* name) {
+bool ClNmsLang::IsUnset(const char* message, std::string* name) {
 	int count = sscanf(message, CLLN_UNSET_IN, ClLanguage::_cache0->buffer);
 	if(count < 1)
 		return false;
@@ -149,7 +149,7 @@ bool ClNamesLang::IsUnset(const char* message, std::string* name) {
 	return true;
 }
 
-bool ClNamesLang::IsStore(const char* message, std::string* name, 
+bool ClNmsLang::IsStore(const char* message, std::string* name, 
 		std::string* content) {
 	size_t size = 0;
 	int count = sscanf(message, CLLN_STOR_IN, ClLanguage::_cache0->buffer,
@@ -160,7 +160,7 @@ bool ClNamesLang::IsStore(const char* message, std::string* name,
 	name->assign(ClLanguage::_cache0->buffer);
 	
 	std::string cache(message);
-	size_t trl = cache.find(ClNamesLang::Trl);
+	size_t trl = cache.find(ClNmsLang::Trl);
 	if(trl == std::string::npos)
 		return false;
 
@@ -174,7 +174,7 @@ bool ClNamesLang::IsStore(const char* message, std::string* name,
 	return true;
 }
 
-bool ClNamesLang::IsRetrieve(const char* message, std::string* name) {
+bool ClNmsLang::IsRetrieve(const char* message, std::string* name) {
 	int count = sscanf(message, CLLN_RETR_IN, ClLanguage::_cache0->buffer);
 	if(count < 1)
 		return false;
@@ -183,7 +183,7 @@ bool ClNamesLang::IsRetrieve(const char* message, std::string* name) {
 	return true;
 }
 
-bool ClNamesLang::IsErase(const char* message, std::string* name) {
+bool ClNmsLang::IsErase(const char* message, std::string* name) {
 	int count = sscanf(message, CLLN_ERASE_IN, ClLanguage::_cache0->buffer);
 	if(count < 1)
 		return false;
@@ -192,14 +192,14 @@ bool ClNamesLang::IsErase(const char* message, std::string* name) {
 	return true;
 }
 
-bool ClNamesLang::IsDispatch(const char* message, std::string* content) {
+bool ClNmsLang::IsDispatch(const char* message, std::string* content) {
 	size_t size = 0;
 	int count = sscanf(message, CLLN_DISP_IN, &size);
 	if(count < 1)
 		return false;
 
 	std::string cache(message);
-	size_t trl = cache.find(ClNamesLang::Trl);
+	size_t trl = cache.find(ClNmsLang::Trl);
 	if(trl == std::string::npos)
 		return false;
 	
@@ -213,15 +213,15 @@ bool ClNamesLang::IsDispatch(const char* message, std::string* content) {
 	return true;
 }
 
-bool ClNamesLang::IsOk(const char* message) {
+bool ClNmsLang::IsOk(const char* message) {
 	return(strcmp(CLLN_OK, message) == 0);
 }
 
-bool ClNamesLang::IsError(const char* message, int* code) {
+bool ClNmsLang::IsError(const char* message, int* code) {
 	return(sscanf(message, CLLN_ERROR, code) == 1);
 }
 		
-bool ClNamesLang::CheckName(const char* message) {
+bool ClNmsLang::CheckName(const char* message) {
 	char name[128];
 	return(sscanf(message, "/%s", name) == 1);
 }

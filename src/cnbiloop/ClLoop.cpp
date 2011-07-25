@@ -29,7 +29,7 @@ unsigned int ClLoop::_refCount = 0;
 /* Declarations */	
 ClProClient ClLoop::processing;
 ClAcqClient ClLoop::acquisition;
-ClNamesClient ClLoop::nameserver;
+ClNmsClient ClLoop::nameserver;
 CcAddress ClLoop::_processing;
 CcAddress ClLoop::_acquisition;
 CcAddress ClLoop::_nameserver;
@@ -152,9 +152,9 @@ bool ClLoop::QueryAddresses(void) {
 	int sp = ClLoop::nameserver.Query("/processing", &ClLoop::_processing);
 	int sa = ClLoop::nameserver.Query("/acquisition", &ClLoop::_acquisition);
 
-	if(sp != ClNamesLang::Successful)
+	if(sp != ClNmsLang::Successful)
 		return false;
-	if(sa != ClNamesLang::Successful)
+	if(sa != ClNmsLang::Successful)
 		return false;
 
 	return true;

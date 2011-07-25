@@ -21,7 +21,7 @@
 
 #include "ClProClient.hpp"
 #include "ClAcqClient.hpp"
-#include "ClNamesClient.hpp"
+#include "ClNmsClient.hpp"
 #include <cnbicore/CcBasic.hpp>
 #include <cnbicore/CcThreadSafe.hpp>
 #include <cnbiconfig/CCfgConfig.hpp>
@@ -49,7 +49,7 @@ class ClLoop {
 	public:
 		static ClProClient processing;
 		static ClAcqClient acquisition;
-		static ClNamesClient nameserver;
+		static ClNmsClient nameserver;
 		const static CcPort portNsr;
 		const static CcPort portPro;
 		const static CcPort portAcq;

@@ -16,14 +16,14 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CLNAMESCLIENT_HPP 
-#define CLNAMESCLIENT_HPP 
+#ifndef CLNMSCLIENT_HPP 
+#define CLNMSCLIENT_HPP 
 
 #include "ClClient.hpp"
-#include "ClNamesLang.hpp"
+#include "ClNmsLang.hpp"
 #include <cnbicore/CcFile.hpp>
 
-class ClNamesClient : public ClClient {
+class ClNmsClient : public ClClient {
 	public:
 		bool Connect(const CcAddress address = "127.0.0.1:8123");
 		int Query(const std::string& name, CcAddress* address);
@@ -47,7 +47,7 @@ class ClNamesClient : public ClClient {
 		bool StoreFile(const std::string& name, const std::string& filename);
 		bool RetrieveFile(const std::string& name, const std::string& filename);
 	private:
-		ClNamesLang _language;
+		ClNmsLang _language;
 };
 
 #endif

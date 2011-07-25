@@ -16,29 +16,29 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CLACQASSERVER_CPP 
-#define CLACQASSERVER_CPP 
+#ifndef CLACQSERVER_CPP 
+#define CLACQSERVER_CPP 
 
-#include "ClAcqAsServer.hpp" 
+#include "ClAcqServer.hpp" 
 #include "ClAcqLang.hpp"
 #include <iostream>
 #include <fstream>
 #include <sys/stat.h>
 #include <errno.h>
 
-ClAcqAsServer::ClAcqAsServer(CaWriter* writer) {
+ClAcqServer::ClAcqServer(CaWriter* writer) {
 	this->_writer = writer;
 }
 
-ClAcqAsServer::~ClAcqAsServer(void) {
+ClAcqServer::~ClAcqServer(void) {
 }
 
-void ClAcqAsServer::HandleRecvPeer(CcSocket* caller, CcAddress addr, 
+void ClAcqServer::HandleRecvPeer(CcSocket* caller, CcAddress addr, 
 		CcStreamer* stream) { 
 	while(this->CommunicationCl((CcServer*)caller, addr, stream));
 }
 
-bool ClAcqAsServer::CreateLog(const std::string& logfile, 
+bool ClAcqServer::CreateLog(const std::string& logfile, 
 		const std::string& xdffile, const std::string& logline) {
 
 	if(logfile.empty())
@@ -57,7 +57,7 @@ bool ClAcqAsServer::CreateLog(const std::string& logfile,
 	return true;
 }
 
-bool ClAcqAsServer::UpdateLog(const std::string& logfile, const std::string& logline, bool space) {
+bool ClAcqServer::UpdateLog(const std::string& logfile, const std::string& logline, bool space) {
 	if(logfile.empty())
 		return false;
 	std::ofstream fid;
@@ -74,7 +74,7 @@ bool ClAcqAsServer::UpdateLog(const std::string& logfile, const std::string& log
 	return true;
 }
 		
-bool ClAcqAsServer::CommunicationCl(CcServer* server, CcAddress address,
+bool ClAcqServer::CommunicationCl(CcServer* server, CcAddress address,
 		CcStreamer* stream) {
 	std::string txtlabel;
 	std::string message;
@@ -162,7 +162,7 @@ bool ClAcqAsServer::CommunicationCl(CcServer* server, CcAddress address,
 	return true;
 }
 
-void ClAcqAsServer::Register(CcServer* server) {
+void ClAcqServer::Register(CcServer* server) {
 	CB_CcSocket(server->iOnRelease, this, HandleRelease);
 	CB_CcSocket(server->iOnAcceptPeer, this, HandleAcceptPeer);
 	CB_CcSocket(server->iOnDropPeer, this, HandleDropPeer);

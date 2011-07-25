@@ -15,17 +15,17 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef CLNAMESASSERVER_HPP 
-#define CLNAMESASSERVER_HPP 
+#ifndef CLNMSSERVER_HPP 
+#define CLNMSSERVER_HPP 
 
-#include "ClNamesLang.hpp"
+#include "ClNmsLang.hpp"
 #include <cnbicore/CcThread.hpp>
 #include <cnbicore/CcBasic.hpp>
 #include <cnbicore/CcServer.hpp>
 #include <cnbicore/CcSocketProxy.hpp>
 #include <map>
 
-class ClNamesAsServer : public CcSocketProxy, protected CcThread {
+class ClNmsServer : public CcSocketProxy, protected CcThread {
 	public:
 		virtual void HandleRecvPeer(CcSocket* caller, CcAddress addr, CcStreamer* stream);
 		virtual void Register(CcServer* server);
@@ -45,7 +45,7 @@ class ClNamesAsServer : public CcSocketProxy, protected CcThread {
 	public:
 	private:
 		CcServer* _master;
-		ClNamesLang language;
+		ClNmsLang language;
 		std::map<std::string, CcAddress> _lookup;
 		std::map<std::string, CcAddress> _monitor;
 		std::map<std::string, std::string> _storage;

@@ -158,37 +158,37 @@ void acquisition(int status) {
 
 void nameserver(int status) { 
 	switch(status) {
-		case ClNamesLang::ErrorGeneric:
+		case ClNmsLang::ErrorGeneric:
 			fprintf(stderr, "ErrorGeneric\n");
 			break;
-		case ClNamesLang::StatusLost:
+		case ClNmsLang::StatusLost:
 			fprintf(stderr, "StatusLost\n");
 			break;
-		case ClNamesLang::NotSupported:
+		case ClNmsLang::NotSupported:
 			fprintf(stderr, "NotSupported\n");
 			break;
-		case ClNamesLang::NotUndestood:
+		case ClNmsLang::NotUndestood:
 			fprintf(stderr, "NotUndestood\n");
 			break;
-		case ClNamesLang::NoReply:
+		case ClNmsLang::NoReply:
 			fprintf(stderr, "NoReply\n");
 			break;
-		case ClNamesLang::Successful:
+		case ClNmsLang::Successful:
 			fprintf(stderr, "Successful\n");
 			break;
-		case ClNamesLang::NotFound:
+		case ClNmsLang::NotFound:
 			fprintf(stderr, "NotFound\n");
 			break;
-		case ClNamesLang::AlreadySet:
+		case ClNmsLang::AlreadySet:
 			fprintf(stderr, "AlreadySet\n");
 			break;
-		case ClNamesLang::AlreadyStored:
+		case ClNmsLang::AlreadyStored:
 			fprintf(stderr, "AlreadyStored\n");
 			break;
-		case ClNamesLang::NotAvailable:
+		case ClNmsLang::NotAvailable:
 			fprintf(stderr, "NotAvailable\n");
 			break;
-		case ClNamesLang::NameFormatError:
+		case ClNmsLang::NameFormatError:
 			fprintf(stderr, "NameFormatError\n");
 			break;
 	}
@@ -256,7 +256,7 @@ int main(int argc, char* argv[]) {
 		CcAddress address;
 		status = ClLoop::nameserver.Query(arg1, &address);
 		nameserver(status);
-		if(status == ClNamesLang::Successful)
+		if(status == ClNmsLang::Successful)
 			cout << address << endl;
 		CcCore::Exit(status);
 
@@ -275,7 +275,7 @@ int main(int argc, char* argv[]) {
 		std::string storage;
 		status = ClLoop::nameserver.Retrieve(arg1, &storage);
 		nameserver(status);
-		if(status == ClNamesLang::Successful)
+		if(status == ClNmsLang::Successful)
 			cout << storage << endl;
 	
 	} else if(command.compare("erase") == 0) {
@@ -292,7 +292,7 @@ int main(int argc, char* argv[]) {
 
 		status = ClLoop::nameserver.StoreConfig(arg1, arg2, arg3);
 		status = status == 0 ? 
-			ClNamesLang::ErrorGeneric : ClNamesLang::Successful;
+			ClNmsLang::ErrorGeneric : ClNmsLang::Successful;
 		nameserver(status);
 		CcCore::Exit(status);
 
@@ -302,9 +302,9 @@ int main(int argc, char* argv[]) {
 
 		std::string storage = ClLoop::nameserver.RetrieveConfig(arg1, arg2);
 		status = storage.empty() == 1 ? 
-			ClNamesLang::ErrorGeneric : ClNamesLang::Successful;
+			ClNmsLang::ErrorGeneric : ClNmsLang::Successful;
 		nameserver(status);
-		if(status == ClNamesLang::Successful)
+		if(status == ClNmsLang::Successful)
 			cout << storage << endl;
 	
 	} else if(command.compare("eraseconfig") == 0) {
@@ -313,7 +313,7 @@ int main(int argc, char* argv[]) {
 
 		status = ClLoop::nameserver.EraseConfig(arg1, arg2);
 		status = status == 0 ?
-			ClNamesLang::ErrorGeneric : ClNamesLang::Successful;
+			ClNmsLang::ErrorGeneric : ClNmsLang::Successful;
 		nameserver(status);
 		CcCore::Exit(status);
 	

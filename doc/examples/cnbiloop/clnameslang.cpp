@@ -16,14 +16,14 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <cnbiloop/ClNamesLang.hpp>
+#include <cnbiloop/ClNmsLang.hpp>
 #include <iostream>
 
 using namespace std;
 
 int main(void) {
 
-	ClNamesLang names;
+	ClNmsLang names;
 	std::string name, address, content;
 	
 	name.clear();

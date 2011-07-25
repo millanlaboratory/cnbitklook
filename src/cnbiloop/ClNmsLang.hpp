@@ -16,16 +16,16 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CLNAMESLANG_HPP 
-#define CLNAMESLANG_HPP 
+#ifndef CLNMSLANG_HPP 
+#define CLNMSLANG_HPP 
 
 #include "ClLanguage.hpp" 
 #include <cnbicore/CcBasic.hpp>
 #include <string>
 
-class ClNamesLang : public ClLanguage {
+class ClNmsLang : public ClLanguage {
 	public:
-		ClNamesLang(void);
+		ClNmsLang(void);
 		char* Query(const std::string& name);
 		char* Reply(CcAddress address);
 		char* Set(const std::string& name, CcAddress address);

@@ -16,8 +16,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ClNamesAsServer.hpp" 
-#include "ClNamesClient.hpp"
+#include "ClNmsServer.hpp" 
+#include "ClNmsClient.hpp"
 #include <cnbicore/CcBasic.hpp>
 #include <cnbicore/CcServer.hpp>
 #include <stdlib.h>
@@ -58,8 +58,8 @@ int main(int argc, char* argv[]) {
 	CcLogConfigS("Nameserver will bind: " << epNameserver.GetAddress());
 
 	CcServer server(CCCORE_1MB);
-	ClNamesAsServer handler;
-	ClNamesClient nsclient;
+	ClNmsServer handler;
+	ClNmsClient nsclient;
 	handler.StartMonitor();
 	try {
 		handler.Register(&server);
@@ -76,7 +76,7 @@ int main(int argc, char* argv[]) {
 	}
 	
 	int nsstatus = nsclient.Set("/nameserver", server.GetLocal());
-	if(nsstatus != ClNamesLang::Successful) {
+	if(nsstatus != ClNmsLang::Successful) {
 		CcLogFatal("Cannot register with nameserver");
 		CcCore::Exit(4);
 	}

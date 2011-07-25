@@ -16,8 +16,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CLACQASSERVER_HPP 
-#define CLACQASSERVER_HPP 
+#ifndef CLACQSERVER_HPP 
+#define CLACQSERVER_HPP 
 
 #include "ClAcqLang.hpp"
 #include <cnbiacq/CaWriter.hpp>
@@ -27,10 +27,10 @@
 #include <cnbicore/CcServer.hpp>
 #include <cnbicore/CcSocketProxy.hpp>
 
-class ClAcqAsServer : public CcSocketProxy {
+class ClAcqServer : public CcSocketProxy {
 	public:
-		ClAcqAsServer(CaWriter* writer);
-		virtual ~ClAcqAsServer(void);
+		ClAcqServer(CaWriter* writer);
+		virtual ~ClAcqServer(void);
 
 		virtual void HandleRecvPeer(CcSocket* caller, CcAddress addr, CcStreamer* stream);
 		void Register(CcServer* server);

@@ -16,11 +16,11 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ClAcqAsServer.hpp" 
-#include "ClDevicesAsServer.hpp" 
-#include "ClTobiIdAsServer.hpp" 
+#include "ClAcqServer.hpp" 
+#include "ClDevServer.hpp" 
+#include "ClBusServer.hpp" 
 #include "ClAcqLang.hpp"
-#include "ClNamesClient.hpp"
+#include "ClNmsClient.hpp"
 #include <cnbiacq/CaWriter.hpp>
 #include <cnbiacq/CaDevice.hpp>
 #include <cnbicore/CcBasic.hpp>
@@ -166,11 +166,11 @@ int main(int argc, char* argv[]) {
 	pipes->Open(optpipename, PIPELINES);
 
 	// Initialize nameserver client
-	ClNamesClient nsclient;
+	ClNmsClient nsclient;
 	int nsstatus;
 	
 	CcServer serverAcq(CCCORE_1MB);
-	ClAcqAsServer handleAcq(&writer);
+	ClAcqServer handleAcq(&writer);
 	handleAcq.Register(&serverAcq);
 	if(serverAcq.Bind(epAcq.GetAddress()) == false) {
 		CcLogFatal("Cannot bind acquisition socket");
@@ -178,7 +178,7 @@ int main(int argc, char* argv[]) {
 	}
 
 	CcServer serverBus(CCCORE_1MB);
-	ClTobiIdAsServer handleBus(&writer, &frame, &semframe);
+	ClBusServer handleBus(&writer, &frame, &semframe);
 	handleBus.Register(&serverBus);
 	if(serverBus.Bind(epBus.GetAddress()) == false) {
 		CcLogFatal("Cannot bind bus socket");
@@ -186,7 +186,7 @@ int main(int argc, char* argv[]) {
 	}
 	
 	CcServer serverDev(CCCORE_1MB);
-	ClDevicesAsServer handleDev(&writer, &frame, &semframe);
+	ClDevServer handleDev(&writer, &frame, &semframe);
 	handleDev.Register(&serverDev);
 	if(serverDev.Bind(epDev.GetAddress()) == false) {
 		CcLogFatal("Cannot bind dev socket");
@@ -199,19 +199,19 @@ int main(int argc, char* argv[]) {
 	}
 
 	nsstatus = nsclient.Set("/acquisition", epAcq.GetAddress());
-	if(nsstatus != ClNamesLang::Successful) {
+	if(nsstatus != ClNmsLang::Successful) {
 		CcLogFatal("Cannot register acquisition with nameserver");
 		CcCore::Exit(7);
 	}
 	
 	nsstatus = nsclient.Set("/bus", epBus.GetAddress());
-	if(nsstatus != ClNamesLang::Successful) {
+	if(nsstatus != ClNmsLang::Successful) {
 		CcLogFatal("Cannot register bus with nameserver");
 		CcCore::Exit(8);
 	}
 	
 	nsstatus = nsclient.Set("/dev", epDev.GetAddress());
-	if(nsstatus != ClNamesLang::Successful) {
+	if(nsstatus != ClNmsLang::Successful) {
 		CcLogFatal("Cannot register dev with nameserver");
 		CcCore::Exit(8);
 	}
@@ -222,7 +222,7 @@ int main(int argc, char* argv[]) {
 		pipename << "/pipe" << p;
 		pipepath << optpipename << p;
 		int nsstatus = nsclient.Set(pipename.str(), pipepath.str());
-		if(nsstatus != ClNamesLang::Successful) {
+		if(nsstatus != ClNmsLang::Successful) {
 			CcLogFatal("Cannot register pipes with nameserver");
 			CcCore::Exit(9);
 		}
@@ -232,7 +232,7 @@ int main(int argc, char* argv[]) {
 		ctlname << "/ctrl" << p;
 		ctrladdr << cnbitkip << ":950" << p;
 		int nsstatus = nsclient.Set(ctlname.str(), ctrladdr.str());
-		if(nsstatus != ClNamesLang::Successful) {
+		if(nsstatus != ClNmsLang::Successful) {
 			CcLogFatal("Cannot register controllers with nameserver");
 			CcCore::Exit(10);
 		}
@@ -298,7 +298,7 @@ int main(int argc, char* argv[]) {
 	}
 
 shutdown:
-	// Stop and unregister ClAcqAsServer
+	// Stop and unregister ClAcqServer
 	serverAcq.Release();
 	nsclient.Unset("/acquisition");
 	

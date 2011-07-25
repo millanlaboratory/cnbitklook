@@ -16,15 +16,15 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CLTOBIIDASSERVER_CPP 
-#define CLTOBIIDASSERVER_CPP 
+#ifndef CLBUSSERVER_CPP 
+#define CLBUSSERVER_CPP 
 
-#include "ClTobiIdAsServer.hpp" 
+#include "ClBusServer.hpp" 
 #include "ClAcqLang.hpp"
 #include <iostream>
 #include <fstream>
 
-ClTobiIdAsServer::ClTobiIdAsServer(CaWriter* writer, ndf_frame* frame,
+ClBusServer::ClBusServer(CaWriter* writer, ndf_frame* frame,
 		CcSemaphore* semframe) {
 	this->_writer = writer;
 	this->_frame = frame;
@@ -32,19 +32,19 @@ ClTobiIdAsServer::ClTobiIdAsServer(CaWriter* writer, ndf_frame* frame,
 	this->_serializerD = new IDSerializerRapid(&this->_messageD);
 }
 
-ClTobiIdAsServer::~ClTobiIdAsServer(void) {
+ClBusServer::~ClBusServer(void) {
 	if(this->_serializerD == NULL)
 		return;
 	delete this->_serializerD;
 	this->_serializerD = NULL;
 }
 
-void ClTobiIdAsServer::HandleRecvPeer(CcSocket* caller, CcAddress addr, 
+void ClBusServer::HandleRecvPeer(CcSocket* caller, CcAddress addr, 
 		CcStreamer* stream) { 
 	while(this->CommunicationTiD((CcServer*)caller, addr, stream));
 }
 
-bool ClTobiIdAsServer::CommunicationTiD(CcServer* server, CcAddress address, 
+bool ClBusServer::CommunicationTiD(CcServer* server, CcAddress address, 
 		CcStreamer* stream) {
 	int idblock = TCBlock::BlockIdxUnset, ndfblock = TCBlock::BlockIdxUnset;
 	IDevent idevent;
@@ -102,7 +102,7 @@ bool ClTobiIdAsServer::CommunicationTiD(CcServer* server, CcAddress address,
 	return true;
 }
 
-void ClTobiIdAsServer::Register(CcServer* server) {
+void ClBusServer::Register(CcServer* server) {
 	CB_CcSocket(server->iOnRelease, this, HandleRelease);
 	CB_CcSocket(server->iOnAcceptPeer, this, HandleAcceptPeer);
 	CB_CcSocket(server->iOnDropPeer, this, HandleDropPeer);

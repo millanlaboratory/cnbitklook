@@ -49,7 +49,7 @@ bool ClTobiId::Attach(const std::string& name) {
 	}
 
 	CcAddress address;
-	if(ClLoop::nameserver.Query(this->_name, &address) != ClNamesLang::Successful) {
+	if(ClLoop::nameserver.Query(this->_name, &address) != ClNmsLang::Successful) {
 		CcLogErrorS("Cannot query " << this->_name);
 		return false;
 	}

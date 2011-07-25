@@ -16,12 +16,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CLPROASSERVER_CPP 
-#define CLPROASSERVER_CPP 
+#ifndef CLPROSERVER_CPP 
+#define CLPROSERVER_CPP 
 
-#include "ClProAsServer.hpp" 
+#include "ClProServer.hpp" 
 
-void ClProAsServer::HandleRecvPeer(CcSocket* caller, CcAddress addr, 
+void ClProServer::HandleRecvPeer(CcSocket* caller, CcAddress addr, 
 		CcStreamer* stream) { 
 	CcServer* server = (CcServer*)caller;
 	
@@ -125,14 +125,14 @@ void ClProAsServer::HandleRecvPeer(CcSocket* caller, CcAddress addr,
 	}
 }
 
-void ClProAsServer::Register(CcServer* server) {
+void ClProServer::Register(CcServer* server) {
 	CB_CcSocket(server->iOnRelease, this, HandleRelease);
 	CB_CcSocket(server->iOnAcceptPeer, this, HandleAcceptPeer);
 	CB_CcSocket(server->iOnDropPeer, this, HandleDropPeer);
 	CB_CcSocket(server->iOnRecvPeer, this, HandleRecvPeer);
 }
 
-int ClProAsServer::Fork(void) {
+int ClProServer::Fork(void) {
 	int pid = 0;
 	ClMatlab* process = new ClMatlab;
 	pid = process->Fork();
@@ -143,13 +143,13 @@ int ClProAsServer::Fork(void) {
 	return pid;
 }
 
-void ClProAsServer::Remove(int pid) {
+void ClProServer::Remove(int pid) {
 	this->_sempool.Wait();
 	this->_pool.erase(pid);
 	this->_sempool.Post();
 }
 
-ClMatlab* ClProAsServer::Get(int pid) {
+ClMatlab* ClProServer::Get(int pid) {
 	this->_sempool.Wait();
 	std::map<int, ClMatlab*>::iterator it;
 	it = this->_pool.find(pid);

@@ -46,7 +46,7 @@ bool ClTobiIc::Attach(const std::string& name) {
 	
 	CcAddress address;
 	int status = ClLoop::nameserver.Query(this->_name, &address);
-	if(status != ClNamesLang::Successful) {
+	if(status != ClNmsLang::Successful) {
 		CcLogErrorS("Cannot query " << name);
 		return false;
 	}
@@ -115,7 +115,7 @@ bool ClTobiIc::Attach(const CcPort port, const std::string& name) {
 	}
 
 	int status = ClLoop::nameserver.Set(this->_name, peer.GetAddress());
-	if(status != ClNamesLang::Successful) {
+	if(status != ClNmsLang::Successful) {
 		CcLogErrorS("Cannot set " << name << " as " << peer.GetAddress());
 		this->_onwsname = false;
 		return false;

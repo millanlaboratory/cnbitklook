@@ -31,9 +31,9 @@ libcnbiloop_include_HEADERS = ClMatlab.hpp \
 							  ClLanguage.hpp \
 							  ClAcqLang.hpp \
 							  ClProLang.hpp \
-							  ClNamesLang.hpp \
+							  ClNmsLang.hpp \
 							  ClAcqClient.hpp \
-							  ClNamesClient.hpp \
+							  ClNmsClient.hpp \
 							  ClProClient.hpp \
 							  ClClient.hpp \
 							  ClLoop.hpp \
@@ -49,10 +49,10 @@ libcnbiloop_la_SOURCES = ClMatlab.cpp \
 						 ClAcqLang.hpp \
 						 ClProLang.cpp \
 						 ClProLang.hpp \
-						 ClNamesLang.cpp \
-						 ClNamesLang.hpp \
-						 ClNamesClient.hpp \
-						 ClNamesClient.cpp \
+						 ClNmsLang.cpp \
+						 ClNmsLang.hpp \
+						 ClNmsClient.hpp \
+						 ClNmsClient.cpp \
 						 ClAcqClient.hpp \
 						 ClAcqClient.cpp \
 						 ClProClient.hpp \
@@ -86,21 +86,21 @@ LDADD = libcnbiloop.la \
 		$(TOBIID_LIBS)
 
 cl_acquisition_SOURCES = cl_acquisition.cpp \
-						 ClAcqAsServer.cpp \
-						 ClAcqAsServer.hpp \
-						 ClTobiIdAsServer.cpp \
-						 ClTobiIdAsServer.hpp \
-						 ClDevicesAsServer.cpp \
-						 ClDevicesAsServer.hpp
+						 ClAcqServer.cpp \
+						 ClAcqServer.hpp \
+						 ClBusServer.cpp \
+						 ClBusServer.hpp \
+						 ClDevServer.cpp \
+						 ClDevServer.hpp
 cl_acquisition_LDADD = libcnbiloop.la \
 					   $(top_builddir)/src/cnbiacq/libcnbiacq.la \
 					   $(LDADD)
 cl_processing_SOURCES = cl_processing.cpp \
-						ClProAsServer.cpp \
-						ClProAsServer.hpp
+						ClProServer.cpp \
+						ClProServer.hpp
 cl_nameserver_SOURCES = cl_nameserver.cpp \
-						ClNamesAsServer.cpp \
-						ClNamesAsServer.hpp
+						ClNmsServer.cpp \
+						ClNmsServer.hpp
 cl_ndfmonitor_SOURCES = cl_ndfmonitor.cpp
 cl_tidmonitor_SOURCES = cl_tidmonitor.cpp
 cl_tidsender_SOURCES = cl_tidsender.cpp

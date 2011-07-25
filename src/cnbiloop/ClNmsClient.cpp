@@ -16,156 +16,156 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CLNAMESCLIENT_CPP 
-#define CLNAMESCLIENT_CPP 
+#ifndef CLNMSCLIENT_CPP 
+#define CLNMSCLIENT_CPP 
 
-#include "ClNamesClient.hpp" 
+#include "ClNmsClient.hpp" 
 
-bool ClNamesClient::Connect(const CcAddress address) {
+bool ClNmsClient::Connect(const CcAddress address) {
 	return ClClient::Connect(address);
 }
 
-int ClNamesClient::Query(const std::string& name, CcAddress* address) {
+int ClNmsClient::Query(const std::string& name, CcAddress* address) {
 	int errorid = 0;
 	std::string message, reply;
 	
 	this->_language.Query(name);
 	bool status = ClClient::_client.SendRecv(this->_language.message->buffer,
-			&reply, ClNamesLang::Hdr, ClNamesLang::Trl, ClClient::_waitms);
+			&reply, ClNmsLang::Hdr, ClNmsLang::Trl, ClClient::_waitms);
 
 	if(status == false) 
-		return ClNamesLang::NoReply;
+		return ClNmsLang::NoReply;
 
 	if(this->_language.IsReply(reply.c_str(), address))
-		return ClNamesLang::Successful;
+		return ClNmsLang::Successful;
 	else if(this->_language.IsError(reply.c_str(), &errorid)) {
-		if(errorid == ClNamesLang::NameFormatError) 
+		if(errorid == ClNmsLang::NameFormatError) 
 			CcLogError("Port name must be /PORT");
 		return errorid;
-	} else return ClNamesLang::StatusLost;
+	} else return ClNmsLang::StatusLost;
 }
 
-int ClNamesClient::Set(const std::string& name, CcAddress address) {
+int ClNmsClient::Set(const std::string& name, CcAddress address) {
 	int errorid = 0;
 	std::string message, reply;
 	
 	this->_language.Set(name, address);
 	bool status = ClClient::_client.SendRecv(this->_language.message->buffer,
-			&reply, ClNamesLang::Hdr, ClNamesLang::Trl, ClClient::_waitms);
+			&reply, ClNmsLang::Hdr, ClNmsLang::Trl, ClClient::_waitms);
 
 	if(status == false) 
-		return ClNamesLang::NoReply;
+		return ClNmsLang::NoReply;
 
 	if(this->_language.IsOk(reply.c_str()))
-		return ClNamesLang::Successful;
+		return ClNmsLang::Successful;
 	else if(this->_language.IsError(reply.c_str(), &errorid)) {
-		if(errorid == ClNamesLang::NameFormatError) 
+		if(errorid == ClNmsLang::NameFormatError) 
 			CcLogError("Port name must be /PORT");
 		return errorid;
 	} else
-		return ClNamesLang::StatusLost;
+		return ClNmsLang::StatusLost;
 }
 
-int ClNamesClient::Unset(const std::string& name) {
+int ClNmsClient::Unset(const std::string& name) {
 	int errorid = 0;
 	std::string message, reply;
 	
 	this->_language.Unset(name);
 	bool status = ClClient::_client.SendRecv(this->_language.message->buffer,
-			&reply, ClNamesLang::Hdr, ClNamesLang::Trl, ClClient::_waitms);
+			&reply, ClNmsLang::Hdr, ClNmsLang::Trl, ClClient::_waitms);
 
 	if(status == false) 
-		return ClNamesLang::NoReply;
+		return ClNmsLang::NoReply;
 
 	if(this->_language.IsOk(reply.c_str()))
-		return ClNamesLang::Successful;
+		return ClNmsLang::Successful;
 	else if(this->_language.IsError(reply.c_str(), &errorid)) {
-		if(errorid == ClNamesLang::NameFormatError) 
+		if(errorid == ClNmsLang::NameFormatError) 
 			CcLogError("Port name must be /PORT");
 		return errorid;
 	} else
-		return ClNamesLang::StatusLost;
+		return ClNmsLang::StatusLost;
 }
 
 		
-CcAddress ClNamesClient::Query(const std::string& name) {
+CcAddress ClNmsClient::Query(const std::string& name) {
 	CcAddress address;
-	if(this->Query(name, &address) != ClNamesLang::Successful)
+	if(this->Query(name, &address) != ClNmsLang::Successful)
 		address.assign("");
 	return address;
 }
 
-int ClNamesClient::Retrieve(const std::string& name, std::string* content) {
+int ClNmsClient::Retrieve(const std::string& name, std::string* content) {
 	int errorid = 0;
 	std::string message, reply;
 	
 	this->_language.Retrieve(name);
 	bool status = ClClient::_client.SendRecv(this->_language.message->buffer,
-			&reply, ClNamesLang::Hdr, ClNamesLang::Trl, ClClient::_waitms);
+			&reply, ClNmsLang::Hdr, ClNmsLang::Trl, ClClient::_waitms);
 
 	if(status == false) 
-		return ClNamesLang::NoReply;
+		return ClNmsLang::NoReply;
 
 	if(this->_language.IsDispatch(reply.c_str(), content))
-		return ClNamesLang::Successful;
+		return ClNmsLang::Successful;
 	else if(this->_language.IsError(reply.c_str(), &errorid))
 		return errorid;
 	else
-		return ClNamesLang::StatusLost;
+		return ClNmsLang::StatusLost;
 }
 
-int ClNamesClient::Store(const std::string& name, const std::string& content) {
+int ClNmsClient::Store(const std::string& name, const std::string& content) {
 	int errorid = 0;
 	std::string message, reply;
 	
 	this->_language.Store(name, content);
 	bool status = ClClient::_client.SendRecv(this->_language.message->buffer,
-			&reply, ClNamesLang::Hdr, ClNamesLang::Trl, ClClient::_waitms);
+			&reply, ClNmsLang::Hdr, ClNmsLang::Trl, ClClient::_waitms);
 
 	if(status == false) 
-		return ClNamesLang::NoReply;
+		return ClNmsLang::NoReply;
 
 	if(this->_language.IsOk(reply.c_str()))
-		return ClNamesLang::Successful;
+		return ClNmsLang::Successful;
 	else if(this->_language.IsError(reply.c_str(), &errorid))
 		return errorid;
 	else
-		return ClNamesLang::StatusLost;
+		return ClNmsLang::StatusLost;
 }
 
-int ClNamesClient::Erase(const std::string& name) {
+int ClNmsClient::Erase(const std::string& name) {
 	int errorid = 0;
 	std::string message, reply;
 	
 	this->_language.Erase(name);
 	bool status = ClClient::_client.SendRecv(this->_language.message->buffer,
-			&reply, ClNamesLang::Hdr, ClNamesLang::Trl, ClClient::_waitms);
+			&reply, ClNmsLang::Hdr, ClNmsLang::Trl, ClClient::_waitms);
 
 	if(status == false) 
-		return ClNamesLang::NoReply;
+		return ClNmsLang::NoReply;
 
 	if(this->_language.IsOk(reply.c_str()))
-		return ClNamesLang::Successful;
+		return ClNmsLang::Successful;
 	else if(this->_language.IsError(reply.c_str(), &errorid))
 		return errorid;
 	else
-		return ClNamesLang::StatusLost;
+		return ClNmsLang::StatusLost;
 }
 		
-bool ClNamesClient::Store(const std::string& name, CcFile* file) {
-	return(this->Store(name, file->Get()) == ClNamesLang::Successful);
+bool ClNmsClient::Store(const std::string& name, CcFile* file) {
+	return(this->Store(name, file->Get()) == ClNmsLang::Successful);
 }
 
-bool ClNamesClient::Retrieve(const std::string& name, CcFile* file) {
+bool ClNmsClient::Retrieve(const std::string& name, CcFile* file) {
 	std::string content;
 	int status = this->Retrieve(name, &content);
-	if(status != ClNamesLang::Successful)
+	if(status != ClNmsLang::Successful)
 		return false;
 	file->Set(content);
 	return true;
 }
 
-bool ClNamesClient::StoreFile(const std::string& name, 
+bool ClNmsClient::StoreFile(const std::string& name, 
 		const std::string& filename) {
 	CcFile file;
 	if(file.Load(filename) == false)
@@ -173,7 +173,7 @@ bool ClNamesClient::StoreFile(const std::string& name,
 	return this->Store(name, &file);
 }
 
-bool ClNamesClient::RetrieveFile(const std::string& name, 
+bool ClNmsClient::RetrieveFile(const std::string& name, 
 		const std::string& filename) {
 	CcFile file;
 	if(this->Retrieve(name, &file) == false) 
@@ -181,24 +181,24 @@ bool ClNamesClient::RetrieveFile(const std::string& name,
 	return(file.Save(filename));
 }
 
-bool ClNamesClient::StoreConfig(const std::string& component, 
+bool ClNmsClient::StoreConfig(const std::string& component, 
 		const std::string& name, const std::string& content) {
 	std::string tname = component + "." + name;
-	return(this->Store(tname, content) == ClNamesLang::Successful);
+	return(this->Store(tname, content) == ClNmsLang::Successful);
 }
 
-std::string ClNamesClient::RetrieveConfig(const std::string& component, 
+std::string ClNmsClient::RetrieveConfig(const std::string& component, 
 		const std::string& name) {
 	std::string tname = component + "." + name;
 	std::string content;
-	if(this->Retrieve(tname, &content) != ClNamesLang::Successful)
+	if(this->Retrieve(tname, &content) != ClNmsLang::Successful)
 		content.clear();
 	return content;
 }
 
-bool ClNamesClient::EraseConfig(const std::string& component, 
+bool ClNmsClient::EraseConfig(const std::string& component, 
 		const std::string& name) {
 	std::string tname = component + "." + name;
-	return(this->Erase(tname) == ClNamesLang::Successful);
+	return(this->Erase(tname) == ClNmsLang::Successful);
 }
 #endif

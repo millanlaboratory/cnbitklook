@@ -57,7 +57,7 @@ int main(int argc, char* argv[]) {
 		CcCore::Exit(2);
 	}
 	
-	if(ClLoop::nameserver.Query(optname, &pipename) != ClNamesLang::Successful) {
+	if(ClLoop::nameserver.Query(optname, &pipename) != ClNmsLang::Successful) {
 		CcLogFatal("Cannot query pipe");
 		CcCore::Exit(2);
 	}
