@@ -20,16 +20,21 @@
 #define CLLOOPCONFIG_CPP 
 
 #include "ClLoopConfig.hpp" 
+#include <cnbicore/CcCore.hpp> 
+#include <cnbicore/CcLog.hpp> 
+#include <sys/stat.h>
+#include <fstream>
 
 /* Initialization */
 ClLoopConfig* ClLoopConfig::_instance = NULL;
 unsigned int ClLoopConfig::_refCount = 0;
 
-CcPort ClLoopConfig::portNms = "8123";
-CcPort ClLoopConfig::portPro = "8124";
-CcPort ClLoopConfig::portAcq = "8125";
-CcPort ClLoopConfig::portBus = "8126";
-CcPort ClLoopConfig::portDev = "8127";
+CcPort ClLoopConfig::ip;
+CcPort ClLoopConfig::portNms;
+CcPort ClLoopConfig::portPro;
+CcPort ClLoopConfig::portAcq;
+CcPort ClLoopConfig::portBus;
+CcPort ClLoopConfig::portDev;
 
 ClLoopConfig::ClLoopConfig(void) {
 }
@@ -57,6 +62,78 @@ void ClLoopConfig::Destroy(void) {
 	if(ClLoopConfig::_instance == NULL) 
 		return;
 	delete ClLoopConfig::_instance;
+}
+
+void ClLoopConfig::Load(void) {
+	struct stat st;
+	std::string etc = "/etc/cnbiloop";
+	std::string home = CcCore::GetDirectoryHome() + "/.cnbiloop";
+
+	if(stat(home.c_str(), &st) == 0) {
+		CcLogWarningS("Loading user configuration file: " << home);
+		ClLoopConfig::Read(home);
+	} else if(stat(etc.c_str(), &st) == 0) {
+		CcLogWarningS("Loading system configuration file: " << etc);
+		ClLoopConfig::Read(etc);
+	} else {
+		CcLogWarningS("Using default configuration");
+		ClLoopConfig::Init();
+	}
+
+}
+		
+void ClLoopConfig::Init(void) {
+	ClLoopConfig::ip = "127.0.0.1";
+	ClLoopConfig::portNms = "8123";
+	ClLoopConfig::portPro = "8124";
+	ClLoopConfig::portAcq = "8125";
+	ClLoopConfig::portBus = "8126";
+	ClLoopConfig::portDev = "8127";
+}
+		
+void ClLoopConfig::Read(const std::string& filename) {
+	std::ifstream file(filename.c_str());
+	std::string cache;
+	char trash[2048];
+	char buffer[2048];
+	int line = 0;
+
+	while(std::getline(file, cache)) {
+		++line;
+		if(cache.find("loop.ip") != std::string::npos) {
+			if(sscanf(cache.c_str(), "%s = %s", trash, buffer) == 2) {
+				ClLoopConfig::ip.assign(buffer);
+				continue;
+			}
+		} else if(cache.find("nms.port") != std::string::npos) {
+			if(sscanf(cache.c_str(), "%s = %s", trash, buffer) == 2) {
+				ClLoopConfig::portNms.assign(buffer);
+				continue;
+			}
+		} else if(cache.find("acq.port") != std::string::npos) {
+			if(sscanf(cache.c_str(), "%s = %s", trash, buffer) == 2) {
+				ClLoopConfig::portAcq.assign(buffer);
+				continue;
+			}
+		} else if(cache.find("pro.port") != std::string::npos) {
+			if(sscanf(cache.c_str(), "%s = %s", trash, buffer) == 2) {
+				ClLoopConfig::portPro.assign(buffer);
+				continue;
+			}
+		} else if(cache.find("dev.port") != std::string::npos) {
+			if(sscanf(cache.c_str(), "%s = %s", trash, buffer) == 2) {
+				ClLoopConfig::portDev.assign(buffer);
+				continue;
+			}
+		} else if(cache.find("bus.port") != std::string::npos) {
+			if(sscanf(cache.c_str(), "%s = %s", trash, buffer) == 2) {
+				ClLoopConfig::portBus.assign(buffer);
+				continue;
+			}
+		} else 
+			continue;
+		CcLogErrorS("Bad format: " << filename << ", line=" << line);
+	}
 }
 
 #endif

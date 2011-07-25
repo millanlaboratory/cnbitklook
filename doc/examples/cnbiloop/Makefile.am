@@ -8,6 +8,7 @@ check_PROGRAMS = clacqlang \
 				 clproclient2 \
 				 clnamesclient \
 				 clloop \
+				 clloopconfig \
 				 cltobiic
 
 clacqlang_SOURCES = clacqlang.cpp
@@ -18,6 +19,7 @@ clproclient_SOURCES = clproclient.cpp
 clproclient2_SOURCES = clproclient2.cpp
 clnamesclient_SOURCES = clnamesclient.cpp
 clloop_SOURCES = clloop.cpp
+clloopconfig_SOURCES = clloopconfig.cpp
 cltobiic_SOURCES = cltobiic.cpp
 
 LDADD = $(top_builddir)/src/cnbiloop/libcnbiloop.la\

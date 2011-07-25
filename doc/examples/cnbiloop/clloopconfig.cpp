@@ -16,34 +16,19 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CLLOOPCONFIG_HPP 
-#define CLLOOPCONFIG_HPP 
+#include <cnbiloop/ClLoopConfig.hpp>
+#include <cnbicore/CcBasic.hpp>
+#include <iostream>
 
-#include <cnbicore/CcNetworkTypes.hpp>
+using namespace std;
 
-class ClLoopConfig {
-	public:
-		static ClLoopConfig* Instance(void);
-		static void Release(void);
-		static unsigned int Refcount(void);
-		static void Load(void);
-	protected:
-		static void Init(void);
-		ClLoopConfig(void);
-		virtual ~ClLoopConfig(void);
-		static void Destroy(void);
-		static void Read(const std::string& filename);
+int main(void) {
+	CcCore::OpenLogger("clloopconfig");
+	CcCore::CatchSIGINT();
+	CcCore::CatchSIGTERM();
+	ClLoopConfig::Instance();
+	
+	ClLoopConfig::Load();
 
-	public:
-		static CcIp ip;
-		static CcPort portNms;
-		static CcPort portPro;
-		static CcPort portAcq;
-		static CcPort portBus;
-		static CcPort portDev;
-	private:
-		static ClLoopConfig* _instance;
-		static unsigned int _refCount;
-};
-
-#endif
+	CcCore::Exit(0);
+}
