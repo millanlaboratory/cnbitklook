@@ -1,4 +1,6 @@
-EXTRA_DIST = cclogger_example.xml \
-			 cclogger_spacy.xsl \
-			 cclogger.xsl \
-			 cnbiconfig_example.xml 
+EXTRA_DIST = cclogger_spacy.xsl
+
+sysconfdir = ${prefix}/etc/cnbitk
+sysconf_DATA = cnbiloop \
+			   cclogger.xsl \
+			   cnbitkconfig.xml

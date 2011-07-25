@@ -58,7 +58,7 @@ void CcLogger::Open(const std::string& filename, const std::string& module,
 
 	this->_filexml << "<?xml version='1.0'?>\n";
 	this->_filexml <<	"<!--20100715 M. Tavella <michele.tavella@epfl.ch>-->\n";
-	this->_filexml <<	"<?xml-stylesheet type='text/xsl' href='cclogger.xsl'?>\n";
+	this->_filexml <<	"<?xml-stylesheet type='text/xsl' href='/etc/cnbitk/cclogger.xsl'?>\n";
 	this->_filexml <<	"<CcLogger ";
 	this->_filexml <<	"xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' ";
 	this->_filexml <<	"xmlns:xsd='http://www.w3.org/2001/XMLSchema' timestamp='";

@@ -3,7 +3,7 @@
 # Keep in mind that the spaces are necessary, and removing them 
 # will lead to unread settings and a warning message
 
-loop.ip = 127.0.0.1
+loop.ip = 0.0.0.0
 nms.port = 8123
 pro.port = 8124
 acq.port = 8125

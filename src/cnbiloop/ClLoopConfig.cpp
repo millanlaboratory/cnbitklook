@@ -67,7 +67,7 @@ void ClLoopConfig::Destroy(void) {
 
 void ClLoopConfig::Load(void) {
 	struct stat st;
-	std::string etc = "/etc/cnbiloop";
+	std::string etc = "/etc/cnbitk/cnbiloop";
 	std::string home = CcCore::GetDirectoryHome() + "/.cnbiloop";
 
 	if(stat(home.c_str(), &st) == 0) {
