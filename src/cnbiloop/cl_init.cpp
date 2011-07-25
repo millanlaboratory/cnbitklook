@@ -59,11 +59,11 @@ bool dump_configuration(CCfgConfig* config, const int modality,
 
 int unload_configuration(const std::string& block) {
 	bool status[5];
-	status[0] = ClLoop::nameserver.EraseConfig(block, "block");
-	status[1] = ClLoop::nameserver.EraseConfig(block, "taskset");
-	status[2] = ClLoop::nameserver.EraseConfig(block, "xml");
-	status[3] = ClLoop::nameserver.EraseConfig(block, "path");
-	status[4] = ClLoop::nameserver.EraseConfig(block, "modality");
+	status[0] = ClLoop::nms.EraseConfig(block, "block");
+	status[1] = ClLoop::nms.EraseConfig(block, "taskset");
+	status[2] = ClLoop::nms.EraseConfig(block, "xml");
+	status[3] = ClLoop::nms.EraseConfig(block, "path");
+	status[4] = ClLoop::nms.EraseConfig(block, "modality");
 	
 	for(int i = 0; i < 5; i++)
 		if(status[i] != true)
@@ -98,12 +98,12 @@ int load_configuration(CCfgConfig* config, std::string file, const int modality,
 	}
 
 	bool status[5];
-	status[0] = ClLoop::nameserver.StoreConfig(component, "modality", 
+	status[0] = ClLoop::nms.StoreConfig(component, "modality", 
 			modality == MODALITY_ONLINE ?  "online" : "offline");
-	status[1] = ClLoop::nameserver.StoreConfig(component, "block", block);
-	status[2] = ClLoop::nameserver.StoreConfig(component, "taskset", ts->name);
-	status[3] = ClLoop::nameserver.StoreConfig(component, "xml", file);
-	status[4] = ClLoop::nameserver.StoreConfig(component, "path", path);
+	status[1] = ClLoop::nms.StoreConfig(component, "block", block);
+	status[2] = ClLoop::nms.StoreConfig(component, "taskset", ts->name);
+	status[3] = ClLoop::nms.StoreConfig(component, "xml", file);
+	status[4] = ClLoop::nms.StoreConfig(component, "path", path);
 
 	for(int i = 0; i < 5; i++) {
 		if(status[i] != true)
@@ -125,16 +125,16 @@ int classifier_start(CCfgConfig* config, const std::string& block,
 	}
 
 	int pid = 0;
-	if(ClLoop::processing.ForkAndCheck(&pid) != ClProLang::Successful) {
+	if(ClLoop::pro.ForkAndCheck(&pid) != ClProLang::Successful) {
 		printf("%d\n", 0);
 		fprintf(stderr, "Error: cannot fork\n");
 		return 0;
 	}
-	ClLoop::processing.Directory(pid, ts->ndf.directory);
-	ClLoop::processing.IncludeNDF(pid);
+	ClLoop::pro.Directory(pid, ts->ndf.directory);
+	ClLoop::pro.IncludeNDF(pid);
 	if(ts->ndf.include.empty() == false)
-		ClLoop::processing.Include(pid, ts->ndf.include);
-	ClLoop::processing.Exec(pid, ts->ndf.exec);
+		ClLoop::pro.Include(pid, ts->ndf.include);
+	ClLoop::pro.Exec(pid, ts->ndf.exec);
 
 	if(monitor == true) {
 		CcCore::CatchSIGINT();
@@ -146,10 +146,10 @@ int classifier_start(CCfgConfig* config, const std::string& block,
 		while(true) {
 			if(CcCore::receivedSIGAny.Get()) {
 				printf("[cl_init] Terminating classifier with PID=%d\n", pid);
-				return(ClLoop::processing.Terminate(pid) == ClProLang::Successful);
+				return(ClLoop::pro.Terminate(pid) == ClProLang::Successful);
 			}
 
-			if(ClLoop::processing.IsAlive(pid) != ClProLang::Successful) {
+			if(ClLoop::pro.IsAlive(pid) != ClProLang::Successful) {
 				printf(" Classifier '%s' for block '%s' PID=%d died (%.2f minutes)\n", 
 						ts->classifier.id.c_str(), block.c_str(), 
 						pid, CcTime::Toc(&tic)/1000/60);
@@ -161,7 +161,7 @@ int classifier_start(CCfgConfig* config, const std::string& block,
 			CcTime::Sleep(5000);
 		}
 	} else {
-		if(ClLoop::processing.IsAlive(pid) != ClProLang::Successful) {
+		if(ClLoop::pro.IsAlive(pid) != ClProLang::Successful) {
 			printf("%d\n", 0);
 			return 0;
 		} else {

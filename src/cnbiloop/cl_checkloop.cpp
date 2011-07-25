@@ -63,24 +63,24 @@ int main(int argc, char* argv[]) {
 	filelog.append(".log");
 
 	int pid0;
-	if(ClLoop::processing.ForkAndCheck(&pid0) != ClProLang::Successful) {
+	if(ClLoop::pro.ForkAndCheck(&pid0) != ClProLang::Successful) {
 		CcLogFatal("Cannot spawn PID0");
 		CcCore::Exit(2);
 	}
 
-	ClLoop::nameserver.EraseConfig("checkloop", "plot");
-	ClLoop::nameserver.StoreConfig("checkloop", "plot", optplot);
+	ClLoop::nms.EraseConfig("checkloop", "plot");
+	ClLoop::nms.StoreConfig("checkloop", "plot", optplot);
 
-	ClLoop::processing.Directory(pid0, "/tmp/");
-	ClLoop::processing.IncludeNDF(pid0) ;
-	ClLoop::processing.Exec(pid0, "ndf_checkloop");
+	ClLoop::pro.Directory(pid0, "/tmp/");
+	ClLoop::pro.IncludeNDF(pid0) ;
+	ClLoop::pro.Exec(pid0, "ndf_checkloop");
 
-	if(ClLoop::processing.Check(pid0) == false) {
+	if(ClLoop::pro.Check(pid0) == false) {
 		CcLogFatal("PID0 is dead");
 		goto shutdown;
 	}
 
-	if(ClLoop::acquisition.OpenXDF(filebdf, filelog, "debug=1") 
+	if(ClLoop::acq.OpenXDF(filebdf, filelog, "debug=1") 
 			!= ClAcqLang::Successful) {
 		CcLogFatal("Failed to open XDF, going down");
 		goto shutdown;
@@ -93,7 +93,7 @@ int main(int argc, char* argv[]) {
 			CcLogFatal("Lost connection with loop");
 			goto shutdown;
 		}
-		if(ClLoop::processing.Check(pid0) == false) {
+		if(ClLoop::pro.Check(pid0) == false) {
 			CcLogFatal("PID0 died");
 			goto shutdown;
 		}
@@ -102,9 +102,9 @@ int main(int argc, char* argv[]) {
 	}
 
 shutdown:
-	ClLoop::acquisition.CloseXDF();
-	ClLoop::nameserver.Erase("ndf_monitor::plot");
-	ClLoop::processing.Terminate(pid0);
+	ClLoop::acq.CloseXDF();
+	ClLoop::nms.Erase("ndf_monitor::plot");
+	ClLoop::pro.Terminate(pid0);
 
 	CcCore::Exit(0);
 }

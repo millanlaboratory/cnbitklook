@@ -27,12 +27,12 @@ ClLoop* ClLoop::_instance = NULL;
 unsigned int ClLoop::_refCount = 0;
 
 /* Declarations */	
-ClProClient ClLoop::processing;
-ClAcqClient ClLoop::acquisition;
-ClNmsClient ClLoop::nameserver;
-CcAddress ClLoop::_processing;
-CcAddress ClLoop::_acquisition;
-CcAddress ClLoop::_nameserver;
+ClProClient ClLoop::pro;
+ClAcqClient ClLoop::acq;
+ClNmsClient ClLoop::nms;
+CcAddress ClLoop::_addrPro;
+CcAddress ClLoop::_addrAcq;
+CcAddress ClLoop::_addrNms;
 	
 /*
 const CcPort ClLoop::portNsr = "8123";
@@ -83,21 +83,21 @@ bool ClLoop::Connect(void) {
 	}
 
 	int status = ClLoop::Connect(nameserver);
-	CcLogDebugS("CnbiTk loop nameserver: " << ClLoop::_nameserver);
-	CcLogDebugS("CnbiTk loop processing: " << ClLoop::_processing);
-	CcLogDebugS("CnbiTk loop acquisition: " << ClLoop::_acquisition);
+	CcLogDebugS("CnbiTk loop nameserver: " << ClLoop::_addrNms);
+	CcLogDebugS("CnbiTk loop pro: " << ClLoop::_addrPro);
+	CcLogDebugS("CnbiTk loop acq: " << ClLoop::_addrAcq);
 	return status; 
 }
 		
 bool ClLoop::Connect(CcAddress nameserver) {
-	ClLoop::_nameserver = nameserver;
-	if(ClLoop::ConnectNameserver() == false)
+	ClLoop::_addrNms = nameserver;
+	if(ClLoop::ConnectNms() == false)
 		return false;
 	if(ClLoop::QueryAddresses() == false)
 		return false;
-	if(ClLoop::ConnectProcessing() == false)
+	if(ClLoop::ConnectPro() == false)
 		return false;
-	if(ClLoop::ConnectAcquisition() == false)
+	if(ClLoop::ConnectAcq() == false)
 		return false;
 	return true;
 }
@@ -115,44 +115,44 @@ bool ClLoop::Connect(CCfgConfig* configuration) {
 }
 		
 void ClLoop::Disconnect(void) {
-	ClLoop::processing.Disconnect();
-	ClLoop::acquisition.Disconnect();
-	ClLoop::nameserver.Disconnect();
+	ClLoop::pro.Disconnect();
+	ClLoop::acq.Disconnect();
+	ClLoop::nms.Disconnect();
 }
 		
 bool ClLoop::IsConnected(void) {
-	return ClLoop::processing.IsConnected() &&
-		ClLoop::acquisition.IsConnected() &&
-		ClLoop::nameserver.IsConnected();
+	return ClLoop::pro.IsConnected() &&
+		ClLoop::acq.IsConnected() &&
+		ClLoop::nms.IsConnected();
 }
 
-bool ClLoop::ConnectNameserver(void) {
-	if(ClLoop::nameserver.Connect(ClLoop::_nameserver)) 
+bool ClLoop::ConnectNms(void) {
+	if(ClLoop::nms.Connect(ClLoop::_addrNms)) 
 		return true;
 
-	CcLogDebugS("Cannot connect to nameserver: " << ClLoop::_nameserver);
+	CcLogDebugS("Cannot connect to nameserver: " << ClLoop::_addrNms);
 	return false;
 }
 
-bool ClLoop::ConnectProcessing(void) {
-	if(ClLoop::processing.Connect(ClLoop::_processing)) 
+bool ClLoop::ConnectPro(void) {
+	if(ClLoop::pro.Connect(ClLoop::_addrPro)) 
 		return true;
 
-	CcLogDebugS("Cannot connect to processing: " << ClLoop::_processing);
+	CcLogDebugS("Cannot connect to pro: " << ClLoop::_addrPro);
 	return false;
 }
 
-bool ClLoop::ConnectAcquisition(void) {
-	if(ClLoop::acquisition.Connect(ClLoop::_acquisition)) 
+bool ClLoop::ConnectAcq(void) {
+	if(ClLoop::acq.Connect(ClLoop::_addrAcq)) 
 		return true;
 
-	CcLogDebugS("Cannot connect to acquisition: " << ClLoop::_acquisition);
+	CcLogDebugS("Cannot connect to acq: " << ClLoop::_addrAcq);
 	return false;
 }
 
 bool ClLoop::QueryAddresses(void) {
-	int sp = ClLoop::nameserver.Query("/processing", &ClLoop::_processing);
-	int sa = ClLoop::nameserver.Query("/acquisition", &ClLoop::_acquisition);
+	int sp = ClLoop::nms.Query("/pro", &ClLoop::_addrPro);
+	int sa = ClLoop::nms.Query("/acq", &ClLoop::_addrAcq);
 
 	if(sp != ClNmsLang::Successful)
 		return false;

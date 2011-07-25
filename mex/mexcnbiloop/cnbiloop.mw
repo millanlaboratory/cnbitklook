@@ -68,7 +68,7 @@ $ #include <stdio.h>
 % Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
 % Michele Tavella <michele.tavella@epfl.ch>
 	$ void clquery(ClLoop* q, std::string* name, char* addr) {
-	$	std::string ad = q->nameserver.Query(*name);
+	$	std::string ad = q->nms.Query(*name);
 	$	strcpy(addr, ad.c_str());
 	$ }
 	address = '';
@@ -79,7 +79,7 @@ $ #include <stdio.h>
 % Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
 % Michele Tavella <michele.tavella@epfl.ch>
 	$ bool clset(ClLoop* q, std::string* name, std::string* addr) {
-	$	return(q->nameserver.Set(*name, *addr) == ClNmsLang::Successful);
+	$	return(q->nms.Set(*name, *addr) == ClNmsLang::Successful);
 	$ }
 	# std::string* tname = new std::string(cstring name);
 	# std::string* taddress = new std::string(cstring address);
@@ -89,7 +89,7 @@ $ #include <stdio.h>
 % Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
 % Michele Tavella <michele.tavella@epfl.ch>
 	$ bool clunset(ClLoop* q, std::string* name) {
-	$	return(q->nameserver.Unset(*name) == ClNmsLang::Successful);
+	$	return(q->nms.Unset(*name) == ClNmsLang::Successful);
 	$ }
 	# std::string* tname = new std::string(cstring name);
 	# bool status = clunset(ClLoop* c, std::string* tname);
@@ -98,7 +98,7 @@ $ #include <stdio.h>
 % Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
 % Michele Tavella <michele.tavella@epfl.ch>
 	$ bool clstore(ClLoop* q, std::string* name, std::string* content) {
-	$	return(q->nameserver.Store(*name, *content) == ClNmsLang::Successful);
+	$	return(q->nms.Store(*name, *content) == ClNmsLang::Successful);
 	$ }
 	# std::string* tname = new std::string(cstring name);
 	# std::string* tcontent = new std::string(cstring content);
@@ -109,7 +109,7 @@ $ #include <stdio.h>
 % Michele Tavella <michele.tavella@epfl.ch>
 	$ void clretrieve(ClLoop* q, std::string* name, char* content) {
 	$	std::string cn;
-	$ 	if(q->nameserver.Retrieve(*name, &cn) == ClNmsLang::Successful)
+	$ 	if(q->nms.Retrieve(*name, &cn) == ClNmsLang::Successful)
 	$		strcpy(content, cn.c_str());
 	$ }
 	content = '';
@@ -120,7 +120,7 @@ $ #include <stdio.h>
 % Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
 % Michele Tavella <michele.tavella@epfl.ch>
 	$ bool clerase(ClLoop* q, std::string* name) {
-	$	return(q->nameserver.Erase(*name) == ClNmsLang::Successful);
+	$	return(q->nms.Erase(*name) == ClNmsLang::Successful);
 	$ }
 	# std::string* tname = new std::string(cstring name);
 	# bool status = clerase(ClLoop* c, std::string* tname);
@@ -129,7 +129,7 @@ $ #include <stdio.h>
 % Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
 % Michele Tavella <michele.tavella@epfl.ch>
 	$ bool clretrievefile(ClLoop* q, std::string* name, std::string* filename) {
-	$	return q->nameserver.RetrieveFile(*name, *filename);
+	$	return q->nms.RetrieveFile(*name, *filename);
 	$ }
 	# std::string* tname = new std::string(cstring name);
 	# std::string* tfilename = new std::string(cstring filename);
@@ -139,7 +139,7 @@ $ #include <stdio.h>
 % Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
 % Michele Tavella <michele.tavella@epfl.ch>
 	$ bool clstorefile(ClLoop* q, std::string* name, std::string* filename) {
-	$	return(q->nameserver.StoreFile(*name, *filename));
+	$	return(q->nms.StoreFile(*name, *filename));
 	$ }
 	# std::string* tname = new std::string(cstring name);
 	# std::string* tfilename = new std::string(cstring filename);
@@ -149,7 +149,7 @@ $ #include <stdio.h>
 % Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
 % Michele Tavella <michele.tavella@epfl.ch>
 	$ bool clopenxdf(ClLoop* q, std::string* filexdf, std::string* filelog, std::string* linelog) {
-	$	return(q->acquisition.OpenXDF(*filexdf, *filelog, *linelog));
+	$	return(q->acq.OpenXDF(*filexdf, *filelog, *linelog));
 	$ }
 	# std::string* tfilexdf = new std::string(cstring filexdf);
 	# std::string* tfilelog = new std::string(cstring filelog);
@@ -160,7 +160,7 @@ $ #include <stdio.h>
 % Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
 % Michele Tavella <michele.tavella@epfl.ch>
 	$ bool clclosexdf(ClLoop* q) {
-	$	return(q->acquisition.CloseXDF());
+	$	return(q->acq.CloseXDF());
 	$ }
 	# bool status = clclosexdf(ClLoop* c);
 
@@ -168,7 +168,7 @@ $ #include <stdio.h>
 % Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
 % Michele Tavella <michele.tavella@epfl.ch>
 	$ bool clupdatelog(ClLoop* q, std::string* linelog) {
-	$	return(q->acquisition.UpdateLog(*linelog));
+	$	return(q->acq.UpdateLog(*linelog));
 	$ }
 	# std::string* tlinelog = new std::string(cstring linelog);
 	# bool status = clupdatelog(ClLoop* c, std::string* tlinelog);
@@ -186,7 +186,7 @@ $ #include <stdio.h>
 % Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
 % Michele Tavella <michele.tavella@epfl.ch>
 	$ bool clstorecfg(ClLoop* q, std::string* component, std::string* name, std::string* content) {
-	$	return q->nameserver.StoreConfig(*component, *name, *content);
+	$	return q->nms.StoreConfig(*component, *name, *content);
 	$ }
 	# std::string* tname = new std::string(cstring name);
 	# std::string* tcomponent = new std::string(cstring component);
@@ -197,7 +197,7 @@ $ #include <stdio.h>
 % Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
 % Michele Tavella <michele.tavella@epfl.ch>
 	$ void clretrievecfg(ClLoop* q, std::string* component, std::string* name, char* content) {
-	$	std::string cn = q->nameserver.RetrieveConfig(*component, *name);
+	$	std::string cn = q->nms.RetrieveConfig(*component, *name);
 	$ 	if(cn.empty() == false)
 	$		strcpy(content, cn.c_str());
 	$ }
@@ -210,7 +210,7 @@ $ #include <stdio.h>
 % Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
 % Michele Tavella <michele.tavella@epfl.ch>
 	$ bool clerasecfg(ClLoop* q, std::string* component, std::string* name) {
-	$	return(q->nameserver.EraseConfig(*component, *name) == ClNmsLang::Successful);
+	$	return(q->nms.EraseConfig(*component, *name) == ClNmsLang::Successful);
 	$ }
 	# std::string* tname = new std::string(cstring name);
 	# std::string* tcomponent = new std::string(cstring component);

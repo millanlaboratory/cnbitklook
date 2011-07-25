@@ -215,14 +215,14 @@ int main(int argc, char* argv[]) {
 		if(argc != 5) usage();
 		connect();
 	
-		status = ClLoop::acquisition.OpenXDF(arg1, arg2, arg3);
+		status = ClLoop::acq.OpenXDF(arg1, arg2, arg3);
 		acquisition(status);
 		CcCore::Exit(status);
 
 	} else if(command.compare("closexdf") == 0) {
 		connect();
 
-		status = ClLoop::acquisition.CloseXDF();
+		status = ClLoop::acq.CloseXDF();
 		acquisition(status);
 		CcCore::Exit(status);
 	
@@ -230,7 +230,7 @@ int main(int argc, char* argv[]) {
 		if(argc != 3) usage();
 		connect();
 
-		status = ClLoop::acquisition.UpdateLog(arg1);
+		status = ClLoop::acq.UpdateLog(arg1);
 		acquisition(status);
 		CcCore::Exit(status);
 
@@ -238,7 +238,7 @@ int main(int argc, char* argv[]) {
 		if(argc != 4) usage();
 		connect();
 
-		status = ClLoop::nameserver.Set(arg1, arg2);
+		status = ClLoop::nms.Set(arg1, arg2);
 		nameserver(status);
 		CcCore::Exit(status);
 
@@ -246,7 +246,7 @@ int main(int argc, char* argv[]) {
 		if(argc != 3) usage();
 		connect();
 
-		status = ClLoop::nameserver.Unset(arg1);
+		status = ClLoop::nms.Unset(arg1);
 		CcCore::Exit(status);
 
 	} else if(command.compare("query") == 0) {
@@ -254,7 +254,7 @@ int main(int argc, char* argv[]) {
 		connect();
 
 		CcAddress address;
-		status = ClLoop::nameserver.Query(arg1, &address);
+		status = ClLoop::nms.Query(arg1, &address);
 		nameserver(status);
 		if(status == ClNmsLang::Successful)
 			cout << address << endl;
@@ -264,7 +264,7 @@ int main(int argc, char* argv[]) {
 		if(argc != 4) usage();
 		connect();
 
-		status = ClLoop::nameserver.Store(arg1, arg2);
+		status = ClLoop::nms.Store(arg1, arg2);
 		nameserver(status);
 		CcCore::Exit(status);
 
@@ -273,7 +273,7 @@ int main(int argc, char* argv[]) {
 		connect();
 
 		std::string storage;
-		status = ClLoop::nameserver.Retrieve(arg1, &storage);
+		status = ClLoop::nms.Retrieve(arg1, &storage);
 		nameserver(status);
 		if(status == ClNmsLang::Successful)
 			cout << storage << endl;
@@ -282,7 +282,7 @@ int main(int argc, char* argv[]) {
 		if(argc != 3) usage();
 		connect();
 		
-		status = ClLoop::nameserver.Erase(arg3);
+		status = ClLoop::nms.Erase(arg3);
 		nameserver(status);
 		CcCore::Exit(status);
 	
@@ -290,7 +290,7 @@ int main(int argc, char* argv[]) {
 		if(argc != 5) usage();
 		connect();
 
-		status = ClLoop::nameserver.StoreConfig(arg1, arg2, arg3);
+		status = ClLoop::nms.StoreConfig(arg1, arg2, arg3);
 		status = status == 0 ? 
 			ClNmsLang::ErrorGeneric : ClNmsLang::Successful;
 		nameserver(status);
@@ -300,7 +300,7 @@ int main(int argc, char* argv[]) {
 		if(argc != 4) usage();
 		connect();
 
-		std::string storage = ClLoop::nameserver.RetrieveConfig(arg1, arg2);
+		std::string storage = ClLoop::nms.RetrieveConfig(arg1, arg2);
 		status = storage.empty() == 1 ? 
 			ClNmsLang::ErrorGeneric : ClNmsLang::Successful;
 		nameserver(status);
@@ -311,7 +311,7 @@ int main(int argc, char* argv[]) {
 		if(argc != 4) usage();
 		connect();
 
-		status = ClLoop::nameserver.EraseConfig(arg1, arg2);
+		status = ClLoop::nms.EraseConfig(arg1, arg2);
 		status = status == 0 ?
 			ClNmsLang::ErrorGeneric : ClNmsLang::Successful;
 		nameserver(status);
@@ -321,21 +321,21 @@ int main(int argc, char* argv[]) {
 		if(argc != 4) usage();
 		connect();
 
-		bool status = ClLoop::nameserver.StoreFile(arg1, arg2);
+		bool status = ClLoop::nms.StoreFile(arg1, arg2);
 		CcCore::Exit(status);
 
 	} else if(command.compare("retrievefile") == 0) {
 		if(argc != 4) usage();
 		connect();
 
-		bool status = ClLoop::nameserver.RetrieveFile(arg1, arg2);
+		bool status = ClLoop::nms.RetrieveFile(arg1, arg2);
 		CcCore::Exit(status);
 
 	} else if(command.compare("fork") == 0) {
 		connect();
 
 		int pid;
-		status = ClLoop::processing.ForkAndCheck(&pid);
+		status = ClLoop::pro.ForkAndCheck(&pid);
 		processing(status);
 		if(status == ClProLang::Successful)
 			cout << pid << endl;
@@ -347,7 +347,7 @@ int main(int argc, char* argv[]) {
 		
 		int pid = -1;
 		sscanf(arg1.c_str(), "%d", &pid);
-		status = ClLoop::processing.Exec(pid, arg2);
+		status = ClLoop::pro.Exec(pid, arg2);
 		processing(status);
 		CcCore::Exit(status);
 	
@@ -357,7 +357,7 @@ int main(int argc, char* argv[]) {
 		
 		int pid = -1;
 		sscanf(arg1.c_str(), "%d", &pid);
-		status = ClLoop::processing.IsAlive(pid);
+		status = ClLoop::pro.IsAlive(pid);
 		processing(status);
 		if(status == ClProLang::Successful) 
 			cout << "alive" << endl;
@@ -371,7 +371,7 @@ int main(int argc, char* argv[]) {
 		
 		int pid = -1;
 		sscanf(arg1.c_str(), "%d", &pid);
-		status = ClLoop::processing.Terminate(pid);
+		status = ClLoop::pro.Terminate(pid);
 		processing(status);
 		CcCore::Exit(status);
 
@@ -381,7 +381,7 @@ int main(int argc, char* argv[]) {
 
 		int pid = -1;
 		sscanf(arg1.c_str(), "%d", &pid);
-		status = ClLoop::processing.Directory(pid, arg2);
+		status = ClLoop::pro.Directory(pid, arg2);
 		processing(status);
 		CcCore::Exit(status);
 	
@@ -391,7 +391,7 @@ int main(int argc, char* argv[]) {
 		
 		int pid = -1;
 		sscanf(arg1.c_str(), "%d", &pid);
-		status = ClLoop::processing.Include(pid, arg1);
+		status = ClLoop::pro.Include(pid, arg1);
 		processing(status);
 		CcCore::Exit(status);
 	
@@ -401,7 +401,7 @@ int main(int argc, char* argv[]) {
 		
 		int pid = -1;
 		sscanf(arg1.c_str(), "%d", &pid);
-		status = ClLoop::processing.Include(pid, arg1, arg2);
+		status = ClLoop::pro.Include(pid, arg1, arg2);
 		processing(status);
 		CcCore::Exit(status);
 

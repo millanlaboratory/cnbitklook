@@ -41,15 +41,15 @@ class ClLoop {
 		ClLoop(void);
 		virtual ~ClLoop(void);
 		static void Destroy(void);
-		static bool ConnectNameserver(void);
-		static bool ConnectProcessing(void);
-		static bool ConnectAcquisition(void);
+		static bool ConnectNms(void);
+		static bool ConnectPro(void);
+		static bool ConnectAcq(void);
 		static bool QueryAddresses(void);
 
 	public:
-		static ClProClient processing;
-		static ClAcqClient acquisition;
-		static ClNmsClient nameserver;
+		static ClProClient pro;
+		static ClAcqClient acq;
+		static ClNmsClient nms;
 		/*
 		const static CcPort portNms;
 		const static CcPort portPro;
@@ -58,9 +58,9 @@ class ClLoop {
 		const static CcPort portDev;
 		*/
 	protected:
-		static CcAddress _processing;
-		static CcAddress _acquisition;
-		static CcAddress _nameserver;
+		static CcAddress _addrPro;
+		static CcAddress _addrAcq;
+		static CcAddress _addrNms;
 	private:
 		static ClLoop* _instance;
 		static unsigned int _refCount;
