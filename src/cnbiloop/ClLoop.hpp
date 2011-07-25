@@ -49,10 +49,6 @@ class ClLoop {
 		static ClProClient pro;
 		static ClAcqClient acq;
 		static ClNmsClient nms;
-	protected:
-		static CcAddress _addrPro;
-		static CcAddress _addrAcq;
-		static CcAddress _addrNms;
 	private:
 		static ClLoop* _instance;
 		static unsigned int _refCount;

@@ -34,6 +34,7 @@
 #define MODULE_LOOP			3
 
 #include "ClLoop.hpp"
+#include "ClLoopConfig.hpp"
 #include <cnbicore/CcBasic.hpp>
 
 bool dump_configuration(CCfgConfig* config, const int modality,
@@ -59,6 +60,7 @@ bool dump_configuration(CCfgConfig* config, const int modality,
 
 int unload_configuration(const std::string& block) {
 	bool status[5];
+
 	status[0] = ClLoop::nms.EraseConfig(block, "block");
 	status[1] = ClLoop::nms.EraseConfig(block, "taskset");
 	status[2] = ClLoop::nms.EraseConfig(block, "xml");
@@ -220,7 +222,9 @@ int main(int argc, char* argv[]) {
 		CcCore::Exit(0);
 	}
 
-	CcCore::OpenLogger("cl_init", CcCore::TerminalDisabled);
+	//CcCore::OpenLogger("cl_init", CcCore::TerminalDisabled);
+	CcCore::OpenLogger("cl_init", CcCore::TerminalColors);
+	ClLoopConfig::Load();
 	
 	while((opt = getopt(argc, argv, "x:M:B:T:FNsutlumdc")) != -1) {
 		if(opt == 'x')
@@ -294,6 +298,7 @@ int main(int argc, char* argv[]) {
 	if(die == true)
 		CcCore::Exit(1);;
 	
+
 	CCfgConfig* config = NULL;
 	if(what != WHAT_UNLOAD) {
 		try {

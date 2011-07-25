@@ -31,11 +31,9 @@ unsigned int ClLoop::_refCount = 0;
 ClProClient ClLoop::pro;
 ClAcqClient ClLoop::acq;
 ClNmsClient ClLoop::nms;
-CcAddress ClLoop::_addrPro;
-CcAddress ClLoop::_addrAcq;
-CcAddress ClLoop::_addrNms;
 
 ClLoop::ClLoop(void) {
+	ClLoopConfig::Load();
 }
 
 ClLoop::~ClLoop(void) {
@@ -67,8 +65,7 @@ void ClLoop::Destroy(void) {
 }
 
 bool ClLoop::Connect(void) {
-	CcAddress nameserver;
-	
+	CcAddress nameserver = ClLoopConfig::GetNms();
 	/*
 	CcAddress envvar = CcCore::GetEnvCnbiTkAddress();
 	if(envvar.empty() == false) {
@@ -78,18 +75,17 @@ bool ClLoop::Connect(void) {
 		CcLogDebug("$CNBITK_ADDRESS not defined, assuming localhost");
 		nameserver = "127.0.0.1:8123";
 	}
+	*/
 
 	int status = ClLoop::Connect(nameserver);
-	CcLogDebugS("CnbiTk loop nameserver: " << ClLoop::_addrNms);
-	CcLogDebugS("CnbiTk loop pro: " << ClLoop::_addrPro);
-	CcLogDebugS("CnbiTk loop acq: " << ClLoop::_addrAcq);
+	CcLogDebugS("CnbiTk loop nameserver: " << ClLoopConfig::GetNms());
+	CcLogDebugS("CnbiTk loop pro: " << ClLoopConfig::GetPro());
+	CcLogDebugS("CnbiTk loop acq: " << ClLoopConfig::GetAcq());
 	return status; 
-	*/
-	return 1;
 }
 		
 bool ClLoop::Connect(CcAddress nameserver) {
-	ClLoop::_addrNms = nameserver;
+	ClLoopConfig::GetNms() = nameserver;
 	if(ClLoop::ConnectNms() == false)
 		return false;
 	if(ClLoop::QueryAddresses() == false)
@@ -126,38 +122,40 @@ bool ClLoop::IsConnected(void) {
 }
 
 bool ClLoop::ConnectNms(void) {
-	if(ClLoop::nms.Connect(ClLoop::_addrNms)) 
+	if(ClLoop::nms.Connect(ClLoopConfig::GetNms())) 
 		return true;
 
-	CcLogDebugS("Cannot connect to nameserver: " << ClLoop::_addrNms);
+	CcLogDebugS("Cannot connect to nameserver: " << ClLoopConfig::GetNms());
 	return false;
 }
 
 bool ClLoop::ConnectPro(void) {
-	if(ClLoop::pro.Connect(ClLoop::_addrPro)) 
+	if(ClLoop::pro.Connect(ClLoopConfig::GetPro())) 
 		return true;
 
-	CcLogDebugS("Cannot connect to pro: " << ClLoop::_addrPro);
+	CcLogDebugS("Cannot connect to pro: " << ClLoopConfig::GetPro());
 	return false;
 }
 
 bool ClLoop::ConnectAcq(void) {
-	if(ClLoop::acq.Connect(ClLoop::_addrAcq)) 
+	if(ClLoop::acq.Connect(ClLoopConfig::GetAcq())) 
 		return true;
 
-	CcLogDebugS("Cannot connect to acq: " << ClLoop::_addrAcq);
+	CcLogDebugS("Cannot connect to acq: " << ClLoopConfig::GetAcq());
 	return false;
 }
 
 bool ClLoop::QueryAddresses(void) {
-	int sp = ClLoop::nms.Query("/pro", &ClLoop::_addrPro);
-	int sa = ClLoop::nms.Query("/acq", &ClLoop::_addrAcq);
-
-	if(sp != ClNmsLang::Successful)
-		return false;
-	if(sa != ClNmsLang::Successful)
-		return false;
-
+//	std::string addrPro = ClLoopConfig::GetPro()
+//	std::string addrAcq = ClLoopConfig::GetAcq()
+//	int sp = ClLoop::nms.Query("/pro", &addrPro);
+//	int sa = ClLoop::nms.Query("/acq", &addrAcq);
+//
+//	if(sp != ClNmsLang::Successful)
+//		return false;
+//	if(sa != ClNmsLang::Successful)
+//		return false;
+//
 	return true;
 }
 
