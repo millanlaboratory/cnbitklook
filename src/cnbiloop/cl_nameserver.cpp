@@ -16,6 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "ClLoopConfigSrv.hpp"
 #include "ClNmsServer.hpp" 
 #include "ClNmsClient.hpp"
 #include <cnbicore/CcBasic.hpp>
@@ -24,19 +25,15 @@
 
 void usage(void) { 
 	printf("Usage: cl_nameserver [OPTION]...\n\n");
-	printf("  -p       nameserver TCP port (8123 default)\n");
 	printf("  -h       display this help and exit\n");
 }
 
 int main(int argc, char* argv[]) {
 	int opt;
 	std::string optopt;
-	CcPort portNameserver("8123");
 	
-	while((opt = getopt(argc, argv, "p:h")) != -1) {
-		if(opt == 'p')
-			portNameserver.assign(optarg);
-		else {
+	while((opt = getopt(argc, argv, "h")) != -1) {
+		if(opt == 'h') {
 			usage();
 			CcCore::Exit(opt == 'h' ? EXIT_SUCCESS : EXIT_FAILURE);
 		}
@@ -45,32 +42,24 @@ int main(int argc, char* argv[]) {
 	CcCore::OpenLogger("cl_nameserver");
 	CcCore::CatchSIGINT();
 	CcCore::CatchSIGTERM();
+	ClLoopConfigSrv::Load();
 	
-	// Handle the CNBITK_ADDRESS envvar
-	CcIp cnbitkip = CcCore::GetEnvCnbiTkAddress();
-	if(cnbitkip.empty() == true) {
-		cnbitkip.assign("127.0.0.1");
-	}
-	CcLogConfigS("CnbkTk loop running on: " << cnbitkip);
+	CcLogConfigS("Nms will bind: " << ClLoopConfigSrv::GetSrvNms());
 
-	// Handle hosts
-	CcEndpoint epNameserver(cnbitkip, portNameserver);
-	CcLogConfigS("Nameserver will bind: " << epNameserver.GetAddress());
-
+	// Setup TCP server
 	CcServer server(CCCORE_1MB);
 	ClNmsServer handler;
-	ClNmsClient nsclient;
 	handler.StartMonitor();
-	try {
-		handler.Register(&server);
-		server.Bind(epNameserver.GetAddress());
-	} catch(CcException e) {
-		CcLogFatal("Cannot bind socket");
+	handler.Register(&server);
+		
+	if(server.Bind(ClLoopConfigSrv::GetSrvNms()) == false) {
+		CcLogFatal("Cannot bind nameserver socket");
 		CcCore::Exit(2);
 	}
 
 	CcTime::Sleep(1000.00f);
-	if(nsclient.Connect(epNameserver.GetAddress()) == false) {
+	ClNmsClient nsclient;
+	if(nsclient.Connect(ClLoopConfigSrv::GetNms()) == false) {
 		CcLogFatal("Cannot connect to nameserver");
 		CcCore::Exit(3);
 	}

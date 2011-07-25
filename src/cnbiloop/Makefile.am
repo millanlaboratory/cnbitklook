@@ -63,6 +63,8 @@ libcnbiloop_la_SOURCES = ClMatlab.cpp \
 						 ClLoop.cpp \
 						 ClLoopConfig.hpp \
 						 ClLoopConfig.cpp \
+						 ClLoopConfigSrv.hpp \
+						 ClLoopConfigSrv.cpp \
 						 ClTobiIc.cpp \
 						 ClTobiIc.hpp \
 						 ClTobiId.cpp \

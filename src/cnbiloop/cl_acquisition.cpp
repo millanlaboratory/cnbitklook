@@ -16,6 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "ClLoopConfigSrv.hpp"
 #include "ClAcqServer.hpp" 
 #include "ClDevServer.hpp" 
 #include "ClBusServer.hpp" 
@@ -44,10 +45,6 @@ void usage(void) {
 	printf("Usage: cl_acquisition [OPTION]...\n\n");
 	printf("  -d       device: gtec, biosemi, GDF/BDF file, EGD string\n");
 	printf("  -f       buffering rate in Hz (16 default)\n");
-	printf("  -A       TCP port for the acquisition server (8125 default)\n");
-	printf("  -B       TCP port for the bus server (8126 default)\n");
-	printf("  -D       TCP port for the devices server (8127 default)\n");
-	printf("  -N       TCP port for the nameserver (8123 default)\n");
 	printf("  -n       basename for the pipes (/tmp/cl.pipe.ndf. default)\n");
 	printf("  -i       interactive acquisition starting\n");
 	printf("  -p       print labels added to NDF frame\n");
@@ -61,27 +58,15 @@ int main(int argc, char* argv[]) {
 	int opt;
 	std::string optdevice("");
 	std::string optfs("16");
-	CcPort portNs("8123"),
-		   portAcq("8125"), 
-		   portBus("8126"), 
-		   portDev("8127");
 	std::string optpipename("/tmp/cl.pipe.ndf.");
 	bool optinteractive = false, optprintndf = false, optprintbuffers = false,
 		 optwarnlate = false, optreopen = false;
 
-	while((opt = getopt(argc, argv, "A:B:D:N:d:f:l:n:hipwbr")) != -1) {
+	while((opt = getopt(argc, argv, "d:f:l:n:hipwbr")) != -1) {
 		if(opt == 'd')
 			optdevice.assign(optarg);
 		else if(opt == 'f')
 			optfs.assign(optarg);
-		else if(opt == 'A')
-			portAcq.assign(optarg);
-		else if(opt == 'B')
-			portBus.assign(optarg);
-		else if(opt == 'D')
-			portDev.assign(optarg);
-		else if(opt == 'M')
-			portNs.assign(optarg);
 		else if(opt == 'n')
 			optpipename.assign(optarg);
 		else if(opt == 'i')
@@ -102,24 +87,8 @@ int main(int argc, char* argv[]) {
 	CcCore::OpenLogger("cl_acquisition");
 	CcCore::CatchSIGINT();
 	CcCore::CatchSIGTERM();
+	ClLoopConfigSrv::Load();
 	
-	// Handle the CNBITK_ADDRESS envvar
-	CcIp cnbitkip = CcCore::GetEnvCnbiTkAddress();
-	if(cnbitkip.empty() == true) {
-		cnbitkip.assign("127.0.0.1");
-	}
-	CcLogConfigS("CnbkTk loop running on: " << cnbitkip);
-	
-	// Handle hosts
-	CcEndpoint epNs(cnbitkip, portNs);
-	CcEndpoint epAcq(cnbitkip, portAcq); 
-	CcEndpoint epBus(cnbitkip, portBus); 
-	CcEndpoint epDev(cnbitkip, portDev);
-	CcLogConfigS("Acquisition will bind: " << epAcq.GetAddress());
-	CcLogConfigS("Bus will bind: " << epBus.GetAddress());
-	CcLogConfigS("Dev will bind: " << epDev.GetAddress());
-	CcLogConfigS("Nameserver configured as: " << epNs.GetAddress());
-
 	CcLogConfigS("Acquisition: " << 
 			optfs << "Hz, " << 
 			optpipename << "[0," << PIPELINES-1 << "]");
@@ -164,6 +133,10 @@ int main(int argc, char* argv[]) {
 	pipes = new CcPipeServer(frame.ack.buffer, frame.ack.bsize,
 			frame.data.bsize);
 	pipes->Open(optpipename, PIPELINES);
+	
+	CcLogConfigS("Acq configured as: " << ClLoopConfigSrv::GetSrvAcq());
+	CcLogConfigS("Bus configured as: " << ClLoopConfigSrv::GetSrvBus());
+	CcLogConfigS("Dev configured as: " << ClLoopConfigSrv::GetSrvDev());
 
 	// Initialize nameserver client
 	ClNmsClient nsclient;
@@ -172,7 +145,7 @@ int main(int argc, char* argv[]) {
 	CcServer serverAcq(CCCORE_1MB);
 	ClAcqServer handleAcq(&writer);
 	handleAcq.Register(&serverAcq);
-	if(serverAcq.Bind(epAcq.GetAddress()) == false) {
+	if(serverAcq.Bind(ClLoopConfigSrv::GetSrvAcq()) == false) {
 		CcLogFatal("Cannot bind acquisition socket");
 		CcCore::Exit(4);
 	}
@@ -180,7 +153,7 @@ int main(int argc, char* argv[]) {
 	CcServer serverBus(CCCORE_1MB);
 	ClBusServer handleBus(&writer, &frame, &semframe);
 	handleBus.Register(&serverBus);
-	if(serverBus.Bind(epBus.GetAddress()) == false) {
+	if(serverBus.Bind(ClLoopConfigSrv::GetSrvBus()) == false) {
 		CcLogFatal("Cannot bind bus socket");
 		CcCore::Exit(5);
 	}
@@ -188,29 +161,29 @@ int main(int argc, char* argv[]) {
 	CcServer serverDev(CCCORE_1MB);
 	ClDevServer handleDev(&writer, &frame, &semframe);
 	handleDev.Register(&serverDev);
-	if(serverDev.Bind(epDev.GetAddress()) == false) {
+	if(serverDev.Bind(ClLoopConfigSrv::GetSrvDev()) == false) {
 		CcLogFatal("Cannot bind dev socket");
 		CcCore::Exit(50);
 	}
 
-	if(nsclient.Connect(epNs.GetAddress()) == false) {
+	if(nsclient.Connect(ClLoopConfigSrv::GetNms()) == false) {
 		CcLogFatal("Cannot connect to nameserver");
 		CcCore::Exit(6);
 	}
 
-	nsstatus = nsclient.Set("/acquisition", epAcq.GetAddress());
+	nsstatus = nsclient.Set("/acquisition", ClLoopConfigSrv::GetAcq());
 	if(nsstatus != ClNmsLang::Successful) {
 		CcLogFatal("Cannot register acquisition with nameserver");
 		CcCore::Exit(7);
 	}
 	
-	nsstatus = nsclient.Set("/bus", epBus.GetAddress());
+	nsstatus = nsclient.Set("/bus", ClLoopConfigSrv::GetBus());
 	if(nsstatus != ClNmsLang::Successful) {
 		CcLogFatal("Cannot register bus with nameserver");
 		CcCore::Exit(8);
 	}
 	
-	nsstatus = nsclient.Set("/dev", epDev.GetAddress());
+	nsstatus = nsclient.Set("/dev", ClLoopConfigSrv::GetDev());
 	if(nsstatus != ClNmsLang::Successful) {
 		CcLogFatal("Cannot register dev with nameserver");
 		CcCore::Exit(8);
@@ -230,7 +203,7 @@ int main(int argc, char* argv[]) {
 	for(int p = 0; p < PIPELINES; p++) { 
 		std::stringstream ctlname, ctrladdr;
 		ctlname << "/ctrl" << p;
-		ctrladdr << cnbitkip << ":950" << p;
+		ctrladdr << ClLoopConfigSrv::GetSrvIp() << ":950" << p;
 		int nsstatus = nsclient.Set(ctlname.str(), ctrladdr.str());
 		if(nsstatus != ClNmsLang::Successful) {
 			CcLogFatal("Cannot register controllers with nameserver");

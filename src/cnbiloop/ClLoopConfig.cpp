@@ -28,6 +28,7 @@
 /* Initialization */
 ClLoopConfig* ClLoopConfig::_instance = NULL;
 unsigned int ClLoopConfig::_refCount = 0;
+bool ClLoopConfig::_loaded = false;
 
 CcPort ClLoopConfig::ip;
 CcPort ClLoopConfig::portNms;
@@ -37,6 +38,7 @@ CcPort ClLoopConfig::portBus;
 CcPort ClLoopConfig::portDev;
 
 ClLoopConfig::ClLoopConfig(void) {
+	ClLoopConfig::Load();
 }
 
 ClLoopConfig::~ClLoopConfig(void) {
@@ -79,7 +81,7 @@ void ClLoopConfig::Load(void) {
 		CcLogWarningS("Using default configuration");
 		ClLoopConfig::Init();
 	}
-
+	ClLoopConfig::_loaded = true;
 }
 		
 void ClLoopConfig::Init(void) {
@@ -92,6 +94,9 @@ void ClLoopConfig::Init(void) {
 }
 		
 void ClLoopConfig::Read(const std::string& filename) {
+	if(ClLoopConfig::_loaded == true)
+		return;
+
 	std::ifstream file(filename.c_str());
 	std::string cache;
 	char trash[2048];
@@ -100,9 +105,14 @@ void ClLoopConfig::Read(const std::string& filename) {
 
 	while(std::getline(file, cache)) {
 		++line;
+		if(cache.find("#") != std::string::npos)
+			continue;
+
 		if(cache.find("loop.ip") != std::string::npos) {
 			if(sscanf(cache.c_str(), "%s = %s", trash, buffer) == 2) {
 				ClLoopConfig::ip.assign(buffer);
+				//if(ClLoopConfig::ip.compare("0.0.0.0") == 0)
+				//	ClLoopConfig::ipSrv.assign("127.0.0.1");	
 				continue;
 			}
 		} else if(cache.find("nms.port") != std::string::npos) {
@@ -134,6 +144,36 @@ void ClLoopConfig::Read(const std::string& filename) {
 			continue;
 		CcLogErrorS("Bad format: " << filename << ", line=" << line);
 	}
+}
+
+CcAddress ClLoopConfig::GetNms(void) {
+	CcAddress address = ClLoopConfig::ip + ":" + ClLoopConfig::portNms;
+	return address;
+}
+
+CcAddress ClLoopConfig::GetPro(void) {
+	CcAddress address = ClLoopConfig::ip + ":" + ClLoopConfig::portPro;
+	return address;
+}
+
+CcAddress ClLoopConfig::GetAcq(void) {
+	CcAddress address = ClLoopConfig::ip + ":" + ClLoopConfig::portAcq;
+	return address;
+}
+
+CcAddress ClLoopConfig::GetBus(void) {
+	CcAddress address = ClLoopConfig::ip + ":" + ClLoopConfig::portBus;
+	return address;
+}
+
+CcAddress ClLoopConfig::GetDev(void) {
+	CcAddress address = ClLoopConfig::ip + ":" + ClLoopConfig::portDev;
+	return address;
+}
+
+
+CcIp ClLoopConfig::GetIp(void) {
+	return ClLoopConfig::ip;
 }
 
 #endif

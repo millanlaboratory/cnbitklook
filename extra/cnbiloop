@@ -1,0 +1,11 @@
+# CnbiTk Loop configuration file
+# All entries must follow the following format: "name = value". 
+# Keep in mind that the spaces are necessary, and removing them 
+# will lead to unread settings and a warning message
+
+loop.ip = 127.0.0.1
+nms.port = 8123
+pro.port = 8124
+acq.port = 8125
+bus.port = 8126
+dev.port = 8127

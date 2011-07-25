@@ -20,6 +20,7 @@
 #define CLLOOP_CPP 
 
 #include "ClLoop.hpp" 
+#include "ClLoopConfig.hpp" 
 #include <cnbicore/CcSocket.hpp>
 
 /* Initialization */
@@ -33,18 +34,19 @@ ClNmsClient ClLoop::nms;
 CcAddress ClLoop::_addrPro;
 CcAddress ClLoop::_addrAcq;
 CcAddress ClLoop::_addrNms;
-	
+
 ClLoop::ClLoop(void) {
 }
 
 ClLoop::~ClLoop(void) {
 	ClLoop::Disconnect();
 }
-		
+
 ClLoop* ClLoop::Instance(void) {
 	if(ClLoop::_instance == NULL)
 		ClLoop::_instance = new ClLoop;
 	++ClLoop::_refCount;
+	ClLoopConfig::Instance();
 	return ClLoop::_instance;
 }
 
@@ -55,6 +57,7 @@ unsigned int ClLoop::Refcount(void) {
 void ClLoop::Release(void) {
 	if(--ClLoop::_refCount < 1) 
 		ClLoop::Destroy();
+	ClLoopConfig::Release();
 }
 
 void ClLoop::Destroy(void) {
@@ -65,6 +68,8 @@ void ClLoop::Destroy(void) {
 
 bool ClLoop::Connect(void) {
 	CcAddress nameserver;
+	
+	/*
 	CcAddress envvar = CcCore::GetEnvCnbiTkAddress();
 	if(envvar.empty() == false) {
 		CcLogDebugS("$CNBITK_ADDRESS defined as " << envvar);
@@ -79,6 +84,8 @@ bool ClLoop::Connect(void) {
 	CcLogDebugS("CnbiTk loop pro: " << ClLoop::_addrPro);
 	CcLogDebugS("CnbiTk loop acq: " << ClLoop::_addrAcq);
 	return status; 
+	*/
+	return 1;
 }
 		
 bool ClLoop::Connect(CcAddress nameserver) {

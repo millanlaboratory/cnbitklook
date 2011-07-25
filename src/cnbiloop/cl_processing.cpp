@@ -16,6 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "ClLoopConfigSrv.hpp"
 #include "ClProServer.hpp" 
 #include "ClNmsClient.hpp"
 #include <cnbicore/CcBasic.hpp>
@@ -24,8 +25,6 @@
 
 void usage(void) { 
 	printf("Usage: cl_processing [OPTION]...\n\n");
-	printf("  -p       processing TCP port (8124 default)\n");
-	printf("  -n       nameserver TCP port (8123 default)\n");
 	printf("  -h       display this help and exit\n");
 }
 
@@ -35,11 +34,7 @@ int main(int argc, char* argv[]) {
 	CcPort portPro("8124"), portNs("8123");
 
 	while((opt = getopt(argc, argv, "p:h")) != -1) {
-		if(opt == 'p')
-			portPro.assign(optarg);
-		else if(opt == 'n')
-			portNs.assign(optarg);
-		else {
+		if(opt == 'h') {
 			usage();
 			CcCore::Exit(opt == 'h' ? EXIT_SUCCESS : EXIT_FAILURE);
 		}
@@ -48,34 +43,22 @@ int main(int argc, char* argv[]) {
 	CcCore::OpenLogger("cl_processing");
 	CcCore::CatchSIGINT();
 	CcCore::CatchSIGTERM();
+	ClLoopConfigSrv::Load();
 
-	// Handle the CNBITK_ADDRESS envvar
-	CcIp cnbitkip = CcCore::GetEnvCnbiTkAddress();
-	if(cnbitkip.empty() == true) {
-		cnbitkip.assign("127.0.0.1");
-	}
-	CcLogConfigS("CnbkTk loop running on: " << cnbitkip);
-	
-	// Handle hosts
-	CcEndpoint epPro(cnbitkip, portPro);
-	CcEndpoint epNs(cnbitkip, portNs);
-	CcLogConfigS("Processing will bind: " << epPro.GetAddress());
-	CcLogConfigS("Nameserver configured as: " << epNs.GetAddress());
+	CcLogConfigS("Processing will bind: " << ClLoopConfigSrv::GetSrvPro());
+	CcLogConfigS("Nameserver configured as: " << ClLoopConfigSrv::GetPro());
 	
 	// Setup TCP server
 	CcServer server(CCCORE_1MB);
 	ClProServer handler;
-	ClNmsClient nsclient;
-
-	try { 
-		handler.Register(&server);
-		server.Bind(epPro.GetAddress());
-	} catch(CcException e) {
+	handler.Register(&server);
+	if(server.Bind(ClLoopConfigSrv::GetSrvPro()) == false) {
 		CcLogFatal("Cannot bind socket");
 		CcCore::Exit(2);
 	}
 
-	if(nsclient.Connect(epNs.GetAddress()) == false) {
+	ClNmsClient nsclient;
+	if(nsclient.Connect(ClLoopConfigSrv::GetNms()) == false) {
 		CcLogFatal("Cannot connect to nameserver");
 		CcCore::Exit(3);
 	}

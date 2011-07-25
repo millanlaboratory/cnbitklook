@@ -27,14 +27,20 @@ class ClLoopConfig {
 		static void Release(void);
 		static unsigned int Refcount(void);
 		static void Load(void);
+		static CcIp GetIp(void);
+		static CcAddress GetNms(void);
+		static CcAddress GetPro(void);
+		static CcAddress GetAcq(void);
+		static CcAddress GetBus(void);
+		static CcAddress GetDev(void);
 	protected:
 		static void Init(void);
 		ClLoopConfig(void);
 		virtual ~ClLoopConfig(void);
 		static void Destroy(void);
 		static void Read(const std::string& filename);
-
-	public:
+		
+	protected:
 		static CcIp ip;
 		static CcPort portNms;
 		static CcPort portPro;
@@ -44,6 +50,7 @@ class ClLoopConfig {
 	private:
 		static ClLoopConfig* _instance;
 		static unsigned int _refCount;
+		static bool _loaded;
 };
 
 #endif

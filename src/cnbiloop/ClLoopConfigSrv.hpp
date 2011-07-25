@@ -16,16 +16,23 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <cnbiloop/ClLoopConfig.hpp>
-#include <cnbicore/CcBasic.hpp>
-#include <iostream>
+#ifndef CLLOOPCONFIGSRV_HPP 
+#define CLLOOPCONFIGSRV_HPP 
 
-using namespace std;
+#include "ClLoopConfig.hpp" 
 
-int main(void) {
-	CcCore::OpenLogger("clloopconfig");
-	CcCore::CatchSIGINT();
-	CcCore::CatchSIGTERM();
-	
-	CcCore::Exit(0);
-}
+class ClLoopConfigSrv : public ClLoopConfig {
+	public:
+		static void LoadSrv(void);
+		static CcIp GetSrvIp(void);
+		static CcAddress GetSrvNms(void);
+		static CcAddress GetSrvPro(void);
+		static CcAddress GetSrvAcq(void);
+		static CcAddress GetSrvBus(void);
+		static CcAddress GetSrvDev(void);
+
+	protected:
+		static CcIp ipSrv;
+};
+
+#endif
