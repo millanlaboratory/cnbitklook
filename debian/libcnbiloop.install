@@ -6,3 +6,4 @@
 /usr/lib/libndf.so.*
 /usr/lib/libtranspipe.so.*
 /usr/lib/libtransport.so.*
+/etc/cnbitk/*
