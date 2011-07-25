@@ -25,6 +25,12 @@
 ClLoopConfig* ClLoopConfig::_instance = NULL;
 unsigned int ClLoopConfig::_refCount = 0;
 
+CcPort ClLoopConfig::portNms = "8123";
+CcPort ClLoopConfig::portPro = "8124";
+CcPort ClLoopConfig::portAcq = "8125";
+CcPort ClLoopConfig::portBus = "8126";
+CcPort ClLoopConfig::portDev = "8127";
+
 ClLoopConfig::ClLoopConfig(void) {
 }
 

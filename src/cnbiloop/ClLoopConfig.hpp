@@ -32,11 +32,12 @@ class ClLoopConfig {
 		static void Destroy(void);
 
 	public:
-		const static CcPort portNms;
-		const static CcPort portPro;
-		const static CcPort portAcq;
-		const static CcPort portBus;
-		const static CcPort portDev;
+		static CcIp ip;
+		static CcPort portNms;
+		static CcPort portPro;
+		static CcPort portAcq;
+		static CcPort portBus;
+		static CcPort portDev;
 	private:
 		static ClLoopConfig* _instance;
 		static unsigned int _refCount;
