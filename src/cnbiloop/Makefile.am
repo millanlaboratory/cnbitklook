@@ -37,6 +37,7 @@ libcnbiloop_include_HEADERS = ClMatlab.hpp \
 							  ClProClient.hpp \
 							  ClClient.hpp \
 							  ClLoop.hpp \
+							  ClLoopConfig.hpp \
 							  ClTobiIc.hpp \
 							  ClTobiId.hpp
 
@@ -60,6 +61,8 @@ libcnbiloop_la_SOURCES = ClMatlab.cpp \
 						 ClClient.cpp \
 						 ClLoop.hpp \
 						 ClLoop.cpp \
+						 ClLoopConfig.hpp \
+						 ClLoopConfig.cpp \
 						 ClTobiIc.cpp \
 						 ClTobiIc.hpp \
 						 ClTobiId.cpp \
