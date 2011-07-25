@@ -33,12 +33,14 @@ ClNmsClient ClLoop::nameserver;
 CcAddress ClLoop::_processing;
 CcAddress ClLoop::_acquisition;
 CcAddress ClLoop::_nameserver;
-		
+	
+/*
 const CcPort ClLoop::portNsr = "8123";
 const CcPort ClLoop::portPro = "8124";
 const CcPort ClLoop::portAcq = "8125";
 const CcPort ClLoop::portBus = "8126";
 const CcPort ClLoop::portDev = "8127";
+*/
 
 ClLoop::ClLoop(void) {
 }
