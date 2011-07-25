@@ -106,13 +106,13 @@ int tr_check(tr_socket* sock) {
 	return sock->fd;
 }
 
-int tr_bind(tr_socket* sock, const char* port) {
+int tr_bind(tr_socket* sock, const char* ip, const char* port) {
 	int retopt = 0;
 	int bndret = 0;
 	struct addrinfo *ai; 
 	int opt = 1;
 
-	if(getaddrinfo(NULL, port, &(sock->info_results), &ai) != 0)
+	if(getaddrinfo(ip, port, &(sock->info_results), &ai) != 0)
 		return -1;
 
 	for(sock->info = ai; sock->info != NULL; sock->info = sock->info->ai_next) {

@@ -24,8 +24,8 @@
 #define EXAMPLE_NAME "[tr_tcpserver]"
 
 int main(int argc, char * const argv[]) {
-	if(argc < 2) {
-		printf("Usage: tr_tcpserver PORT\n");
+	if(argc < 3) {
+		printf("Usage: tr_tcpserver IP PORT\n");
 		return 2;
 	}
 
@@ -40,7 +40,7 @@ int main(int argc, char * const argv[]) {
 	tr_open(&socket);
 
 	printf("%s Binding socket\n", EXAMPLE_NAME);
-	tr_bind(&socket, argv[1]);
+	tr_bind(&socket, argv[1], argv[2]);
 	
 	printf("%s Local TCP socket: %s:%u [server]\n", EXAMPLE_NAME, 
 			socket.local.address, socket.local.port);

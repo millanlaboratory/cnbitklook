@@ -172,7 +172,7 @@ int main(int argc, char* argv[]) {
 	CcServer serverAcq(CCCORE_1MB);
 	ClAcqAsServer handleAcq(&writer);
 	handleAcq.Register(&serverAcq);
-	if(serverAcq.Bind(epAcq.GetPort()) == false) {
+	if(serverAcq.Bind(epAcq.GetAddress()) == false) {
 		CcLogFatal("Cannot bind acquisition socket");
 		CcCore::Exit(4);
 	}
@@ -180,7 +180,7 @@ int main(int argc, char* argv[]) {
 	CcServer serverBus(CCCORE_1MB);
 	ClTobiIdAsServer handleBus(&writer, &frame, &semframe);
 	handleBus.Register(&serverBus);
-	if(serverBus.Bind(epBus.GetPort()) == false) {
+	if(serverBus.Bind(epBus.GetAddress()) == false) {
 		CcLogFatal("Cannot bind bus socket");
 		CcCore::Exit(5);
 	}
@@ -188,7 +188,7 @@ int main(int argc, char* argv[]) {
 	CcServer serverDev(CCCORE_1MB);
 	ClDevicesAsServer handleDev(&writer, &frame, &semframe);
 	handleDev.Register(&serverDev);
-	if(serverDev.Bind(epDev.GetPort()) == false) {
+	if(serverDev.Bind(epDev.GetAddress()) == false) {
 		CcLogFatal("Cannot bind dev socket");
 		CcCore::Exit(50);
 	}

@@ -110,10 +110,10 @@ $ #include <stdlib.h>
 	buffer = '';
 	# getbuffer(tr_socket* sptr, inout cstring[1024] buffer);
 
-@function [status, sptr] = tr_bind(sptr, port);
+@function [status, sptr] = tr_bind(sptr, addr, port);
 % Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
 % Michele Tavella <michele.tavella@epfl.ch>
-	# int status = tr_bind(tr_socket* sptr, cstring port);
+	# int status = tr_bind(tr_socket* sptr, cstring addr, cstring port);
 
 @function [status, sptr] = tr_listen(sptr);
 % Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)

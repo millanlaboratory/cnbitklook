@@ -63,7 +63,7 @@ int main(int argc, char* argv[]) {
 	handler.StartMonitor();
 	try {
 		handler.Register(&server);
-		server.Bind(epNameserver.GetPort());
+		server.Bind(epNameserver.GetAddress());
 	} catch(CcException e) {
 		CcLogFatal("Cannot bind socket");
 		CcCore::Exit(2);

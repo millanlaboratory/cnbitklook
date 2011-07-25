@@ -91,10 +91,11 @@ int tr_check(tr_socket* sock);
  * This method binds the socket to a port.
  *
  * @param sock The socket
+ * @param port The IP address
  * @param port The port
  * @return 0 if successfull, -1 otherwise
  */
-int tr_bind(tr_socket* sock, const char* port);
+int tr_bind(tr_socket* sock, const char* ip, const char* port);
 
 /*! \brief Start listening
  * 

@@ -30,8 +30,8 @@ class CcServer : public CcSocket, protected CcThread {
 	public:
 		CcServer(size_t bsize = CCCORE_1MB);
 		virtual ~CcServer(void);
-		bool Bind(CcPort port, int protocol = CcSocket::TCP);
-		//bool Bind(CcPortUInt port, int protocol = CcSocket::TCP);
+		bool Bind(CcIp ip, CcPort port, int protocol = CcSocket::TCP);
+		bool Bind(CcAddress address, int protocol = CcSocket::TCP);
 		bool Release(void);
 		bool IsConnected(void);
 

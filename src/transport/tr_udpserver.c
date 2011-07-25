@@ -33,7 +33,7 @@ int main(void) {
 	tr_open(&socket);
 	
 	printf("%s Binding socket\n", EXAMPLE_NAME);
-	tr_bind(&socket, "8000");
+	tr_bind(&socket, "0.0.0.0", "8000");
 
 	printf("%s Local UDP socket: %s:%u [server]\n", EXAMPLE_NAME, 
 			socket.local.address, socket.local.port);

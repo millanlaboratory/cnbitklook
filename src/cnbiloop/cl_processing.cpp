@@ -69,7 +69,7 @@ int main(int argc, char* argv[]) {
 
 	try { 
 		handler.Register(&server);
-		server.Bind(epPro.GetPort());
+		server.Bind(epPro.GetAddress());
 	} catch(CcException e) {
 		CcLogFatal("Cannot bind socket");
 		CcCore::Exit(2);

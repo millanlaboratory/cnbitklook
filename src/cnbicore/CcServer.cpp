@@ -37,7 +37,7 @@ CcServer::CcServer(size_t bsize) : CcSocket(bsize) {
 CcServer::~CcServer(void) {
 }
 		
-bool CcServer::Bind(CcPort port, int protocol) {
+bool CcServer::Bind(CcIp ip, CcPort port, int protocol) {
 	CcSocket::_semsocket.Wait();
 	if(CcThread::IsRunning() == true) {
 		CcLogWarning("Client thread already running");
@@ -52,7 +52,7 @@ bool CcServer::Bind(CcPort port, int protocol) {
 	}
 	
 	int statusb = 0;
-	statusb = tr_bind(CcSocket::_socket, port.c_str());
+	statusb = tr_bind(CcSocket::_socket, ip.c_str(), port.c_str());
 	tr_set_nonblocking(CcSocket::_socket, 1);
 	CcSocket::AddStream(CcSocket::_socket->fd);
 	CcSocket::AddPeer(CcSocket::_socket);
@@ -75,6 +75,11 @@ bool CcServer::Bind(CcPort port, int protocol) {
 	
 	CcThread::Start();
 	return true;
+}
+		
+bool CcServer::Bind(CcAddress address, int protocol) {
+	CcEndpoint ep(address);
+	return this->Bind(ep.GetIp(), ep.GetPort());
 }
 
 /*

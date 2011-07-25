@@ -58,7 +58,7 @@ bool ClTobiIc::Attach(const std::string& name) {
 			delete this->_server;
 		this->_server = new CcServer();
 
-		if(this->_server->Bind(peer.GetPort()) == false) {
+		if(this->_server->Bind(peer.GetIp(), peer.GetPort()) == false) {
 			CcLogErrorS("Cannot bind to port " << peer.GetPort());
 			this->Detach();
 			return false;
@@ -109,7 +109,7 @@ bool ClTobiIc::Attach(const CcPort port, const std::string& name) {
 	CB_CcSocket(this->_server->iOnDrop, this, HandleDrop);
 	CB_CcSocket(this->_server->iOnRecvPeer, this, HandleRecvPeer);
 
-	if(this->_server->Bind(peer.GetPort()) == false) {
+	if(this->_server->Bind(peer.GetIp(), peer.GetPort()) == false) {
 		CcLogErrorS("Cannot bind to port " << port);
 		return false;
 	}
