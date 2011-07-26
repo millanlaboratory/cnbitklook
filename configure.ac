@@ -79,11 +79,13 @@ fi
 if test "$MEX" = no ; then 
 	AC_MSG_ERROR(Cannot find mex.) 
 fi
-#if test "$DOXYGEN" = no ; then 
-#	AC_MSG_ERROR(Cannot find doxygen.) 
-#fi
+if test "$DOXYGEN" = no ; then 
+	AC_MSG_ERROR(Cannot find doxygen.) 
+fi
 
 AC_HEADER_STDBOOL
+
+#AX_DEFINE_DIR([SYSCONFDIR], [sysconfdir], [System configuration path])
 
 AC_SUBST([RELEASE],[lib_release])
 AC_SUBST([CURRENT],[lib_current])

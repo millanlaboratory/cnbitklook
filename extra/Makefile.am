@@ -1,6 +1,7 @@
 EXTRA_DIST = cclogger_spacy.xsl
+# AX_DEFINE_DIR([LIBEXECDIR], [libexecdir], [Auxiliary executables path])
 
-sysconfdir = ${prefix}/etc/cnbitk
-sysconf_DATA = cnbiloop \
-			   cclogger.xsl \
-			   cnbitkconfig.xml
+cnbitkconfdir = $(sysconfdir)/cnbitk
+dist_cnbitkconf_DATA = cnbiloop \
+					   cclogger.xsl \
+					   cnbitkconfig.xml

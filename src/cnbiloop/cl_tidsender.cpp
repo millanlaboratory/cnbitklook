@@ -22,6 +22,7 @@
 
 void usage(void) { 
 	printf("Usage: cl_tidsender [OPTION]...\n\n");
+	printf("  -a       address of nameserver in ip:port format\n");
 	printf("  -n       iD bus name (/bus default)\n");
 	printf("  -u       Interactive events\n");	
 	printf("  -e       GDF event (default 666)\n");
@@ -35,6 +36,7 @@ int main(int argc, char* argv[]) {
 	std::string optname("/bus");
 	unsigned int event = 666;
 	bool interactive = false;
+	CcAddress nameserver;
 	
 	float ms = 0.00f;
 	
@@ -47,6 +49,8 @@ int main(int argc, char* argv[]) {
 			sscanf(optarg, "%f", &ms); 
 		} else if(opt == 'u') {
 			interactive = true; 			
+		} else if(opt == 'a') {
+			nameserver.assign(optarg);
 		} else {
 			usage();
 			CcCore::Exit(opt == 'h' ? EXIT_SUCCESS : EXIT_FAILURE);
@@ -56,6 +60,7 @@ int main(int argc, char* argv[]) {
 	CcCore::OpenLogger("cl_tidsender");
 	CcCore::CatchSIGINT();
 	CcCore::CatchSIGTERM();
+	ClLoop::Configure(nameserver);
 
 	IDMessage messageI;
 	IDSerializerRapid serializerI(&messageI);
