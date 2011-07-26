@@ -29,6 +29,7 @@ $ #include <stdio.h>
 % Michele Tavella <michele.tavella@epfl.ch>
 	$ ClLoop* clnew(void) {
 	$ 	ClLoop* loop = ClLoop::Instance();
+	$ 	ClLoop::Configure();
 	$ 	return loop;
 	$ }
 	# ClLoop *c = clnew();
