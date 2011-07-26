@@ -34,7 +34,6 @@
 #define MODULE_LOOP			3
 
 #include "ClLoop.hpp"
-#include "ClLoopConfig.hpp"
 #include <cnbicore/CcBasic.hpp>
 
 bool dump_configuration(CCfgConfig* config, const int modality,
@@ -222,8 +221,7 @@ int main(int argc, char* argv[]) {
 		CcCore::Exit(0);
 	}
 
-	//CcCore::OpenLogger("cl_init", CcCore::TerminalDisabled);
-	CcCore::OpenLogger("cl_init", CcCore::TerminalColors);
+	CcCore::OpenLogger("cl_init", CcCore::TerminalDisabled);
 	ClLoop::Configure();
 	
 	while((opt = getopt(argc, argv, "x:M:B:T:FNsutlumdc")) != -1) {
