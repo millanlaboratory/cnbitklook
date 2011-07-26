@@ -134,12 +134,18 @@ bool ClTobiIc::Detach(void) {
 	if(this->_onwsname == true)
 		ClLoop::nms.Unset(this->_name);
 	
-	if(this->_server != NULL) 
+	if(this->_server != NULL) {
 		this->_server->Release();
+		delete this->_server;
+		this->_server = NULL;
+	}
 	
-	if(this->_client != NULL)
+	if(this->_client != NULL) {
 		this->_client->Disconnect();
-	
+		delete this->_client;
+		this->_client = NULL;
+	}
+
 	this->iOnDetach.Execute();
 	return true;
 }
