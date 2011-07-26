@@ -59,10 +59,17 @@ int main(void) {
 	RegisterAll(client, handler);
 	CcEndpoint peer("127.0.0.1", "8000");
 	while(true) {
-		client->Connect(peer.GetAddress());
+		while(client->Connect(peer.GetAddress()) == false) {
+			printf("Waiting for connection...\n");
+			CcTime::Sleep(1000);
+		}
 
-		for(int i = 0; i < 10; i++) {
+		for(int i = 0; i < 20; i++) {
 			client->Send((const char*)"Hello there!");
+			if(client->IsConnected() == false) {
+				printf("Disconnected...\n");
+				break;
+			}
 			CcTime::Sleep(1000);
 		}
 		client->Disconnect();
