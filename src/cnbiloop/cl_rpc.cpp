@@ -199,6 +199,7 @@ int main(int argc, char* argv[]) {
 		usage();
 	
 	CcCore::OpenLogger("cl_rpc", CcCore::TerminalDisabled);
+	ClLoop::Configure();
 
 	int status = 1;;
 	std::string command(argv[1]), arg1, arg2, arg3;

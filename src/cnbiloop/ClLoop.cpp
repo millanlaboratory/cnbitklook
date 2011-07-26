@@ -20,7 +20,8 @@
 #define CLLOOP_CPP 
 
 #include "ClLoop.hpp" 
-#include "ClLoopConfig.hpp" 
+#include "ClLoopConfig.hpp"
+#include "ClLoopConfigSrv.hpp"
 #include <cnbicore/CcSocket.hpp>
 
 /* Initialization */
@@ -33,7 +34,6 @@ ClAcqClient ClLoop::acq;
 ClNmsClient ClLoop::nms;
 
 ClLoop::ClLoop(void) {
-	ClLoopConfig::Load();
 }
 
 ClLoop::~ClLoop(void) {
@@ -88,8 +88,6 @@ bool ClLoop::Connect(CcAddress nameserver) {
 	ClLoopConfig::GetNms() = nameserver;
 	if(ClLoop::ConnectNms() == false)
 		return false;
-	if(ClLoop::QueryAddresses() == false)
-		return false;
 	if(ClLoop::ConnectPro() == false)
 		return false;
 	if(ClLoop::ConnectAcq() == false)
@@ -125,7 +123,7 @@ bool ClLoop::ConnectNms(void) {
 	if(ClLoop::nms.Connect(ClLoopConfig::GetNms())) 
 		return true;
 
-	CcLogDebugS("Cannot connect to nameserver: " << ClLoopConfig::GetNms());
+	CcLogDebugS("Cannot connect to Nms: " << ClLoopConfig::GetNms());
 	return false;
 }
 
@@ -133,7 +131,7 @@ bool ClLoop::ConnectPro(void) {
 	if(ClLoop::pro.Connect(ClLoopConfig::GetPro())) 
 		return true;
 
-	CcLogDebugS("Cannot connect to pro: " << ClLoopConfig::GetPro());
+	CcLogDebugS("Cannot connect to Pro: " << ClLoopConfig::GetPro());
 	return false;
 }
 
@@ -141,22 +139,54 @@ bool ClLoop::ConnectAcq(void) {
 	if(ClLoop::acq.Connect(ClLoopConfig::GetAcq())) 
 		return true;
 
-	CcLogDebugS("Cannot connect to acq: " << ClLoopConfig::GetAcq());
+	CcLogDebugS("Cannot connect to Acq: " << ClLoopConfig::GetAcq());
 	return false;
 }
+		
+bool ClLoop::Configure(CcAddress nameserver, bool asserver) {
+	bool status = true;
+	if(nameserver.empty() == true)
+		ClLoopConfig::ImplLoad();
+	else
+		status = ClLoop::Query(nameserver);
 
-bool ClLoop::QueryAddresses(void) {
-//	std::string addrPro = ClLoopConfig::GetPro()
-//	std::string addrAcq = ClLoopConfig::GetAcq()
-//	int sp = ClLoop::nms.Query("/pro", &addrPro);
-//	int sa = ClLoop::nms.Query("/acq", &addrAcq);
-//
-//	if(sp != ClNmsLang::Successful)
-//		return false;
-//	if(sa != ClNmsLang::Successful)
-//		return false;
-//
-	return true;
+	if(asserver == true)
+		ClLoopConfigSrv::ConfigureSrv();
+
+	if(status == true) {
+		CcLogInfo("Loop correctly configured");
+	} else {
+		CcLogError("Cannot configure loop");
+	}
+	
+	return status;
 }
 
+bool ClLoop::Query(CcAddress nameserver) {
+	CcLogConfigS("Querying nameserver: " << nameserver);
+	ClLoopConfig::Init();
+	CcEndpoint cache;
+
+	cache.SetAddress(nameserver);
+	ClLoopConfig::ip.assign(cache.GetIp());
+	ClLoopConfig::portNms.assign(cache.GetPort());
+	if(ClLoop::ConnectNms() == false) {
+		return false;
+	}
+	
+	CcAddress addrPro, addrAcq;
+	int statusPro = ClLoop::nms.Query("/processing", &addrPro);
+	int statusAcq = ClLoop::nms.Query("/acquisition", &addrAcq);
+
+	cache.SetAddress(addrPro);
+	ClLoopConfig::portPro.assign(cache.GetPort());
+	
+	cache.SetAddress(addrAcq);
+	ClLoopConfig::portAcq.assign(cache.GetPort());
+	
+	if(statusPro != ClNmsLang::Successful || statusAcq != ClNmsLang::Successful)
+		return false;
+	return true;
+}
+		
 #endif

@@ -16,10 +16,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "ClLoop.hpp"
 #include "ClTobiIc.hpp"
 
 void usage(void) { 
 	printf("Usage: cl_ticmonitor [OPTION]...\n\n");
+	printf("  -a       address of nameserver in ip:port format\n");
 	printf("  -p       TCP port (9500 default)\n");
 	printf("  -n       TCP server name (/ctrl0 default)\n");
 	printf("  -h       display this help and exit\n");
@@ -31,6 +33,7 @@ int main(int argc, char* argv[]) {
 	int opt;
 	std::string optname("/ctrl0");
 	CcPort optport("");
+	CcAddress nameserver;
 	bool locking = false, dump = false;
 	
 	while((opt = getopt(argc, argv, "p:n:hld")) != -1) {
@@ -42,6 +45,8 @@ int main(int argc, char* argv[]) {
 			locking = true;
 		else if(opt == 'd')
 			dump = true;
+		else if(opt == 'a')
+			nameserver.assign(optarg);
 		else {
 			usage();
 			CcCore::Exit(opt == 'h' ? EXIT_SUCCESS : EXIT_FAILURE);
@@ -51,6 +56,7 @@ int main(int argc, char* argv[]) {
 	CcCore::OpenLogger("cl_ticmonitor");
 	CcCore::CatchSIGINT();
 	CcCore::CatchSIGTERM();
+	ClLoop::Configure(nameserver);
 
 	ICMessage message;
 	ICSerializerRapid serializer(&message);

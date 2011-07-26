@@ -16,6 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "ClLoop.hpp"
 #include "ClLoopConfigSrv.hpp"
 #include "ClAcqServer.hpp" 
 #include "ClDevServer.hpp" 
@@ -84,10 +85,11 @@ int main(int argc, char* argv[]) {
 			CcCore::Exit(opt == 'h' ? EXIT_SUCCESS : EXIT_FAILURE);
 		}
 	}
+
 	CcCore::OpenLogger("cl_acquisition");
 	CcCore::CatchSIGINT();
 	CcCore::CatchSIGTERM();
-	ClLoopConfigSrv::LoadSrv();
+	ClLoop::Configure("", true);
 	
 	CcLogConfigS("Acquisition: " << 
 			optfs << "Hz, " << 

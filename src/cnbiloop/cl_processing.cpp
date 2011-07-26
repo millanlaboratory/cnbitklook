@@ -16,6 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "ClLoop.hpp"
 #include "ClLoopConfigSrv.hpp"
 #include "ClProServer.hpp" 
 #include "ClNmsClient.hpp"
@@ -43,7 +44,7 @@ int main(int argc, char* argv[]) {
 	CcCore::OpenLogger("cl_processing");
 	CcCore::CatchSIGINT();
 	CcCore::CatchSIGTERM();
-	ClLoopConfigSrv::LoadSrv();
+	ClLoop::Configure("", true);
 
 	CcLogConfigS("Processing will bind: " << ClLoopConfigSrv::GetSrvPro());
 	CcLogConfigS("Nameserver configured as: " << ClLoopConfigSrv::GetPro());

@@ -19,14 +19,16 @@
 #ifndef CLLOOPCONFIG_HPP 
 #define CLLOOPCONFIG_HPP 
 
+#include "ClLoop.hpp"
 #include <cnbicore/CcNetworkTypes.hpp>
 
 class ClLoopConfig {
+	friend class ClLoop;
+
 	public:
 		static ClLoopConfig* Instance(void);
 		static void Release(void);
 		static unsigned int Refcount(void);
-		static void Load(void);
 		static CcIp GetIp(void);
 		static CcAddress GetNms(void);
 		static CcAddress GetPro(void);
@@ -39,6 +41,7 @@ class ClLoopConfig {
 		virtual ~ClLoopConfig(void);
 		static void Destroy(void);
 		static void Read(const std::string& filename);
+		static void ImplLoad(void);
 		
 	protected:
 		static CcIp ip;

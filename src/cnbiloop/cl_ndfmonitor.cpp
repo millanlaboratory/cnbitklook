@@ -51,6 +51,7 @@ int main(int argc, char* argv[]) {
 	CcCore::OpenLogger("cl_ndfmonitor");
 	CcCore::CatchSIGINT();
 	CcCore::CatchSIGTERM();
+	ClLoop::Configure();
 
 	if(ClLoop::Connect() == false) {
 		CcLogFatal("Cannot connect to loop");

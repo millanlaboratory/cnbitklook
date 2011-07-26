@@ -36,6 +36,7 @@ class ClLoop {
 		static bool Connect(CCfgConfig* configuration);
 		static void Disconnect(void);
 		static bool IsConnected(void);
+		static bool Configure(CcAddress nameserver = "", bool asserver = false);
 	protected:
 		ClLoop(void);
 		virtual ~ClLoop(void);
@@ -43,7 +44,7 @@ class ClLoop {
 		static bool ConnectNms(void);
 		static bool ConnectPro(void);
 		static bool ConnectAcq(void);
-		static bool QueryAddresses(void);
+		static bool Query(CcAddress nameserver);
 
 	public:
 		static ClProClient pro;

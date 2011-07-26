@@ -16,6 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "ClLoop.hpp"
 #include "ClLoopConfigSrv.hpp"
 #include "ClNmsServer.hpp" 
 #include "ClNmsClient.hpp"
@@ -42,7 +43,7 @@ int main(int argc, char* argv[]) {
 	CcCore::OpenLogger("cl_nameserver");
 	CcCore::CatchSIGINT();
 	CcCore::CatchSIGTERM();
-	ClLoopConfigSrv::LoadSrv();
+	ClLoop::Configure("", true);
 	
 	CcLogConfigS("Nms will bind: " << ClLoopConfigSrv::GetSrvNms());
 

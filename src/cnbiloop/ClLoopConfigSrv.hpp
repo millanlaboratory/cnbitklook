@@ -23,7 +23,7 @@
 
 class ClLoopConfigSrv : public ClLoopConfig {
 	public:
-		static void LoadSrv(void);
+		static void ConfigureSrv(void);
 		static CcIp GetSrvIp(void);
 		static CcAddress GetSrvNms(void);
 		static CcAddress GetSrvPro(void);

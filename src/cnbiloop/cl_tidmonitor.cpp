@@ -16,11 +16,13 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "ClLoop.hpp"
 #include "ClTobiId.hpp"
 #include "ClLoopConfig.hpp"
 
 void usage(void) { 
 	printf("Usage: cl_tidmonitor [OPTION]...\n\n");
+	printf("  -a       address of nameserver in ip:port format\n");
 	printf("  -n       bus name (/bus default)\n");
 	printf("  -h       display this help and exit\n");
 	CcCore::Exit(1);
@@ -29,10 +31,13 @@ void usage(void) {
 int main(int argc, char* argv[]) {
 	int opt;
 	std::string optname("/bus");
+	CcAddress nameserver;
 	
-	while((opt = getopt(argc, argv, "n:h")) != -1) {
+	while((opt = getopt(argc, argv, "a:n:h")) != -1) {
 		if(opt == 'n')
 			optname.assign(optarg);
+		else if(opt == 'a')
+			nameserver.assign(optarg);
 		else {
 			usage();
 			CcCore::Exit(opt == 'h' ? EXIT_SUCCESS : EXIT_FAILURE);
@@ -42,6 +47,7 @@ int main(int argc, char* argv[]) {
 	CcCore::OpenLogger("cl_tidmonitor");
 	CcCore::CatchSIGINT();
 	CcCore::CatchSIGTERM();
+	ClLoop::Configure(nameserver);
 
 	IDMessage messageI;
 	IDSerializerRapid serializerI(&messageI);

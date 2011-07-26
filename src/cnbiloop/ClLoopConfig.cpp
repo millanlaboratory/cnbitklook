@@ -65,24 +65,24 @@ void ClLoopConfig::Destroy(void) {
 	delete ClLoopConfig::_instance;
 }
 
-void ClLoopConfig::Load(void) {
+void ClLoopConfig::ImplLoad(void) {
 	struct stat st;
 	std::string etc = "/etc/cnbitk/cnbiloop";
 	std::string home = CcCore::GetDirectoryHome() + "/.cnbiloop";
 
 	if(stat(home.c_str(), &st) == 0) {
-		CcLogWarningS("Loading user configuration file: " << home);
+		CcLogConfigS("Loading user configuration file: " << home);
 		ClLoopConfig::Read(home);
 	} else if(stat(etc.c_str(), &st) == 0) {
-		CcLogWarningS("Loading system configuration file: " << etc);
+		CcLogConfigS("Loading system configuration file: " << etc);
 		ClLoopConfig::Read(etc);
 	} else {
-		CcLogWarningS("Using default configuration");
+		CcLogConfigS("Using default configuration");
 		ClLoopConfig::Init();
 	}
 	ClLoopConfig::_loaded = true;
 }
-		
+
 void ClLoopConfig::Init(void) {
 	ClLoopConfig::ip = "127.0.0.1";
 	ClLoopConfig::portNms = "8123";

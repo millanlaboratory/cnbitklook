@@ -224,7 +224,7 @@ int main(int argc, char* argv[]) {
 
 	//CcCore::OpenLogger("cl_init", CcCore::TerminalDisabled);
 	CcCore::OpenLogger("cl_init", CcCore::TerminalColors);
-	ClLoopConfig::Load();
+	ClLoop::Configure();
 	
 	while((opt = getopt(argc, argv, "x:M:B:T:FNsutlumdc")) != -1) {
 		if(opt == 'x')
