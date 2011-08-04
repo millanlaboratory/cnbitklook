@@ -27,6 +27,8 @@ void ClLoopConfigSrv::ConfigureSrv(void) {
 	if(ClLoopConfig::ip.compare("0.0.0.0") == 0) {
 		ClLoopConfigSrv::ip.assign("127.0.0.1");	
 		ClLoopConfigSrv::ipSrv.assign("0.0.0.0");	
+	} else {
+		ClLoopConfigSrv::ipSrv.assign(ClLoopConfigSrv::ip);
 	}
 }
 
