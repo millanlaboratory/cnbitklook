@@ -79,6 +79,8 @@ int main(int argc, char* argv[]) {
 		CcLogWarning("Cannot attach iD");
 		goto shutdown;
 	}
+		
+	CcLogConfigS("iD monitor now attached to: " << optname);
 
 	CcLogInfo("Waiting for iD messages");
 	while(true) { 
