@@ -15,7 +15,7 @@ tic: ${ticc}
 toc: ${tocc}
 	mex ${tocc}
 
-install-data-local: all
+install-data-local:
 	mkdir -p ${matpath}
 	cp ${matfiles} ${matpath}
 	cp *.mex* ${matpath}
