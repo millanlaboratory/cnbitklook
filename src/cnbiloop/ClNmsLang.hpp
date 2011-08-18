@@ -34,7 +34,6 @@ class ClNmsLang : public ClLanguage {
 		char* Retrieve(const std::string& name);
 		char* Dispatch(const std::string& content);
 		char* Erase(const std::string& name);
-
 		char* Ok(void);
 		char* Error(const int code);
 
