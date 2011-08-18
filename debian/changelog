@@ -1,3 +1,9 @@
+cnbiloop (5.1.0) lucid; urgency=low
+
+  * Minor bugfix
+
+ -- Michele Tavella <michele.tavella@epfl.ch>  Thu, 18 Aug 2011 13:11:08 +0200
+
 cnbiloop (5.0.0) lucid; urgency=low
 
   * Handling /etc/ correctly and added config file support
