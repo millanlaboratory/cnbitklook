@@ -75,6 +75,8 @@ bool ClTobiId::Detach(void) {
 }
 
 bool ClTobiId::IsAttached(void) {
+	if(this->_client == NULL)
+		return false;
 	return this->_client->IsConnected();
 }
 
