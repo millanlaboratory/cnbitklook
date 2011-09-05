@@ -21,12 +21,13 @@
 
 #include "ClTobiIc.hpp" 
 
-ClTobiIc::ClTobiIc(int mode) {
+ClTobiIc::ClTobiIc(int mode, bool nscache) {
 	ClLoop::Instance();
 	this->_mode = mode;
 	this->_server = NULL;
 	this->_client = NULL;
 	this->_onwsname = false;
+	this->_nscache = nscache;
 }
 
 ClTobiIc::~ClTobiIc(void) {
@@ -44,16 +45,18 @@ bool ClTobiIc::Attach(const std::string& name) {
 	this->_name.assign(name);
 	this->_onwsname = false;
 	
-	CcAddress address;
-	int status = ClLoop::nms.Query(this->_name, &address);
-	if(status != ClNmsLang::Successful) {
-		CcLogErrorS("Cannot query " << name);
-		return false;
+	if((this->_address.empty() == true && this->_nscache == true) || 
+			this->_nscache == false) {
+		int status = ClLoop::nms.Query(this->_name, &this->_address);
+		if(status != ClNmsLang::Successful) {
+			CcLogErrorS("Cannot query " << name);
+			return false;
+		}
 	}
 	
-	CcEndpoint peer(address);
+	CcEndpoint peer(this->_address);
 	if(this->_mode == ClTobiIc::GetOnly) {
-		CcLogConfigS("Configuring iC for GetOnly (query name): " << address);
+		CcLogConfigS("Configuring iC for GetOnly (query name): " << this->_address);
 		if(this->_server != NULL) 
 			delete this->_server;
 		this->_server = new CcServer();
@@ -68,7 +71,7 @@ bool ClTobiIc::Attach(const std::string& name) {
 		CB_CcSocket(this->_server->iOnRecvPeer, this, HandleRecvPeer);
 		this->_hasmessage.Wait();
 	} else { 
-		CcLogConfigS("Configuring iC for SetOnly: " << address);
+		CcLogConfigS("Configuring iC for SetOnly: " << this->_address);
 		if(this->_client != NULL) 
 			delete this->_client;
 		this->_client = new CcClient();

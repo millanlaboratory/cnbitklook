@@ -32,7 +32,7 @@
 
 class ClTobiIc : public CcSocketProxy {
 	public:
-		ClTobiIc(int mode = ClTobiIc::GetOnly);
+		ClTobiIc(int mode = ClTobiIc::GetOnly, bool nscache = true);
 		virtual ~ClTobiIc(void);
 		bool Attach(const CcPort port, const std::string& name);
 		bool Attach(const std::string& name);
@@ -66,6 +66,8 @@ class ClTobiIc : public CcSocketProxy {
 	protected:
 		CcClient* _client;
 		CcServer* _server;
+		CcAddress _address;
+		bool _nscache;
 		std::string _name;
 		bool _onwsname;
 		int _mode;
