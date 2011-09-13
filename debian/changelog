@@ -1,3 +1,9 @@
+cnbiloop (5.1.1) lucid; urgency=low
+
+  * ClMatlab logs are now .txt
+
+ -- Michele Tavella <michele.tavella@epfl.ch>  Tue, 13 Sep 2011 19:08:11 +0200
+
 cnbiloop (5.1.0) lucid; urgency=low
 
   * Minor bugfix
