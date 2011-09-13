@@ -108,7 +108,7 @@ end\n"
 ClMatlab::ClMatlab(void) : CcProcess("matlab", true, true) {
 	std::string timestamp;
 	CcTime::Daystamp(&timestamp);
-	this->_logfile = CcCore::GetDirectoryTmp() + timestamp + "." + "cl_matlab.xml";
+	this->_logfile = CcCore::GetDirectoryTmp() + timestamp + "." + "cl_matlab.txt";
 	CcLogConfigS("Matlab log file: " << this->_logfile);
 }
 
