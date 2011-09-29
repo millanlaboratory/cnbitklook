@@ -21,6 +21,7 @@
 
 #include <cnbicore/CcBasic.hpp>
 #include "ClMatlab.hpp" 
+#include "ClLoopConfig.hpp" 
 
 #define CLMATLAB_INCLUDE1 "\
 try;\
@@ -105,7 +106,7 @@ catch e;\
 	exit;\
 end\n"
 
-ClMatlab::ClMatlab(void) : CcProcess("matlab", true, true) {
+ClMatlab::ClMatlab(void) : CcProcess(ClLoopConfig::matlabBinary, true, true) {
 	std::string timestamp;
 	CcTime::Daystamp(&timestamp);
 	this->_logfile = CcCore::GetDirectoryTmp() + timestamp + "." + "cl_matlab.txt";
@@ -116,8 +117,16 @@ ClMatlab::~ClMatlab(void) {
 }
 
 void ClMatlab::Exec(void) { 
-	execlp(this->_cmd.c_str(), "-nodesktop", "-nojvm", "-nosplash", 
-			"-logfile", this->_logfile.c_str(), "2>&1", NULL);
+	if(ClLoopConfig::matlabVariant.empty() == true) {
+		execlp(this->_cmd.c_str(), "-nodesktop", "-nojvm", "-nosplash", 
+				"-logfile", this->_logfile.c_str(), "2>&1", NULL);
+	} else {
+		CcLogConfigS("Running matlab with custom variant: " <<
+				ClLoopConfig::matlabVariant);
+		std::string tvariant = "v=" + ClLoopConfig::matlabVariant;
+		execlp(this->_cmd.c_str(), tvariant.c_str(), "-nodesktop", "-nojvm",
+				"-nosplash", "-logfile", this->_logfile.c_str(), "2>&1", NULL);
+	}
 }
 
 void ClMatlab::AddPath(const std::string& path) {
