@@ -116,13 +116,12 @@ ClMatlab::ClMatlab(void) : CcProcess(ClLoopConfig::matlabBinary, true, true) {
 ClMatlab::~ClMatlab(void) {
 }
 
+#include <iostream>
 void ClMatlab::Exec(void) { 
 	if(ClLoopConfig::matlabVariant.empty() == true) {
 		execlp(this->_cmd.c_str(), "-nodesktop", "-nojvm", "-nosplash", 
 				"-logfile", this->_logfile.c_str(), "2>&1", NULL);
 	} else {
-		CcLogConfigS("Running matlab with custom variant: " <<
-				ClLoopConfig::matlabVariant);
 		std::string tvariant = "v=" + ClLoopConfig::matlabVariant;
 		execlp(this->_cmd.c_str(), tvariant.c_str(), "-nodesktop", "-nojvm",
 				"-nosplash", "-logfile", this->_logfile.c_str(), "2>&1", NULL);
@@ -161,7 +160,7 @@ void ClMatlab::Directory(const std::string& path) {
 }
 
 void ClMatlab::Exec(const std::string function) {
-	
+	CcLogFatal("FUCK EVERYBODY");
 	char buffer[2048];
 	sprintf(buffer, CLMATLAB_EXEC, function.c_str());
 	CcLogDebugS("Executing: " << buffer);
