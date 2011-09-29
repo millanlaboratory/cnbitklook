@@ -116,7 +116,6 @@ ClMatlab::ClMatlab(void) : CcProcess(ClLoopConfig::matlabBinary, true, true) {
 ClMatlab::~ClMatlab(void) {
 }
 
-#include <iostream>
 void ClMatlab::Exec(void) { 
 	if(ClLoopConfig::matlabVariant.empty() == true) {
 		execlp(this->_cmd.c_str(), "-nodesktop", "-nojvm", "-nosplash", 
