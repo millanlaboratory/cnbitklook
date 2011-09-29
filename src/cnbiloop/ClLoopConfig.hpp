@@ -21,6 +21,7 @@
 
 #include "ClLoop.hpp"
 #include <cnbicore/CcNetworkTypes.hpp>
+#include <string>
 
 class ClLoopConfig {
 	friend class ClLoop;
@@ -35,6 +36,8 @@ class ClLoopConfig {
 		static CcAddress GetAcq(void);
 		static CcAddress GetBus(void);
 		static CcAddress GetDev(void);
+		static CcAddress GetMaltabBinary(void);
+		static CcAddress GetMatlabVariant(void);
 	protected:
 		static void Init(void);
 		ClLoopConfig(void);
@@ -54,6 +57,9 @@ class ClLoopConfig {
 		static ClLoopConfig* _instance;
 		static unsigned int _refCount;
 		static bool _loaded;
+	public:
+		static std::string matlabBinary;
+		static std::string matlabVariant;
 };
 
 #endif

@@ -29,6 +29,8 @@
 ClLoopConfig* ClLoopConfig::_instance = NULL;
 unsigned int ClLoopConfig::_refCount = 0;
 bool ClLoopConfig::_loaded = false;
+std::string ClLoopConfig::matlabBinary = "";
+std::string ClLoopConfig::matlabVariant = "";
 
 CcPort ClLoopConfig::ip;
 CcPort ClLoopConfig::portNms;
@@ -137,6 +139,16 @@ void ClLoopConfig::Read(const std::string& filename) {
 				ClLoopConfig::portBus.assign(buffer);
 				continue;
 			}
+		} else if(cache.find("matlab.binary") != std::string::npos) {
+			if(sscanf(cache.c_str(), "%s = %s", trash, buffer) == 2) {
+				ClLoopConfig::matlabBinary.assign(buffer);
+				continue;
+			}
+		} else if(cache.find("matlab.variant") != std::string::npos) {
+			if(sscanf(cache.c_str(), "%s = %s", trash, buffer) == 2) {
+				ClLoopConfig::matlabVariant.assign(buffer);
+				continue;
+			}
 		} else 
 			continue;
 		CcLogErrorS("Bad format: " << filename << ", line=" << line);
@@ -167,7 +179,6 @@ CcAddress ClLoopConfig::GetDev(void) {
 	CcAddress address = ClLoopConfig::ip + ":" + ClLoopConfig::portDev;
 	return address;
 }
-
 
 CcIp ClLoopConfig::GetIp(void) {
 	return ClLoopConfig::ip;
