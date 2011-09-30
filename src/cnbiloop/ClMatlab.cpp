@@ -111,6 +111,9 @@ ClMatlab::ClMatlab(void) : CcProcess(ClLoopConfig::matlabBinary, true, true) {
 	CcTime::Daystamp(&timestamp);
 	this->_logfile = CcCore::GetDirectoryTmp() + timestamp + "." + "cl_matlab.txt";
 	CcLogConfigS("Matlab log file: " << this->_logfile);
+	CcLogConfigS("Matlab binary='" << ClLoopConfig::matlabBinary 
+			<< "', variant='" << ClLoopConfig::matlabVariant << "'");
+
 }
 
 ClMatlab::~ClMatlab(void) {
@@ -118,12 +121,17 @@ ClMatlab::~ClMatlab(void) {
 
 void ClMatlab::Exec(void) { 
 	if(ClLoopConfig::matlabVariant.empty() == true) {
-		execlp(this->_cmd.c_str(), "-nodesktop", "-nojvm", "-nosplash", 
-				"-logfile", this->_logfile.c_str(), "2>&1", NULL);
+		execlp(this->_cmd.c_str(), this->_cmd.c_str(),
+				"-nodesktop", "-nojvm", "-nosplash", 
+				"-logfile", this->_logfile.c_str(), 
+				"2>&1", NULL);
 	} else {
 		std::string tvariant = "v=" + ClLoopConfig::matlabVariant;
-		execlp(this->_cmd.c_str(), tvariant.c_str(), "-nodesktop", "-nojvm",
-				"-nosplash", "-logfile", this->_logfile.c_str(), "2>&1", NULL);
+		execlp(this->_cmd.c_str(), this->_cmd.c_str(),
+				"-nodesktop", "-nojvm", "-nosplash",
+				"-logfile", this->_logfile.c_str(), 
+				tvariant.c_str(),
+				"2>&1", NULL);
 	}
 }
 
@@ -159,7 +167,6 @@ void ClMatlab::Directory(const std::string& path) {
 }
 
 void ClMatlab::Exec(const std::string function) {
-	CcLogFatal("FUCK EVERYBODY");
 	char buffer[2048];
 	sprintf(buffer, CLMATLAB_EXEC, function.c_str());
 	CcLogDebugS("Executing: " << buffer);
