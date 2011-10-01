@@ -19,6 +19,7 @@
 #ifndef CCCORE_CPP
 #define CCCORE_CPP
 
+#include "CcFile.hpp"
 #include "CcCore.hpp"
 #include "CcLog.hpp"
 #include "CcLogger.hpp"
@@ -135,7 +136,7 @@ void CcCore::OpenLogger(std::string modulename, CcTermType termtype,
 
 	CcCore::logger.Open(CcCore::_filename, CcCore::_modulename, termtype, level);
 	CcLogConfigS("Log file: " << CcCore::_filename);
-	if(link( CcCore::_filename.c_str(),  CcCore::_linkname.c_str()) == 0) {
+	if(link(CcCore::_filename.c_str(),  CcCore::_linkname.c_str()) == 0) {
 		CcLogConfigS("Log file hard linked as: " <<  CcCore::_linkname);
 	} else  {
 		CcLogErrorS("Cannot create log file hard link: " << strerror(errno));

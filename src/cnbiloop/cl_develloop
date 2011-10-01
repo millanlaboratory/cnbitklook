@@ -8,6 +8,7 @@ if [ "z$1" == "z" ]; then
 fi
 
 cl_rpcnotify "CnbiTk cl_develloop" "Starting: $*"
+cl_copyxsl
 
 gnome-terminal \
 ---tab "CnbiTk RPC Shell (devel)" \
