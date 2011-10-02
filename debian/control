@@ -17,6 +17,9 @@ Description: CNBI Toolkit Loop libraries
  It also provides high-level functionalities for acquiring/saving/streaming EEG
  data and BCI/protocol configuration. Last but not least, it provides all the
  applications required to run the BCI loop.
+ .
+ This package contains the files needed to compile and link programs which
+ use cnbiloop.
 
 Package: libcnbiloop-dev
 Section: libdevel

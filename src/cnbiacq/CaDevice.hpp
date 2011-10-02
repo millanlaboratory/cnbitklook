@@ -24,6 +24,11 @@
 #include <eegdev.h>
 #include <string>
 
+/*! \brief Capabilities of EGD-compatible devices
+ *
+ * This structure contains the description of the EGD device capabilities. It
+ * plays an important role for configuring the NDF stream.
+ */
 typedef struct CaDeviceCap_struct {
 	char* model;
 	char* id;
@@ -33,6 +38,12 @@ typedef struct CaDeviceCap_struct {
     unsigned int trigger_nmax;
 } CaDeviceCap;
 
+/*! \brief Acquisition class for EGD-compatible device
+ *
+ * This class allows to acquire data from EGD devices (using libeegdev). Data
+ * can be saved to XDF files (via libxdfio) or encoded in NDF format for IPC
+ * transfer (using libndf).
+ */
 class CaDevice {
 	friend class CaWriter;
 

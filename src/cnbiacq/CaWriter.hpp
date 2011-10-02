@@ -25,6 +25,11 @@
 #include <tobicore/TCTimestamp.hpp>
 #include <xdfio.h>
 
+
+/*! \brief XDF file writer class
+ *
+ *  This class implements an XDF file writer to be used with CaDevice
+ */
 class CaWriter {
 	public:
 		CaWriter(CaDevice* device = NULL);
