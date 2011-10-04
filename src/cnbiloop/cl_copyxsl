@@ -7,7 +7,7 @@ if [ -e $LOG_FILE ]; then
 	if [ -e $LOG_LINK ]; then
 		exit 2;
 	else
-		cp $LOG_FILE $LOG_LINK;
+		cp -f $LOG_FILE $LOG_LINK;
 		exit 0;
 	fi
 fi
