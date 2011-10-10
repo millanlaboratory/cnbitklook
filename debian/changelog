@@ -1,3 +1,10 @@
+cnbiloop (5.1.5) lucid; urgency=low
+
+  * Removed -nojvm in ClMatlab
+  * Now compiled against tobicore 6.0.0
+
+ -- Michele Tavella <michele.tavella@epfl.ch>  Mon, 10 Oct 2011 16:47:00 +0200
+
 cnbiloop (5.1.4) lucid; urgency=low
 
   * Small fix using "cp -f" for copying the XSL file
