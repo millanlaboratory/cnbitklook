@@ -1,9 +1,14 @@
 cnbiloop (5.1.5) lucid; urgency=low
 
+  [ Michele Tavella ]
   * Removed -nojvm in ClMatlab
   * Now compiled against tobicore 6.0.0
 
- -- Michele Tavella <michele.tavella@epfl.ch>  Mon, 10 Oct 2011 16:47:00 +0200
+  [ Nicolas Bourdaud ]
+  * Update Build-Depends to prepare transition of libxdffileio-dev
+  * Make libcnbiloop-dev depends on dev package of eegdev and xffileio
+
+ -- Nicolas Bourdaud <nicolas.bourdaud@gmail.com>  Wed, 26 Oct 2011 11:37:19 +0200
 
 cnbiloop (5.1.4) lucid; urgency=low
 

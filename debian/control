@@ -2,7 +2,8 @@ Source: cnbiloop
 Section: libs
 Priority: extra
 Maintainer: Michele Tavella <michele.tavella@epfl.ch>
-Build-Depends: debhelper (>= 7), autotools-dev, libtobicore-dev, libxdffileio0-dev, libeegdev0-dev
+Build-Depends: debhelper (>= 7), autotools-dev, libtobicore-dev,
+ libxdffileio-dev | libxdffileio0-dev , libeegdev-dev | libeegdev0-dev
 Standards-Version: 3.8.3
 Homepage: http://www.mtvl.org/cnbitk
 
@@ -24,7 +25,8 @@ Description: CNBI Toolkit Loop libraries
 Package: libcnbiloop-dev
 Section: libdevel
 Architecture: any
-Depends: libcnbiloop(= ${binary:Version}), ${misc:Depends}
+Depends: libcnbiloop(= ${binary:Version}), ${misc:Depends},
+ libxdffileio-dev | libxdffileio0-dev , libeegdev-dev | libeegdev0-dev
 Homepage: http://www.mtvl.org/cnbitk
 Description: CNBI Toolkit Loop libraries
  Core components of the CNBI Toolkit. It provides basic functionalities such as 
