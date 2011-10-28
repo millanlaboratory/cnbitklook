@@ -122,13 +122,13 @@ ClMatlab::~ClMatlab(void) {
 void ClMatlab::Exec(void) { 
 	if(ClLoopConfig::matlabVariant.empty() == true) {
 		execlp(this->_cmd.c_str(), this->_cmd.c_str(),
-				"-nodesktop", "-nosplash", 
+				"-nodesktop", "-nosplash", "-nojvm",
 				"-logfile", this->_logfile.c_str(), 
 				"2>&1", NULL);
 	} else {
 		std::string tvariant = "v=" + ClLoopConfig::matlabVariant;
 		execlp(this->_cmd.c_str(), this->_cmd.c_str(),
-				"-nodesktop", "-nosplash",
+				"-nodesktop", "-nosplash", "-nojvm",
 				"-logfile", this->_logfile.c_str(), 
 				tvariant.c_str(),
 				"2>&1", NULL);

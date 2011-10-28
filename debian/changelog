@@ -1,5 +1,6 @@
 cnbiloop (5.1.6) lucid; urgency=low
 
+  * Added back -nojvm in ClMatlab due to instability issues
   * Now compiled against tobicore 7.0.0
 
  -- Michele Tavella <michele.tavella@epfl.ch>  Tue, 28 Oct 2011 10:41:00 +0200
