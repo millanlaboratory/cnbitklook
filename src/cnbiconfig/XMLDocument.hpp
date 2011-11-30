@@ -27,7 +27,7 @@ typedef rapidxml::xml_attribute<>* XMLAttr;
 
 class XMLDocument {
 	public:
-		XMLDocument(size_t bsize = 20480);
+		XMLDocument(size_t bsize = 204800);
 		virtual ~XMLDocument();
 		int ImportFile(const std::string& filename);
 		int ImportBuffer(const std::string& buffer);
