@@ -1,3 +1,9 @@
+cnbiloop (5.3.0) lucid; urgency=low
+
+  * Minor fixes
+
+ -- Michele Tavella <michele.tavella@epfl.ch>  Sun, 11 Dec 2011 18:24:00 +0200
+
 cnbiloop (5.2.0) lucid; urgency=low
 
   * Added back -nojvm in ClMatlab due to instability issues
