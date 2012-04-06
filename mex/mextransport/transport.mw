@@ -20,6 +20,7 @@ $ #include <transport/tr_udp.h>
 $ #include <cstring>
 $ #include <stdio.h>
 $ #include <stdlib.h>
+$ #include <mex.h>
 
 
 @function [sptr] = tr_new();

@@ -23,6 +23,7 @@ $ #include <cnbiloop/ClTobiId.hpp>
 $ #include <cstring>
 $ #include <iostream>
 $ #include <stdio.h>
+$ #include <mex.h>
 
 @function [c] = cl_new();
 % Copyright (C) 2009-2011  EPFL (Ecole Polytechnique Fédérale de Lausanne)
