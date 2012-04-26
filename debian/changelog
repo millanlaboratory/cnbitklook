@@ -1,3 +1,9 @@
+tobicore (5.3.1) lucid; urgency=low
+
+  * Compiled against tobicore 7.0.1
+
+ -- Michele Tavella <michele.tavella@epfl.ch>  Mon, 23 Apr 2012 17:16:00 +0200
+
 cnbiloop (5.3.0) lucid; urgency=low
 
   * Minor fixes
