@@ -1,8 +1,13 @@
 cnbiloop (5.3.2) lucid; urgency=low
 
+  [ Michele Tavella ]
   * Compiled against tobicore 7.1.0
  
- -- Michele Tavella <michele.tavella@epfl.ch>  Tue, 8 May 2012 21:16:00 +0200
+  [ Mohit Goel ]
+  * Compiling again
+  * Added patches to file src/cnbiloop/ClMatlab.cpp and mex/matndf/ndf_mi.m given by TOM 
+
+ -- Mohit Goel <mgoel@turner.epfl.ch>  Fri, 15 Mar 2013 13:59:16 +0100
 
 cnbiloop (5.3.1) lucid; urgency=low
 
