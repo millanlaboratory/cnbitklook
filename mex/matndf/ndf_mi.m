@@ -121,6 +121,12 @@ try
 	cl_updatelog(loop.cl, sprintf('classifier=%s', loop.cfg.classifier.file));
 	cl_updatelog(loop.cl, sprintf('rejection=%f', user.rejection));
 	cl_updatelog(loop.cl, sprintf('integration=%f', user.integration));
+	msg_thresholds_log = 'thresholds=(';
+	for t = 0:user.nTasks-1
+	    msg_thresholds_log = sprintf('%s %f', msg_thresholds_log, user.thresholds(t+1));
+        end
+	msg_thresholds_log = sprintf('%s )', msg_thresholds_log);
+	cl_updatelog(loop.cl, msg_thresholds_log);
 
 	% -------------------------------------------------------------- %
 	% User EEG data configuration                                    %

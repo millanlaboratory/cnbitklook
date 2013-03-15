@@ -28,6 +28,8 @@ try;\
 	if(isempty(getenv('CNBITKMAT_ROOT')));\
 		disp('CNBITKMAT_ROOT unset, mtpath must be in /usr/share/cnbiloop/cnbitkmat/mtpath');\
 		addpath('/usr/share/cnbiloop/cnbitkmat/mtpath');\
+	else;\
+		addpath(strcat(getenv('CNBITKMAT_ROOT'), '/mtpath'));\
 	end;\
 	status0 = mtpath_include('%s');\
 	if(status0 == false);\
@@ -47,6 +49,8 @@ try;\
 	if(isempty(getenv('CNBITKMAT_ROOT')));\
 		disp('CNBITKMAT_ROOT unset, mtpath must be in /usr/share/cnbiloop/cnbitkmat/mtpath');\
 		addpath('/usr/share/cnbiloop/cnbitkmat/mtpath');\
+	else;\
+		addpath(strcat(getenv('CNBITKMAT_ROOT'), '/mtpath'));\
 	end;\
 	status0 = mtpath_include('%s');\
 	if(status0 == false);\
