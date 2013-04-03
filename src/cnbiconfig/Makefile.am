@@ -36,7 +36,7 @@ libcnbiconfig_la_SOURCES = CCfgConfig.cpp \
 						   XMLException.cpp \
 						   XMLException.hpp
 						   
-libcnbiconfig_la_LDFLAGS = $(AM_LDFLAGS) \
+libcnbiconfig_la_LDFLAGS = $(AM_LDFLAGS) -ltobicore \
 						   -version-info $(CURRENT):$(REVISION):$(AGE) 
 
 libcnbiconfig_la_LIBADD = $(TOBIIC_LIBS) \

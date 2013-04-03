@@ -11,7 +11,7 @@ libcnbiacq_la_SOURCES = CaDevice.cpp \
 						CaWriter.hpp \
 						CaWriter.cpp
 
-libcnbiacq_la_LDFLAGS = $(AM_LDFLAGS) \
+libcnbiacq_la_LDFLAGS = $(AM_LDFLAGS) -ltobicore \
 						-version-info $(CURRENT):$(REVISION):$(AGE)
 
 libcnbiacq_la_LIBADD =  $(ACQ_LIBS) \

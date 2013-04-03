@@ -71,7 +71,7 @@ libcnbiloop_la_SOURCES = ClMatlab.cpp \
 						 ClTobiId.cpp \
 						 ClTobiId.hpp
 
-libcnbiloop_la_LDFLAGS = $(AM_LDLAGS) \
+libcnbiloop_la_LDFLAGS = $(AM_LDLAGS) -ltobicore \
 						 -version-info $(CURRENT):$(REVISION):$(AGE) 
 
 libcnbiloop_la_LIBADD = $(builddir)/../cnbicore/libcnbicore.la \

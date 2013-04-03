@@ -26,6 +26,7 @@
 #include <string.h>
 #include <sys/time.h>
 #include <sys/types.h>
+#include <errno.h>
 #include <unistd.h>
 #include <transport/tr_net.h>
 #include <transport/tr_tcp.h>
@@ -147,8 +148,14 @@ void CcClient::Main(void) {
 
 		status = select(CcSocket::_socket->fd + 1, &readfds, NULL, NULL, &tv);
 		if(status == -1) {
-			CcLogFatalS("Async I/O error: " << strerror(status));
-			CcThread::Stop();
+			if (errno == EINTR){
+				CcLogWarning("CcClient: Async I/O error: interrupted system call");
+			} else {
+				CcLogFatalS("CcClient: Async I/O error: " << strerror(errno));
+				CcThread::Stop();
+			}
+//			CcLogFatalS("CcClient: Async I/O error: " << strerror(status));
+//			CcThread::Stop();
 		} else if(status > 0) {
 			if(FD_ISSET(CcSocket::_socket->fd, &readfds)) {
 				CcSocket::_semsocket.Wait();

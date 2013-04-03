@@ -207,7 +207,7 @@ void CcServer::Main(void) {
 		readfds = masterfds;
 		status = select(fdmax + 1, &readfds, NULL, NULL, &tv); 
 		if(status == -1) {
-			CcLogDebugS("Async I/O error: " << strerror(status));
+			CcLogDebugS("CcServer: Async I/O error: " << strerror(status));
 		}
 		
 		int fida, fidr, fidd;
