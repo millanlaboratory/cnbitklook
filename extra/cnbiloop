@@ -10,4 +10,4 @@ acq.port = 8125
 bus.port = 8126
 dev.port = 8127
 matlab.binary = matlab
-#matlab.variant = syslib
+matlab.variant = syslib
