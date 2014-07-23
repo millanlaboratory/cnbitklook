@@ -1,3 +1,9 @@
+cnbiloop (5.4.4) precise; urgency=low
+
+  * Modified cl_killloop to cleanup tmp directory for used pipes
+
+ -- Michael Pereira <michael.pereira@epfl.ch>  Wed, 23 Jul 2014 11:11:32 +0200
+
 cnbiloop (5.4.3) precise; urgency=low
 
   * Minor bug fixes 
