@@ -1,5 +1,8 @@
 #!/bin/bash
 # 2011-05-28  Michele Tavella <michele.tavella@epfl.ch>
+# modified: 2014-07-23 Michael Pereira <michael.pereira@epfl.ch>
 kill -n 9 `pidof cl_nameserver`
 kill -n 9 `pidof cl_processing`
 kill -n 9 `pidof cl_acquisition`
+kill -n 9 `pidof cl_keepalive`
+rm -f  /tmp/cl.pipe.ndf.* 
