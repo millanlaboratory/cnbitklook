@@ -36,6 +36,7 @@ typedef struct CaDeviceCap_struct {
     unsigned int eeg_nmax;
     unsigned int sensor_nmax;
     unsigned int trigger_nmax;
+	char* prefiltering;
 } CaDeviceCap;
 
 /*! \brief Acquisition class for EGD-compatible device
@@ -60,6 +61,11 @@ class CaDevice {
 		virtual void InitNDF(ndf_frame* frame);
 		virtual void WriteNDF(ndf_frame* frame, bool inc = true, bool tic = true);
 		void Dump(void);
+		int GetFS(void);
+		const char* GetDevType(void);
+		const char* GetDevID(void);
+		const char* GetPrefiltering(void);
+		const char*** GetLabels(void);
 	protected:
 		void InitFrameSize(float hz);
 		void InitCapabilities(void);
@@ -76,6 +82,7 @@ class CaDevice {
 		void* _exg;
 		void* _tri;
 		size_t _frames;
+		char **_labels[2];
 };
 
 #endif

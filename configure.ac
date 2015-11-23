@@ -32,6 +32,8 @@ AC_SEARCH_LIBS([xdf_open], [xdffileio], [],
         AC_MSG_ERROR([The xdffileio library must be installed.]))
 AC_SEARCH_LIBS([egd_open], [eegdev], [],
         AC_MSG_ERROR([The eegdev library must be installed.]))
+AC_SEARCH_LIBS([mcp_show], [mcpanel], [],
+        AC_MSG_ERROR([The mcpanel library must be installed.]))
 AC_SUBST([ACQ_LIBS], "$LIBS")
 LIBS="$save_LIBS"
 

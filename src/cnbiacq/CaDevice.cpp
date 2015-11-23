@@ -41,6 +41,19 @@ CaDevice::~CaDevice(void) {
 		free(this->_exg);
 	if(this->_tri != NULL)
 		free(this->_tri);
+
+	// Free labels
+	unsigned int igrp, i;
+	for (igrp=0; igrp<2; igrp++) {
+		if (this->_labels[igrp] == NULL)
+			continue;
+		for (i=0; i<this->_grp[igrp].nch; i++) 
+			free(this->_labels[igrp][i]);
+
+		free(this->_labels[igrp]);
+		this->_labels[igrp] = NULL;
+	}
+
 }
 		
 void CaDevice::InitCapabilities(void) {
@@ -50,6 +63,7 @@ void CaDevice::InitCapabilities(void) {
 	this->_cap.eeg_nmax = egd_get_numch(this->_dev, EGD_EEG);
 	this->_cap.trigger_nmax = egd_get_numch(this->_dev, EGD_TRIGGER);
 	this->_cap.sensor_nmax = egd_get_numch(this->_dev, EGD_SENSOR);
+	egd_channel_info(this->_dev, EGD_EEG, 0, EGD_PREFILTERING, this->_cap.prefiltering, EGD_EOL);
 }
 
 void CaDevice::InitBuffers(void) {
@@ -102,6 +116,20 @@ bool CaDevice::Setup(float hz) {
 	this->InitBuffers();
 	if(egd_acq_setup(this->_dev, 3, this->_strides, 3, this->_grp) == -1)
 		CcLogErrorS("Cannot setup acquisition: " << strerror(errno));
+	// Setup channel labels
+	unsigned int i, igrp;
+	int type;
+
+	// Allocate and copy labels
+	for (igrp=0; igrp<2; igrp++) {
+		this->_labels[igrp] = (char**)malloc(this->_grp[igrp].nch * sizeof(char*));
+		type = this->_grp[igrp].sensortype;
+		for (i=0; i<this->_grp[igrp].nch; i++) {
+			this->_labels[igrp][i] = (char*)malloc(32);
+			egd_channel_info(this->_dev, type, i,
+			               EGD_LABEL, this->_labels[igrp][i], EGD_EOL);
+		}
+	}	
 	return true;
 }
 
@@ -231,6 +259,26 @@ void CaDevice::InitNDF(ndf_frame* frame) {
 	frame->config.sf 			= this->_cap.sampling_freq;
 	frame->config.id 			= 0;
 	ndf_init(frame);
+}
+
+int CaDevice::GetFS(void) {
+	return this->_cap.sampling_freq;
+}
+
+const char* CaDevice::GetDevType(void) {
+	return this->_cap.model;
+}
+
+const char* CaDevice::GetDevID(void) {
+	return this->_cap.id;
+}
+
+const char* CaDevice::GetPrefiltering(void) {
+	return this->_cap.prefiltering;
+}
+
+const char*** CaDevice::GetLabels(void) {
+	return (const char***)this->_labels;
 }
 
 #endif

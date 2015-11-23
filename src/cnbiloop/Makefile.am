@@ -10,7 +10,8 @@ bin_PROGRAMS = cl_processing \
 			   cl_checkloop \
 			   cl_rpc \
 			   cl_init \
-			   cl_acquisition 
+			   cl_acquisition \
+			   cl_acquisitionscope
 
 dist_bin_SCRIPTS = cl_rpcnotify \
 				   cl_grpc \
@@ -95,9 +96,25 @@ cl_acquisition_SOURCES = cl_acquisition.cpp \
 						 ClBusServer.hpp \
 						 ClDevServer.cpp \
 						 ClDevServer.hpp
+
 cl_acquisition_LDADD = libcnbiloop.la \
 					   $(top_builddir)/src/cnbiacq/libcnbiacq.la \
 					   $(LDADD)
+
+cl_acquisitionscope_SOURCES = cl_acquisitionscope.cpp \
+						 ClAcqServer.cpp \
+						 ClAcqServer.hpp \
+						 ClBusServer.cpp \
+						 ClBusServer.hpp \
+						 ClDevServer.cpp \
+						 ClDevServer.hpp \
+						 mcpanel.h
+
+cl_acquisitionscope_LDADD = libcnbiloop.la \
+				-lmcpanel \
+			   $(top_builddir)/src/cnbiacq/libcnbiacq.la \
+			   $(LDADD)
+
 cl_processing_SOURCES = cl_processing.cpp \
 						ClProServer.cpp \
 						ClProServer.hpp
