@@ -19,6 +19,7 @@
 #include "ClLoop.hpp"
 #include <cnbicore/CcBasic.hpp>
 #include <iostream>
+#include <getopt.h>
 
 using namespace std;
 

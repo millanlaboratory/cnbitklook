@@ -19,6 +19,7 @@
 #include "ClLoop.hpp"
 #include "ClTobiId.hpp"
 #include "ClLoopConfig.hpp"
+#include <getopt.h>
 
 void usage(void) { 
 	printf("Usage: cl_tidmonitor [OPTION]...\n\n");

@@ -19,6 +19,7 @@
 
 #include "ClTobiId.hpp"
 #include <iostream>
+#include <getopt.h>
 
 void usage(void) { 
 	printf("Usage: cl_tidsender [OPTION]...\n\n");

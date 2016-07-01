@@ -47,7 +47,7 @@ bool CaWriter::Setup(CaDevice* device) {
 
 	if(xdf_set_conf(this->_file,
 			XDF_F_REC_DURATION, 1.0,
-			XDF_F_REC_NSAMPLE, this->_device->_cap.sampling_freq,
+			XDF_F_REC_NSAMPLE, this->_device->_cap->sampling_freq,
 			XDF_NOF) == -1) {
 		CcLogErrorS("Cannot setup header: " << strerror(errno));
 		goto failure;

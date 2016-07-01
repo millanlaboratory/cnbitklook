@@ -21,6 +21,7 @@
 #include <cnbicore/CcBasic.hpp>
 #include <cnbicore/CcPipe.hpp>
 #include <iostream>
+#include <getopt.h>
 
 using namespace std;
 

@@ -57,13 +57,13 @@ CaDevice::~CaDevice(void) {
 }
 		
 void CaDevice::InitCapabilities(void) {
-	egd_get_cap(this->_dev, EGD_CAP_FS, &this->_cap.sampling_freq);
-	egd_get_cap(this->_dev, EGD_CAP_DEVTYPE, &this->_cap.model);
-	egd_get_cap(this->_dev, EGD_CAP_DEVID, &this->_cap.id);
-	this->_cap.eeg_nmax = egd_get_numch(this->_dev, EGD_EEG);
-	this->_cap.trigger_nmax = egd_get_numch(this->_dev, EGD_TRIGGER);
-	this->_cap.sensor_nmax = egd_get_numch(this->_dev, EGD_SENSOR);
-	egd_channel_info(this->_dev, EGD_EEG, 0, EGD_PREFILTERING, this->_cap.prefiltering, EGD_EOL);
+	egd_get_cap(this->_dev, EGD_CAP_FS, &this->_cap->sampling_freq);
+	egd_get_cap(this->_dev, EGD_CAP_DEVTYPE, &this->_cap->model);
+	egd_get_cap(this->_dev, EGD_CAP_DEVID, &this->_cap->id);
+	this->_cap->eeg_nmax = egd_get_numch(this->_dev, EGD_EEG);
+	this->_cap->trigger_nmax = egd_get_numch(this->_dev, EGD_TRIGGER);
+	this->_cap->sensor_nmax = egd_get_numch(this->_dev, EGD_SENSOR);
+	egd_channel_info(this->_dev, EGD_EEG, 0, EGD_PREFILTERING, this->_cap->prefiltering, EGD_EOL);
 }
 
 void CaDevice::InitBuffers(void) {
@@ -88,14 +88,14 @@ void CaDevice::InitGroups(void) {
 	this->_grp[0].iarray = 0;
 	this->_grp[0].datatype = EGD_FLOAT;
 	this->_grp[0].arr_offset = 0;
-	this->_grp[0].nch = this->_cap.eeg_nmax;
+	this->_grp[0].nch = this->_cap->eeg_nmax;
 	
 	this->_grp[1].sensortype = EGD_SENSOR;
 	this->_grp[1].index = 0; 
 	this->_grp[1].iarray = 1; 
 	this->_grp[1].datatype = EGD_FLOAT;
 	this->_grp[1].arr_offset = 0;
-	this->_grp[1].nch = this->_cap.sensor_nmax;
+	this->_grp[1].nch = this->_cap->sensor_nmax;
 	
 	this->_grp[2].sensortype = EGD_TRIGGER;
 	this->_grp[2].index = 0; 
@@ -106,7 +106,7 @@ void CaDevice::InitGroups(void) {
 }
 
 void CaDevice::InitFrameSize(float hz) {
-	this->_frames = (size_t)((float)this->_cap.sampling_freq/hz);
+	this->_frames = (size_t)((float)this->_cap->sampling_freq/hz);
 }
 
 bool CaDevice::Setup(float hz) {
@@ -116,6 +116,7 @@ bool CaDevice::Setup(float hz) {
 	this->InitBuffers();
 	if(egd_acq_setup(this->_dev, 3, this->_strides, 3, this->_grp) == -1)
 		CcLogErrorS("Cannot setup acquisition: " << strerror(errno));
+	
 	// Setup channel labels
 	unsigned int i, igrp;
 	int type;
@@ -146,6 +147,7 @@ bool CaDevice::Open(const std::string& devname) {
 		CcLogErrorS("Cannot open device: " << strerror(errno));
 		return false;
 	}
+	this->_cap = new CaDeviceCap();
 	return true;
 }
 
@@ -154,6 +156,7 @@ bool CaDevice::Close(void) {
 		CcLogErrorS("Cannot close device: " << strerror(errno));
 		return false;
 	}
+	delete _cap;
 	return true;
 }
 		
@@ -214,12 +217,12 @@ size_t CaDevice::SizeNDF(int egdtype) {
 void CaDevice::Dump(void) {
 	printf("[CaDevice::Dump] Device info:\n");
 	printf(" + Capabilities:\n");
-	printf(" |- Device:       %s\n", this->_cap.model);
-	printf(" |- Id:           %s\n", this->_cap.id);
-	printf(" |- Sf:           %u Hz\n", this->_cap.sampling_freq);
-	printf(" |- Channels:     %u\n", this->_cap.eeg_nmax);
-	printf(" |- Signals:      %u\n", this->_cap.sensor_nmax);
-	printf(" `- Triggers:     %u\n", this->_cap.trigger_nmax);
+	printf(" |- Device:       %s\n", this->_cap->model);
+	printf(" |- Id:           %s\n", this->_cap->id);
+	printf(" |- Sf:           %u Hz\n", this->_cap->sampling_freq);
+	printf(" |- Channels:     %u\n", this->_cap->eeg_nmax);
+	printf(" |- Signals:      %u\n", this->_cap->sensor_nmax);
+	printf(" `- Triggers:     %u\n", this->_cap->trigger_nmax);
 }
 
 size_t CaDevice::GetData(void) {
@@ -252,29 +255,29 @@ void CaDevice::InitNDF(ndf_frame* frame) {
 	frame->types.exg 			= this->SizeNDF(EGD_FLOAT);
 	frame->types.tri 			= this->SizeNDF(EGD_INT32);
 	frame->config.labels 		= 32;
-	frame->config.eeg_channels 	= this->_cap.eeg_nmax;
-	frame->config.exg_channels 	= this->_cap.sensor_nmax;
-	frame->config.tri_channels 	= this->_cap.trigger_nmax;
+	frame->config.eeg_channels 	= this->_cap->eeg_nmax;
+	frame->config.exg_channels 	= this->_cap->sensor_nmax;
+	frame->config.tri_channels 	= this->_cap->trigger_nmax;
 	frame->config.samples 		= CaDevice::_frames;;
-	frame->config.sf 			= this->_cap.sampling_freq;
+	frame->config.sf 			= this->_cap->sampling_freq;
 	frame->config.id 			= 0;
 	ndf_init(frame);
 }
 
 int CaDevice::GetFS(void) {
-	return this->_cap.sampling_freq;
+	return this->_cap->sampling_freq;
 }
 
 const char* CaDevice::GetDevType(void) {
-	return this->_cap.model;
+	return this->_cap->model;
 }
 
 const char* CaDevice::GetDevID(void) {
-	return this->_cap.id;
+	return this->_cap->id;
 }
 
 const char* CaDevice::GetPrefiltering(void) {
-	return this->_cap.prefiltering;
+	return this->_cap->prefiltering;
 }
 
 const char*** CaDevice::GetLabels(void) {

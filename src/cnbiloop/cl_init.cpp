@@ -35,6 +35,7 @@
 
 #include "ClLoop.hpp"
 #include <cnbicore/CcBasic.hpp>
+#include <getopt.h>
 
 bool dump_configuration(CCfgConfig* config, const int modality,
 		const std::string& block, const std::string& taskset) {

@@ -22,6 +22,7 @@ dist_bin_SCRIPTS = cl_rpcnotify \
 				   cl_termloop \
 				   cl_killloop \
 				   cl_runloop \
+				   cl_runloopscope \
 				   cl_debugloop \
 				   cl_develloop \
 				   cl_killmatlab \

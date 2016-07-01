@@ -23,6 +23,7 @@
 #include <cnbicore/CcBasic.hpp>
 #include <cnbicore/CcServer.hpp>
 #include <stdlib.h>
+#include <getopt.h>
 
 void usage(void) { 
 	printf("Usage: cl_nameserver [OPTION]...\n\n");

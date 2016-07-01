@@ -18,6 +18,7 @@
 
 #include "ClLoop.hpp"
 #include "ClTobiIc.hpp"
+#include <getopt.h>
 
 void usage(void) { 
 	printf("Usage: cl_ticmonitor [OPTION]...\n\n");

@@ -75,7 +75,7 @@ class CaDevice {
 		size_t SizeNDF(int egdtype);
 	protected:
 		struct eegdev* _dev;
-		CaDeviceCap _cap;
+		CaDeviceCap* _cap;
 		struct grpconf _grp[3];
 		size_t _strides[3];
 		void* _eeg;
