@@ -31,7 +31,7 @@
 				<cue>1000.00</cue>
 				<cfeedback>4000.00</cfeedback>
 				<boom>1000.00</boom>
-				<timeout>1000.00</timeout>
+				<timeout>10000.00</timeout>
 			</trial>
 		</mi>
 		<errp>
@@ -168,6 +168,40 @@
 			<rejection>0.60</rejection>
 			<integration>0.96</integration>
 		</mi>
+		<mito description="Online MI" protocol="mi_online_to">
+			<taskset ttype="mi_rhlh" ctype="mi" classifier="kmi0">
+				<threshold>
+					<mi_hand_right>0.65</mi_hand_right>
+					<mi_hand_left>0.90</mi_hand_left>
+				</threshold>
+				<trials>
+					<mi_hand_right>15</mi_hand_right>
+					<mi_hand_left>15</mi_hand_left>
+				</trials>
+			</taskset>
+			<taskset ttype="mi_rhbf" ctype="mi" classifier="kmi1">
+				<threshold>
+					<mi_hand_right>0.80</mi_hand_right>
+					<mi_both_feet>0.80</mi_both_feet>
+				</threshold>
+				<trials>
+					<mi_hand_right>15</mi_hand_right>
+					<mi_both_feet>15</mi_both_feet>
+				</trials>
+			</taskset>
+			<taskset ttype="mi_bflh" ctype="mi" classifier="kmi2">
+				<threshold>
+					<mi_both_feet>0.80</mi_both_feet>
+					<mi_hand_left>0.80</mi_hand_left>
+				</threshold>
+				<trials>
+					<mi_both_feet>15</mi_both_feet>
+					<mi_hand_left>15</mi_hand_left>
+				</trials>
+			</taskset>
+			<rejection>0.60</rejection>
+			<integration>0.96</integration>
+		</mito>
 		<errp description="Online ErrPs (6x240)" protocol="errp_online">
 			<taskset ttype="errp" ctype="mi" classifier="kerrp0">
 				<trials>
