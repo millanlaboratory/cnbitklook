@@ -41,7 +41,7 @@ int main(int argc, char* argv[]) {
 	
 	float ms = 0.00f;
 	
-	while((opt = getopt(argc, argv, "n:d:e:h:u")) != -1) {
+	while((opt = getopt(argc, argv, "a:n:d:e:h:u")) != -1) {
 		if(opt == 'n') {
 			optname.assign(optarg);
 		} else if(opt == 'e') {

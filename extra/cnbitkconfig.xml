@@ -31,6 +31,7 @@
 				<cue>1000.00</cue>
 				<cfeedback>4000.00</cfeedback>
 				<boom>1000.00</boom>
+				<timeout>1000.00</timeout>
 			</trial>
 		</mi>
 		<errp>
@@ -446,6 +447,7 @@
 			<dfeedback>0x030e</dfeedback>
 			<targethit>0x0381</targethit>
 			<targetmiss>0x0382</targetmiss>
+			<timeout>0x0383</timeout>
 			<cnbi>
 				<inc>0x002</inc>
 				<correct>0x003</correct>
@@ -473,6 +475,7 @@
 			<dfeedback>8</dfeedback>
 			<targethit>9</targethit>
 			<targetmiss>10</targetmiss>
+			<timeout>17</timeout>
 			<cnbi>
 				<inc>12</inc>
 				<correct>11</correct>
