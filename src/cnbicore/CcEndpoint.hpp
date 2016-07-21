@@ -16,8 +16,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CCHOST_HPP
-#define CCHOST_HPP
+#ifndef CCENDPOINT_HPP
+#define CCENDPOINT_HPP
 
 #include "CcNetworkTypes.hpp"
 #include "CcObject.hpp"
