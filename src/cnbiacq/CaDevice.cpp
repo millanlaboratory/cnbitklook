@@ -102,7 +102,7 @@ void CaDevice::InitGroups(void) {
 	this->_grp[2].iarray = 2;
 	this->_grp[2].datatype = EGD_INT32;
 	this->_grp[2].arr_offset = 0;
-	this->_grp[2].nch = 1;
+	this->_grp[2].nch = this->_cap->trigger_nmax;
 }
 
 void CaDevice::InitFrameSize(float hz) {
