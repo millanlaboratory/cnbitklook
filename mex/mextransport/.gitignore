@@ -1,0 +1,11 @@
+.deps
+Makefile
+Makefile.in
+*.pc
+.libs
+*.lo
+*.o
+*.la
+*~
+*.m
+*.cc
