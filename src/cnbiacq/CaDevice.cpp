@@ -70,7 +70,7 @@ void CaDevice::InitBuffers(void) {
 	// Setup the strides so that we get packed data into the buffers
 	this->_strides[0] = this->_grp[0].nch * this->SizeEGD(EGD_FLOAT);
 	this->_strides[1] = this->_grp[1].nch * this->SizeEGD(EGD_FLOAT);
-	this->_strides[2] = this->SizeEGD(EGD_INT32);
+	this->_strides[2] = this->_grp[2].nch * this->SizeEGD(EGD_INT32);
 
 	// Compute sizes so not to call malloc if size == 0
 	size_t seeg = this->_strides[0]*this->_frames;
