@@ -122,11 +122,11 @@ bool CaDevice::Setup(float hz) {
 	int type;
 
 	// Allocate and copy labels
-	for (igrp=0; igrp<2; igrp++) {
+	for (igrp=0; igrp<3; igrp++) {
 		this->_labels[igrp] = (char**)malloc(this->_grp[igrp].nch * sizeof(char*));
 		type = this->_grp[igrp].sensortype;
 		for (i=0; i<this->_grp[igrp].nch; i++) {
-			this->_labels[igrp][i] = (char*)malloc(32);
+			this->_labels[igrp][i] = (char*)malloc(32*sizeof(char));
 			egd_channel_info(this->_dev, type, i,
 			               EGD_LABEL, this->_labels[igrp][i], EGD_EOL);
 		}

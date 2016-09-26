@@ -82,7 +82,7 @@ class CaDevice {
 		void* _exg;
 		void* _tri;
 		size_t _frames;
-		char **_labels[2];
+		char **_labels[3];
 };
 
 #endif
