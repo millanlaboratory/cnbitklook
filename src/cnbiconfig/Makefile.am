@@ -1,7 +1,7 @@
 AM_CPPFLAGS = $(CPPFLAGS) -I$(top_srcdir)/src
 lib_LTLIBRARIES = libcnbiconfig.la
 
-bin_PROGRAMS = ccfg_validate ccfg_cli
+bin_PROGRAMS = ccfg_validate ccfg_cli ccfg_getstring ccfg_getint ccfg_getfloat ccfg_getbool
 
 libcnbiconfig_includedir=$(includedir)/cnbiconfig
 
@@ -45,6 +45,10 @@ libcnbiconfig_la_LIBADD = $(TOBIIC_LIBS) \
 LDADD = libcnbiconfig.la
 ccfg_validate_SOURCES = ccfg_validate.cpp
 ccfg_cli_SOURCES = ccfg_cli.cpp
+ccfg_getstring_SOURCES = ccfg_getstring.cpp
+ccfg_getint_SOURCES = ccfg_getint.cpp
+ccfg_getfloat_SOURCES = ccfg_getfloat.cpp
+ccfg_getbool_SOURCES = ccfg_getbool.cpp
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = cnbiconfig.pc
