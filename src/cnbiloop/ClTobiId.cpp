@@ -179,4 +179,9 @@ bool ClTobiId::SetMessage(IDSerializerRapid* serializer, int blockidx, int* fidx
 	return true;
 }
 
+// Created by L.Tonin  <luca.tonin@epfl.ch> on 09/06/17 10:55:07
+int ClTobiId::GetMode(void) {
+	return this->_mode;
+}
+
 #endif
