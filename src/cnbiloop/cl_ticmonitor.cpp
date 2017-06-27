@@ -37,7 +37,7 @@ int main(int argc, char* argv[]) {
 	CcAddress nameserver;
 	bool locking = false, dump = false;
 	
-	while((opt = getopt(argc, argv, "p:n:hld")) != -1) {
+	while((opt = getopt(argc, argv, "a:p:n:hld")) != -1) {
 		if(opt == 'p')
 			optport.assign(optarg);
 		else if(opt == 'n')
