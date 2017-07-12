@@ -20,6 +20,7 @@
 #include <cnbicore/CcThread.hpp>
 #include <cnbicore/CcTime.hpp>
 #include <stdio.h>
+#include <unistd.h>
 
 using namespace std;
 
