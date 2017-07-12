@@ -62,6 +62,9 @@ void ClLoop::Destroy(void) {
 	if(ClLoop::_instance == NULL) 
 		return;
 	delete ClLoop::_instance;
+	// Edited by L.Tonin  <luca.tonin@epfl.ch> on 12/07/17 16:00:08
+	// Added to fix segmentation fault
+	ClLoop::_instance = NULL;
 }
 
 bool ClLoop::Connect(void) {

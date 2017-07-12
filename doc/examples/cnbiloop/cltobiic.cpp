@@ -40,7 +40,7 @@ int main(void) {
 	m1.classifiers.Add(&c);
 	
 	int block = 0;
-
+	ClLoop::Configure();
 	if(ClLoop::Connect() == false) {
 		CcLogFatal("Cannot connect to loop");
 		goto shutdown;
