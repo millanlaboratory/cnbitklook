@@ -171,12 +171,14 @@ void CcClient::Main(void) {
 			CcSocket::iOnRecv.Execute(this, stream);
 	}
 	FD_ZERO(&readfds);
-	
-	this->Disconnect();
-	CcSocket::_semsocket.Wait();
-	CcSocket::RemStream(CcSocket::_socket->fd);
-	CcSocket::_semsocket.Post();
-	this->iOnDisconnect.Execute(this);
+
+	// Edited by L.Tonin  <luca.tonin@epfl.ch> on 12/07/17 16:01:05
+	// Comment to avoid double disconnection (and segmentation fault)
+	//this->Disconnect();
+	//CcSocket::_semsocket.Wait();
+	//CcSocket::RemStream(CcSocket::_socket->fd);
+	//CcSocket::_semsocket.Post();
+	//this->iOnDisconnect.Execute(this);
 }
 
 bool CcClient::Open(int protocol) {

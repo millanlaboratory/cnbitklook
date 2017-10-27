@@ -9,7 +9,9 @@ check_PROGRAMS = clacqlang \
 				 clnamesclient \
 				 clloop \
 				 clloopconfig \
-				 cltobiic
+				 cltobiic \
+				 cltobiic_sender \
+				 cltobiic_receiver 
 
 clacqlang_SOURCES = clacqlang.cpp
 clprolang_SOURCES = clprolang.cpp
@@ -21,6 +23,8 @@ clnamesclient_SOURCES = clnamesclient.cpp
 clloop_SOURCES = clloop.cpp
 clloopconfig_SOURCES = clloopconfig.cpp
 cltobiic_SOURCES = cltobiic.cpp
+cltobiic_sender_SOURCES = cltobiic_sender.cpp
+cltobiic_receiver_SOURCES = cltobiic_receiver.cpp
 
 LDADD = $(top_builddir)/src/cnbiloop/libcnbiloop.la\
 		$(top_builddir)/src/cnbicore/libcnbicore.la\

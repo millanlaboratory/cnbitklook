@@ -269,7 +269,9 @@ void CcServer::Main(void) {
 	}
 	FD_ZERO(&readfds);
 	FD_ZERO(&masterfds);
-	this->Release();
+	// Edited by L.Tonin  <luca.tonin@epfl.ch> on 12/07/17 16:01:46
+	// Added to avoid double release and segmentation fault
+	//this->Release();
 }
 
 void CcServer::Drop(int fid) {

@@ -42,6 +42,8 @@ class ClTobiId : public CcSocketProxy {
 				int blockidx = TCBlock::BlockIdxUnset, int* fixd = NULL);
 		int Count(void);
 		int Clear(void);
+		// Created by L.Tonin  <luca.tonin@epfl.ch> on 09/06/17 10:54:42
+		int GetMode(void);
 	protected:
 		void HandleConnect(CcSocket* caller);
 		void HandleDisconnect(CcSocket* caller);

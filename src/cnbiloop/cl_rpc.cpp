@@ -283,7 +283,7 @@ int main(int argc, char* argv[]) {
 		if(argc != 3) usage();
 		connect();
 		
-		status = ClLoop::nms.Erase(arg3);
+		status = ClLoop::nms.Erase(arg1);
 		nameserver(status);
 		CcCore::Exit(status);
 	

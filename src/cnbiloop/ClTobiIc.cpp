@@ -261,4 +261,9 @@ unsigned int ClTobiIc::GetPeers(void) {
 	}
 }
 
+// Created by L.Tonin  <luca.tonin@epfl.ch> on 09/06/17 10:52:09
+int ClTobiIc::GetMode(void) {
+	return this->_mode;
+}
+
 #endif

@@ -65,6 +65,9 @@ void ClLoopConfig::Destroy(void) {
 	if(ClLoopConfig::_instance == NULL) 
 		return;
 	delete ClLoopConfig::_instance;
+	// Edited by L.Tonin  <luca.tonin@epfl.ch> on 12/07/17 15:59:12
+	// Added to fix segmentation fault
+	ClLoopConfig::_instance = NULL;
 }
 
 void ClLoopConfig::ImplLoad(void) {
