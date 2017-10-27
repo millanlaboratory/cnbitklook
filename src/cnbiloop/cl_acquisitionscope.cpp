@@ -284,7 +284,6 @@ int main(int argc, char* argv[]) {
 	if(optinteractive == true)
 		idle();
 
-
 	// Prepare scope
 	mcpanel* panel = NULL;
 
@@ -307,7 +306,6 @@ int main(int argc, char* argv[]) {
 
 	// Init scope panel
 	mcp_init_lib(&argc, &argv);
-
 	panel = mcp_create(uifilename, &cb, NTAB, tabconf);
 	if (!panel) {
 		fprintf(stderr,"error at the creation of the panel\n");
@@ -347,7 +345,6 @@ int main(int argc, char* argv[]) {
 		goto shutdown;
 	}
 	CcLogInfo("Started EGD device");
-
 	CcTime::Tic(&ticSignals);
 	while(true) {
 		gsize = eegdev.GetData();
@@ -374,7 +371,6 @@ int main(int argc, char* argv[]) {
 			continue;
 		}
 		writer.Write(gsize);
-		
 		semframe.Wait();
 		eegdev.WriteNDF(&frame);
 		pipes->Write(frame.data.buffer, 0);
@@ -389,13 +385,13 @@ int main(int argc, char* argv[]) {
 		mcp_add_samples(panel, 0, gsize, (float*)frame.offset.eeg);
 		mcp_add_samples(panel, 1, gsize, (float*)frame.offset.eeg);
 		mcp_add_samples(panel, 2, gsize, (float*)frame.offset.exg);
-		mcp_add_triggers(panel, gsize, (const uint32_t*)frame.offset.tri);		
-
+		if(_auxdev.ntrig > 0)
+			mcp_add_triggers(panel, gsize, (const uint32_t*)frame.offset.tri);		
+	
 		if(optprintndf) 
 			ndf_print_labels(&frame);
 		ndf_clear_labels(&frame);
 		semframe.Post();
-		
 		if(CcTime::Toc(&ticSignals) >= 500.00f) {
 			if(nsclient.IsConnected() == false)  {
 				CcLogFatal("Lost connection with nameserver");
