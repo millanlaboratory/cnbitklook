@@ -41,7 +41,7 @@ class CCfgConfig : public CCfgXMLConfig {
 		CCfgTaskset* OfflineEx(const std::string& blockname,
 				const std::string& taskset);
 
-	private:
+	public:
 		void ParseTasksetEx(const std::string& name,
 				CCfgTaskset* taskset);
 		void ParseConfigEx(const std::string& mode,
