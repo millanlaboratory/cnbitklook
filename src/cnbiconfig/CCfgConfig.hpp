@@ -41,6 +41,9 @@ class CCfgConfig : public CCfgXMLConfig {
 		CCfgTaskset* OfflineEx(const std::string& blockname,
 				const std::string& taskset);
 
+	// Edited by L.Tonin  <luca.tonin@epfl.ch> on 23/03/18 09:47:54
+	// Changed these method from private to public. I don't they were private
+	// since they are quite useful.
 	public:
 		void ParseTasksetEx(const std::string& name,
 				CCfgTaskset* taskset);
