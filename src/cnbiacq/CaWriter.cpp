@@ -102,7 +102,7 @@ bool CaWriter::Open(const std::string& filename) {
 
 bool CaWriter::Close(void) {
 	this->_semlock.Wait();
-	if(this->_file == false) {
+	if(this->_file == NULL) {
 		CcLogDebug("File is not open");
 		goto failure;
 	}

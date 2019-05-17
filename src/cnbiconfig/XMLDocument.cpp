@@ -37,7 +37,7 @@ int XMLDocument::ImportFile(const std::string& filename) {
 	std::string cache, buffer;
 	file.open(filename.c_str(), std::ios::in);
 	
-	if(file == NULL) 
+	if(file.good() == false) 
 		return XMLDocument::FileInputError;
 
 	while(!file.eof()) {
